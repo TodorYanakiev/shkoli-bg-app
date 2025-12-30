@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "Shkoli.bg"
+  },
+  "layouts": {
+    "auth": {
+      "subtitle": "Sign in or create an account"
+    }
+  },
+  "nav": {
+    "shkoli": "Schools",
+    "map": "Map"
+  },
+  "pages": {
+    "login": {
+      "title": "Login",
+      "subtitle": "Access your account to continue."
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Create a new account in minutes."
+    },
+    "shkoli": {
+      "title": "Schools",
+      "subtitle": "Browse nearby schools and view their details."
+    },
+    "map": {
+      "title": "Map",
+      "subtitle": "Explore schools on the map."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "message": "The page you are looking for does not exist.",
+      "action": "Go to schools"
+    }
+  }
+}
