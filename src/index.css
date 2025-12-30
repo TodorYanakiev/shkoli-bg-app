@@ -19,3 +19,35 @@
     min-height: 100vh;
   }
 }
+
+@layer utilities {
+  @keyframes toast-in {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, -12px, 0) scale(0.98);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes toast-out {
+    0% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(0, -12px, 0) scale(0.98);
+    }
+  }
+
+  .animate-toast-in {
+    animation: toast-in 200ms ease-out;
+  }
+
+  .animate-toast-out {
+    animation: toast-out 180ms ease-in forwards;
+  }
+}

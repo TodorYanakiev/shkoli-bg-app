@@ -3,15 +3,25 @@ import { useTranslation } from 'react-i18next'
 import {
   Link,
   NavLink,
+  useNavigate,
   useLocation,
   type NavLinkRenderProps,
 } from 'react-router-dom'
 
 import logo from '../../assets/logo.png'
+import { useToast } from '../../components/feedback/ToastProvider'
+import { useAuthStatus } from '../../hooks/useAuthStatus'
+import { useLogoutMutation } from '../../hooks/useLogoutMutation'
+import type { ApiError } from '../../types/api'
+import { clearTokens } from '../../utils/authStorage'
 
 const TopNav = () => {
   const { t } = useTranslation()
   const location = useLocation()
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuthStatus()
+  const logoutMutation = useLogoutMutation()
+  const { showToast } = useToast()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -33,6 +43,44 @@ const TopNav = () => {
         ? 'bg-brand/10 text-brand'
         : 'text-slate-700 hover:bg-slate-100',
     ].join(' ')
+
+  const getLogoutErrorMessage = (
+    error: ApiError | null,
+    translate: (key: string) => string,
+  ) => {
+    if (!error) return null
+    if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
+      return null
+    }
+    if (error.kind === 'network') {
+      return translate('errors.network')
+    }
+    return translate('errors.auth.logoutFailed')
+  }
+
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        clearTokens()
+        showToast({
+          message: t('feedback.auth.logoutSuccess'),
+          tone: 'success',
+        })
+        navigate('/login', { replace: true })
+      },
+      onError: (error) => {
+        if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
+          clearTokens()
+          navigate('/login', { replace: true })
+        }
+      },
+    })
+  }
+
+  const logoutErrorMessage = getLogoutErrorMessage(
+    logoutMutation.error ?? null,
+    t,
+  )
 
   return (
     <header className="relative z-10 w-full border-b border-slate-200 bg-white">
@@ -73,18 +121,33 @@ const TopNav = () => {
             </NavLink>
           </nav>
           <div className="hidden items-center gap-2 md:flex">
-            <Link
-              to="/register"
-              className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
-            >
-              {t('nav.register')}
-            </Link>
-            <Link
-              to="/login"
-              className="inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-            >
-              {t('nav.login')}
-            </Link>
+            {isAuthenticated ? (
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={logoutMutation.isPending}
+                className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+              >
+                {logoutMutation.isPending
+                  ? t('nav.loggingOut')
+                  : t('nav.logout')}
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/register"
+                  className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
+                >
+                  {t('nav.register')}
+                </Link>
+                <Link
+                  to="/login"
+                  className="inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  {t('nav.login')}
+                </Link>
+              </>
+            )}
           </div>
           <button
             type="button"
@@ -103,6 +166,14 @@ const TopNav = () => {
           </button>
         </div>
       </div>
+      {logoutErrorMessage ? (
+        <div
+          className="border-t border-rose-100 bg-rose-50 px-4 py-2 text-xs text-rose-700 sm:px-6 lg:px-12"
+          role="alert"
+        >
+          {logoutErrorMessage}
+        </div>
+      ) : null}
       <div
         id="mobile-nav"
         aria-hidden={!isMenuOpen}
@@ -126,18 +197,33 @@ const TopNav = () => {
             {t('nav.about')}
           </NavLink>
           <div className="flex flex-col gap-2 pt-2">
-            <Link
-              to="/register"
-              className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
-            >
-              {t('nav.register')}
-            </Link>
-            <Link
-              to="/login"
-              className="inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-            >
-              {t('nav.login')}
-            </Link>
+            {isAuthenticated ? (
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={logoutMutation.isPending}
+                className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+              >
+                {logoutMutation.isPending
+                  ? t('nav.loggingOut')
+                  : t('nav.logout')}
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/register"
+                  className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
+                >
+                  {t('nav.register')}
+                </Link>
+                <Link
+                  to="/login"
+                  className="inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  {t('nav.login')}
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

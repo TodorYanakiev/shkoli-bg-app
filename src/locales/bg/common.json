@@ -31,12 +31,44 @@
     "map": "Карта",
     "about": "За нас",
     "login": "Вход",
-    "register": "Регистрация"
+    "register": "Регистрация",
+    "logout": "Изход",
+    "loggingOut": "Излизане..."
+  },
+  "validation": {
+    "required": "Полето е задължително.",
+    "email": "Въведете валиден имейл адрес."
+  },
+  "errors": {
+    "network": "Не можем да се свържем със сървъра. Опитайте отново.",
+    "generic": "Възникна грешка. Моля, опитайте отново.",
+    "auth": {
+      "forbidden": "Нямате достъп до този акаунт.",
+      "logoutFailed": "Неуспешен изход от профила. Опитайте отново."
+    }
+  },
+  "feedback": {
+    "dismiss": "Затвори",
+    "auth": {
+      "loginSuccess": "Добре дошли отново! Влязохте успешно.",
+      "logoutSuccess": "Излязохте от профила си."
+    }
   },
   "pages": {
     "login": {
       "title": "Вход",
-      "subtitle": "Влезте в профила си, за да продължите."
+      "subtitle": "Влезте в профила си, за да продължите.",
+      "form": {
+        "emailLabel": "Имейл адрес",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Парола",
+        "passwordPlaceholder": "Въведете паролата си",
+        "submit": "Вход",
+        "submitting": "Влизане...",
+        "errors": {
+          "invalidCredentials": "Невалиден имейл или парола."
+        }
+      }
     },
     "register": {
       "title": "Регистрация",

@@ -1,6 +1,8 @@
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
+import LoginForm from './components/LoginForm'
+
 const LoginPage = () => {
   const { t } = useTranslation()
 
@@ -15,6 +17,7 @@ const LoginPage = () => {
       <p className="text-sm text-slate-600">
         {t('pages.login.subtitle')}
       </p>
+      <LoginForm />
     </section>
   )
 }
