@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
 const ShkoliPage = () => {
@@ -5,6 +6,9 @@ const ShkoliPage = () => {
 
   return (
     <section className="space-y-3">
+      <Helmet>
+        <title>{`${t('pages.shkoli.title')} | ${t('app.title')}`}</title>
+      </Helmet>
       <h1 className="text-2xl font-semibold text-slate-900">
         {t('pages.shkoli.title')}
       </h1>

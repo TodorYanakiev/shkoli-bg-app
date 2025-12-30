@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -6,6 +7,9 @@ const NotFoundPage = () => {
 
   return (
     <section className="mx-auto w-full max-w-3xl space-y-4 px-6 py-16 text-center">
+      <Helmet>
+        <title>{`${t('pages.notFound.title')} | ${t('app.title')}`}</title>
+      </Helmet>
       <h1 className="text-3xl font-semibold text-slate-900">
         {t('pages.notFound.title')}
       </h1>
