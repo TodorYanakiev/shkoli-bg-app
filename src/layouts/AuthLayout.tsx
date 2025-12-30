@@ -1,24 +1,22 @@
 import { useTranslation } from 'react-i18next'
-import { Link, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
+
+import AppFooter from './components/AppFooter'
+import TopNav from './components/TopNav'
 
 const AuthLayout = () => {
   const { t } = useTranslation()
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex w-full max-w-4xl items-center justify-between px-6 py-4">
-          <Link to="/shkoli" className="text-lg font-semibold">
-            {t('app.title')}
-          </Link>
-          <span className="text-sm text-slate-500">
-            {t('layouts.auth.subtitle')}
-          </span>
-        </div>
-      </header>
-      <main className="mx-auto w-full max-w-4xl px-6 py-10">
+    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
+      <TopNav />
+      <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10">
+        <p className="mb-6 text-sm text-slate-500">
+          {t('layouts.auth.subtitle')}
+        </p>
         <Outlet />
       </main>
+      <AppFooter />
     </div>
   )
 }

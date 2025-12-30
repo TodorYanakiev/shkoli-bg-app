@@ -1,8 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply font-sans;
+  }
+
   :root {
     color: #0f172a;
     background-color: #f8fafc;
