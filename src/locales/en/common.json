@@ -9,7 +9,8 @@
     },
     "app": {
       "nav": {
-        "label": "Main navigation"
+        "label": "Main navigation",
+        "toggle": "Toggle navigation"
       },
       "header": {
         "kicker": "Education nearby",

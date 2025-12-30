@@ -10,7 +10,7 @@ const AuthLayout = () => {
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       <TopNav />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10">
+      <main className="w-full flex-1 px-4 py-8 sm:px-6 sm:py-10 lg:px-12">
         <p className="mb-6 text-sm text-slate-500">
           {t('layouts.auth.subtitle')}
         </p>

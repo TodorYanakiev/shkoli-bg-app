@@ -6,7 +6,7 @@ const NotFoundPage = () => {
   const { t } = useTranslation()
 
   return (
-    <section className="mx-auto w-full max-w-3xl space-y-4 px-6 py-16 text-center">
+    <section className="mx-auto w-full max-w-3xl space-y-4 px-4 py-12 text-center sm:px-6 sm:py-16">
       <Helmet>
         <title>{`${t('pages.notFound.title')} | ${t('app.title')}`}</title>
       </Helmet>

@@ -6,8 +6,8 @@ const AppFooter = () => {
 
   return (
     <footer className="border-t border-slate-200 bg-white">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-6 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-1">
+      <div className="flex w-full flex-col gap-6 px-4 py-6 text-sm text-slate-600 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-12">
+        <div className="space-y-1 text-center md:text-left">
           <p className="text-sm font-semibold text-slate-900">
             {t('app.title')}
           </p>
@@ -18,7 +18,7 @@ const AppFooter = () => {
         </div>
         <nav
           aria-label={t('layouts.app.footer.linksLabel')}
-          className="flex items-center gap-3 text-sm"
+          className="flex items-center justify-center gap-3 text-sm md:justify-end"
         >
           <Link
             to="/shkoli"
