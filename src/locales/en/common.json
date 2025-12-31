@@ -5,7 +5,31 @@
   },
   "layouts": {
     "auth": {
-      "subtitle": "Sign in or create an account"
+      "subtitle": "Sign in or create an account",
+      "benefits": {
+        "kicker": "Why join",
+        "title": "Make the most of Shkoli.bg",
+        "subtitle": "Keep everything in one place and move faster.",
+        "items": {
+          "save": {
+            "title": "Save your favorites",
+            "description": "Bookmark courses and lyceums to compare later."
+          },
+          "compare": {
+            "title": "Compare smarter",
+            "description": "See distance, availability, and details side by side."
+          },
+          "manage": {
+            "title": "Stay in control",
+            "description": "Manage your profile and access from any device."
+          }
+        },
+        "badges": {
+          "secure": "Secure login",
+          "noSpam": "No spam",
+          "local": "Local data"
+        }
+      }
     },
     "app": {
       "nav": {
