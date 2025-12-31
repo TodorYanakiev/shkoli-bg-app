@@ -14,9 +14,6 @@ const AuthLayout = () => {
       <main className="relative w-full flex-1 overflow-hidden px-4 py-8 sm:px-6 sm:py-10 lg:px-12">
         <div aria-hidden className="page-background" />
         <div className="relative z-10 mx-auto w-full max-w-6xl">
-          <p className="mb-6 text-sm text-slate-500">
-            {t('layouts.auth.subtitle')}
-          </p>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
             <div>
               <Outlet />
