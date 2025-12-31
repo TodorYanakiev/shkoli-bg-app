@@ -37,21 +37,28 @@
   },
   "validation": {
     "required": "Полето е задължително.",
-    "email": "Въведете валиден имейл адрес."
+    "email": "Въведете валиден имейл адрес.",
+    "usernameMin": "Потребителското име трябва да е поне 3 символа.",
+    "usernameMax": "Потребителското име може да е най-много 50 символа.",
+    "passwordMin": "Паролата трябва да е поне 8 символа.",
+    "passwordMatch": "Паролите не съвпадат."
   },
   "errors": {
     "network": "Не можем да се свържем със сървъра. Опитайте отново.",
     "generic": "Възникна грешка. Моля, опитайте отново.",
     "auth": {
       "forbidden": "Нямате достъп до този акаунт.",
-      "logoutFailed": "Неуспешен изход от профила. Опитайте отново."
+      "logoutFailed": "Неуспешен изход от профила. Опитайте отново.",
+      "registerFailed": "Неуспешна регистрация. Опитайте отново.",
+      "userExists": "Вече има профил с тези данни."
     }
   },
   "feedback": {
     "dismiss": "Затвори",
     "auth": {
       "loginSuccess": "Добре дошли отново! Влязохте успешно.",
-      "logoutSuccess": "Излязохте от профила си."
+      "logoutSuccess": "Излязохте от профила си.",
+      "registerSuccess": "Профилът е създаден. Влязохте успешно."
     }
   },
   "pages": {
@@ -72,7 +79,25 @@
     },
     "register": {
       "title": "Регистрация",
-      "subtitle": "Създайте нов профил за минути."
+      "subtitle": "Създайте нов профил за минути.",
+      "form": {
+        "firstnameLabel": "Име",
+        "firstnamePlaceholder": "Вашето име",
+        "lastnameLabel": "Фамилия",
+        "lastnamePlaceholder": "Вашата фамилия",
+        "usernameLabel": "Потребителско име",
+        "usernamePlaceholder": "Изберете потребителско име",
+        "emailLabel": "Имейл адрес",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Парола",
+        "passwordPlaceholder": "Създайте парола",
+        "repeatedPasswordLabel": "Потвърди паролата",
+        "repeatedPasswordPlaceholder": "Повторете паролата",
+        "submit": "Създай профил",
+        "submitting": "Създаване...",
+        "loginPrompt": "Имате профил?",
+        "loginLink": "Вход"
+      }
     },
     "shkoli": {
       "title": "Школи",

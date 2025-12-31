@@ -66,12 +66,12 @@ const TopNav = () => {
           message: t('feedback.auth.logoutSuccess'),
           tone: 'success',
         })
-        navigate('/login', { replace: true })
+        navigate('/auth/login', { replace: true })
       },
       onError: (error) => {
         if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
           clearTokens()
-          navigate('/login', { replace: true })
+          navigate('/auth/login', { replace: true })
         }
       },
     })
@@ -135,13 +135,13 @@ const TopNav = () => {
             ) : (
               <>
                 <Link
-                  to="/register"
+                  to="/auth/register"
                   className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
                 >
                   {t('nav.register')}
                 </Link>
                 <Link
-                  to="/login"
+                  to="/auth/login"
                   className="inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 >
                   {t('nav.login')}
@@ -211,13 +211,13 @@ const TopNav = () => {
             ) : (
               <>
                 <Link
-                  to="/register"
+                  to="/auth/register"
                   className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
                 >
                   {t('nav.register')}
                 </Link>
                 <Link
-                  to="/login"
+                  to="/auth/login"
                   className="inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 >
                   {t('nav.login')}

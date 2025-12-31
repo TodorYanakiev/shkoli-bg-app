@@ -12,11 +12,21 @@ import ShkoliPage from '../pages/Shkoli'
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/login',
+    element: <Navigate to="/auth/login" replace />,
+  },
+  {
+    path: '/register',
+    element: <Navigate to="/auth/register" replace />,
+  },
+  {
+    path: '/auth',
     element: <AuthLayout />,
     children: [
+      { index: true, element: <Navigate to="/auth/login" replace /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
+      { path: '*', element: <Navigate to="/auth/login" replace /> },
     ],
   },
   {

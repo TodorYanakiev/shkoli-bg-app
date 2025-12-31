@@ -37,21 +37,28 @@
   },
   "validation": {
     "required": "This field is required.",
-    "email": "Enter a valid email address."
+    "email": "Enter a valid email address.",
+    "usernameMin": "Username must be at least 3 characters.",
+    "usernameMax": "Username must be at most 50 characters.",
+    "passwordMin": "Password must be at least 8 characters.",
+    "passwordMatch": "Passwords do not match."
   },
   "errors": {
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
     "auth": {
       "forbidden": "You do not have access to this account.",
-      "logoutFailed": "We couldn't log you out. Try again."
+      "logoutFailed": "We couldn't log you out. Try again.",
+      "registerFailed": "We couldn't create your account. Try again.",
+      "userExists": "An account with these details already exists."
     }
   },
   "feedback": {
     "dismiss": "Dismiss",
     "auth": {
       "loginSuccess": "Welcome back! You are signed in.",
-      "logoutSuccess": "You have been logged out."
+      "logoutSuccess": "You have been logged out.",
+      "registerSuccess": "Account created. You're signed in."
     }
   },
   "pages": {
@@ -72,7 +79,25 @@
     },
     "register": {
       "title": "Register",
-      "subtitle": "Create a new account in minutes."
+      "subtitle": "Create a new account in minutes.",
+      "form": {
+        "firstnameLabel": "First name",
+        "firstnamePlaceholder": "Your first name",
+        "lastnameLabel": "Last name",
+        "lastnamePlaceholder": "Your last name",
+        "usernameLabel": "Username",
+        "usernamePlaceholder": "Choose a username",
+        "emailLabel": "Email address",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "Create a password",
+        "repeatedPasswordLabel": "Confirm password",
+        "repeatedPasswordPlaceholder": "Repeat your password",
+        "submit": "Create account",
+        "submitting": "Creating account...",
+        "loginPrompt": "Already have an account?",
+        "loginLink": "Log in"
+      }
     },
     "shkoli": {
       "title": "Courses",

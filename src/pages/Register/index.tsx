@@ -1,6 +1,8 @@
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
+import RegisterForm from './components/RegisterForm'
+
 const RegisterPage = () => {
   const { t } = useTranslation()
 
@@ -15,6 +17,7 @@ const RegisterPage = () => {
       <p className="text-sm text-slate-600">
         {t('pages.register.subtitle')}
       </p>
+      <RegisterForm />
     </section>
   )
 }
