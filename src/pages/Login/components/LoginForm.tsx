@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
 import { useLoginMutation } from '../hooks/useLoginMutation'
-import { useToast } from '../../../components/feedback/ToastProvider'
+import { useToast } from '../../../components/feedback/ToastContext'
 import type { ApiError } from '../../../types/api'
 import { setTokens } from '../../../utils/authStorage'
 import {
@@ -33,10 +33,10 @@ const getLoginErrorMessage = (error: ApiError | null, t: (key: string) => string
 }
 
 const LoginForm = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { showToast } = useToast()
-  const schema = useMemo(() => getLoginSchema(t), [t, i18n.language])
+  const schema = useMemo(() => getLoginSchema(t), [t])
   const mutation = useLoginMutation()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
 import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
-import { useToast } from '../../../components/feedback/ToastProvider'
+import { useToast } from '../../../components/feedback/ToastContext'
 import type { ApiError } from '../../../types/api'
 import {
   getChangePasswordSchema,
@@ -26,10 +26,10 @@ const getChangePasswordErrorMessage = (
 }
 
 const ChangePasswordPage = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { showToast } = useToast()
   const navigate = useNavigate()
-  const schema = useMemo(() => getChangePasswordSchema(t), [t, i18n.language])
+  const schema = useMemo(() => getChangePasswordSchema(t), [t])
   const mutation = useChangePasswordMutation()
   const [isCurrentVisible, setIsCurrentVisible] = useState(false)
   const [isNewVisible, setIsNewVisible] = useState(false)

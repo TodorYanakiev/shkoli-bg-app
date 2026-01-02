@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom'
 
 import logo from '../../assets/logo.png'
-import { useToast } from '../../components/feedback/ToastProvider'
+import { useToast } from '../../components/feedback/ToastContext'
 import UserAvatar from '../../components/ui/UserAvatar'
 import { useAuthStatus } from '../../hooks/useAuthStatus'
 import { useLogoutMutation } from '../../hooks/useLogoutMutation'

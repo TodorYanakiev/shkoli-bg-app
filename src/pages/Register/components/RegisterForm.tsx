@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
 import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
-import { useToast } from '../../../components/feedback/ToastProvider'
+import { useToast } from '../../../components/feedback/ToastContext'
 import { useRegisterMutation } from '../hooks/useRegisterMutation'
 import type { ApiError } from '../../../types/api'
 import { setTokens } from '../../../utils/authStorage'
@@ -32,10 +32,10 @@ const getRegisterErrorMessage = (
 }
 
 const RegisterForm = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { showToast } = useToast()
-  const schema = useMemo(() => getRegisterSchema(t), [t, i18n.language])
+  const schema = useMemo(() => getRegisterSchema(t), [t])
   const mutation = useRegisterMutation()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [isRepeatVisible, setIsRepeatVisible] = useState(false)

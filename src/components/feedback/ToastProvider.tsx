@@ -1,7 +1,5 @@
 import {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -10,26 +8,12 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type ToastTone = 'success' | 'info' | 'error'
-
-type ToastItem = {
-  id: string
-  message: string
-  tone: ToastTone
-  isExiting: boolean
-}
-
-type ToastOptions = {
-  message: string
-  tone?: ToastTone
-  durationMs?: number
-}
-
-type ToastContextValue = {
-  showToast: (options: ToastOptions) => void
-}
-
-const ToastContext = createContext<ToastContextValue | undefined>(undefined)
+import {
+  ToastContext,
+  type ToastItem,
+  type ToastOptions,
+  type ToastTone,
+} from './ToastContext'
 
 const DEFAULT_DURATION_MS = 3600
 const EXIT_DURATION_MS = 220
@@ -44,14 +28,6 @@ const createToastId = (() => {
     return `toast-${Date.now()}-${counter}`
   }
 })()
-
-export const useToast = () => {
-  const context = useContext(ToastContext)
-  if (!context) {
-    throw new Error('useToast must be used within ToastProvider')
-  }
-  return context
-}
 
 const ToastProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation()
@@ -108,15 +84,14 @@ const ToastProvider = ({ children }: { children: ReactNode }) => {
   )
 
   useEffect(() => {
+    const scheduledTimeouts = timeoutIds.current
+    const scheduledExitTimeouts = exitTimeoutIds.current
+
     return () => {
-      timeoutIds.current.forEach((timeoutId) =>
-        window.clearTimeout(timeoutId),
-      )
-      exitTimeoutIds.current.forEach((timeoutId) =>
-        window.clearTimeout(timeoutId),
-      )
-      timeoutIds.current.clear()
-      exitTimeoutIds.current.clear()
+      scheduledTimeouts.forEach((timeoutId) => window.clearTimeout(timeoutId))
+      scheduledExitTimeouts.forEach((timeoutId) => window.clearTimeout(timeoutId))
+      scheduledTimeouts.clear()
+      scheduledExitTimeouts.clear()
     }
   }, [])
 
