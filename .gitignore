@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 lhci-reports
+.lighthouseci
 playwright-report
 test-results
 
