@@ -15,8 +15,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "i18next": "^23.12.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-helmet-async": "^2.0.5",
+    "react-i18next": "^15.0.2",
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
@@ -25,14 +29,17 @@
     "@playwright/test": "^1.57.0",
     "@testing-library/react": "^16.3.1",
     "@types/node": "^24.9.1",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^5.1.0",
+    "autoprefixer": "^10.4.20",
     "axe-core": "^4.11.0",
     "eslint": "^9.38.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.4.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
     "jsdom": "^27.4.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.2",

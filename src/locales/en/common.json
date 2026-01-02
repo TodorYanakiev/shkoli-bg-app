@@ -1,0 +1,67 @@
+{
+  "app": {
+    "title": "Shkoli.bg",
+    "logoAlt": "Shkoli.bg logo"
+  },
+  "layouts": {
+    "auth": {
+      "subtitle": "Sign in or create an account"
+    },
+    "app": {
+      "nav": {
+        "label": "Main navigation",
+        "toggle": "Toggle navigation"
+      },
+      "header": {
+        "kicker": "Education nearby",
+        "title": "Find courses that fit your needs",
+        "subtitle": "Compare locations, courses, and access on the map.",
+        "cta": "Open map"
+      },
+      "footer": {
+        "description": "EducationNearby helps citizens find the right course faster.",
+        "linksLabel": "Quick links",
+        "notice": "All rights reserved."
+      }
+    }
+  },
+  "nav": {
+    "shkoli": "Courses",
+    "lyceums": "Lyceums",
+    "map": "Map",
+    "about": "About us",
+    "login": "Log in",
+    "register": "Register"
+  },
+  "pages": {
+    "login": {
+      "title": "Login",
+      "subtitle": "Access your account to continue."
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Create a new account in minutes."
+    },
+    "shkoli": {
+      "title": "Courses",
+      "subtitle": "Browse nearby courses and view their details."
+    },
+    "map": {
+      "title": "Map",
+      "subtitle": "Explore courses on the map."
+    },
+    "lyceums": {
+      "title": "Lyceums",
+      "subtitle": "Explore nearby lyceums and their profiles."
+    },
+    "about": {
+      "title": "About us",
+      "subtitle": "Learn more about the EducationNearby project."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "message": "The page you are looking for does not exist.",
+      "action": "Go to courses"
+    }
+  }
+}

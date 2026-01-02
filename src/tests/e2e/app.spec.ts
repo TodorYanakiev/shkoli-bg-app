@@ -5,7 +5,7 @@ test('home page renders', async ({ page }) => {
   await page.goto('/')
 
   await expect(
-    page.getByRole('heading', { name: /vite \+ react/i })
+    page.getByRole('heading', { name: 'Courses', level: 1 })
   ).toBeVisible()
 })
 
