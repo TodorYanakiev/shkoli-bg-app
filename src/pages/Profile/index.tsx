@@ -29,6 +29,11 @@ const ProfilePage = () => {
   const fullName = getUserFullName(user) || t('pages.profile.emptyValue')
   const username = user?.username ?? t('pages.profile.emptyValue')
   const email = user?.email ?? t('pages.profile.emptyValue')
+  const roleLabel = user?.role
+    ? ({ USER: t('pages.profile.roles.user'), ADMIN: t('pages.profile.roles.admin') }[
+        user.role
+      ] ?? t('pages.profile.roles.unknown'))
+    : t('pages.profile.emptyValue')
 
   const errorMessage = getProfileErrorMessage(error ?? null, t)
 
@@ -37,19 +42,11 @@ const ProfilePage = () => {
       <Helmet>
         <title>{`${t('pages.profile.title')} | ${t('app.title')}`}</title>
       </Helmet>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <UserAvatar
-          alt={t('nav.profileAvatarAlt', { name: displayName })}
-          size="lg"
-        />
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900">
-            {t('pages.profile.title')}
-          </h1>
-          <p className="text-sm text-slate-600">
-            {t('pages.profile.subtitle')}
-          </p>
-        </div>
+      <div>
+        <h1 className="text-2xl font-semibold text-slate-900">
+          {t('pages.profile.title')}
+        </h1>
+        <p className="text-sm text-slate-600">{t('pages.profile.subtitle')}</p>
       </div>
       {isLoading ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm">
@@ -63,31 +60,52 @@ const ProfilePage = () => {
           {errorMessage}
         </div>
       ) : user ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-900">
-            {t('pages.profile.details.title')}
-          </h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <dt className="text-slate-500">
-                {t('pages.profile.details.fullName')}
-              </dt>
-              <dd className="font-medium text-slate-900">{fullName}</dd>
+        <>
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="text-sm font-semibold text-slate-900">
+              {t('pages.profile.summary.title')}
+            </h2>
+            <div className="mt-4 flex items-center gap-4">
+              <UserAvatar
+                alt={t('nav.profileAvatarAlt', { name: displayName })}
+                size="lg"
+              />
+              <div>
+                <p className="text-lg font-semibold text-slate-900">
+                  {displayName}
+                </p>
+                <span className="mt-2 inline-flex items-center rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                  {roleLabel}
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <dt className="text-slate-500">
-                {t('pages.profile.details.username')}
-              </dt>
-              <dd className="font-medium text-slate-900">{username}</dd>
-            </div>
-            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <dt className="text-slate-500">
-                {t('pages.profile.details.email')}
-              </dt>
-              <dd className="font-medium text-slate-900">{email}</dd>
-            </div>
-          </dl>
-        </div>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="text-sm font-semibold text-slate-900">
+              {t('pages.profile.details.title')}
+            </h2>
+            <dl className="mt-4 space-y-3 text-sm sm:space-y-0 sm:grid sm:grid-cols-[minmax(0,180px)_minmax(0,1fr)] sm:gap-x-6 sm:gap-y-3">
+              <div className="sm:contents">
+                <dt className="text-slate-500">
+                  {t('pages.profile.details.fullName')}
+                </dt>
+                <dd className="font-medium text-slate-900">{fullName}</dd>
+              </div>
+              <div className="sm:contents">
+                <dt className="text-slate-500">
+                  {t('pages.profile.details.username')}
+                </dt>
+                <dd className="font-medium text-slate-900">{username}</dd>
+              </div>
+              <div className="sm:contents">
+                <dt className="text-slate-500">
+                  {t('pages.profile.details.email')}
+                </dt>
+                <dd className="font-medium text-slate-900">{email}</dd>
+              </div>
+            </dl>
+          </div>
+        </>
       ) : (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm">
           {t('pages.profile.empty')}

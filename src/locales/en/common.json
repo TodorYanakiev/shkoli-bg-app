@@ -146,6 +146,14 @@
       "empty": "We couldn't find profile details yet.",
       "emptyValue": "Not provided",
       "unknownUser": "User",
+      "summary": {
+        "title": "Profile summary"
+      },
+      "roles": {
+        "user": "User",
+        "admin": "Admin",
+        "unknown": "Unknown"
+      },
       "actions": {
         "title": "Account actions",
         "changePassword": "Change password"
