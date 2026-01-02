@@ -62,6 +62,12 @@
     "logout": "Log out",
     "loggingOut": "Logging out..."
   },
+  "form": {
+    "passwordToggle": {
+      "show": "Show",
+      "hide": "Hide"
+    }
+  },
   "validation": {
     "required": "This field is required.",
     "email": "Enter a valid email address.",
@@ -74,7 +80,8 @@
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
     "profile": {
-      "loadFailed": "We couldn't load your profile. Try again."
+      "loadFailed": "We couldn't load your profile. Try again.",
+      "changePasswordFailed": "We couldn't update your password. Try again."
     },
     "auth": {
       "forbidden": "You do not have access to this account.",
@@ -89,6 +96,9 @@
       "loginSuccess": "Welcome back! You are signed in.",
       "logoutSuccess": "You have been logged out.",
       "registerSuccess": "Account created. You're signed in."
+    },
+    "profile": {
+      "passwordChanged": "Password updated successfully."
     }
   },
   "pages": {
@@ -136,6 +146,25 @@
       "empty": "We couldn't find profile details yet.",
       "emptyValue": "Not provided",
       "unknownUser": "User",
+      "actions": {
+        "title": "Account actions",
+        "changePassword": "Change password"
+      },
+      "changePassword": {
+        "title": "Change password",
+        "subtitle": "Update your password to keep your account secure.",
+        "backLink": "Back to profile",
+        "form": {
+          "currentPasswordLabel": "Current password",
+          "currentPasswordPlaceholder": "Enter your current password",
+          "newPasswordLabel": "New password",
+          "newPasswordPlaceholder": "Create a new password",
+          "confirmationPasswordLabel": "Confirm new password",
+          "confirmationPasswordPlaceholder": "Repeat the new password",
+          "submit": "Update password",
+          "submitting": "Updating..."
+        }
+      },
       "details": {
         "title": "Profile details",
         "fullName": "Full name",

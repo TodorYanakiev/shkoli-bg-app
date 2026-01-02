@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
 import { useLoginMutation } from '../hooks/useLoginMutation'
 import { useToast } from '../../../components/feedback/ToastProvider'
 import type { ApiError } from '../../../types/api'
@@ -37,6 +38,7 @@ const LoginForm = () => {
   const { showToast } = useToast()
   const schema = useMemo(() => getLoginSchema(t), [t, i18n.language])
   const mutation = useLoginMutation()
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   const {
     register,
@@ -68,14 +70,18 @@ const LoginForm = () => {
 
   const errorMessage = getLoginErrorMessage(mutation.error ?? null, t)
 
-  const inputClassName = (hasError: boolean) =>
+  const inputClassName = (hasError: boolean, extraClasses?: string) =>
     [
       'mt-1 w-full rounded-lg border px-3 py-2 text-sm text-slate-900 shadow-sm transition',
       'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
       hasError
         ? 'border-rose-300 bg-rose-50/40 focus-visible:outline-rose-300'
         : 'border-slate-200 bg-white',
+      extraClasses,
     ].join(' ')
+
+  const getToggleLabel = (isVisible: boolean) =>
+    isVisible ? t('form.passwordToggle.hide') : t('form.passwordToggle.show')
 
   return (
     <form
@@ -117,16 +123,23 @@ const LoginForm = () => {
         >
           {t('pages.login.form.passwordLabel')}
         </label>
-        <input
-          id="login-password"
-          type="password"
-          autoComplete="current-password"
-          placeholder={t('pages.login.form.passwordPlaceholder')}
-          aria-invalid={Boolean(errors.password)}
-          aria-describedby={errors.password ? 'login-password-error' : undefined}
-          className={inputClassName(Boolean(errors.password))}
-          {...register('password')}
-        />
+        <div className="relative mt-1">
+          <input
+            id="login-password"
+            type={isPasswordVisible ? 'text' : 'password'}
+            autoComplete="current-password"
+            placeholder={t('pages.login.form.passwordPlaceholder')}
+            aria-invalid={Boolean(errors.password)}
+            aria-describedby={errors.password ? 'login-password-error' : undefined}
+            className={inputClassName(Boolean(errors.password), 'pr-14 mt-0')}
+            {...register('password')}
+          />
+          <PasswordVisibilityToggle
+            isVisible={isPasswordVisible}
+            onToggle={() => setIsPasswordVisible((prev) => !prev)}
+            ariaLabel={getToggleLabel(isPasswordVisible)}
+          />
+        </div>
         {errors.password ? (
           <p
             id="login-password-error"

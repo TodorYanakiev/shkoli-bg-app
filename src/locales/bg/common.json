@@ -62,6 +62,12 @@
     "logout": "Изход",
     "loggingOut": "Излизане..."
   },
+  "form": {
+    "passwordToggle": {
+      "show": "Покажи",
+      "hide": "Скрий"
+    }
+  },
   "validation": {
     "required": "Полето е задължително.",
     "email": "Въведете валиден имейл адрес.",
@@ -74,7 +80,8 @@
     "network": "Не можем да се свържем със сървъра. Опитайте отново.",
     "generic": "Възникна грешка. Моля, опитайте отново.",
     "profile": {
-      "loadFailed": "Не можем да заредим профила ви. Опитайте отново."
+      "loadFailed": "Не можем да заредим профила ви. Опитайте отново.",
+      "changePasswordFailed": "Не успяхме да обновим паролата ви. Опитайте отново."
     },
     "auth": {
       "forbidden": "Нямате достъп до този акаунт.",
@@ -89,6 +96,9 @@
       "loginSuccess": "Добре дошли отново! Влязохте успешно.",
       "logoutSuccess": "Излязохте от профила си.",
       "registerSuccess": "Профилът е създаден. Влязохте успешно."
+    },
+    "profile": {
+      "passwordChanged": "Паролата е обновена успешно."
     }
   },
   "pages": {
@@ -136,6 +146,25 @@
       "empty": "Все още няма налични данни за профила.",
       "emptyValue": "Няма данни",
       "unknownUser": "Потребител",
+      "actions": {
+        "title": "Действия по акаунта",
+        "changePassword": "Смени паролата"
+      },
+      "changePassword": {
+        "title": "Смяна на парола",
+        "subtitle": "Обновете паролата си, за да запазите профила си защитен.",
+        "backLink": "Назад към профила",
+        "form": {
+          "currentPasswordLabel": "Текуща парола",
+          "currentPasswordPlaceholder": "Въведете текущата си парола",
+          "newPasswordLabel": "Нова парола",
+          "newPasswordPlaceholder": "Създайте нова парола",
+          "confirmationPasswordLabel": "Потвърдете новата парола",
+          "confirmationPasswordPlaceholder": "Повторете новата парола",
+          "submit": "Обнови паролата",
+          "submitting": "Обновяване..."
+        }
+      },
       "details": {
         "title": "Детайли за профила",
         "fullName": "Име и фамилия",
