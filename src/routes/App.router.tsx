@@ -7,8 +7,10 @@ import LoginPage from '../pages/Login'
 import LyceumsPage from '../pages/Lyceums'
 import MapPage from '../pages/Map'
 import NotFoundPage from '../pages/NotFound'
+import ProfilePage from '../pages/Profile'
 import RegisterPage from '../pages/Register'
 import ShkoliPage from '../pages/Shkoli'
+import ProtectedRoute from './ProtectedRoute'
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
       { path: 'lyceums', element: <LyceumsPage /> },
       { path: 'map', element: <MapPage /> },
       { path: 'about', element: <AboutPage /> },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

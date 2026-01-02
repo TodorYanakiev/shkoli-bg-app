@@ -10,19 +10,27 @@ import {
 
 import logo from '../../assets/logo.png'
 import { useToast } from '../../components/feedback/ToastProvider'
+import UserAvatar from '../../components/ui/UserAvatar'
 import { useAuthStatus } from '../../hooks/useAuthStatus'
 import { useLogoutMutation } from '../../hooks/useLogoutMutation'
+import { useUserProfile } from '../../pages/Profile/hooks/useUserProfile'
 import type { ApiError } from '../../types/api'
 import { clearTokens } from '../../utils/authStorage'
+import { getUserDisplayName } from '../../utils/user'
 
 const TopNav = () => {
   const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
   const { isAuthenticated } = useAuthStatus()
+  const { data: currentUser } = useUserProfile({ enabled: isAuthenticated })
   const logoutMutation = useLogoutMutation()
   const { showToast } = useToast()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const profileName =
+    getUserDisplayName(currentUser) || t('pages.profile.unknownUser')
+  const profileAvatarAlt = t('nav.profileAvatarAlt', { name: profileName })
 
   useEffect(() => {
     setIsMenuOpen(false)
@@ -122,16 +130,26 @@ const TopNav = () => {
           </nav>
           <div className="hidden items-center gap-2 md:flex">
             {isAuthenticated ? (
-              <button
-                type="button"
-                onClick={handleLogout}
-                disabled={logoutMutation.isPending}
-                className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
-              >
-                {logoutMutation.isPending
-                  ? t('nav.loggingOut')
-                  : t('nav.logout')}
-              </button>
+              <>
+                <Link
+                  to="/profile"
+                  aria-label={t('nav.profileLink')}
+                  title={profileName}
+                  className="inline-flex items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  <UserAvatar alt={profileAvatarAlt} size="sm" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  disabled={logoutMutation.isPending}
+                  className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+                >
+                  {logoutMutation.isPending
+                    ? t('nav.loggingOut')
+                    : t('nav.logout')}
+                </button>
+              </>
             ) : (
               <>
                 <Link
@@ -198,16 +216,26 @@ const TopNav = () => {
           </NavLink>
           <div className="flex flex-col gap-2 pt-2">
             {isAuthenticated ? (
-              <button
-                type="button"
-                onClick={handleLogout}
-                disabled={logoutMutation.isPending}
-                className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
-              >
-                {logoutMutation.isPending
-                  ? t('nav.loggingOut')
-                  : t('nav.logout')}
-              </button>
+              <>
+                <Link
+                  to="/profile"
+                  aria-label={t('nav.profileLink')}
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  <UserAvatar alt={profileAvatarAlt} size="sm" />
+                  <span>{t('nav.profile')}</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  disabled={logoutMutation.isPending}
+                  className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+                >
+                  {logoutMutation.isPending
+                    ? t('nav.loggingOut')
+                    : t('nav.logout')}
+                </button>
+              </>
             ) : (
               <>
                 <Link
