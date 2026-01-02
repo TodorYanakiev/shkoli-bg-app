@@ -83,7 +83,7 @@ const TopNav = () => {
   )
 
   return (
-    <header className="relative z-10 w-full border-b border-slate-200 bg-white">
+    <header className="sticky top-0 z-20 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="flex w-full items-center justify-between px-4 py-4 sm:px-6 lg:px-12">
         <Link
           to="/shkoli"
