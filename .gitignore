@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
+lhci-reports
+.lighthouseci
+playwright-report
+test-results
 
 # Editor directories and files
 .vscode/*
@@ -23,4 +27,6 @@ dist-ssr
 *.sln
 *.sw?
 
+.env
 AGENTS.md
+
