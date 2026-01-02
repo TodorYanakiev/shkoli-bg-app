@@ -1,13 +1,18 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
+import i18n from './locales/i18n'
 import App from './App'
 
 describe('App', () => {
-  it('renders the main heading', () => {
+  beforeAll(async () => {
+    await i18n.changeLanguage('en')
+  })
+
+  it('renders the courses page heading', async () => {
     render(<App />)
 
     expect(
-      screen.getByRole('heading', { name: /vite \+ react/i })
+      await screen.findByRole('heading', { name: 'Courses', level: 1 })
     ).toBeDefined()
   })
 })
