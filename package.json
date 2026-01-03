@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "typecheck": "tsc -b",
     "test": "vitest run",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build && playwright test",
+    "test:e2e:ci": "playwright test",
     "perf": "lhci autorun",
     "security": "npm audit --audit-level=high",
     "preview": "vite preview"
