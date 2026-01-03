@@ -227,7 +227,11 @@
         "title": "Детайли за профила",
         "fullName": "Име и фамилия",
         "username": "Потребителско име",
-        "email": "Имейл адрес"
+        "email": "Имейл адрес",
+        "administratedLyceum": "Администрирано читалище",
+        "administratedLyceumLoading": "Зареждане на читалище...",
+        "administratedLyceumUnavailable": "Не можем да заредим читалището.",
+        "administratedLyceumUnknown": "Читалището не е намерено."
       }
     },
     "shkoli": {

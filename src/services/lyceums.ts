@@ -2,6 +2,7 @@ import httpClient from './httpClient'
 import type {
   LyceumRightsRequest,
   LyceumRightsVerificationRequest,
+  LyceumResponse,
 } from '../types/lyceums'
 
 export const requestLyceumRights = async (payload: LyceumRightsRequest) => {
@@ -19,5 +20,10 @@ export const verifyLyceumRights = async (
     '/api/v1/lyceums/verify-rights',
     payload,
   )
+  return response.data
+}
+
+export const getLyceumById = async (id: number) => {
+  const response = await httpClient.get<LyceumResponse>(`/api/v1/lyceums/${id}`)
   return response.data
 }

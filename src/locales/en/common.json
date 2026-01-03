@@ -227,7 +227,11 @@
         "title": "Profile details",
         "fullName": "Full name",
         "username": "Username",
-        "email": "Email address"
+        "email": "Email address",
+        "administratedLyceum": "Administrated lyceum",
+        "administratedLyceumLoading": "Loading lyceum...",
+        "administratedLyceumUnavailable": "Unable to load lyceum.",
+        "administratedLyceumUnknown": "Lyceum not found."
       }
     },
     "shkoli": {
