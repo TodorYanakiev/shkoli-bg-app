@@ -160,6 +160,7 @@
       "roles": {
         "user": "User",
         "admin": "Admin",
+        "lyceumAdmin": "Lyceum administrator",
         "unknown": "Unknown"
       },
       "actions": {

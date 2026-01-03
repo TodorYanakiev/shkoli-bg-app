@@ -29,11 +29,15 @@ const ProfilePage = () => {
   const fullName = getUserFullName(user) || t('pages.profile.emptyValue')
   const username = user?.username ?? t('pages.profile.emptyValue')
   const email = user?.email ?? t('pages.profile.emptyValue')
-  const roleLabel = user?.role
-    ? ({ USER: t('pages.profile.roles.user'), ADMIN: t('pages.profile.roles.admin') }[
-        user.role
-      ] ?? t('pages.profile.roles.unknown'))
-    : t('pages.profile.emptyValue')
+  const hasLyceumAdministration = Boolean(user?.administratedLyceumId)
+  const roleLabel = hasLyceumAdministration
+    ? t('pages.profile.roles.lyceumAdmin')
+    : user?.role
+      ? ({
+          USER: t('pages.profile.roles.user'),
+          ADMIN: t('pages.profile.roles.admin'),
+        }[user.role] ?? t('pages.profile.roles.unknown'))
+      : t('pages.profile.emptyValue')
 
   const errorMessage = getProfileErrorMessage(error ?? null, t)
 
@@ -122,12 +126,14 @@ const ProfilePage = () => {
           >
             {t('pages.profile.actions.changePassword')}
           </Link>
-          <Link
-            to="/profile/lyceum-rights"
-            className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
-          >
-            {t('pages.profile.actions.requestLyceumRights')}
-          </Link>
+          {hasLyceumAdministration ? null : (
+            <Link
+              to="/profile/lyceum-rights"
+              className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
+            >
+              {t('pages.profile.actions.requestLyceumRights')}
+            </Link>
+          )}
         </div>
       </div>
     </section>
