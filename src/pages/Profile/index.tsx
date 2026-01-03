@@ -122,6 +122,12 @@ const ProfilePage = () => {
           >
             {t('pages.profile.actions.changePassword')}
           </Link>
+          <Link
+            to="/profile/lyceum-rights"
+            className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
+          >
+            {t('pages.profile.actions.requestLyceumRights')}
+          </Link>
         </div>
       </div>
     </section>
