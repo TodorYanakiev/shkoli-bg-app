@@ -74,7 +74,8 @@
     "usernameMin": "Username must be at least 3 characters.",
     "usernameMax": "Username must be at most 50 characters.",
     "passwordMin": "Password must be at least 8 characters.",
-    "passwordMatch": "Passwords do not match."
+    "passwordMatch": "Passwords do not match.",
+    "invalidOption": "Select a valid option."
   },
   "errors": {
     "network": "We couldn't reach the server. Try again.",
@@ -194,9 +195,16 @@
             "lyceumNameLabel": "Lyceum name",
             "lyceumNamePlaceholder": "Official lyceum name",
             "townLabel": "Town",
-            "townPlaceholder": "Town or city",
+            "townPlaceholder": "Select a town",
             "submit": "Send verification email",
             "submitting": "Sending..."
+          },
+          "suggestions": {
+            "selectTown": "Start typing to see suggestions, or select a town to narrow results.",
+            "loading": "Loading lyceum suggestions...",
+            "error": "Unable to load lyceum suggestions.",
+            "empty": "No lyceums found for the current selection.",
+            "hint": "Start typing to see suggestions."
           },
           "outcomes": {
             "emailSent": "We have sent you an email at {{email}} with a verification code.",

@@ -7,6 +7,13 @@ export type LyceumRightsVerificationRequest = {
   verificationCode: string
 }
 
+export type LyceumFilterParams = {
+  town?: string
+  latitude?: number
+  longitude?: number
+  limit?: number
+}
+
 export type LyceumResponse = {
   id?: number
   name?: string

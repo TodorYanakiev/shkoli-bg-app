@@ -1,5 +1,6 @@
 import httpClient from './httpClient'
 import type {
+  LyceumFilterParams,
   LyceumRightsRequest,
   LyceumRightsVerificationRequest,
   LyceumResponse,
@@ -23,7 +24,20 @@ export const verifyLyceumRights = async (
   return response.data
 }
 
+export const getAllLyceums = async () => {
+  const response = await httpClient.get<LyceumResponse[]>('/api/v1/lyceums')
+  return response.data
+}
+
 export const getLyceumById = async (id: number) => {
   const response = await httpClient.get<LyceumResponse>(`/api/v1/lyceums/${id}`)
+  return response.data
+}
+
+export const filterLyceums = async (params: LyceumFilterParams) => {
+  const response = await httpClient.get<LyceumResponse[]>(
+    '/api/v1/lyceums/filter',
+    { params },
+  )
   return response.data
 }

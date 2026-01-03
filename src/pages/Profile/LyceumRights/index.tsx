@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useToast } from '../../../components/feedback/ToastContext'
+import { LYCEUM_TOWNS } from '../../../constants/lyceums'
 import type { ApiError } from '../../../types/api'
 import {
   getLyceumRightsRequestSchema,
@@ -13,8 +14,12 @@ import {
   type LyceumRightsRequestFormValues,
   type LyceumRightsVerificationFormValues,
 } from '../../../validations/lyceums'
+import TownSelect from './components/TownSelect'
+import { useLyceumSuggestions } from './hooks/useLyceumSuggestions'
 import { useRequestLyceumRightsMutation } from './hooks/useRequestLyceumRightsMutation'
 import { useVerifyLyceumRightsMutation } from './hooks/useVerifyLyceumRightsMutation'
+
+const MAX_SUGGESTIONS = 8
 
 const getRequestRightsErrorMessage = (
   error: ApiError | null,
@@ -110,6 +115,8 @@ const LyceumRightsPage = () => {
     register: registerRequest,
     handleSubmit: handleRequestSubmit,
     reset: resetRequest,
+    watch: watchRequest,
+    control,
     formState: { errors: requestErrors },
   } = useForm<LyceumRightsRequestFormValues>({
     resolver: zodResolver(requestSchema),
@@ -129,6 +136,19 @@ const LyceumRightsPage = () => {
     defaultValues: {
       verificationCode: '',
     },
+  })
+
+  const selectedTown = watchRequest('town')
+  const lyceumNameValue = watchRequest('lyceumName')
+  const trimmedLyceumName = lyceumNameValue?.trim() ?? ''
+  const shouldFetchSuggestions =
+    Boolean(selectedTown) || Boolean(trimmedLyceumName)
+  const {
+    data: lyceumSuggestions,
+    isLoading: isSuggestionsLoading,
+    isError: isSuggestionsError,
+  } = useLyceumSuggestions(selectedTown, {
+    enabled: shouldFetchSuggestions,
   })
 
   const onRequestSubmit = (values: LyceumRightsRequestFormValues) => {
@@ -189,6 +209,7 @@ const LyceumRightsPage = () => {
     verifyMutation.error ?? null,
     t,
   )
+  const hasSelectedTown = Boolean(selectedTown)
   const isRequestLocked =
     requestOutcome?.type === 'alreadyAdmin' ||
     requestOutcome?.type === 'alreadyAdminOther'
@@ -196,10 +217,63 @@ const LyceumRightsPage = () => {
   const shouldShowRequestError =
     Boolean(requestErrorMessage) && requestOutcome?.type !== 'alreadyAdminOther'
 
+  const suggestionNames = useMemo(() => {
+    if (!lyceumSuggestions) {
+      return []
+    }
+    const query = lyceumNameValue?.trim().toLowerCase()
+    const names = lyceumSuggestions
+      .map((lyceum) => lyceum.name)
+      .filter((name): name is string => Boolean(name))
+    const filtered = query
+      ? names.filter((name) => name.toLowerCase().includes(query))
+      : names
+    const uniqueNames = Array.from(new Set(filtered))
+    return uniqueNames.slice(0, MAX_SUGGESTIONS)
+  }, [hasSelectedTown, lyceumSuggestions, lyceumNameValue])
+
+  const suggestionMessage = useMemo(() => {
+    if (isRequestLocked) {
+      return null
+    }
+    if (!hasSelectedTown && !trimmedLyceumName) {
+      return t('pages.profile.lyceumRights.request.suggestions.selectTown')
+    }
+    if (isSuggestionsLoading) {
+      return t('pages.profile.lyceumRights.request.suggestions.loading')
+    }
+    if (isSuggestionsError) {
+      return t('pages.profile.lyceumRights.request.suggestions.error')
+    }
+    if (shouldFetchSuggestions && suggestionNames.length === 0) {
+      return t('pages.profile.lyceumRights.request.suggestions.empty')
+    }
+    if (!trimmedLyceumName) {
+      return t('pages.profile.lyceumRights.request.suggestions.hint')
+    }
+    return null
+  }, [
+    isRequestLocked,
+    hasSelectedTown,
+    trimmedLyceumName,
+    isSuggestionsLoading,
+    isSuggestionsError,
+    suggestionNames.length,
+    shouldFetchSuggestions,
+    t,
+  ])
+
+  const suggestionMessageTone = isSuggestionsError
+    ? 'text-rose-600'
+    : shouldFetchSuggestions && suggestionNames.length === 0
+      ? 'text-amber-700'
+      : 'text-slate-500'
+
   const inputClassName = (hasError: boolean, extraClasses?: string) =>
     [
       'mt-1 w-full rounded-lg border px-3 py-2 text-sm text-slate-900 shadow-sm transition',
       'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+      'disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400',
       hasError
         ? 'border-rose-300 bg-rose-50/40 focus-visible:outline-rose-300'
         : 'border-slate-200 bg-white',
@@ -310,6 +384,7 @@ const LyceumRightsPage = () => {
                   id="lyceum-rights-name"
                   type="text"
                   autoComplete="organization"
+                  list="lyceum-rights-suggestions"
                   placeholder={t(
                     'pages.profile.lyceumRights.request.form.lyceumNamePlaceholder',
                   )}
@@ -323,6 +398,11 @@ const LyceumRightsPage = () => {
                   className={inputClassName(Boolean(requestErrors.lyceumName))}
                   {...registerRequest('lyceumName')}
                 />
+                <datalist id="lyceum-rights-suggestions">
+                  {suggestionNames.map((name) => (
+                    <option key={name} value={name} />
+                  ))}
+                </datalist>
                 {requestErrors.lyceumName ? (
                   <p
                     id="lyceum-rights-name-error"
@@ -330,6 +410,11 @@ const LyceumRightsPage = () => {
                     role="alert"
                   >
                     {requestErrors.lyceumName.message}
+                  </p>
+                ) : null}
+                {suggestionMessage ? (
+                  <p className={`mt-2 text-xs ${suggestionMessageTone}`}>
+                    {suggestionMessage}
                   </p>
                 ) : null}
               </div>
@@ -340,20 +425,25 @@ const LyceumRightsPage = () => {
                 >
                   {t('pages.profile.lyceumRights.request.form.townLabel')}
                 </label>
-                <input
-                  id="lyceum-rights-town"
-                  type="text"
-                  autoComplete="address-level2"
-                  placeholder={t(
-                    'pages.profile.lyceumRights.request.form.townPlaceholder',
+                <Controller
+                  control={control}
+                  name="town"
+                  render={({ field }) => (
+                    <TownSelect
+                      id="lyceum-rights-town"
+                      value={field.value ?? ''}
+                      onChange={field.onChange}
+                      options={LYCEUM_TOWNS}
+                      placeholder={t(
+                        'pages.profile.lyceumRights.request.form.townPlaceholder',
+                      )}
+                      disabled={requestMutation.isPending || isRequestLocked}
+                      hasError={Boolean(requestErrors.town)}
+                      describedById={
+                        requestErrors.town ? 'lyceum-rights-town-error' : undefined
+                      }
+                    />
                   )}
-                  aria-invalid={Boolean(requestErrors.town)}
-                  aria-describedby={
-                    requestErrors.town ? 'lyceum-rights-town-error' : undefined
-                  }
-                  disabled={requestMutation.isPending || isRequestLocked}
-                  className={inputClassName(Boolean(requestErrors.town))}
-                  {...registerRequest('town')}
                 />
                 {requestErrors.town ? (
                   <p
