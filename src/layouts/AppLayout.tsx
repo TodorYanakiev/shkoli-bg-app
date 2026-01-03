@@ -9,8 +9,11 @@ const AppLayout = () => {
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       <TopNav />
       <AppHeader />
-      <main className="w-full flex-1 px-4 py-8 sm:px-6 sm:py-10 lg:px-12">
-        <Outlet />
+      <main className="relative w-full flex-1 overflow-hidden px-4 py-8 sm:px-6 sm:py-10 lg:px-12">
+        <div aria-hidden className="page-background" />
+        <div className="relative z-10">
+          <Outlet />
+        </div>
       </main>
       <AppFooter />
     </div>

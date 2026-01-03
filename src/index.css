@@ -7,6 +7,8 @@
 @layer base {
   html {
     @apply font-sans;
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
   }
 
   :root {
@@ -17,5 +19,66 @@
   body {
     margin: 0;
     min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .page-background {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .page-background::before {
+    content: '';
+    position: absolute;
+    inset: -10% -10% 0 -10%;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(46, 123, 74, 0.16), transparent 45%),
+      radial-gradient(circle at 85% 10%, rgba(15, 23, 42, 0.12), transparent 35%),
+      radial-gradient(circle at 80% 80%, rgba(46, 123, 74, 0.1), transparent 45%),
+      linear-gradient(120deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+  }
+
+  .page-background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+      rgba(15, 23, 42, 0.06) 1px,
+      transparent 1px
+    );
+    background-size: 28px 28px;
+    opacity: 0.35;
+  }
+
+  @keyframes toast-in {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, -12px, 0) scale(0.98);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes toast-out {
+    0% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(0, -12px, 0) scale(0.98);
+    }
+  }
+
+  .animate-toast-in {
+    animation: toast-in 200ms ease-out;
+  }
+
+  .animate-toast-out {
+    animation: toast-out 180ms ease-in forwards;
   }
 }

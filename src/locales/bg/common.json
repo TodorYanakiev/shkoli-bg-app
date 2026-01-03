@@ -5,7 +5,31 @@
   },
   "layouts": {
     "auth": {
-      "subtitle": "Влезте или създайте профил"
+      "subtitle": "Влезте или създайте профил",
+      "benefits": {
+        "kicker": "Защо Школи",
+        "title": "Всичко под ръка",
+        "subtitle": "Запази, сравнявай и управлявай профила си по-лесно.",
+        "items": {
+          "save": {
+            "title": "Запази любими",
+            "description": "Отбелязвай курсове и читалища, за да ги сравниш по-късно."
+          },
+          "compare": {
+            "title": "Сравнявай бързо",
+            "description": "Виж разстояние, достъпност и детайли на едно място."
+          },
+          "manage": {
+            "title": "Контрол във всеки момент",
+            "description": "Управлявай профила си от всяко устройство."
+          }
+        },
+        "badges": {
+          "secure": "Сигурен вход",
+          "noSpam": "Без спам",
+          "local": "Локални данни"
+        }
+      }
     },
     "app": {
       "nav": {
@@ -31,16 +55,130 @@
     "map": "Карта",
     "about": "За нас",
     "login": "Вход",
-    "register": "Регистрация"
+    "register": "Регистрация",
+    "profile": "Профил",
+    "profileLink": "Отвори профила",
+    "profileAvatarAlt": "Профилна снимка на {{name}}",
+    "logout": "Изход",
+    "loggingOut": "Излизане..."
+  },
+  "form": {
+    "passwordToggle": {
+      "show": "Покажи",
+      "hide": "Скрий"
+    }
+  },
+  "validation": {
+    "required": "Полето е задължително.",
+    "email": "Въведете валиден имейл адрес.",
+    "usernameMin": "Потребителското име трябва да е поне 3 символа.",
+    "usernameMax": "Потребителското име може да е най-много 50 символа.",
+    "passwordMin": "Паролата трябва да е поне 8 символа.",
+    "passwordMatch": "Паролите не съвпадат."
+  },
+  "errors": {
+    "network": "Не можем да се свържем със сървъра. Опитайте отново.",
+    "generic": "Възникна грешка. Моля, опитайте отново.",
+    "profile": {
+      "loadFailed": "Не можем да заредим профила ви. Опитайте отново.",
+      "changePasswordFailed": "Не успяхме да обновим паролата ви. Опитайте отново."
+    },
+    "auth": {
+      "forbidden": "Нямате достъп до този акаунт.",
+      "logoutFailed": "Неуспешен изход от профила. Опитайте отново.",
+      "registerFailed": "Неуспешна регистрация. Опитайте отново.",
+      "userExists": "Вече има профил с тези данни."
+    }
+  },
+  "feedback": {
+    "dismiss": "Затвори",
+    "auth": {
+      "loginSuccess": "Добре дошли отново! Влязохте успешно.",
+      "logoutSuccess": "Излязохте от профила си.",
+      "registerSuccess": "Профилът е създаден. Влязохте успешно."
+    },
+    "profile": {
+      "passwordChanged": "Паролата е обновена успешно."
+    }
   },
   "pages": {
     "login": {
       "title": "Вход",
-      "subtitle": "Влезте в профила си, за да продължите."
+      "subtitle": "Влезте в профила си, за да продължите.",
+      "form": {
+        "emailLabel": "Имейл адрес",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Парола",
+        "passwordPlaceholder": "Въведете паролата си",
+        "submit": "Вход",
+        "submitting": "Влизане...",
+        "errors": {
+          "invalidCredentials": "Невалиден имейл или парола."
+        }
+      }
     },
     "register": {
       "title": "Регистрация",
-      "subtitle": "Създайте нов профил за минути."
+      "subtitle": "Създайте нов профил за минути.",
+      "form": {
+        "firstnameLabel": "Име",
+        "firstnamePlaceholder": "Вашето име",
+        "lastnameLabel": "Фамилия",
+        "lastnamePlaceholder": "Вашата фамилия",
+        "usernameLabel": "Потребителско име",
+        "usernamePlaceholder": "Изберете потребителско име",
+        "emailLabel": "Имейл адрес",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Парола",
+        "passwordPlaceholder": "Създайте парола",
+        "repeatedPasswordLabel": "Потвърди паролата",
+        "repeatedPasswordPlaceholder": "Повторете паролата",
+        "submit": "Създай профил",
+        "submitting": "Създаване...",
+        "loginPrompt": "Имате профил?",
+        "loginLink": "Вход"
+      }
+    },
+    "profile": {
+      "title": "Профил",
+      "subtitle": "Прегледайте данните на профила си на едно място.",
+      "loading": "Зареждане на профила...",
+      "empty": "Все още няма налични данни за профила.",
+      "emptyValue": "Няма данни",
+      "unknownUser": "Потребител",
+      "summary": {
+        "title": "Обобщение на профила"
+      },
+      "roles": {
+        "user": "Потребител",
+        "admin": "Администратор",
+        "unknown": "Неизвестна"
+      },
+      "actions": {
+        "title": "Действия по акаунта",
+        "changePassword": "Смени паролата"
+      },
+      "changePassword": {
+        "title": "Смяна на парола",
+        "subtitle": "Обновете паролата си, за да запазите профила си защитен.",
+        "backLink": "Назад към профила",
+        "form": {
+          "currentPasswordLabel": "Текуща парола",
+          "currentPasswordPlaceholder": "Въведете текущата си парола",
+          "newPasswordLabel": "Нова парола",
+          "newPasswordPlaceholder": "Създайте нова парола",
+          "confirmationPasswordLabel": "Потвърдете новата парола",
+          "confirmationPasswordPlaceholder": "Повторете новата парола",
+          "submit": "Обнови паролата",
+          "submitting": "Обновяване..."
+        }
+      },
+      "details": {
+        "title": "Детайли за профила",
+        "fullName": "Име и фамилия",
+        "username": "Потребителско име",
+        "email": "Имейл адрес"
+      }
     },
     "shkoli": {
       "title": "Школи",

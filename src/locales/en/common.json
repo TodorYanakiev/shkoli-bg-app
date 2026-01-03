@@ -5,7 +5,31 @@
   },
   "layouts": {
     "auth": {
-      "subtitle": "Sign in or create an account"
+      "subtitle": "Sign in or create an account",
+      "benefits": {
+        "kicker": "Why join",
+        "title": "Make the most of Shkoli.bg",
+        "subtitle": "Keep everything in one place and move faster.",
+        "items": {
+          "save": {
+            "title": "Save your favorites",
+            "description": "Bookmark courses and lyceums to compare later."
+          },
+          "compare": {
+            "title": "Compare smarter",
+            "description": "See distance, availability, and details side by side."
+          },
+          "manage": {
+            "title": "Stay in control",
+            "description": "Manage your profile and access from any device."
+          }
+        },
+        "badges": {
+          "secure": "Secure login",
+          "noSpam": "No spam",
+          "local": "Local data"
+        }
+      }
     },
     "app": {
       "nav": {
@@ -31,16 +55,130 @@
     "map": "Map",
     "about": "About us",
     "login": "Log in",
-    "register": "Register"
+    "register": "Register",
+    "profile": "Profile",
+    "profileLink": "Open profile",
+    "profileAvatarAlt": "Profile picture for {{name}}",
+    "logout": "Log out",
+    "loggingOut": "Logging out..."
+  },
+  "form": {
+    "passwordToggle": {
+      "show": "Show",
+      "hide": "Hide"
+    }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Enter a valid email address.",
+    "usernameMin": "Username must be at least 3 characters.",
+    "usernameMax": "Username must be at most 50 characters.",
+    "passwordMin": "Password must be at least 8 characters.",
+    "passwordMatch": "Passwords do not match."
+  },
+  "errors": {
+    "network": "We couldn't reach the server. Try again.",
+    "generic": "Something went wrong. Please try again.",
+    "profile": {
+      "loadFailed": "We couldn't load your profile. Try again.",
+      "changePasswordFailed": "We couldn't update your password. Try again."
+    },
+    "auth": {
+      "forbidden": "You do not have access to this account.",
+      "logoutFailed": "We couldn't log you out. Try again.",
+      "registerFailed": "We couldn't create your account. Try again.",
+      "userExists": "An account with these details already exists."
+    }
+  },
+  "feedback": {
+    "dismiss": "Dismiss",
+    "auth": {
+      "loginSuccess": "Welcome back! You are signed in.",
+      "logoutSuccess": "You have been logged out.",
+      "registerSuccess": "Account created. You're signed in."
+    },
+    "profile": {
+      "passwordChanged": "Password updated successfully."
+    }
   },
   "pages": {
     "login": {
       "title": "Login",
-      "subtitle": "Access your account to continue."
+      "subtitle": "Access your account to continue.",
+      "form": {
+        "emailLabel": "Email address",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "submit": "Log in",
+        "submitting": "Signing in...",
+        "errors": {
+          "invalidCredentials": "Incorrect email or password."
+        }
+      }
     },
     "register": {
       "title": "Register",
-      "subtitle": "Create a new account in minutes."
+      "subtitle": "Create a new account in minutes.",
+      "form": {
+        "firstnameLabel": "First name",
+        "firstnamePlaceholder": "Your first name",
+        "lastnameLabel": "Last name",
+        "lastnamePlaceholder": "Your last name",
+        "usernameLabel": "Username",
+        "usernamePlaceholder": "Choose a username",
+        "emailLabel": "Email address",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "Create a password",
+        "repeatedPasswordLabel": "Confirm password",
+        "repeatedPasswordPlaceholder": "Repeat your password",
+        "submit": "Create account",
+        "submitting": "Creating account...",
+        "loginPrompt": "Already have an account?",
+        "loginLink": "Log in"
+      }
+    },
+    "profile": {
+      "title": "Profile",
+      "subtitle": "Review your account details in one place.",
+      "loading": "Loading your profile...",
+      "empty": "We couldn't find profile details yet.",
+      "emptyValue": "Not provided",
+      "unknownUser": "User",
+      "summary": {
+        "title": "Profile summary"
+      },
+      "roles": {
+        "user": "User",
+        "admin": "Admin",
+        "unknown": "Unknown"
+      },
+      "actions": {
+        "title": "Account actions",
+        "changePassword": "Change password"
+      },
+      "changePassword": {
+        "title": "Change password",
+        "subtitle": "Update your password to keep your account secure.",
+        "backLink": "Back to profile",
+        "form": {
+          "currentPasswordLabel": "Current password",
+          "currentPasswordPlaceholder": "Enter your current password",
+          "newPasswordLabel": "New password",
+          "newPasswordPlaceholder": "Create a new password",
+          "confirmationPasswordLabel": "Confirm new password",
+          "confirmationPasswordPlaceholder": "Repeat the new password",
+          "submit": "Update password",
+          "submitting": "Updating..."
+        }
+      },
+      "details": {
+        "title": "Profile details",
+        "fullName": "Full name",
+        "username": "Username",
+        "email": "Email address"
+      }
     },
     "shkoli": {
       "title": "Courses",

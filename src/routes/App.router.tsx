@@ -7,16 +7,29 @@ import LoginPage from '../pages/Login'
 import LyceumsPage from '../pages/Lyceums'
 import MapPage from '../pages/Map'
 import NotFoundPage from '../pages/NotFound'
+import ChangePasswordPage from '../pages/Profile/ChangePassword'
+import ProfilePage from '../pages/Profile'
 import RegisterPage from '../pages/Register'
 import ShkoliPage from '../pages/Shkoli'
+import ProtectedRoute from './ProtectedRoute'
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/login',
+    element: <Navigate to="/auth/login" replace />,
+  },
+  {
+    path: '/register',
+    element: <Navigate to="/auth/register" replace />,
+  },
+  {
+    path: '/auth',
     element: <AuthLayout />,
     children: [
+      { index: true, element: <Navigate to="/auth/login" replace /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
+      { path: '*', element: <Navigate to="/auth/login" replace /> },
     ],
   },
   {
@@ -28,6 +41,22 @@ const router = createBrowserRouter([
       { path: 'lyceums', element: <LyceumsPage /> },
       { path: 'map', element: <MapPage /> },
       { path: 'about', element: <AboutPage /> },
+      {
+        path: 'profile/change-password',
+        element: (
+          <ProtectedRoute>
+            <ChangePasswordPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
