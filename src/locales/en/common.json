@@ -104,6 +104,24 @@
       "lyceumRightsVerified": "You are now a lyceum administrator."
     }
   },
+  "components": {
+    "lyceumCard": {
+      "title": "Administrated lyceum",
+      "subtitle": "Key details for the lyceum you manage.",
+      "imageAlt": "Lyceum exterior",
+      "loading": "Loading lyceum details...",
+      "error": "Unable to load lyceum details right now.",
+      "empty": "Lyceum details are not available.",
+      "notAvailable": "Not provided",
+      "viewDetails": "Open lyceum page",
+      "manageCta": "Manage lyceum",
+      "fields": {
+        "name": "Name",
+        "town": "Town",
+        "address": "Address"
+      }
+    }
+  },
   "pages": {
     "login": {
       "title": "Login",
@@ -246,7 +264,49 @@
     },
     "lyceums": {
       "title": "Lyceums",
-      "subtitle": "Explore nearby lyceums and their profiles."
+      "subtitle": "Explore nearby lyceums and their profiles.",
+      "detail": {
+        "title": "Lyceum profile",
+        "subtitle": "Full information about this lyceum.",
+        "back": "Back to lyceums",
+        "invalidId": "Invalid lyceum id.",
+        "loadFailed": "We couldn't load this lyceum. Try again.",
+        "notFound": "Lyceum not found.",
+        "heroLabel": "Lyceum overview",
+        "labels": {
+          "verification": "Verification: {{status}}"
+        },
+        "verificationStatus": {
+          "VERIFIED": "Verified",
+          "PENDING": "Pending",
+          "NOT_VERIFIED": "Not verified"
+        },
+        "notProvided": "Not provided",
+        "sections": {
+          "identity": "Identity",
+          "location": "Location",
+          "contacts": "Contacts",
+          "people": "People"
+        },
+        "fields": {
+          "status": "Status",
+          "verificationStatus": "Verification status",
+          "bulstat": "Bulstat",
+          "registrationNumber": "Registration number",
+          "region": "Region",
+          "municipality": "Municipality",
+          "town": "Town",
+          "address": "Address",
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "phone": "Phone",
+          "email": "Email",
+          "urlToLibrariesSite": "Library website",
+          "chitalishtaUrl": "Chitalishta profile",
+          "chairman": "Chairman",
+          "secretary": "Secretary"
+        }
+      }
     },
     "about": {
       "title": "About us",

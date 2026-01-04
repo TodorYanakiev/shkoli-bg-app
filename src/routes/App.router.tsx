@@ -5,6 +5,7 @@ import AuthLayout from '../layouts/AuthLayout'
 import AboutPage from '../pages/About'
 import LoginPage from '../pages/Login'
 import LyceumsPage from '../pages/Lyceums'
+import LyceumDetailPage from '../pages/Lyceums/Detail'
 import MapPage from '../pages/Map'
 import NotFoundPage from '../pages/NotFound'
 import ChangePasswordPage from '../pages/Profile/ChangePassword'
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="/shkoli" replace /> },
       { path: 'shkoli', element: <ShkoliPage /> },
       { path: 'lyceums', element: <LyceumsPage /> },
+      { path: 'lyceums/:id', element: <LyceumDetailPage /> },
       { path: 'map', element: <MapPage /> },
       { path: 'about', element: <AboutPage /> },
       {
