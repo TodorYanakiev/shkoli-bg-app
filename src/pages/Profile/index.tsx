@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import UserAvatar from '../../components/ui/UserAvatar'
 import type { ApiError } from '../../types/api'
 import { getUserDisplayName, getUserFullName } from '../../utils/user'
+import { useAdministratedLyceum } from './hooks/useAdministratedLyceum'
 import { useUserProfile } from './hooks/useUserProfile'
 
 const getProfileErrorMessage = (
@@ -29,13 +30,33 @@ const ProfilePage = () => {
   const fullName = getUserFullName(user) || t('pages.profile.emptyValue')
   const username = user?.username ?? t('pages.profile.emptyValue')
   const email = user?.email ?? t('pages.profile.emptyValue')
-  const roleLabel = user?.role
-    ? ({ USER: t('pages.profile.roles.user'), ADMIN: t('pages.profile.roles.admin') }[
-        user.role
-      ] ?? t('pages.profile.roles.unknown'))
-    : t('pages.profile.emptyValue')
+  const hasLyceumAdministration = Boolean(user?.administratedLyceumId)
+  const administratedLyceumId = user?.administratedLyceumId
+  const {
+    data: administratedLyceum,
+    isLoading: isAdministratedLyceumLoading,
+    error: administratedLyceumError,
+  } = useAdministratedLyceum(administratedLyceumId, {
+    enabled: Boolean(administratedLyceumId),
+  })
+  const roleLabel = hasLyceumAdministration
+    ? t('pages.profile.roles.lyceumAdmin')
+    : user?.role
+      ? ({
+          USER: t('pages.profile.roles.user'),
+          ADMIN: t('pages.profile.roles.admin'),
+        }[user.role] ?? t('pages.profile.roles.unknown'))
+      : t('pages.profile.emptyValue')
 
   const errorMessage = getProfileErrorMessage(error ?? null, t)
+  const administratedLyceumName = administratedLyceumId
+    ? isAdministratedLyceumLoading
+      ? t('pages.profile.details.administratedLyceumLoading')
+      : administratedLyceumError
+        ? t('pages.profile.details.administratedLyceumUnavailable')
+        : administratedLyceum?.name ??
+          t('pages.profile.details.administratedLyceumUnknown')
+    : t('pages.profile.emptyValue')
 
   return (
     <section className="space-y-6">
@@ -103,6 +124,16 @@ const ProfilePage = () => {
                 </dt>
                 <dd className="font-medium text-slate-900">{email}</dd>
               </div>
+              {administratedLyceumId ? (
+                <div className="sm:contents">
+                  <dt className="text-slate-500">
+                    {t('pages.profile.details.administratedLyceum')}
+                  </dt>
+                  <dd className="font-medium text-slate-900">
+                    {administratedLyceumName}
+                  </dd>
+                </div>
+              ) : null}
             </dl>
           </div>
         </>
@@ -122,6 +153,14 @@ const ProfilePage = () => {
           >
             {t('pages.profile.actions.changePassword')}
           </Link>
+          {hasLyceumAdministration ? null : (
+            <Link
+              to="/profile/lyceum-rights"
+              className="inline-flex items-center justify-center rounded-full border border-brand/30 px-4 py-2 text-sm font-semibold text-brand transition hover:border-brand hover:text-brand-dark"
+            >
+              {t('pages.profile.actions.requestLyceumRights')}
+            </Link>
+          )}
         </div>
       </div>
     </section>

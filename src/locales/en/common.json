@@ -74,14 +74,21 @@
     "usernameMin": "Username must be at least 3 characters.",
     "usernameMax": "Username must be at most 50 characters.",
     "passwordMin": "Password must be at least 8 characters.",
-    "passwordMatch": "Passwords do not match."
+    "passwordMatch": "Passwords do not match.",
+    "invalidOption": "Select a valid option."
   },
   "errors": {
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
     "profile": {
       "loadFailed": "We couldn't load your profile. Try again.",
-      "changePasswordFailed": "We couldn't update your password. Try again."
+      "changePasswordFailed": "We couldn't update your password. Try again.",
+      "lyceumRightsUnauthorized": "You must be signed in to request lyceum rights.",
+      "lyceumRightsAlreadyAdminOther": "You already administrate another lyceum. Requests are disabled.",
+      "lyceumRightsInvalid": "Provide the lyceum name and town.",
+      "lyceumRightsServer": "Internal server error. Please try again.",
+      "lyceumRightsRequestFailed": "We couldn't send the verification email. Try again.",
+      "lyceumRightsVerifyFailed": "We couldn't verify the code. Try again."
     },
     "auth": {
       "forbidden": "You do not have access to this account.",
@@ -98,7 +105,9 @@
       "registerSuccess": "Account created. You're signed in."
     },
     "profile": {
-      "passwordChanged": "Password updated successfully."
+      "passwordChanged": "Password updated successfully.",
+      "lyceumRightsRequested": "Verification email sent.",
+      "lyceumRightsVerified": "You are now a lyceum administrator."
     }
   },
   "pages": {
@@ -152,11 +161,13 @@
       "roles": {
         "user": "User",
         "admin": "Admin",
+        "lyceumAdmin": "Lyceum administrator",
         "unknown": "Unknown"
       },
       "actions": {
         "title": "Account actions",
-        "changePassword": "Change password"
+        "changePassword": "Change password",
+        "requestLyceumRights": "Request lyceum rights"
       },
       "changePassword": {
         "title": "Change password",
@@ -173,11 +184,62 @@
           "submitting": "Updating..."
         }
       },
+      "lyceumRights": {
+        "title": "Request lyceum administrator rights",
+        "subtitle": "Provide the official lyceum details and verify the email code to manage that center.",
+        "backLink": "Back to profile",
+        "request": {
+          "title": "Request verification email",
+          "description": "Use the registered lyceum name and town so we can email the official address.",
+          "form": {
+            "lyceumNameLabel": "Lyceum name",
+            "lyceumNamePlaceholder": "Official lyceum name",
+            "townLabel": "Town",
+            "townPlaceholder": "Select a town",
+            "submit": "Send verification email",
+            "submitting": "Sending..."
+          },
+          "suggestions": {
+            "selectTown": "Start typing to see suggestions, or select a town to narrow results.",
+            "loading": "Loading lyceum suggestions...",
+            "error": "Unable to load lyceum suggestions.",
+            "empty": "No lyceums found for the current selection.",
+            "hint": "Start typing to see suggestions."
+          },
+          "outcomes": {
+            "emailSent": "We have sent you an email at {{email}} with a verification code.",
+            "emailFallback": "the official address",
+            "requestedLyceum": "Lyceum: {{lyceumName}} ({{town}}).",
+            "alreadyAdmin": "Attention: You already administrate this lyceum. Requests are disabled.",
+            "alreadyAdminOther": "Attention: You already administrate another lyceum. Requests are disabled.",
+            "missingEmail": "Attention: We could not reach the lyceum via email. Please contact us.",
+            "notFound": "Attention: We could not find this lyceum. Check the details or contact us.",
+            "unknown": "Attention: We couldn't complete the request. Please try again."
+          },
+          "startOver": "Send another request"
+        },
+        "verify": {
+          "title": "Verify the code",
+          "description": "Enter the code from the verification email to confirm your administrator rights.",
+          "pending": "Submit a request first to receive a verification code.",
+          "emailSent": "Email sent. Enter the verification code below.",
+          "form": {
+            "codeLabel": "Verification code",
+            "codePlaceholder": "Enter the code",
+            "submit": "Verify rights",
+            "submitting": "Verifying..."
+          }
+        }
+      },
       "details": {
         "title": "Profile details",
         "fullName": "Full name",
         "username": "Username",
-        "email": "Email address"
+        "email": "Email address",
+        "administratedLyceum": "Administrated lyceum",
+        "administratedLyceumLoading": "Loading lyceum...",
+        "administratedLyceumUnavailable": "Unable to load lyceum.",
+        "administratedLyceumUnknown": "Lyceum not found."
       }
     },
     "shkoli": {
