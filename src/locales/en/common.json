@@ -36,12 +36,6 @@
         "label": "Main navigation",
         "toggle": "Toggle navigation"
       },
-      "header": {
-        "kicker": "Education nearby",
-        "title": "Find courses that fit your needs",
-        "subtitle": "Compare locations, courses, and access on the map.",
-        "cta": "Open map"
-      },
       "footer": {
         "description": "EducationNearby helps citizens find the right course faster.",
         "linksLabel": "Quick links",
