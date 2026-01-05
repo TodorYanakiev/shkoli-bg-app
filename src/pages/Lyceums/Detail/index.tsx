@@ -4,7 +4,10 @@ import { Link, useParams } from 'react-router-dom'
 
 import placeholderImage from '../../../assets/lyceum-placeholder.svg'
 import type { ApiError } from '../../../types/api'
+import { getUserDisplayName } from '../../../utils/user'
 import { useLyceum } from '../hooks/useLyceum'
+import { useLyceumCourses } from '../hooks/useLyceumCourses'
+import { useLyceumLecturers } from '../hooks/useLyceumLecturers'
 
 const getLyceumErrorMessage = (
   error: ApiError | null,
@@ -23,6 +26,20 @@ const getLyceumErrorMessage = (
   return t('pages.lyceums.detail.loadFailed')
 }
 
+const getSectionErrorMessage = (
+  error: ApiError | null,
+  fallbackKey: string,
+  t: (key: string) => string,
+) => {
+  if (error?.kind === 'network') {
+    return t('errors.network')
+  }
+  if (error?.kind === 'unauthorized' || error?.kind === 'forbidden') {
+    return t('errors.auth.forbidden')
+  }
+  return t(fallbackKey)
+}
+
 const LyceumDetailPage = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
@@ -35,124 +52,79 @@ const LyceumDetailPage = () => {
     isLoading,
     error,
   } = useLyceum(lyceumId, { enabled: isValidId })
+  const {
+    data: courses,
+    isLoading: isCoursesLoading,
+    error: coursesError,
+  } = useLyceumCourses(lyceumId, { enabled: isValidId })
+  const {
+    data: lecturers,
+    isLoading: isLecturersLoading,
+    error: lecturersError,
+  } = useLyceumLecturers(lyceumId, { enabled: isValidId })
 
   const fallbackValue = t('pages.lyceums.detail.notProvided')
+  const coursesCount = courses?.length ?? 0
+  const lecturersCount = lecturers?.length ?? 0
+  const coursesErrorMessage = getSectionErrorMessage(
+    coursesError ?? null,
+    'pages.lyceums.detail.coursesError',
+    t,
+  )
+  const lecturersErrorMessage = getSectionErrorMessage(
+    lecturersError ?? null,
+    'pages.lyceums.detail.lecturersError',
+    t,
+  )
 
-  const verificationStatusLabel = lyceum?.verificationStatus
-    ? t(
-        `pages.lyceums.detail.verificationStatus.${lyceum.verificationStatus}`,
-      )
-    : fallbackValue
-
-  const detailSections = [
+  const overviewDetails = [
     {
-      title: t('pages.lyceums.detail.sections.identity'),
-      items: [
-        {
-          label: t('pages.lyceums.detail.fields.status'),
-          value: lyceum?.status ?? fallbackValue,
-        },
-        {
-          label: t('pages.lyceums.detail.fields.verificationStatus'),
-          value: verificationStatusLabel,
-        },
-        {
-          label: t('pages.lyceums.detail.fields.bulstat'),
-          value: lyceum?.bulstat ?? fallbackValue,
-        },
-        {
-          label: t('pages.lyceums.detail.fields.registrationNumber'),
-          value:
-            typeof lyceum?.registrationNumber === 'number'
-              ? lyceum.registrationNumber
-              : fallbackValue,
-        },
-      ],
+      label: t('pages.lyceums.detail.fields.phone'),
+      value: lyceum?.phone ?? fallbackValue,
     },
     {
-      title: t('pages.lyceums.detail.sections.location'),
-      items: [
-        { label: t('pages.lyceums.detail.fields.region'), value: lyceum?.region ?? fallbackValue },
-        {
-          label: t('pages.lyceums.detail.fields.municipality'),
-          value: lyceum?.municipality ?? fallbackValue,
-        },
-        { label: t('pages.lyceums.detail.fields.town'), value: lyceum?.town ?? fallbackValue },
-        {
-          label: t('pages.lyceums.detail.fields.address'),
-          value: lyceum?.address ?? fallbackValue,
-        },
-        {
-          label: t('pages.lyceums.detail.fields.latitude'),
-          value:
-            typeof lyceum?.latitude === 'number'
-              ? lyceum.latitude.toFixed(5)
-              : fallbackValue,
-        },
-        {
-          label: t('pages.lyceums.detail.fields.longitude'),
-          value:
-            typeof lyceum?.longitude === 'number'
-              ? lyceum.longitude.toFixed(5)
-              : fallbackValue,
-        },
-      ],
+      label: t('pages.lyceums.detail.fields.email'),
+      value: lyceum?.email ?? fallbackValue,
     },
     {
-      title: t('pages.lyceums.detail.sections.contacts'),
-      items: [
-        {
-          label: t('pages.lyceums.detail.fields.phone'),
-          value: lyceum?.phone ?? fallbackValue,
-        },
-        {
-          label: t('pages.lyceums.detail.fields.email'),
-          value: lyceum?.email ?? fallbackValue,
-        },
-        {
-          label: t('pages.lyceums.detail.fields.urlToLibrariesSite'),
-          value: lyceum?.urlToLibrariesSite ? (
-            <a
-              href={lyceum.urlToLibrariesSite}
-              target="_blank"
-              rel="noreferrer"
-              className="text-brand hover:text-brand-dark underline"
-            >
-              {lyceum.urlToLibrariesSite}
-            </a>
-          ) : (
-            fallbackValue
-          ),
-        },
-        {
-          label: t('pages.lyceums.detail.fields.chitalishtaUrl'),
-          value: lyceum?.chitalishtaUrl ? (
-            <a
-              href={lyceum.chitalishtaUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="text-brand hover:text-brand-dark underline"
-            >
-              {lyceum.chitalishtaUrl}
-            </a>
-          ) : (
-            fallbackValue
-          ),
-        },
-      ],
+      label: t('pages.lyceums.detail.fields.urlToLibrariesSite'),
+      value: lyceum?.urlToLibrariesSite ? (
+        <a
+          href={lyceum.urlToLibrariesSite}
+          target="_blank"
+          rel="noreferrer"
+          className="block max-w-full truncate text-brand underline hover:text-brand-dark"
+          title={lyceum.urlToLibrariesSite}
+        >
+          {lyceum.urlToLibrariesSite}
+        </a>
+      ) : (
+        fallbackValue
+      ),
     },
     {
-      title: t('pages.lyceums.detail.sections.people'),
-      items: [
-        {
-          label: t('pages.lyceums.detail.fields.chairman'),
-          value: lyceum?.chairman ?? fallbackValue,
-        },
-        {
-          label: t('pages.lyceums.detail.fields.secretary'),
-          value: lyceum?.secretary ?? fallbackValue,
-        },
-      ],
+      label: t('pages.lyceums.detail.fields.chitalishtaUrl'),
+      value: lyceum?.chitalishtaUrl ? (
+        <a
+          href={lyceum.chitalishtaUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="block max-w-full truncate text-brand underline hover:text-brand-dark"
+          title={lyceum.chitalishtaUrl}
+        >
+          {lyceum.chitalishtaUrl}
+        </a>
+      ) : (
+        fallbackValue
+      ),
+    },
+    {
+      label: t('pages.lyceums.detail.fields.chairman'),
+      value: lyceum?.chairman ?? fallbackValue,
+    },
+    {
+      label: t('pages.lyceums.detail.fields.secretary'),
+      value: lyceum?.secretary ?? fallbackValue,
     },
   ]
 
@@ -160,7 +132,9 @@ const LyceumDetailPage = () => {
     ? `${lyceum.name} | ${t('app.title')}`
     : `${t('pages.lyceums.detail.title')} | ${t('app.title')}`
 
-  const heroSubtitle = lyceum?.town ?? lyceum?.region ?? ''
+  const heroLocation = [lyceum?.address, lyceum?.town]
+    .filter(Boolean)
+    .join(', ')
 
   return (
     <section className="space-y-6">
@@ -173,7 +147,7 @@ const LyceumDetailPage = () => {
             {lyceum?.name ?? t('pages.lyceums.detail.title')}
           </h1>
           <p className="text-sm text-slate-600">
-            {heroSubtitle || t('pages.lyceums.detail.subtitle')}
+            {heroLocation || t('pages.lyceums.detail.subtitle')}
           </p>
         </div>
         <Link
@@ -221,20 +195,38 @@ const LyceumDetailPage = () => {
                   {lyceum.name}
                 </h2>
                 <p className="mt-1 text-sm text-slate-600">
-                  {heroSubtitle || fallbackValue}
+                  {heroLocation || fallbackValue}
                 </p>
-                <div className="mt-4 flex flex-wrap items-center gap-3">
-                  <span className="inline-flex items-center rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
-                    {t('pages.lyceums.detail.labels.verification', {
-                      status: verificationStatusLabel,
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <a
+                    href="#lyceum-courses"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-800 transition hover:border-brand/30 hover:text-brand"
+                  >
+                    {t('pages.lyceums.detail.overviewLinks.courses', {
+                      count: coursesCount,
                     })}
-                  </span>
-                  {lyceum.status ? (
-                    <span className="inline-flex items-center rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">
-                      {lyceum.status}
-                    </span>
-                  ) : null}
+                  </a>
+                  <a
+                    href="#lyceum-lecturers"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-800 transition hover:border-brand/30 hover:text-brand"
+                  >
+                    {t('pages.lyceums.detail.overviewLinks.lecturers', {
+                      count: lecturersCount,
+                    })}
+                  </a>
                 </div>
+                <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+                  {overviewDetails.map((item) => (
+                    <div key={item.label} className="space-y-1">
+                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                        {item.label}
+                      </dt>
+                      <dd className="font-medium text-slate-900">
+                        {item.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
               <div className="relative">
                 <img
@@ -246,29 +238,110 @@ const LyceumDetailPage = () => {
               </div>
             </div>
           </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {detailSections.map((section) => (
-              <div
-                key={section.title}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-              >
+          <div
+            id="lyceum-courses"
+            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
                 <h3 className="text-sm font-semibold text-slate-900">
-                  {section.title}
+                  {t('pages.lyceums.detail.sections.courses')}
                 </h3>
-                <dl className="mt-4 space-y-3 text-sm">
-                  {section.items.map((item) => (
-                    <div key={item.label} className="space-y-1">
-                      <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                        {item.label}
-                      </dt>
-                      <dd className="font-medium text-slate-900">
-                        {item.value}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
+                <p className="text-xs text-slate-500">
+                  {t('pages.lyceums.detail.sections.coursesSubtitle')}
+                </p>
               </div>
-            ))}
+              <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                {t('pages.lyceums.detail.countLabel', { count: coursesCount })}
+              </span>
+            </div>
+            {isCoursesLoading ? (
+              <div className="mt-4 animate-pulse rounded-lg border border-dashed border-slate-200 p-4 text-sm text-slate-600">
+                {t('pages.lyceums.detail.coursesLoading')}
+              </div>
+            ) : coursesError ? (
+              <div
+                className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"
+                role="alert"
+              >
+                {coursesErrorMessage}
+              </div>
+            ) : courses && courses.length > 0 ? (
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {courses.map((course, index) => (
+                  <li
+                    key={course.id ?? `${course.name ?? 'course'}-${index}`}
+                    className="rounded-lg border border-slate-100 bg-slate-50 p-4"
+                  >
+                    <p className="text-sm font-semibold text-slate-900">
+                      {course.name ?? fallbackValue}
+                    </p>
+                    {course.description ? (
+                      <p className="mt-1 text-xs text-slate-600">
+                        {course.description}
+                      </p>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="mt-4 rounded-lg border border-dashed border-slate-200 p-4 text-sm text-slate-600">
+                {t('pages.lyceums.detail.coursesPlaceholder')}
+              </div>
+            )}
+          </div>
+          <div
+            id="lyceum-lecturers"
+            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-semibold text-slate-900">
+                  {t('pages.lyceums.detail.sections.lecturers')}
+                </h3>
+                <p className="text-xs text-slate-500">
+                  {t('pages.lyceums.detail.sections.lecturersSubtitle')}
+                </p>
+              </div>
+              <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                {t('pages.lyceums.detail.countLabel', {
+                  count: lecturersCount,
+                })}
+              </span>
+            </div>
+            {isLecturersLoading ? (
+              <div className="mt-4 animate-pulse rounded-lg border border-dashed border-slate-200 p-4 text-sm text-slate-600">
+                {t('pages.lyceums.detail.lecturersLoading')}
+              </div>
+            ) : lecturersError ? (
+              <div
+                className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"
+                role="alert"
+              >
+                {lecturersErrorMessage}
+              </div>
+            ) : lecturers && lecturers.length > 0 ? (
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {lecturers.map((lecturer, index) => {
+                  const displayName =
+                    getUserDisplayName(lecturer) || fallbackValue
+                  return (
+                    <li
+                      key={lecturer.id ?? `${displayName}-${index}`}
+                      className="rounded-lg border border-slate-100 bg-slate-50 p-4"
+                    >
+                      <p className="text-sm font-semibold text-slate-900">
+                        {displayName}
+                      </p>
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : (
+              <div className="mt-4 rounded-lg border border-dashed border-slate-200 p-4 text-sm text-slate-600">
+                {t('pages.lyceums.detail.lecturersPlaceholder')}
+              </div>
+            )}
           </div>
         </>
       )}

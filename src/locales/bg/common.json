@@ -273,6 +273,11 @@
         "loadFailed": "Не успяхме да заредим читалището. Опитайте отново.",
         "notFound": "Читалището не е намерено.",
         "heroLabel": "Преглед на читалището",
+        "countLabel": "{{count}}",
+        "overviewLinks": {
+          "courses": "Курсове ({{count}})",
+          "lecturers": "Преподаватели ({{count}})"
+        },
         "labels": {
           "verification": "Потвърждение: {{status}}"
         },
@@ -286,7 +291,11 @@
           "identity": "Идентичност",
           "location": "Локация",
           "contacts": "Контакти",
-          "people": "Екип"
+          "people": "Екип",
+          "courses": "Курсове",
+          "coursesSubtitle": "Програми и дейности, предлагани от читалището.",
+          "lecturers": "Преподаватели",
+          "lecturersSubtitle": "Преподаватели, свързани с читалището."
         },
         "fields": {
           "status": "Статус",
@@ -305,7 +314,13 @@
           "chitalishtaUrl": "Профил в chitalishta.com",
           "chairman": "Председател",
           "secretary": "Секретар"
-        }
+        },
+        "coursesLoading": "????????? ?? ???????...",
+        "coursesError": "?? ????? ?? ??????? ????????? ? ???????.",
+        "lecturersLoading": "????????? ?? ?????????????...",
+        "lecturersError": "?? ????? ?? ??????? ??????????????? ? ???????.",
+        "coursesPlaceholder": "Курсовете за това читалище ще се показват тук.",
+        "lecturersPlaceholder": "Преподавателите за това читалище ще се показват тук."
       }
     },
     "about": {

@@ -1,10 +1,12 @@
 import httpClient from './httpClient'
+import type { CourseResponse } from '../types/courses'
 import type {
   LyceumFilterParams,
   LyceumRightsRequest,
   LyceumRightsVerificationRequest,
   LyceumResponse,
 } from '../types/lyceums'
+import type { UserResponse } from '../types/users'
 
 export const requestLyceumRights = async (payload: LyceumRightsRequest) => {
   const response = await httpClient.post<string>(
@@ -38,6 +40,20 @@ export const filterLyceums = async (params: LyceumFilterParams) => {
   const response = await httpClient.get<LyceumResponse[]>(
     '/api/v1/lyceums/filter',
     { params },
+  )
+  return response.data
+}
+
+export const getLyceumCourses = async (lyceumId: number) => {
+  const response = await httpClient.get<CourseResponse[]>(
+    `/api/v1/lyceums/${lyceumId}/courses`,
+  )
+  return response.data
+}
+
+export const getLyceumLecturers = async (lyceumId: number) => {
+  const response = await httpClient.get<UserResponse[]>(
+    `/api/v1/lyceums/${lyceumId}/lecturers`,
   )
   return response.data
 }

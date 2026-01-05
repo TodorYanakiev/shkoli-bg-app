@@ -273,6 +273,11 @@
         "loadFailed": "We couldn't load this lyceum. Try again.",
         "notFound": "Lyceum not found.",
         "heroLabel": "Lyceum overview",
+        "countLabel": "{{count}}",
+        "overviewLinks": {
+          "courses": "Courses ({{count}})",
+          "lecturers": "Lecturers ({{count}})"
+        },
         "labels": {
           "verification": "Verification: {{status}}"
         },
@@ -286,7 +291,11 @@
           "identity": "Identity",
           "location": "Location",
           "contacts": "Contacts",
-          "people": "People"
+          "people": "People",
+          "courses": "Courses",
+          "coursesSubtitle": "Programs and activities offered by this lyceum.",
+          "lecturers": "Lecturers",
+          "lecturersSubtitle": "Educators associated with this lyceum."
         },
         "fields": {
           "status": "Status",
@@ -305,7 +314,13 @@
           "chitalishtaUrl": "Chitalishta profile",
           "chairman": "Chairman",
           "secretary": "Secretary"
-        }
+        },
+        "coursesLoading": "Loading courses...",
+        "coursesError": "Unable to load courses right now.",
+        "lecturersLoading": "Loading lecturers...",
+        "lecturersError": "Unable to load lecturers right now.",
+        "coursesPlaceholder": "Courses for this lyceum will appear here.",
+        "lecturersPlaceholder": "Lecturers for this lyceum will appear here."
       }
     },
     "about": {
