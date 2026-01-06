@@ -1,0 +1,24 @@
+<svg width="640" height="360" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Course placeholder image">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop stop-color="#f8fafc" offset="0%" />
+      <stop stop-color="#e2e8f0" offset="100%" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop stop-color="#2e7b4a" offset="0%" />
+      <stop stop-color="#4ade80" offset="100%" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)" />
+  <rect x="40" y="60" width="560" height="240" rx="28" fill="#ffffff" opacity="0.86" />
+  <rect x="80" y="105" width="220" height="20" rx="10" fill="#cbd5e1" />
+  <rect x="80" y="145" width="320" height="16" rx="8" fill="#e2e8f0" />
+  <rect x="80" y="173" width="280" height="16" rx="8" fill="#e2e8f0" />
+  <rect x="80" y="201" width="200" height="16" rx="8" fill="#e2e8f0" />
+  <rect x="410" y="115" width="160" height="160" rx="24" fill="url(#accent)" />
+  <circle cx="490" cy="195" r="48" fill="#ecfdf5" />
+  <path d="M470 205 L490 175 L510 205 L490 235 Z" fill="#2e7b4a" />
+  <circle cx="120" cy="70" r="18" fill="#dbeafe" opacity="0.7" />
+  <circle cx="180" cy="50" r="12" fill="#bae6fd" opacity="0.8" />
+  <circle cx="560" cy="80" r="16" fill="#bbf7d0" opacity="0.8" />
+</svg>

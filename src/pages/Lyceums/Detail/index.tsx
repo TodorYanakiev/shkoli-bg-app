@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
@@ -5,6 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import placeholderImage from '../../../assets/lyceum-placeholder.svg'
 import type { ApiError } from '../../../types/api'
 import { getUserDisplayName } from '../../../utils/user'
+import LyceumCourseCard from './components/LyceumCourseCard'
 import { useLyceum } from '../hooks/useLyceum'
 import { useLyceumCourses } from '../hooks/useLyceumCourses'
 import { useLyceumLecturers } from '../hooks/useLyceumLecturers'
@@ -40,6 +42,11 @@ const getSectionErrorMessage = (
   return t(fallbackKey)
 }
 
+const MAX_VISIBLE_COURSES = 4
+const COURSE_CARD_STYLE = {
+  flex: '0 0 calc((100% - (var(--course-cols) - 1) * var(--course-gap)) / var(--course-cols))',
+} as const
+
 const LyceumDetailPage = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
@@ -63,6 +70,12 @@ const LyceumDetailPage = () => {
     error: lecturersError,
   } = useLyceumLecturers(lyceumId, { enabled: isValidId })
 
+  const [courseStartIndex, setCourseStartIndex] = useState(0)
+  const [courseStep, setCourseStep] = useState(0)
+  const [coursesPerView, setCoursesPerView] = useState(MAX_VISIBLE_COURSES)
+  const coursesTrackRef = useRef<HTMLUListElement | null>(null)
+  const courseCardRef = useRef<HTMLLIElement | null>(null)
+
   const fallbackValue = t('pages.lyceums.detail.notProvided')
   const coursesCount = courses?.length ?? 0
   const lecturersCount = lecturers?.length ?? 0
@@ -76,6 +89,73 @@ const LyceumDetailPage = () => {
     'pages.lyceums.detail.lecturersError',
     t,
   )
+
+  useEffect(() => {
+    const maxStartIndex = Math.max(0, coursesCount - coursesPerView)
+    setCourseStartIndex((prev) => Math.min(prev, maxStartIndex))
+  }, [coursesCount, coursesPerView])
+
+  useEffect(() => {
+    const track = coursesTrackRef.current
+    const firstCard = courseCardRef.current
+    if (!track || !firstCard) return
+
+    const updateMetrics = () => {
+      const styles = getComputedStyle(track)
+      const gapValue = Number.parseFloat(
+        styles.columnGap || styles.gap || '0',
+      )
+      const columnsValue = Number.parseInt(
+        styles.getPropertyValue('--course-cols'),
+        10,
+      )
+      const cardWidth = firstCard.getBoundingClientRect().width
+      const gap = Number.isFinite(gapValue) ? gapValue : 0
+
+      if (Number.isFinite(cardWidth) && cardWidth > 0) {
+        setCourseStep(cardWidth + gap)
+      }
+
+      if (Number.isFinite(columnsValue) && columnsValue > 0) {
+        setCoursesPerView(columnsValue)
+      } else {
+        setCoursesPerView(MAX_VISIBLE_COURSES)
+      }
+    }
+
+    updateMetrics()
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateMetrics)
+      return () => window.removeEventListener('resize', updateMetrics)
+    }
+
+    const observer = new ResizeObserver(updateMetrics)
+    observer.observe(track)
+    observer.observe(firstCard)
+    return () => observer.disconnect()
+  }, [coursesCount])
+
+  const lecturersById = useMemo(() => {
+    if (!lecturers) return new Map<number, string>()
+    return new Map(
+      lecturers
+        .filter((lecturer) => lecturer.id != null)
+        .map((lecturer) => [
+          lecturer.id as number,
+          getUserDisplayName(lecturer),
+        ]),
+    )
+  }, [lecturers])
+
+  const maxCourseStartIndex = Math.max(0, coursesCount - coursesPerView)
+  const clampedCourseStartIndex = Math.min(
+    courseStartIndex,
+    maxCourseStartIndex,
+  )
+  const courseOffset = courseStep * clampedCourseStartIndex
+  const canGoPrevCourse = clampedCourseStartIndex > 0
+  const canGoNextCourse = clampedCourseStartIndex < maxCourseStartIndex
 
   const overviewDetails = [
     {
@@ -240,8 +320,12 @@ const LyceumDetailPage = () => {
           </div>
           <div
             id="lyceum-courses"
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+            className="relative overflow-hidden rounded-3xl px-3 py-6 sm:px-5"
           >
+            <div className="pointer-events-none absolute inset-0 -z-10">
+              <div className="absolute -top-6 left-8 h-24 w-24 rounded-full bg-brand/10 blur-2xl" />
+              <div className="absolute bottom-4 right-6 h-32 w-32 rounded-full bg-emerald-100/80 blur-3xl" />
+            </div>
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h3 className="text-sm font-semibold text-slate-900">
@@ -256,36 +340,113 @@ const LyceumDetailPage = () => {
               </span>
             </div>
             {isCoursesLoading ? (
-              <div className="mt-4 animate-pulse rounded-lg border border-dashed border-slate-200 p-4 text-sm text-slate-600">
+              <div className="mt-4 animate-pulse rounded-2xl border border-dashed border-slate-200 bg-white/80 p-4 text-sm text-slate-600 shadow-sm">
                 {t('pages.lyceums.detail.coursesLoading')}
               </div>
             ) : coursesError ? (
               <div
-                className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"
+                className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
                 role="alert"
               >
                 {coursesErrorMessage}
               </div>
             ) : courses && courses.length > 0 ? (
-              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-                {courses.map((course, index) => (
-                  <li
-                    key={course.id ?? `${course.name ?? 'course'}-${index}`}
-                    className="rounded-lg border border-slate-100 bg-slate-50 p-4"
+              <>
+                <div className="mt-4 overflow-hidden">
+                  <ul
+                    ref={coursesTrackRef}
+                    className="flex flex-nowrap gap-4 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform motion-reduce:transition-none [--course-cols:1] sm:[--course-cols:2] lg:[--course-cols:4] [--course-gap:1rem]"
+                    style={{ transform: `translateX(-${courseOffset}px)` }}
                   >
-                    <p className="text-sm font-semibold text-slate-900">
-                      {course.name ?? fallbackValue}
-                    </p>
-                    {course.description ? (
-                      <p className="mt-1 text-xs text-slate-600">
-                        {course.description}
-                      </p>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
+                    {courses.map((course, index) => {
+                      const lecturerIds = course.lecturerIds ?? []
+                      const primaryLecturerId = lecturerIds[0]
+                      const primaryLecturerName =
+                        (primaryLecturerId
+                          ? lecturersById.get(primaryLecturerId)
+                          : '') || fallbackValue
+                      const additionalLecturers = Math.max(
+                        0,
+                        lecturerIds.length - 1,
+                      )
+
+                      return (
+                        <li
+                          key={
+                            course.id ?? `${course.name ?? 'course'}-${index}`
+                          }
+                          ref={index === 0 ? courseCardRef : undefined}
+                          className="h-full flex-none"
+                          style={COURSE_CARD_STYLE}
+                        >
+                          <LyceumCourseCard
+                            course={course}
+                            lecturerName={primaryLecturerName}
+                            additionalLecturers={additionalLecturers}
+                            fallbackValue={fallbackValue}
+                          />
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+                <div className="mt-4 flex items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCourseStartIndex((prev) => Math.max(0, prev - 1))
+                    }
+                    disabled={!canGoPrevCourse}
+                    className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/90 p-2 text-slate-600 shadow-sm transition hover:border-brand/40 hover:text-brand disabled:cursor-not-allowed disabled:opacity-40"
+                    aria-label={t(
+                      'pages.lyceums.detail.coursesCarousel.previous',
+                    )}
+                    title={t('pages.lyceums.detail.coursesCarousel.previous')}
+                  >
+                    <svg
+                      viewBox="0 0 20 20"
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        d="M12.5 4.5L7 10l5.5 5.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCourseStartIndex((prev) =>
+                        Math.min(maxCourseStartIndex, prev + 1),
+                      )
+                    }
+                    disabled={!canGoNextCourse}
+                    className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/90 p-2 text-slate-600 shadow-sm transition hover:border-brand/40 hover:text-brand disabled:cursor-not-allowed disabled:opacity-40"
+                    aria-label={t('pages.lyceums.detail.coursesCarousel.next')}
+                    title={t('pages.lyceums.detail.coursesCarousel.next')}
+                  >
+                    <svg
+                      viewBox="0 0 20 20"
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        d="M7.5 4.5L13 10l-5.5 5.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </>
             ) : (
-              <div className="mt-4 rounded-lg border border-dashed border-slate-200 p-4 text-sm text-slate-600">
+              <div className="mt-4 rounded-2xl border border-dashed border-slate-200 bg-white/80 p-4 text-sm text-slate-600 shadow-sm">
                 {t('pages.lyceums.detail.coursesPlaceholder')}
               </div>
             )}

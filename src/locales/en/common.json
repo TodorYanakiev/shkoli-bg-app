@@ -315,6 +315,16 @@
           "chairman": "Chairman",
           "secretary": "Secretary"
         },
+        "courseCard": {
+          "imageAlt": "Course main image for {{name}}",
+          "logoAlt": "Course logo for {{name}}",
+          "lecturerLabel": "Lecturer",
+          "additionalLecturers": "plus {{count}} more"
+        },
+        "coursesCarousel": {
+          "previous": "Previous courses",
+          "next": "Next courses"
+        },
         "coursesLoading": "Loading courses...",
         "coursesError": "Unable to load courses right now.",
         "lecturersLoading": "Loading lecturers...",

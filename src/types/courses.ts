@@ -61,6 +61,21 @@ export type CourseSchedule = {
   specialCases?: CourseScheduleSpecialCase[]
 }
 
+export type CourseImageRole = 'LOGO' | 'MAIN' | 'GALLERY'
+
+export type CourseImageResponse = {
+  id?: number
+  courseId?: number
+  s3Key?: string
+  url?: string
+  role?: CourseImageRole
+  altText?: string
+  width?: number
+  height?: number
+  mimeType?: string
+  orderIndex?: number
+}
+
 export type CourseResponse = {
   id?: number
   name?: string
@@ -68,6 +83,7 @@ export type CourseResponse = {
   type?: CourseType
   ageGroupList?: CourseAgeGroup[]
   schedule?: CourseSchedule
+  images?: CourseImageResponse[]
   address?: string
   price?: number
   facebookLink?: string
