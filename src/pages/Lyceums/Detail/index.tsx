@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { RefObject } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
@@ -7,6 +8,7 @@ import placeholderImage from '../../../assets/lyceum-placeholder.svg'
 import type { ApiError } from '../../../types/api'
 import { getUserDisplayName } from '../../../utils/user'
 import LyceumCourseCard from './components/LyceumCourseCard'
+import LyceumLecturerCard from './components/LyceumLecturerCard'
 import { useLyceum } from '../hooks/useLyceum'
 import { useLyceumCourses } from '../hooks/useLyceumCourses'
 import { useLyceumLecturers } from '../hooks/useLyceumLecturers'
@@ -43,9 +45,70 @@ const getSectionErrorMessage = (
 }
 
 const MAX_VISIBLE_COURSES = 4
-const COURSE_CARD_STYLE = {
-  flex: '0 0 calc((100% - (var(--course-cols) - 1) * var(--course-gap)) / var(--course-cols))',
+const MAX_VISIBLE_LECTURERS = 5
+const CAROUSEL_CARD_STYLE = {
+  flex: '0 0 calc((100% - (var(--carousel-cols) - 1) * var(--carousel-gap)) / var(--carousel-cols))',
 } as const
+
+type CarouselMetrics = {
+  step: number
+  perView: number
+  trackRef: RefObject<HTMLUListElement>
+  cardRef: RefObject<HTMLLIElement>
+}
+
+const useCarouselMetrics = (
+  itemsCount: number,
+  fallbackPerView: number,
+): CarouselMetrics => {
+  const [step, setStep] = useState(0)
+  const [perView, setPerView] = useState(fallbackPerView)
+  const trackRef = useRef<HTMLUListElement | null>(null)
+  const cardRef = useRef<HTMLLIElement | null>(null)
+
+  useEffect(() => {
+    const track = trackRef.current
+    const firstCard = cardRef.current
+    if (!track || !firstCard) return
+
+    const updateMetrics = () => {
+      const styles = getComputedStyle(track)
+      const gapValue = Number.parseFloat(
+        styles.columnGap || styles.gap || '0',
+      )
+      const columnsValue = Number.parseInt(
+        styles.getPropertyValue('--carousel-cols'),
+        10,
+      )
+      const cardWidth = firstCard.getBoundingClientRect().width
+      const gap = Number.isFinite(gapValue) ? gapValue : 0
+
+      if (Number.isFinite(cardWidth) && cardWidth > 0) {
+        setStep(cardWidth + gap)
+      }
+
+      if (Number.isFinite(columnsValue) && columnsValue > 0) {
+        setPerView(columnsValue)
+      } else {
+        setPerView(fallbackPerView)
+      }
+    }
+
+    updateMetrics()
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateMetrics)
+      return () => window.removeEventListener('resize', updateMetrics)
+    }
+
+    const observer = new ResizeObserver(updateMetrics)
+    observer.observe(track)
+    observer.observe(firstCard)
+    return () => observer.disconnect()
+  }, [itemsCount, fallbackPerView])
+
+  return { step, perView, trackRef, cardRef }
+}
 
 const LyceumDetailPage = () => {
   const { t } = useTranslation()
@@ -71,10 +134,7 @@ const LyceumDetailPage = () => {
   } = useLyceumLecturers(lyceumId, { enabled: isValidId })
 
   const [courseStartIndex, setCourseStartIndex] = useState(0)
-  const [courseStep, setCourseStep] = useState(0)
-  const [coursesPerView, setCoursesPerView] = useState(MAX_VISIBLE_COURSES)
-  const coursesTrackRef = useRef<HTMLUListElement | null>(null)
-  const courseCardRef = useRef<HTMLLIElement | null>(null)
+  const [lecturerStartIndex, setLecturerStartIndex] = useState(0)
 
   const fallbackValue = t('pages.lyceums.detail.notProvided')
   const coursesCount = courses?.length ?? 0
@@ -90,51 +150,30 @@ const LyceumDetailPage = () => {
     t,
   )
 
+  const coursesCarousel = useCarouselMetrics(
+    coursesCount,
+    MAX_VISIBLE_COURSES,
+  )
+  const lecturersCarousel = useCarouselMetrics(
+    lecturersCount,
+    MAX_VISIBLE_LECTURERS,
+  )
+
   useEffect(() => {
-    const maxStartIndex = Math.max(0, coursesCount - coursesPerView)
+    const maxStartIndex = Math.max(
+      0,
+      coursesCount - coursesCarousel.perView,
+    )
     setCourseStartIndex((prev) => Math.min(prev, maxStartIndex))
-  }, [coursesCount, coursesPerView])
+  }, [coursesCount, coursesCarousel.perView])
 
   useEffect(() => {
-    const track = coursesTrackRef.current
-    const firstCard = courseCardRef.current
-    if (!track || !firstCard) return
-
-    const updateMetrics = () => {
-      const styles = getComputedStyle(track)
-      const gapValue = Number.parseFloat(
-        styles.columnGap || styles.gap || '0',
-      )
-      const columnsValue = Number.parseInt(
-        styles.getPropertyValue('--course-cols'),
-        10,
-      )
-      const cardWidth = firstCard.getBoundingClientRect().width
-      const gap = Number.isFinite(gapValue) ? gapValue : 0
-
-      if (Number.isFinite(cardWidth) && cardWidth > 0) {
-        setCourseStep(cardWidth + gap)
-      }
-
-      if (Number.isFinite(columnsValue) && columnsValue > 0) {
-        setCoursesPerView(columnsValue)
-      } else {
-        setCoursesPerView(MAX_VISIBLE_COURSES)
-      }
-    }
-
-    updateMetrics()
-
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', updateMetrics)
-      return () => window.removeEventListener('resize', updateMetrics)
-    }
-
-    const observer = new ResizeObserver(updateMetrics)
-    observer.observe(track)
-    observer.observe(firstCard)
-    return () => observer.disconnect()
-  }, [coursesCount])
+    const maxStartIndex = Math.max(
+      0,
+      lecturersCount - lecturersCarousel.perView,
+    )
+    setLecturerStartIndex((prev) => Math.min(prev, maxStartIndex))
+  }, [lecturersCount, lecturersCarousel.perView])
 
   const lecturersById = useMemo(() => {
     if (!lecturers) return new Map<number, string>()
@@ -148,14 +187,29 @@ const LyceumDetailPage = () => {
     )
   }, [lecturers])
 
-  const maxCourseStartIndex = Math.max(0, coursesCount - coursesPerView)
+  const maxCourseStartIndex = Math.max(
+    0,
+    coursesCount - coursesCarousel.perView,
+  )
   const clampedCourseStartIndex = Math.min(
     courseStartIndex,
     maxCourseStartIndex,
   )
-  const courseOffset = courseStep * clampedCourseStartIndex
+  const courseOffset = coursesCarousel.step * clampedCourseStartIndex
   const canGoPrevCourse = clampedCourseStartIndex > 0
   const canGoNextCourse = clampedCourseStartIndex < maxCourseStartIndex
+
+  const maxLecturerStartIndex = Math.max(
+    0,
+    lecturersCount - lecturersCarousel.perView,
+  )
+  const clampedLecturerStartIndex = Math.min(
+    lecturerStartIndex,
+    maxLecturerStartIndex,
+  )
+  const lecturerOffset = lecturersCarousel.step * clampedLecturerStartIndex
+  const canGoPrevLecturer = clampedLecturerStartIndex > 0
+  const canGoNextLecturer = clampedLecturerStartIndex < maxLecturerStartIndex
 
   const overviewDetails = [
     {
@@ -328,12 +382,9 @@ const LyceumDetailPage = () => {
             </div>
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h3 className="text-sm font-semibold text-slate-900">
+                <h3 className="text-base font-semibold text-slate-900 sm:text-lg">
                   {t('pages.lyceums.detail.sections.courses')}
                 </h3>
-                <p className="text-xs text-slate-500">
-                  {t('pages.lyceums.detail.sections.coursesSubtitle')}
-                </p>
               </div>
               <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
                 {t('pages.lyceums.detail.countLabel', { count: coursesCount })}
@@ -354,8 +405,8 @@ const LyceumDetailPage = () => {
               <>
                 <div className="mt-4 overflow-hidden">
                   <ul
-                    ref={coursesTrackRef}
-                    className="flex flex-nowrap gap-4 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform motion-reduce:transition-none [--course-cols:1] sm:[--course-cols:2] lg:[--course-cols:4] [--course-gap:1rem]"
+                    ref={coursesCarousel.trackRef}
+                    className="flex flex-nowrap gap-4 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform motion-reduce:transition-none [--carousel-cols:1] sm:[--carousel-cols:2] lg:[--carousel-cols:4] [--carousel-gap:1rem]"
                     style={{ transform: `translateX(-${courseOffset}px)` }}
                   >
                     {courses.map((course, index) => {
@@ -375,9 +426,9 @@ const LyceumDetailPage = () => {
                           key={
                             course.id ?? `${course.name ?? 'course'}-${index}`
                           }
-                          ref={index === 0 ? courseCardRef : undefined}
+                          ref={index === 0 ? coursesCarousel.cardRef : undefined}
                           className="h-full flex-none"
-                          style={COURSE_CARD_STYLE}
+                          style={CAROUSEL_CARD_STYLE}
                         >
                           <LyceumCourseCard
                             course={course}
@@ -453,16 +504,13 @@ const LyceumDetailPage = () => {
           </div>
           <div
             id="lyceum-lecturers"
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+            className="rounded-2xl border border-slate-200/60 bg-transparent p-5 shadow-none"
           >
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h3 className="text-sm font-semibold text-slate-900">
+                <h3 className="text-base font-semibold text-slate-900 sm:text-lg">
                   {t('pages.lyceums.detail.sections.lecturers')}
                 </h3>
-                <p className="text-xs text-slate-500">
-                  {t('pages.lyceums.detail.sections.lecturersSubtitle')}
-                </p>
               </div>
               <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
                 {t('pages.lyceums.detail.countLabel', {
@@ -482,22 +530,109 @@ const LyceumDetailPage = () => {
                 {lecturersErrorMessage}
               </div>
             ) : lecturers && lecturers.length > 0 ? (
-              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-                {lecturers.map((lecturer, index) => {
-                  const displayName =
-                    getUserDisplayName(lecturer) || fallbackValue
-                  return (
-                    <li
-                      key={lecturer.id ?? `${displayName}-${index}`}
-                      className="rounded-lg border border-slate-100 bg-slate-50 p-4"
+              <>
+                <div className="relative mt-4 overflow-hidden rounded-2xl bg-slate-100/60 p-2">
+                  <div className="pointer-events-none absolute -left-6 -top-6 h-24 w-24 rounded-full bg-emerald-200/40 blur-3xl" />
+                  <div className="pointer-events-none absolute -right-8 bottom-0 h-28 w-28 rounded-full bg-sky-200/40 blur-3xl" />
+                  <ul
+                    ref={lecturersCarousel.trackRef}
+                    className="relative z-10 flex flex-nowrap gap-2 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform motion-reduce:transition-none [--carousel-cols:1] sm:[--carousel-cols:2] md:[--carousel-cols:3] lg:[--carousel-cols:5] [--carousel-gap:0.5rem]"
+                    style={{ transform: `translateX(-${lecturerOffset}px)` }}
+                  >
+                    {lecturers.map((lecturer, index) => {
+                      const displayName =
+                        getUserDisplayName(lecturer) || fallbackValue
+                      const isLeadingEdge =
+                        canGoPrevLecturer &&
+                        index === clampedLecturerStartIndex
+                      const isTrailingEdge =
+                        canGoNextLecturer &&
+                        index ===
+                          clampedLecturerStartIndex +
+                            lecturersCarousel.perView -
+                            1
+                      const edgeClass =
+                        isLeadingEdge || isTrailingEdge
+                          ? 'opacity-80 translate-y-1'
+                          : 'opacity-100'
+                      return (
+                        <li
+                          key={lecturer.id ?? `${displayName}-${index}`}
+                          ref={
+                            index === 0
+                              ? lecturersCarousel.cardRef
+                              : undefined
+                          }
+                          className={`h-full flex-none transition-transform transition-opacity duration-300 ${edgeClass}`}
+                          style={CAROUSEL_CARD_STYLE}
+                        >
+                          <LyceumLecturerCard
+                            lecturer={lecturer}
+                            displayName={displayName}
+                            fallbackValue={fallbackValue}
+                          />
+                        </li>
+                      )
+                    })}
+                  </ul>
+                  <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-6 bg-gradient-to-r from-white/90 via-white/60 to-transparent" />
+                  <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-6 bg-gradient-to-l from-white/90 via-white/60 to-transparent" />
+                </div>
+                <div className="mt-4 flex items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setLecturerStartIndex((prev) => Math.max(0, prev - 1))
+                    }
+                    disabled={!canGoPrevLecturer}
+                    className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/90 p-2 text-slate-600 shadow-sm transition hover:border-brand/40 hover:text-brand disabled:cursor-not-allowed disabled:opacity-40"
+                    aria-label={t(
+                      'pages.lyceums.detail.lecturersCarousel.previous',
+                    )}
+                    title={t('pages.lyceums.detail.lecturersCarousel.previous')}
+                  >
+                    <svg
+                      viewBox="0 0 20 20"
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
                     >
-                      <p className="text-sm font-semibold text-slate-900">
-                        {displayName}
-                      </p>
-                    </li>
-                  )
-                })}
-              </ul>
+                      <path
+                        d="M12.5 4.5L7 10l5.5 5.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setLecturerStartIndex((prev) =>
+                        Math.min(maxLecturerStartIndex, prev + 1),
+                      )
+                    }
+                    disabled={!canGoNextLecturer}
+                    className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/90 p-2 text-slate-600 shadow-sm transition hover:border-brand/40 hover:text-brand disabled:cursor-not-allowed disabled:opacity-40"
+                    aria-label={t('pages.lyceums.detail.lecturersCarousel.next')}
+                    title={t('pages.lyceums.detail.lecturersCarousel.next')}
+                  >
+                    <svg
+                      viewBox="0 0 20 20"
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        d="M7.5 4.5L13 10l-5.5 5.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </>
             ) : (
               <div className="mt-4 rounded-lg border border-dashed border-slate-200 p-4 text-sm text-slate-600">
                 {t('pages.lyceums.detail.lecturersPlaceholder')}

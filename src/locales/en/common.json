@@ -325,6 +325,15 @@
           "previous": "Previous courses",
           "next": "Next courses"
         },
+        "lecturerCard": {
+          "avatarAlt": "Avatar for {{name}}",
+          "badge": "Lecturer",
+          "subtitle": "Lyceum lecturer"
+        },
+        "lecturersCarousel": {
+          "previous": "Previous lecturers",
+          "next": "Next lecturers"
+        },
         "coursesLoading": "Loading courses...",
         "coursesError": "Unable to load courses right now.",
         "lecturersLoading": "Loading lecturers...",
