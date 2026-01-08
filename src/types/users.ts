@@ -1,4 +1,4 @@
-export type CurrentUser = {
+export type UserIdentity = {
   id?: number
   firstname?: string
   lastname?: string
@@ -6,8 +6,19 @@ export type CurrentUser = {
   lastName?: string
   username?: string
   email?: string
+}
+
+export type CurrentUser = UserIdentity & {
   role?: 'USER' | 'ADMIN'
   administratedLyceumId?: number
+  enabled?: boolean
+}
+
+export type UserResponse = UserIdentity & {
+  role?: 'USER' | 'ADMIN'
+  administratedLyceumId?: number
+  lecturedCourseIds?: number[]
+  lecturedLyceumIds?: number[]
   enabled?: boolean
 }
 

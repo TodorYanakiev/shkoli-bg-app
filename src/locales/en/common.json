@@ -36,12 +36,6 @@
         "label": "Main navigation",
         "toggle": "Toggle navigation"
       },
-      "header": {
-        "kicker": "Education nearby",
-        "title": "Find courses that fit your needs",
-        "subtitle": "Compare locations, courses, and access on the map.",
-        "cta": "Open map"
-      },
       "footer": {
         "description": "EducationNearby helps citizens find the right course faster.",
         "linksLabel": "Quick links",
@@ -75,11 +69,24 @@
     "usernameMax": "Username must be at most 50 characters.",
     "passwordMin": "Password must be at least 8 characters.",
     "passwordMatch": "Passwords do not match.",
-    "invalidOption": "Select a valid option."
+    "invalidOption": "Select a valid option.",
+    "number": "Enter a valid number."
   },
   "errors": {
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
+    "lyceums": {
+      "updateFailed": "We couldn't update this lyceum. Try again.",
+      "lecturers": {
+        "addFailed": "We couldn't add this lecturer. Try again.",
+        "removeFailed": "We couldn't remove this lecturer. Try again.",
+        "addInvalid": "Enter a valid lecturer email.",
+        "removeInvalid": "That user isn't a lecturer for this lyceum.",
+        "notFound": "We couldn't find that user or lyceum.",
+        "alreadyAssigned": "That user is already a lecturer here.",
+        "emailNotFound": "We couldn't find a user with that email."
+      }
+    },
     "profile": {
       "loadFailed": "We couldn't load your profile. Try again.",
       "changePasswordFailed": "We couldn't update your password. Try again.",
@@ -104,10 +111,33 @@
       "logoutSuccess": "You have been logged out.",
       "registerSuccess": "Account created. You're signed in."
     },
+    "lyceums": {
+      "updateSuccess": "Lyceum updated successfully.",
+      "lecturerAdded": "Lecturer added successfully.",
+      "lecturerRemoved": "Lecturer removed successfully."
+    },
     "profile": {
       "passwordChanged": "Password updated successfully.",
       "lyceumRightsRequested": "Verification email sent.",
       "lyceumRightsVerified": "You are now a lyceum administrator."
+    }
+  },
+  "components": {
+    "lyceumCard": {
+      "title": "Administrated lyceum",
+      "subtitle": "Key details for the lyceum you manage.",
+      "imageAlt": "Lyceum exterior",
+      "loading": "Loading lyceum details...",
+      "error": "Unable to load lyceum details right now.",
+      "empty": "Lyceum details are not available.",
+      "notAvailable": "Not provided",
+      "viewDetails": "Open lyceum page",
+      "manageCta": "Manage lyceum",
+      "fields": {
+        "name": "Name",
+        "town": "Town",
+        "address": "Address"
+      }
     }
   },
   "pages": {
@@ -252,7 +282,158 @@
     },
     "lyceums": {
       "title": "Lyceums",
-      "subtitle": "Explore nearby lyceums and their profiles."
+      "subtitle": "Explore nearby lyceums and their profiles.",
+      "detail": {
+        "title": "Lyceum profile",
+        "subtitle": "Full information about this lyceum.",
+        "back": "Back to lyceums",
+        "invalidId": "Invalid lyceum id.",
+        "loadFailed": "We couldn't load this lyceum. Try again.",
+        "notFound": "Lyceum not found.",
+        "heroLabel": "Lyceum overview",
+        "countLabel": "{{count}}",
+        "overviewLinks": {
+          "courses": "Courses ({{count}})",
+          "lecturers": "Lecturers ({{count}})"
+        },
+        "sideNav": {
+          "label": "Lyceum page sections",
+          "info": "Lyceum info",
+          "courses": "Courses",
+          "lecturers": "Lecturers",
+          "expand": "Expand menu",
+          "collapse": "Collapse menu"
+        },
+        "editCta": "Update lyceum",
+        "labels": {
+          "verification": "Verification: {{status}}"
+        },
+        "verificationStatus": {
+          "VERIFIED": "Verified",
+          "PENDING": "Pending",
+          "NOT_VERIFIED": "Not verified"
+        },
+        "notProvided": "Not provided",
+        "sections": {
+          "identity": "Identity",
+          "location": "Location",
+          "contacts": "Contacts",
+          "people": "People",
+          "courses": "Courses",
+          "coursesSubtitle": "Programs and activities offered by this lyceum.",
+          "lecturers": "Lecturers",
+          "lecturersSubtitle": "Educators associated with this lyceum."
+        },
+        "fields": {
+          "status": "Status",
+          "verificationStatus": "Verification status",
+          "bulstat": "Bulstat",
+          "registrationNumber": "Registration number",
+          "region": "Region",
+          "municipality": "Municipality",
+          "town": "Town",
+          "address": "Address",
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "phone": "Phone",
+          "email": "Email",
+          "urlToLibrariesSite": "Library website",
+          "chitalishtaUrl": "Chitalishta profile",
+          "chairman": "Chairman",
+          "secretary": "Secretary"
+        },
+        "courseCard": {
+          "imageAlt": "Course main image for {{name}}",
+          "logoAlt": "Course logo for {{name}}",
+          "lecturerLabel": "Lecturer",
+          "additionalLecturers": "plus {{count}} more"
+        },
+        "coursesCarousel": {
+          "previous": "Previous courses",
+          "next": "Next courses"
+        },
+        "lecturerCard": {
+          "avatarAlt": "Avatar for {{name}}",
+          "badge": "Lecturer",
+          "subtitle": "Lyceum lecturer"
+        },
+        "lecturersCarousel": {
+          "previous": "Previous lecturers",
+          "next": "Next lecturers"
+        },
+        "coursesLoading": "Loading courses...",
+        "coursesError": "Unable to load courses right now.",
+        "lecturersLoading": "Loading lecturers...",
+        "lecturersError": "Unable to load lecturers right now.",
+        "coursesPlaceholder": "Courses for this lyceum will appear here.",
+        "lecturersPlaceholder": "Lecturers for this lyceum will appear here."
+      },
+      "edit": {
+        "title": "Update lyceum",
+        "subtitle": "Adjust the lyceum profile details.",
+        "backLink": "Back to lyceum",
+        "loading": "Loading lyceum details...",
+        "notFound": "Lyceum not found.",
+        "form": {
+          "sections": {
+            "basics": "Basic details",
+            "location": "Location",
+            "contacts": "Contacts",
+            "links": "Links",
+            "leadership": "Leadership"
+          },
+          "fields": {
+            "name": "Name",
+            "town": "Town",
+            "status": "Status",
+            "bulstat": "Bulstat",
+            "registrationNumber": "Registration number",
+            "address": "Address",
+            "region": "Region",
+            "municipality": "Municipality",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "phone": "Phone",
+            "email": "Email",
+            "urlToLibrariesSite": "Library website",
+            "chitalishtaUrl": "Chitalishta profile",
+            "chairman": "Chairman",
+            "secretary": "Secretary"
+          },
+          "submit": "Save changes",
+          "submitting": "Saving...",
+          "cancel": "Cancel"
+        },
+        "lecturers": {
+          "title": "Lecturers",
+          "subtitle": "Manage the educators connected to this lyceum.",
+          "addTitle": "Add lecturer",
+          "addDescription": "Assign a user to teach in this lyceum by email.",
+          "form": {
+            "emailLabel": "User email",
+            "emailPlaceholder": "Enter user email",
+            "submit": "Add lecturer",
+            "submitting": "Adding..."
+          },
+          "suggestions": {
+            "hint": "Start typing to see user emails.",
+            "loading": "Loading users...",
+            "error": "Unable to load users.",
+            "empty": "No users match that email."
+          },
+          "listTitle": "Current lecturers",
+          "listDescription": "Remove lecturers who no longer teach here.",
+          "loading": "Loading lecturers...",
+          "listError": "Unable to load lecturers right now.",
+          "empty": "No lecturers assigned yet.",
+          "removeAction": "Remove",
+          "removing": "Removing...",
+          "removeLabel": "Remove {{name}}",
+          "confirmPrompt": "Are you sure?",
+          "confirmAction": "Confirm",
+          "cancelAction": "Cancel"
+        }
+      }
     },
     "about": {
       "title": "About us",
