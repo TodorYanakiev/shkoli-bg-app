@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import courseLogoPlaceholder from '../../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
+import { env } from '../../../../constants/env'
 import type {
   CourseImageResponse,
   CourseImageRole,
@@ -20,6 +21,25 @@ const getImageByRole = (
   role: CourseImageRole,
 ) => images?.find((image) => image.role === role && image.url)
 
+const getPreferredImage = (
+  images: CourseImageResponse[] | undefined,
+  role: CourseImageRole,
+) => getImageByRole(images, role) ?? images?.find((image) => image.url)
+
+const resolveImageUrl = (url?: string) => {
+  if (!url) return null
+  if (!env.apiBaseUrl) return url
+
+  try {
+    const baseUrl = env.apiBaseUrl.endsWith('/')
+      ? env.apiBaseUrl
+      : `${env.apiBaseUrl}/`
+    return new URL(url, baseUrl).toString()
+  } catch {
+    return url
+  }
+}
+
 const LyceumCourseCard = ({
   course,
   lecturerName,
@@ -28,11 +48,13 @@ const LyceumCourseCard = ({
 }: LyceumCourseCardProps) => {
   const { t } = useTranslation()
   const courseName = course.name ?? fallbackValue
-  const mainImage = getImageByRole(course.images, 'MAIN')
-  const logoImage = getImageByRole(course.images, 'LOGO')
+  const mainImage = getPreferredImage(course.images, 'MAIN')
+  const logoImage = getPreferredImage(course.images, 'LOGO')
 
-  const mainImageUrl = mainImage?.url ?? courseMainPlaceholder
-  const logoImageUrl = logoImage?.url ?? courseLogoPlaceholder
+  const mainImageUrl =
+    resolveImageUrl(mainImage?.url) ?? courseMainPlaceholder
+  const logoImageUrl =
+    resolveImageUrl(logoImage?.url) ?? courseLogoPlaceholder
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white/90 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-lg">
@@ -45,6 +67,11 @@ const LyceumCourseCard = ({
           }
           className="h-36 w-full object-cover"
           loading="lazy"
+          onError={(event) => {
+            const target = event.currentTarget
+            target.onerror = null
+            target.src = courseMainPlaceholder
+          }}
         />
         <div className="absolute -bottom-4 left-4 rounded-2xl border border-white/80 bg-white/90 p-1 shadow-md">
           <img
@@ -55,6 +82,11 @@ const LyceumCourseCard = ({
             }
             className="h-12 w-12 rounded-xl object-contain"
             loading="lazy"
+            onError={(event) => {
+              const target = event.currentTarget
+              target.onerror = null
+              target.src = courseLogoPlaceholder
+            }}
           />
         </div>
       </div>
