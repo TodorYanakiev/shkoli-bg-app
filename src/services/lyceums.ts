@@ -2,6 +2,7 @@ import httpClient from './httpClient'
 import type { CourseResponse } from '../types/courses'
 import type {
   LyceumFilterParams,
+  LyceumRequest,
   LyceumRightsRequest,
   LyceumRightsVerificationRequest,
   LyceumResponse,
@@ -33,6 +34,14 @@ export const getAllLyceums = async () => {
 
 export const getLyceumById = async (id: number) => {
   const response = await httpClient.get<LyceumResponse>(`/api/v1/lyceums/${id}`)
+  return response.data
+}
+
+export const updateLyceum = async (id: number, payload: LyceumRequest) => {
+  const response = await httpClient.put<LyceumResponse>(
+    `/api/v1/lyceums/${id}`,
+    payload,
+  )
   return response.data
 }
 

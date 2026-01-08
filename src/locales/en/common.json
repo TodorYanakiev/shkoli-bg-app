@@ -69,11 +69,15 @@
     "usernameMax": "Username must be at most 50 characters.",
     "passwordMin": "Password must be at least 8 characters.",
     "passwordMatch": "Passwords do not match.",
-    "invalidOption": "Select a valid option."
+    "invalidOption": "Select a valid option.",
+    "number": "Enter a valid number."
   },
   "errors": {
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
+    "lyceums": {
+      "updateFailed": "We couldn't update this lyceum. Try again."
+    },
     "profile": {
       "loadFailed": "We couldn't load your profile. Try again.",
       "changePasswordFailed": "We couldn't update your password. Try again.",
@@ -97,6 +101,9 @@
       "loginSuccess": "Welcome back! You are signed in.",
       "logoutSuccess": "You have been logged out.",
       "registerSuccess": "Account created. You're signed in."
+    },
+    "lyceums": {
+      "updateSuccess": "Lyceum updated successfully."
     },
     "profile": {
       "passwordChanged": "Password updated successfully.",
@@ -278,6 +285,15 @@
           "courses": "Courses ({{count}})",
           "lecturers": "Lecturers ({{count}})"
         },
+        "sideNav": {
+          "label": "Lyceum page sections",
+          "info": "Lyceum info",
+          "courses": "Courses",
+          "lecturers": "Lecturers",
+          "expand": "Expand menu",
+          "collapse": "Collapse menu"
+        },
+        "editCta": "Update lyceum",
         "labels": {
           "verification": "Verification: {{status}}"
         },
@@ -340,6 +356,43 @@
         "lecturersError": "Unable to load lecturers right now.",
         "coursesPlaceholder": "Courses for this lyceum will appear here.",
         "lecturersPlaceholder": "Lecturers for this lyceum will appear here."
+      },
+      "edit": {
+        "title": "Update lyceum",
+        "subtitle": "Adjust the lyceum profile details.",
+        "backLink": "Back to lyceum",
+        "loading": "Loading lyceum details...",
+        "notFound": "Lyceum not found.",
+        "form": {
+          "sections": {
+            "basics": "Basic details",
+            "location": "Location",
+            "contacts": "Contacts",
+            "links": "Links",
+            "leadership": "Leadership"
+          },
+          "fields": {
+            "name": "Name",
+            "town": "Town",
+            "status": "Status",
+            "bulstat": "Bulstat",
+            "registrationNumber": "Registration number",
+            "address": "Address",
+            "region": "Region",
+            "municipality": "Municipality",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "phone": "Phone",
+            "email": "Email",
+            "urlToLibrariesSite": "Library website",
+            "chitalishtaUrl": "Chitalishta profile",
+            "chairman": "Chairman",
+            "secretary": "Secretary"
+          },
+          "submit": "Save changes",
+          "submitting": "Saving...",
+          "cancel": "Cancel"
+        }
       }
     },
     "about": {

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { RefObject } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
 
 import placeholderImage from '../../../assets/lyceum-placeholder.svg'
+import { useAuthStatus } from '../../../hooks/useAuthStatus'
 import type { ApiError } from '../../../types/api'
 import { getUserDisplayName } from '../../../utils/user'
 import LyceumCourseCard from './components/LyceumCourseCard'
@@ -12,6 +13,7 @@ import LyceumLecturerCard from './components/LyceumLecturerCard'
 import { useLyceum } from '../hooks/useLyceum'
 import { useLyceumCourses } from '../hooks/useLyceumCourses'
 import { useLyceumLecturers } from '../hooks/useLyceumLecturers'
+import { useUserProfile } from '../../Profile/hooks/useUserProfile'
 
 const getLyceumErrorMessage = (
   error: ApiError | null,
@@ -56,6 +58,22 @@ type CarouselMetrics = {
   trackRef: RefObject<HTMLUListElement>
   cardRef: RefObject<HTMLLIElement>
 }
+
+type SideNavItem =
+  | {
+      key: string
+      label: string
+      icon: ReactNode
+      href: string
+      to?: never
+    }
+  | {
+      key: string
+      label: string
+      icon: ReactNode
+      to: string
+      href?: never
+    }
 
 const useCarouselMetrics = (
   itemsCount: number,
@@ -113,6 +131,12 @@ const useCarouselMetrics = (
 const LyceumDetailPage = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
+  const { isAuthenticated } = useAuthStatus()
+  const { data: user } = useUserProfile({ enabled: isAuthenticated })
+  const [isSideNavExpanded, setIsSideNavExpanded] = useState(() => {
+    if (typeof window === 'undefined') return true
+    return window.matchMedia('(min-width: 1024px)').matches
+  })
 
   const lyceumId = Number(id)
   const isValidId = Number.isFinite(lyceumId)
@@ -270,6 +294,148 @@ const LyceumDetailPage = () => {
     .filter(Boolean)
     .join(', ')
 
+  const canEditLyceum =
+    isValidId &&
+    (user?.role === 'ADMIN' || user?.administratedLyceumId === lyceumId)
+  const navIconClassName = 'h-5 w-5'
+  const baseSideNavItems: SideNavItem[] = [
+    {
+      key: 'lyceum-info',
+      label: t('pages.lyceums.detail.sideNav.info'),
+      href: '#lyceum-info',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 10.5v5" />
+          <circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      ),
+    },
+    {
+      key: 'lyceum-courses',
+      label: t('pages.lyceums.detail.sideNav.courses'),
+      href: '#lyceum-courses',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M8 6.5h11" />
+          <path d="M8 12h11" />
+          <path d="M8 17.5h11" />
+          <circle cx="5" cy="6.5" r="1.2" />
+          <circle cx="5" cy="12" r="1.2" />
+          <circle cx="5" cy="17.5" r="1.2" />
+        </svg>
+      ),
+    },
+    {
+      key: 'lyceum-lecturers',
+      label: t('pages.lyceums.detail.sideNav.lecturers'),
+      href: '#lyceum-lecturers',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M8 12.5a3.5 3.5 0 1 0-3.5-3.5A3.5 3.5 0 0 0 8 12.5z" />
+          <path d="M4 19.5a4 4 0 0 1 8 0" />
+          <path d="M17 12a3 3 0 1 0-2.6-4.5" />
+          <path d="M14.5 18.5a3.5 3.5 0 0 1 5.5 1" />
+        </svg>
+      ),
+    },
+  ]
+  const sideNavItems: SideNavItem[] = canEditLyceum
+    ? [
+        ...baseSideNavItems,
+        {
+          key: 'lyceum-edit',
+          label: t('pages.lyceums.detail.editCta'),
+          to: `/lyceums/${lyceumId}/edit`,
+          icon: (
+            <svg
+              viewBox="0 0 24 24"
+              className={navIconClassName}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M4 16.5V20h3.5L19 8.5l-3.5-3.5L4 16.5z" />
+              <path d="M13.5 6.5L17 10" />
+            </svg>
+          ),
+        },
+      ]
+    : baseSideNavItems
+
+  const sideNavBaseButtonClassName =
+    'group inline-flex items-center rounded-lg text-xs font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 lg:text-sm'
+  const sideNavItemClassName = [
+    sideNavBaseButtonClassName,
+    isSideNavExpanded
+      ? 'w-full justify-start gap-3 px-3 py-1'
+      : 'h-11 w-11 justify-center',
+  ].join(' ')
+  const sideNavIconClassName =
+    'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-brand transition group-hover:border-brand/30'
+  const sideNavToggleClassName = [
+    sideNavBaseButtonClassName,
+    'mt-2',
+    isSideNavExpanded
+      ? 'w-full justify-start gap-3 px-3 py-1'
+      : 'h-11 w-11 justify-center',
+  ].join(' ')
+  const sideNavContainerClassName = [
+    'flex h-full w-full flex-col gap-3 px-2 py-4',
+    isSideNavExpanded ? 'items-stretch' : 'items-center',
+  ].join(' ')
+  const sideNavListClassName = [
+    'flex flex-1 flex-col gap-2 overflow-y-auto',
+    isSideNavExpanded ? 'pr-1' : 'pr-0',
+  ].join(' ')
+  const sideNavWidth = isSideNavExpanded ? '16rem' : '4.75rem'
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    const root = document.documentElement
+
+    if (!lyceum) {
+      root.style.removeProperty('--page-sidebar-offset')
+      return
+    }
+
+    root.style.setProperty('--page-sidebar-offset', sideNavWidth)
+
+    return () => {
+      root.style.removeProperty('--page-sidebar-offset')
+    }
+  }, [lyceum, sideNavWidth])
+
   return (
     <section className="space-y-6">
       <Helmet>
@@ -318,9 +484,97 @@ const LyceumDetailPage = () => {
           {t('pages.lyceums.detail.notFound')}
         </div>
       ) : (
-        <>
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="relative">
+          <aside
+            className="fixed left-0 top-[76px] z-20 flex h-[calc(100vh-76px)] border-r border-slate-200 bg-white/95 shadow-sm backdrop-blur"
+            style={{ width: sideNavWidth }}
+          >
+            <nav
+              aria-label={t('pages.lyceums.detail.sideNav.label')}
+              className={sideNavContainerClassName}
+            >
+              <div className={sideNavListClassName}>
+                {sideNavItems.map((item) =>
+                  item.to ? (
+                    <Link
+                      key={item.key}
+                      to={item.to}
+                      title={item.label}
+                      className={sideNavItemClassName}
+                    >
+                      <span className={sideNavIconClassName}>{item.icon}</span>
+                      {isSideNavExpanded ? (
+                        <span>{item.label}</span>
+                      ) : (
+                        <span className="sr-only">{item.label}</span>
+                      )}
+                    </Link>
+                  ) : (
+                    <a
+                      key={item.key}
+                      href={item.href}
+                      title={item.label}
+                      className={sideNavItemClassName}
+                    >
+                      <span className={sideNavIconClassName}>{item.icon}</span>
+                      {isSideNavExpanded ? (
+                        <span>{item.label}</span>
+                      ) : (
+                        <span className="sr-only">{item.label}</span>
+                      )}
+                    </a>
+                  ),
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSideNavExpanded((prev) => !prev)}
+                aria-label={
+                  isSideNavExpanded
+                    ? t('pages.lyceums.detail.sideNav.collapse')
+                    : t('pages.lyceums.detail.sideNav.expand')
+                }
+                title={
+                  isSideNavExpanded
+                    ? t('pages.lyceums.detail.sideNav.collapse')
+                    : t('pages.lyceums.detail.sideNav.expand')
+                }
+                className={sideNavToggleClassName}
+              >
+                <span className={sideNavIconClassName}>
+                  <svg
+                    viewBox="0 0 24 24"
+                    className={navIconClassName}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    {isSideNavExpanded ? (
+                      <path d="M15 6l-6 6 6 6" />
+                    ) : (
+                      <path d="M9 6l6 6-6 6" />
+                    )}
+                  </svg>
+                </span>
+                {isSideNavExpanded ? (
+                  <span>{t('pages.lyceums.detail.sideNav.collapse')}</span>
+                ) : (
+                  <span className="sr-only">
+                    {t('pages.lyceums.detail.sideNav.expand')}
+                  </span>
+                )}
+              </button>
+            </nav>
+          </aside>
+          <div className="space-y-6">
+            <div
+              id="lyceum-info"
+              className="scroll-mt-24 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+            >
+              <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="p-6 lg:p-8">
                 <p className="text-xs font-semibold uppercase tracking-wide text-brand">
                   {t('pages.lyceums.detail.heroLabel')}
@@ -374,7 +628,7 @@ const LyceumDetailPage = () => {
           </div>
           <div
             id="lyceum-courses"
-            className="relative overflow-hidden rounded-3xl px-3 py-6 sm:px-5"
+            className="relative scroll-mt-24 overflow-hidden rounded-3xl px-3 py-6 sm:px-5"
           >
             <div className="pointer-events-none absolute inset-0 -z-10">
               <div className="absolute -top-6 left-8 h-24 w-24 rounded-full bg-brand/10 blur-2xl" />
@@ -504,7 +758,7 @@ const LyceumDetailPage = () => {
           </div>
           <div
             id="lyceum-lecturers"
-            className="rounded-2xl border border-slate-200/60 bg-transparent p-5 shadow-none"
+            className="scroll-mt-24 rounded-2xl border border-slate-200/60 bg-transparent p-5 shadow-none"
           >
             <div className="flex items-center justify-between gap-3">
               <div>
@@ -639,7 +893,8 @@ const LyceumDetailPage = () => {
               </div>
             )}
           </div>
-        </>
+        </div>
+      </div>
       )}
     </section>
   )

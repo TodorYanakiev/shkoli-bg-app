@@ -6,6 +6,7 @@ import AboutPage from '../pages/About'
 import LoginPage from '../pages/Login'
 import LyceumsPage from '../pages/Lyceums'
 import LyceumDetailPage from '../pages/Lyceums/Detail'
+import LyceumEditPage from '../pages/Lyceums/Edit'
 import MapPage from '../pages/Map'
 import NotFoundPage from '../pages/NotFound'
 import ChangePasswordPage from '../pages/Profile/ChangePassword'
@@ -42,6 +43,14 @@ const router = createBrowserRouter([
       { path: 'shkoli', element: <ShkoliPage /> },
       { path: 'lyceums', element: <LyceumsPage /> },
       { path: 'lyceums/:id', element: <LyceumDetailPage /> },
+      {
+        path: 'lyceums/:id/edit',
+        element: (
+          <ProtectedRoute>
+            <LyceumEditPage />
+          </ProtectedRoute>
+        ),
+      },
       { path: 'map', element: <MapPage /> },
       { path: 'about', element: <AboutPage /> },
       {
