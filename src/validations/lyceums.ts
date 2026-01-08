@@ -31,6 +31,19 @@ export type LyceumRightsVerificationFormValues = z.infer<
   ReturnType<typeof getLyceumRightsVerificationSchema>
 >
 
+export const getLyceumLecturerSchema = (t: TFunction) =>
+  z.object({
+    email: z
+      .string()
+      .trim()
+      .min(1, t('validation.required'))
+      .email(t('validation.email')),
+  })
+
+export type LyceumLecturerFormValues = z.infer<
+  ReturnType<typeof getLyceumLecturerSchema>
+>
+
 const optionalTextField = z.string().trim()
 
 const getOptionalNumberField = (t: TFunction) =>

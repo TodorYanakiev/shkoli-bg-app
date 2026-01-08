@@ -13,6 +13,7 @@ import LyceumLecturerCard from './components/LyceumLecturerCard'
 import { useLyceum } from '../hooks/useLyceum'
 import { useLyceumCourses } from '../hooks/useLyceumCourses'
 import { useLyceumLecturers } from '../hooks/useLyceumLecturers'
+import { useUsersByIds } from '../hooks/useUsersByIds'
 import { useUserProfile } from '../../Profile/hooks/useUserProfile'
 
 const getLyceumErrorMessage = (
@@ -26,7 +27,7 @@ const getLyceumErrorMessage = (
   if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
     return t('errors.auth.forbidden')
   }
-  if (error.kind === 'notFound') {
+  if (error.status === 404) {
     return t('pages.lyceums.detail.notFound')
   }
   return t('pages.lyceums.detail.loadFailed')
@@ -210,6 +211,46 @@ const LyceumDetailPage = () => {
         ]),
     )
   }, [lecturers])
+
+  const courseLecturerIds = useMemo(() => {
+    if (!courses) return []
+    const ids = courses.flatMap((course) => course.lecturerIds ?? [])
+    const validIds = ids.filter(
+      (id): id is number => Number.isFinite(id),
+    )
+    return Array.from(new Set(validIds))
+  }, [courses])
+
+  const missingLecturerIds = useMemo(() => {
+    if (courseLecturerIds.length === 0) return []
+    return courseLecturerIds.filter((id) => !lecturersById.has(id))
+  }, [courseLecturerIds, lecturersById])
+
+  const { data: extraLecturers } = useUsersByIds(missingLecturerIds, {
+    enabled: isValidId && missingLecturerIds.length > 0,
+  })
+
+  const extraLecturersById = useMemo(() => {
+    if (!extraLecturers) return new Map<number, string>()
+    return new Map(
+      extraLecturers
+        .filter((lecturer) => lecturer.id != null)
+        .map((lecturer) => [
+          lecturer.id as number,
+          getUserDisplayName(lecturer),
+        ]),
+    )
+  }, [extraLecturers])
+
+  const courseLecturersById = useMemo(() => {
+    const merged = new Map(lecturersById)
+    extraLecturersById.forEach((name, id) => {
+      if (!merged.has(id)) {
+        merged.set(id, name)
+      }
+    })
+    return merged
+  }, [lecturersById, extraLecturersById])
 
   const maxCourseStartIndex = Math.max(
     0,
@@ -668,7 +709,7 @@ const LyceumDetailPage = () => {
                       const primaryLecturerId = lecturerIds[0]
                       const primaryLecturerName =
                         (primaryLecturerId
-                          ? lecturersById.get(primaryLecturerId)
+                          ? courseLecturersById.get(primaryLecturerId)
                           : '') || fallbackValue
                       const additionalLecturers = Math.max(
                         0,

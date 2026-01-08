@@ -7,6 +7,11 @@ export type LyceumRightsVerificationRequest = {
   verificationCode: string
 }
 
+export type LyceumLecturerRequest = {
+  userId: number
+  lyceumId?: number
+}
+
 export type LyceumRequest = {
   name: string
   chitalishtaUrl?: string

@@ -2,6 +2,7 @@ import httpClient from './httpClient'
 import type { CourseResponse } from '../types/courses'
 import type {
   LyceumFilterParams,
+  LyceumLecturerRequest,
   LyceumRequest,
   LyceumRightsRequest,
   LyceumRightsVerificationRequest,
@@ -65,4 +66,15 @@ export const getLyceumLecturers = async (lyceumId: number) => {
     `/api/v1/lyceums/${lyceumId}/lecturers`,
   )
   return response.data
+}
+
+export const addLyceumLecturer = async (payload: LyceumLecturerRequest) => {
+  await httpClient.post('/api/v1/lyceums/lecturers', payload)
+}
+
+export const removeLyceumLecturer = async (
+  lyceumId: number,
+  userId: number,
+) => {
+  await httpClient.delete(`/api/v1/lyceums/${lyceumId}/lecturers/${userId}`)
 }

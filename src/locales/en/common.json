@@ -76,7 +76,16 @@
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
     "lyceums": {
-      "updateFailed": "We couldn't update this lyceum. Try again."
+      "updateFailed": "We couldn't update this lyceum. Try again.",
+      "lecturers": {
+        "addFailed": "We couldn't add this lecturer. Try again.",
+        "removeFailed": "We couldn't remove this lecturer. Try again.",
+        "addInvalid": "Enter a valid lecturer email.",
+        "removeInvalid": "That user isn't a lecturer for this lyceum.",
+        "notFound": "We couldn't find that user or lyceum.",
+        "alreadyAssigned": "That user is already a lecturer here.",
+        "emailNotFound": "We couldn't find a user with that email."
+      }
     },
     "profile": {
       "loadFailed": "We couldn't load your profile. Try again.",
@@ -103,7 +112,9 @@
       "registerSuccess": "Account created. You're signed in."
     },
     "lyceums": {
-      "updateSuccess": "Lyceum updated successfully."
+      "updateSuccess": "Lyceum updated successfully.",
+      "lecturerAdded": "Lecturer added successfully.",
+      "lecturerRemoved": "Lecturer removed successfully."
     },
     "profile": {
       "passwordChanged": "Password updated successfully.",
@@ -392,6 +403,35 @@
           "submit": "Save changes",
           "submitting": "Saving...",
           "cancel": "Cancel"
+        },
+        "lecturers": {
+          "title": "Lecturers",
+          "subtitle": "Manage the educators connected to this lyceum.",
+          "addTitle": "Add lecturer",
+          "addDescription": "Assign a user to teach in this lyceum by email.",
+          "form": {
+            "emailLabel": "User email",
+            "emailPlaceholder": "Enter user email",
+            "submit": "Add lecturer",
+            "submitting": "Adding..."
+          },
+          "suggestions": {
+            "hint": "Start typing to see user emails.",
+            "loading": "Loading users...",
+            "error": "Unable to load users.",
+            "empty": "No users match that email."
+          },
+          "listTitle": "Current lecturers",
+          "listDescription": "Remove lecturers who no longer teach here.",
+          "loading": "Loading lecturers...",
+          "listError": "Unable to load lecturers right now.",
+          "empty": "No lecturers assigned yet.",
+          "removeAction": "Remove",
+          "removing": "Removing...",
+          "removeLabel": "Remove {{name}}",
+          "confirmPrompt": "Are you sure?",
+          "confirmAction": "Confirm",
+          "cancelAction": "Cancel"
         }
       }
     },
