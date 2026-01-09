@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Link,
@@ -27,6 +27,13 @@ const TopNav = () => {
   const logoutMutation = useLogoutMutation()
   const { showToast } = useToast()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const headerRef = useRef<HTMLElement | null>(null)
+  const lyceumMatch = location.pathname.match(/^\/lyceums\/(\d+)(?:\/.*)?$/)
+  const currentLyceumId = lyceumMatch ? Number(lyceumMatch[1]) : null
+  const canEditLyceum =
+    Number.isFinite(currentLyceumId) &&
+    (currentUser?.role === 'ADMIN' ||
+      currentUser?.administratedLyceumId === currentLyceumId)
 
   const profileName =
     getUserDisplayName(currentUser) || t('pages.profile.unknownUser')
@@ -90,8 +97,39 @@ const TopNav = () => {
     t,
   )
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    const header = headerRef.current
+    if (!header) return
+
+    const root = document.documentElement
+    const updateHeight = () => {
+      root.style.setProperty('--topnav-height', `${header.offsetHeight}px`)
+    }
+
+    updateHeight()
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateHeight)
+      return () => {
+        window.removeEventListener('resize', updateHeight)
+        root.style.removeProperty('--topnav-height')
+      }
+    }
+
+    const observer = new ResizeObserver(updateHeight)
+    observer.observe(header)
+    return () => {
+      observer.disconnect()
+      root.style.removeProperty('--topnav-height')
+    }
+  }, [isMenuOpen, logoutErrorMessage])
+
   return (
-    <header className="sticky top-0 z-20 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-20 w-full border-b border-slate-200 bg-white/95 backdrop-blur"
+    >
       <div className="flex w-full items-center justify-between px-4 py-4 sm:px-6 lg:px-12">
         <Link
           to="/shkoli"
@@ -208,6 +246,14 @@ const TopNav = () => {
           <NavLink to="/lyceums" className={mobileNavLinkClassName}>
             {t('nav.lyceums')}
           </NavLink>
+          {canEditLyceum && currentLyceumId ? (
+            <Link
+              to={`/lyceums/${currentLyceumId}/edit`}
+              className="ml-4 inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-brand/40 hover:text-brand"
+            >
+              {t('pages.lyceums.detail.editCta')}
+            </Link>
+          ) : null}
           <NavLink to="/map" className={mobileNavLinkClassName}>
             {t('nav.map')}
           </NavLink>
