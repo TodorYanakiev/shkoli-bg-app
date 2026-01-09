@@ -88,4 +88,18 @@
   .animate-toast-out {
     animation: toast-out 180ms ease-in forwards;
   }
+
+  .hide-datalist-indicator {
+    appearance: none;
+  }
+
+  .hide-datalist-indicator::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    display: none;
+    pointer-events: none;
+  }
+
+  .hide-datalist-indicator::-webkit-list-button {
+    display: none;
+  }
 }

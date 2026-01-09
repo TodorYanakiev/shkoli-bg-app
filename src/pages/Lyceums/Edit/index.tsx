@@ -136,11 +136,11 @@ const LyceumEditPage = () => {
   const legendClassName =
     'text-xs font-semibold uppercase tracking-wide text-slate-500'
   const actionBarClassName =
-    'flex flex-wrap gap-3 rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4'
+    'flex flex-col gap-3 rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 sm:flex-row sm:items-center'
   const primaryActionButtonClassName =
-    'inline-flex items-center justify-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:bg-slate-300'
+    'inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:bg-slate-300 sm:w-auto'
   const secondaryActionButtonClassName =
-    'inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:text-slate-400'
+    'inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:text-slate-400 sm:w-auto'
   const actionIconClassName = 'h-4 w-4'
 
   const normalizeOptionalText = (value: string) => {
@@ -230,7 +230,7 @@ const LyceumEditPage = () => {
       </Helmet>
       <div className="pointer-events-none absolute -top-10 right-8 h-28 w-28 rounded-full bg-brand/10 blur-3xl" />
       <div className="pointer-events-none absolute left-0 top-16 h-24 w-24 rounded-full bg-emerald-200/40 blur-3xl" />
-      <div className="relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 p-6 shadow-sm backdrop-blur sm:p-8">
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 p-5 shadow-sm backdrop-blur sm:p-6 lg:p-8">
         <div className="pointer-events-none absolute -bottom-8 -right-8 h-32 w-32 rounded-full bg-sky-200/40 blur-3xl" />
         <div className="relative z-10 space-y-4">
           <Link
@@ -312,10 +312,10 @@ const LyceumEditPage = () => {
           {t('errors.auth.forbidden')}
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:items-start">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:items-start">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="w-full space-y-6 rounded-3xl border border-slate-200/70 bg-white/90 p-6 shadow-sm backdrop-blur sm:p-8"
+            className="w-full space-y-6 rounded-3xl border border-slate-200/70 bg-white/90 p-5 shadow-sm backdrop-blur sm:p-6 lg:p-8"
             aria-busy={mutation.isPending}
           >
             <fieldset className={fieldsetClassName}>

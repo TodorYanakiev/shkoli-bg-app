@@ -134,6 +134,10 @@ const LyceumDetailPage = () => {
   const { id } = useParams<{ id: string }>()
   const { isAuthenticated } = useAuthStatus()
   const { data: user } = useUserProfile({ enabled: isAuthenticated })
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') return true
+    return window.matchMedia('(min-width: 1024px)').matches
+  })
   const [isSideNavExpanded, setIsSideNavExpanded] = useState(() => {
     if (typeof window === 'undefined') return true
     return window.matchMedia('(min-width: 1024px)').matches
@@ -339,6 +343,11 @@ const LyceumDetailPage = () => {
     isValidId &&
     (user?.role === 'ADMIN' || user?.administratedLyceumId === lyceumId)
   const navIconClassName = 'h-5 w-5'
+  const sideNavWidth = !isDesktop
+    ? '0px'
+    : isSideNavExpanded
+      ? '16rem'
+      : '4.75rem'
   const baseSideNavItems: SideNavItem[] = [
     {
       key: 'lyceum-info',
@@ -459,13 +468,33 @@ const LyceumDetailPage = () => {
     'flex flex-1 flex-col gap-2 overflow-y-auto',
     isSideNavExpanded ? 'pr-1' : 'pr-0',
   ].join(' ')
-  const sideNavWidth = isSideNavExpanded ? '16rem' : '4.75rem'
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const media = window.matchMedia('(min-width: 1024px)')
+    const handleChange = () => {
+      setIsDesktop(media.matches)
+      if (!media.matches) {
+        setIsSideNavExpanded(false)
+      }
+    }
+
+    handleChange()
+
+    if (media.addEventListener) {
+      media.addEventListener('change', handleChange)
+      return () => media.removeEventListener('change', handleChange)
+    }
+
+    media.addListener(handleChange)
+    return () => media.removeListener(handleChange)
+  }, [])
 
   useEffect(() => {
     if (typeof document === 'undefined') return
     const root = document.documentElement
 
-    if (!lyceum) {
+    if (!lyceum || !isDesktop) {
       root.style.removeProperty('--page-sidebar-offset')
       return
     }
@@ -475,16 +504,16 @@ const LyceumDetailPage = () => {
     return () => {
       root.style.removeProperty('--page-sidebar-offset')
     }
-  }, [lyceum, sideNavWidth])
+  }, [lyceum, sideNavWidth, isDesktop])
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-6 -mt-8 sm:mt-0">
       <Helmet>
         <title>{pageTitle}</title>
       </Helmet>
-      <div className="flex items-center justify-between gap-3">
+      <div className="hidden flex-col gap-3 sm:flex sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">
             {lyceum?.name ?? t('pages.lyceums.detail.title')}
           </h1>
           <p className="text-sm text-slate-600">
@@ -493,7 +522,7 @@ const LyceumDetailPage = () => {
         </div>
         <Link
           to="/lyceums"
-          className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 sm:w-auto"
         >
           ← {t('pages.lyceums.detail.back')}
         </Link>
@@ -526,147 +555,155 @@ const LyceumDetailPage = () => {
         </div>
       ) : (
         <div className="relative">
-          <aside
-            className="fixed left-0 top-[76px] z-20 flex h-[calc(100vh-76px)] border-r border-slate-200 bg-white/95 shadow-sm backdrop-blur"
-            style={{ width: sideNavWidth }}
-          >
-            <nav
-              aria-label={t('pages.lyceums.detail.sideNav.label')}
-              className={sideNavContainerClassName}
+          {isDesktop ? (
+            <aside
+              className="fixed left-0 z-20 flex border-r border-slate-200 bg-white/95 shadow-sm backdrop-blur"
+              style={{
+                width: sideNavWidth,
+                top: 'var(--topnav-height, 76px)',
+                height: 'calc(100vh - var(--topnav-height, 76px))',
+              }}
             >
-              <div className={sideNavListClassName}>
-                {sideNavItems.map((item) =>
-                  item.to ? (
-                    <Link
-                      key={item.key}
-                      to={item.to}
-                      title={item.label}
-                      className={sideNavItemClassName}
-                    >
-                      <span className={sideNavIconClassName}>{item.icon}</span>
-                      {isSideNavExpanded ? (
-                        <span>{item.label}</span>
-                      ) : (
-                        <span className="sr-only">{item.label}</span>
-                      )}
-                    </Link>
-                  ) : (
-                    <a
-                      key={item.key}
-                      href={item.href}
-                      title={item.label}
-                      className={sideNavItemClassName}
-                    >
-                      <span className={sideNavIconClassName}>{item.icon}</span>
-                      {isSideNavExpanded ? (
-                        <span>{item.label}</span>
-                      ) : (
-                        <span className="sr-only">{item.label}</span>
-                      )}
-                    </a>
-                  ),
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsSideNavExpanded((prev) => !prev)}
-                aria-label={
-                  isSideNavExpanded
-                    ? t('pages.lyceums.detail.sideNav.collapse')
-                    : t('pages.lyceums.detail.sideNav.expand')
-                }
-                title={
-                  isSideNavExpanded
-                    ? t('pages.lyceums.detail.sideNav.collapse')
-                    : t('pages.lyceums.detail.sideNav.expand')
-                }
-                className={sideNavToggleClassName}
+              <nav
+                aria-label={t('pages.lyceums.detail.sideNav.label')}
+                className={sideNavContainerClassName}
               >
-                <span className={sideNavIconClassName}>
-                  <svg
-                    viewBox="0 0 24 24"
-                    className={navIconClassName}
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    {isSideNavExpanded ? (
-                      <path d="M15 6l-6 6 6 6" />
+                <div className={sideNavListClassName}>
+                  {sideNavItems.map((item) =>
+                    item.to ? (
+                      <Link
+                        key={item.key}
+                        to={item.to}
+                        title={item.label}
+                        className={sideNavItemClassName}
+                      >
+                        <span className={sideNavIconClassName}>{item.icon}</span>
+                        {isSideNavExpanded ? (
+                          <span>{item.label}</span>
+                        ) : (
+                          <span className="sr-only">{item.label}</span>
+                        )}
+                      </Link>
                     ) : (
-                      <path d="M9 6l6 6-6 6" />
-                    )}
-                  </svg>
-                </span>
-                {isSideNavExpanded ? (
-                  <span>{t('pages.lyceums.detail.sideNav.collapse')}</span>
-                ) : (
-                  <span className="sr-only">
-                    {t('pages.lyceums.detail.sideNav.expand')}
+                      <a
+                        key={item.key}
+                        href={item.href}
+                        title={item.label}
+                        className={sideNavItemClassName}
+                      >
+                        <span className={sideNavIconClassName}>
+                          {item.icon}
+                        </span>
+                        {isSideNavExpanded ? (
+                          <span>{item.label}</span>
+                        ) : (
+                          <span className="sr-only">{item.label}</span>
+                        )}
+                      </a>
+                    ),
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsSideNavExpanded((prev) => !prev)}
+                  aria-label={
+                    isSideNavExpanded
+                      ? t('pages.lyceums.detail.sideNav.collapse')
+                      : t('pages.lyceums.detail.sideNav.expand')
+                  }
+                  title={
+                    isSideNavExpanded
+                      ? t('pages.lyceums.detail.sideNav.collapse')
+                      : t('pages.lyceums.detail.sideNav.expand')
+                  }
+                  className={sideNavToggleClassName}
+                >
+                  <span className={sideNavIconClassName}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      className={navIconClassName}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      {isSideNavExpanded ? (
+                        <path d="M15 6l-6 6 6 6" />
+                      ) : (
+                        <path d="M9 6l6 6-6 6" />
+                      )}
+                    </svg>
                   </span>
-                )}
-              </button>
-            </nav>
-          </aside>
+                  {isSideNavExpanded ? (
+                    <span>{t('pages.lyceums.detail.sideNav.collapse')}</span>
+                  ) : (
+                    <span className="sr-only">
+                      {t('pages.lyceums.detail.sideNav.expand')}
+                    </span>
+                  )}
+                </button>
+              </nav>
+            </aside>
+          ) : null}
           <div className="space-y-6">
             <div
               id="lyceum-info"
               className="scroll-mt-24 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
             >
-              <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="p-6 lg:p-8">
-                <p className="text-xs font-semibold uppercase tracking-wide text-brand">
-                  {t('pages.lyceums.detail.heroLabel')}
-                </p>
-                <h2 className="mt-2 text-2xl font-semibold text-slate-900">
-                  {lyceum.name}
-                </h2>
-                <p className="mt-1 text-sm text-slate-600">
-                  {heroLocation || fallbackValue}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <a
-                    href="#lyceum-courses"
-                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-800 transition hover:border-brand/30 hover:text-brand"
-                  >
-                    {t('pages.lyceums.detail.overviewLinks.courses', {
-                      count: coursesCount,
-                    })}
-                  </a>
-                  <a
-                    href="#lyceum-lecturers"
-                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-800 transition hover:border-brand/30 hover:text-brand"
-                  >
-                    {t('pages.lyceums.detail.overviewLinks.lecturers', {
-                      count: lecturersCount,
-                    })}
-                  </a>
+              <div className="grid gap-4 lg:gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+                <div className="p-5 sm:p-6 lg:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand">
+                    {t('pages.lyceums.detail.heroLabel')}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+                    {lyceum.name}
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-600">
+                    {heroLocation || fallbackValue}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <a
+                      href="#lyceum-courses"
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-800 transition hover:border-brand/30 hover:text-brand"
+                    >
+                      {t('pages.lyceums.detail.overviewLinks.courses', {
+                        count: coursesCount,
+                      })}
+                    </a>
+                    <a
+                      href="#lyceum-lecturers"
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-800 transition hover:border-brand/30 hover:text-brand"
+                    >
+                      {t('pages.lyceums.detail.overviewLinks.lecturers', {
+                        count: lecturersCount,
+                      })}
+                    </a>
+                  </div>
+                  <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+                    {overviewDetails.map((item) => (
+                      <div key={item.label} className="space-y-1">
+                        <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                          {item.label}
+                        </dt>
+                        <dd className="font-medium text-slate-900">
+                          {item.value}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
                 </div>
-                <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
-                  {overviewDetails.map((item) => (
-                    <div key={item.label} className="space-y-1">
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                        {item.label}
-                      </dt>
-                      <dd className="font-medium text-slate-900">
-                        {item.value}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-              <div className="relative">
-                <img
-                  src={placeholderImage}
-                  alt={t('components.lyceumCard.imageAlt')}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
+                <div className="relative">
+                  <img
+                    src={placeholderImage}
+                    alt={t('components.lyceumCard.imageAlt')}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
               </div>
             </div>
-          </div>
           <div
             id="lyceum-courses"
             className="relative scroll-mt-24 overflow-hidden rounded-3xl px-3 py-6 sm:px-5"
@@ -675,7 +712,7 @@ const LyceumDetailPage = () => {
               <div className="absolute -top-6 left-8 h-24 w-24 rounded-full bg-brand/10 blur-2xl" />
               <div className="absolute bottom-4 right-6 h-32 w-32 rounded-full bg-emerald-100/80 blur-3xl" />
             </div>
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="text-base font-semibold text-slate-900 sm:text-lg">
                   {t('pages.lyceums.detail.sections.courses')}
@@ -799,9 +836,9 @@ const LyceumDetailPage = () => {
           </div>
           <div
             id="lyceum-lecturers"
-            className="scroll-mt-24 rounded-2xl border border-slate-200/60 bg-transparent p-5 shadow-none"
+            className="scroll-mt-24 rounded-2xl border border-slate-200/60 bg-transparent p-4 shadow-none sm:p-5"
           >
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="text-base font-semibold text-slate-900 sm:text-lg">
                   {t('pages.lyceums.detail.sections.lecturers')}

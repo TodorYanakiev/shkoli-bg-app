@@ -290,7 +290,7 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
     addMutation.isPending || isUsersLoading || Boolean(usersError)
 
   return (
-    <div className="relative w-full overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 p-6 shadow-sm backdrop-blur sm:p-7">
+    <div className="relative w-full overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 p-5 shadow-sm backdrop-blur sm:p-6">
       <div className="pointer-events-none absolute -top-10 right-6 h-24 w-24 rounded-full bg-brand/10 blur-3xl" />
       <div className="pointer-events-none absolute bottom-0 left-0 h-28 w-28 rounded-full bg-emerald-200/40 blur-3xl" />
       <div className="relative z-10 space-y-4">
@@ -340,7 +340,7 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
                     errors.email ? 'lyceum-lecturer-email-error' : undefined
                   }
                   disabled={isAddDisabled}
-                  className={inputClassName(Boolean(errors.email))}
+                  className={`${inputClassName(Boolean(errors.email))} hide-datalist-indicator`}
                   {...register('email')}
                 />
                 <datalist id="lyceum-lecturer-suggestions">
@@ -415,9 +415,9 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
                   return (
                     <li
                       key={lecturer.id ?? `${displayName}-${index}`}
-                      className="flex items-center justify-between gap-3 rounded-xl border border-slate-200/70 bg-white px-3 py-2 text-sm shadow-sm"
+                      className="flex flex-col gap-3 rounded-xl border border-slate-200/70 bg-white px-3 py-3 text-sm shadow-sm sm:flex-row sm:items-center sm:justify-between"
                     >
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <p className="truncate font-semibold text-slate-900">
                           {displayName}
                         </p>
@@ -426,7 +426,7 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
                         </p>
                       </div>
                       {isConfirming ? (
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
                           <span className="text-[10px] font-semibold text-rose-600">
                             {t('pages.lyceums.edit.lecturers.confirmPrompt')}
                           </span>
@@ -453,23 +453,25 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
                           </button>
                         </div>
                       ) : (
-                        <button
-                          type="button"
-                          onClick={() => setConfirmingId(lecturerId ?? null)}
-                          disabled={isRemoveDisabled}
-                          className={removeButtonClassName}
-                          aria-label={t(
-                            'pages.lyceums.edit.lecturers.removeLabel',
-                            {
+                        <div className="flex items-center sm:justify-end">
+                          <button
+                            type="button"
+                            onClick={() => setConfirmingId(lecturerId ?? null)}
+                            disabled={isRemoveDisabled}
+                            className={removeButtonClassName}
+                            aria-label={t(
+                              'pages.lyceums.edit.lecturers.removeLabel',
+                              {
+                                name: displayName,
+                              },
+                            )}
+                            title={t('pages.lyceums.edit.lecturers.removeLabel', {
                               name: displayName,
-                            },
-                          )}
-                          title={t('pages.lyceums.edit.lecturers.removeLabel', {
-                            name: displayName,
-                          })}
-                        >
-                          {t('pages.lyceums.edit.lecturers.removeAction')}
-                        </button>
+                            })}
+                          >
+                            {t('pages.lyceums.edit.lecturers.removeAction')}
+                          </button>
+                        </div>
                       )}
                     </li>
                   )
