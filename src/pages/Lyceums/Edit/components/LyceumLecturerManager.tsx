@@ -340,7 +340,7 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
                     errors.email ? 'lyceum-lecturer-email-error' : undefined
                   }
                   disabled={isAddDisabled}
-                  className={inputClassName(Boolean(errors.email))}
+                  className={`${inputClassName(Boolean(errors.email))} hide-datalist-indicator`}
                   {...register('email')}
                 />
                 <datalist id="lyceum-lecturer-suggestions">
