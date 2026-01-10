@@ -333,6 +333,16 @@
         "loading": "Loading course...",
         "priceFree": "Free",
         "heroLabel": "Course overview",
+        "sideNav": {
+          "label": "Course page sections",
+          "overview": "Overview",
+          "schedule": "Schedule",
+          "lecturers": "Lecturers",
+          "lyceum": "Lyceum",
+          "gallery": "Gallery",
+          "expand": "Expand menu",
+          "collapse": "Collapse menu"
+        },
         "sections": {
           "overview": "Overview",
           "schedule": "Schedule",

@@ -333,6 +333,16 @@
         "loading": "Зареждане на школа...",
         "priceFree": "Безплатно",
         "heroLabel": "Преглед на школата",
+        "sideNav": {
+          "label": "Секции на страницата на школата",
+          "overview": "Преглед",
+          "schedule": "График",
+          "lecturers": "Преподаватели",
+          "lyceum": "Читалище",
+          "gallery": "Галерия",
+          "expand": "Разшири менюто",
+          "collapse": "Свий менюто"
+        },
         "sections": {
           "overview": "Преглед",
           "schedule": "График",

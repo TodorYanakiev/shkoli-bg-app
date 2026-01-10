@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
@@ -122,9 +124,33 @@ const getSpecialCaseStatus = (
     ? t('pages.shkoli.detail.schedule.cancelled')
     : t('pages.shkoli.detail.schedule.active')
 
+type SideNavItem =
+  | {
+      key: string
+      label: string
+      icon: ReactNode
+      href: string
+      to?: never
+    }
+  | {
+      key: string
+      label: string
+      icon: ReactNode
+      to: string
+      href?: never
+    }
+
 const CourseDetailPage = () => {
   const { t, i18n } = useTranslation()
   const { id } = useParams<{ id: string }>()
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') return true
+    return window.matchMedia('(min-width: 1024px)').matches
+  })
+  const [isSideNavExpanded, setIsSideNavExpanded] = useState(() => {
+    if (typeof window === 'undefined') return true
+    return window.matchMedia('(min-width: 1024px)').matches
+  })
 
   const courseId = Number(id)
   const isValidId = Number.isFinite(courseId)
@@ -196,6 +222,187 @@ const CourseDetailPage = () => {
     'pages.shkoli.detail.lyceumError',
     t,
   )
+  const navIconClassName = 'h-5 w-5'
+  const sideNavWidth = !isDesktop
+    ? '0px'
+    : isSideNavExpanded
+      ? '16rem'
+      : '4.75rem'
+  const sideNavItems: SideNavItem[] = [
+    {
+      key: 'course-overview',
+      label: t('pages.shkoli.detail.sideNav.overview'),
+      href: '#course-overview',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 10.5v5" />
+          <circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      ),
+    },
+    {
+      key: 'course-schedule',
+      label: t('pages.shkoli.detail.sideNav.schedule'),
+      href: '#course-schedule',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="4" y="5" width="16" height="15" rx="2" />
+          <path d="M8 3v4" />
+          <path d="M16 3v4" />
+          <path d="M4 9h16" />
+        </svg>
+      ),
+    },
+    {
+      key: 'course-lecturers',
+      label: t('pages.shkoli.detail.sideNav.lecturers'),
+      href: '#course-lecturers',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M8 12.5a3.5 3.5 0 1 0-3.5-3.5A3.5 3.5 0 0 0 8 12.5z" />
+          <path d="M4 19.5a4 4 0 0 1 8 0" />
+          <path d="M17 12a3 3 0 1 0-2.6-4.5" />
+          <path d="M14.5 18.5a3.5 3.5 0 0 1 5.5 1" />
+        </svg>
+      ),
+    },
+    {
+      key: 'course-lyceum',
+      label: t('pages.shkoli.detail.sideNav.lyceum'),
+      href: '#course-lyceum',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M3 9l9-5 9 5" />
+          <path d="M4 20h16" />
+          <path d="M6 20V9" />
+          <path d="M10 20V9" />
+          <path d="M14 20V9" />
+          <path d="M18 20V9" />
+        </svg>
+      ),
+    },
+    {
+      key: 'course-gallery',
+      label: t('pages.shkoli.detail.sideNav.gallery'),
+      href: '#course-gallery',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="4" y="5" width="16" height="14" rx="2" />
+          <circle cx="9" cy="10" r="1.5" />
+          <path d="M4 16l4-4 4 4 4-4 4 4" />
+        </svg>
+      ),
+    },
+  ]
+
+  const sideNavBaseButtonClassName =
+    'group inline-flex items-center rounded-lg text-xs font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 lg:text-sm'
+  const sideNavItemClassName = [
+    sideNavBaseButtonClassName,
+    isSideNavExpanded
+      ? 'w-full justify-start gap-3 px-3 py-1'
+      : 'h-11 w-11 justify-center',
+  ].join(' ')
+  const sideNavIconClassName =
+    'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-brand transition group-hover:border-brand/30'
+  const sideNavToggleClassName = [
+    sideNavBaseButtonClassName,
+    'mt-2',
+    isSideNavExpanded
+      ? 'w-full justify-start gap-3 px-3 py-1'
+      : 'h-11 w-11 justify-center',
+  ].join(' ')
+  const sideNavContainerClassName = [
+    'flex h-full w-full flex-col gap-3 px-2 py-4',
+    isSideNavExpanded ? 'items-stretch' : 'items-center',
+  ].join(' ')
+  const sideNavListClassName = [
+    'flex flex-1 flex-col gap-2 overflow-y-auto',
+    isSideNavExpanded ? 'pr-1' : 'pr-0',
+  ].join(' ')
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const media = window.matchMedia('(min-width: 1024px)')
+    const handleChange = () => {
+      setIsDesktop(media.matches)
+      if (!media.matches) {
+        setIsSideNavExpanded(false)
+      }
+    }
+
+    handleChange()
+
+    if (media.addEventListener) {
+      media.addEventListener('change', handleChange)
+      return () => media.removeEventListener('change', handleChange)
+    }
+
+    media.addListener(handleChange)
+    return () => media.removeListener(handleChange)
+  }, [])
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    const root = document.documentElement
+
+    if (!course || !isDesktop) {
+      root.style.removeProperty('--page-sidebar-offset')
+      return
+    }
+
+    root.style.setProperty('--page-sidebar-offset', sideNavWidth)
+
+    return () => {
+      root.style.removeProperty('--page-sidebar-offset')
+    }
+  }, [course, sideNavWidth, isDesktop])
 
   return (
     <section className="space-y-6">
@@ -250,9 +457,107 @@ const CourseDetailPage = () => {
           {t('pages.shkoli.detail.notFound')}
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-start">
-          <div className="space-y-6">
-            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div className="relative">
+          {isDesktop ? (
+            <aside
+              className="fixed left-0 z-20 flex border-r border-slate-200 bg-white/95 shadow-sm backdrop-blur"
+              style={{
+                width: sideNavWidth,
+                top: 'var(--topnav-height, 76px)',
+                height: 'calc(100vh - var(--topnav-height, 76px))',
+              }}
+            >
+              <nav
+                aria-label={t('pages.shkoli.detail.sideNav.label')}
+                className={sideNavContainerClassName}
+              >
+                <div className={sideNavListClassName}>
+                  {sideNavItems.map((item) =>
+                    item.to ? (
+                      <Link
+                        key={item.key}
+                        to={item.to}
+                        title={item.label}
+                        className={sideNavItemClassName}
+                      >
+                        <span className={sideNavIconClassName}>
+                          {item.icon}
+                        </span>
+                        {isSideNavExpanded ? (
+                          <span>{item.label}</span>
+                        ) : (
+                          <span className="sr-only">{item.label}</span>
+                        )}
+                      </Link>
+                    ) : (
+                      <a
+                        key={item.key}
+                        href={item.href}
+                        title={item.label}
+                        className={sideNavItemClassName}
+                      >
+                        <span className={sideNavIconClassName}>
+                          {item.icon}
+                        </span>
+                        {isSideNavExpanded ? (
+                          <span>{item.label}</span>
+                        ) : (
+                          <span className="sr-only">{item.label}</span>
+                        )}
+                      </a>
+                    ),
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsSideNavExpanded((prev) => !prev)}
+                  aria-label={
+                    isSideNavExpanded
+                      ? t('pages.shkoli.detail.sideNav.collapse')
+                      : t('pages.shkoli.detail.sideNav.expand')
+                  }
+                  title={
+                    isSideNavExpanded
+                      ? t('pages.shkoli.detail.sideNav.collapse')
+                      : t('pages.shkoli.detail.sideNav.expand')
+                  }
+                  className={sideNavToggleClassName}
+                >
+                  <span className={sideNavIconClassName}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      className={navIconClassName}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      {isSideNavExpanded ? (
+                        <path d="M15 6l-6 6 6 6" />
+                      ) : (
+                        <path d="M9 6l6 6-6 6" />
+                      )}
+                    </svg>
+                  </span>
+                  {isSideNavExpanded ? (
+                    <span>{t('pages.shkoli.detail.sideNav.collapse')}</span>
+                  ) : (
+                    <span className="sr-only">
+                      {t('pages.shkoli.detail.sideNav.expand')}
+                    </span>
+                  )}
+                </button>
+              </nav>
+            </aside>
+          ) : null}
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-start">
+            <div className="space-y-6">
+              <div
+                id="course-overview"
+                className="scroll-mt-24 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
+              >
               <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                 <div className="p-5 sm:p-6">
                   <div className="flex items-center gap-4">
@@ -385,7 +690,10 @@ const CourseDetailPage = () => {
                 </div>
               </div>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div
+              id="course-schedule"
+              className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+            >
               <h3 className="text-sm font-semibold text-slate-900">
                 {t('pages.shkoli.detail.sections.schedule')}
               </h3>
@@ -591,7 +899,10 @@ const CourseDetailPage = () => {
                 </div>
               )}
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div
+              id="course-lecturers"
+              className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+            >
               <h3 className="text-sm font-semibold text-slate-900">
                 {t('pages.shkoli.detail.sections.lecturers')}
               </h3>
@@ -644,7 +955,10 @@ const CourseDetailPage = () => {
             </div>
           </div>
           <div className="space-y-6">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div
+              id="course-lyceum"
+              className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+            >
               <h3 className="text-sm font-semibold text-slate-900">
                 {t('pages.shkoli.detail.sections.lyceum')}
               </h3>
@@ -686,7 +1000,10 @@ const CourseDetailPage = () => {
                 </p>
               )}
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div
+              id="course-gallery"
+              className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+            >
               <h3 className="text-sm font-semibold text-slate-900">
                 {t('pages.shkoli.detail.sections.gallery')}
               </h3>
@@ -730,6 +1047,7 @@ const CourseDetailPage = () => {
             </div>
           </div>
         </div>
+      </div>
       )}
     </section>
   )
