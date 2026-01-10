@@ -12,7 +12,10 @@ import type {
   CourseScheduleSlot,
   CourseScheduleSpecialCase,
 } from '../../../types/courses'
-import { getPreferredCourseImage, resolveCourseImageUrl } from '../../../utils/courseImages'
+import {
+  getPreferredCourseImage,
+  resolveCourseImageUrl,
+} from '../../../utils/courseImages'
 import { getUserDisplayName } from '../../../utils/user'
 import { useLyceum } from '../../Lyceums/hooks/useLyceum'
 import { useCourse } from '../hooks/useCourse'
@@ -179,10 +182,6 @@ const CourseDetailPage = () => {
     ? t(`courses.types.${course.type}`)
     : fallbackValue
   const ageGroups = course?.ageGroupList ?? []
-  const ageGroupsValue =
-    ageGroups.length > 0
-      ? ageGroups.map((group) => t(`courses.ageGroups.${group}`)).join(', ')
-      : fallbackValue
   const priceValue =
     typeof course?.price === 'number'
       ? formatPrice(course.price, i18n.language, t)
@@ -201,13 +200,11 @@ const CourseDetailPage = () => {
   const mainImage = getPreferredCourseImage(course?.images, 'MAIN')
   const logoImage = getPreferredCourseImage(course?.images, 'LOGO')
   const mainImageUrl =
-    resolveCourseImageUrl(mainImage?.url) ?? courseMainPlaceholder
+    resolveCourseImageUrl(mainImage) ?? courseMainPlaceholder
   const logoImageUrl =
-    resolveCourseImageUrl(logoImage?.url) ?? courseLogoPlaceholder
+    resolveCourseImageUrl(logoImage) ?? courseLogoPlaceholder
   const galleryImages =
-    course?.images?.filter(
-      (image) => image.role === 'GALLERY' && image.url,
-    ) ?? []
+    course?.images?.filter((image) => image.role === 'GALLERY') ?? []
 
   const pageTitle = course?.name
     ? `${course.name} | ${t('app.title')}`
@@ -1031,8 +1028,7 @@ const CourseDetailPage = () => {
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   {galleryImages.map((image, index) => {
                     const imageUrl =
-                      resolveCourseImageUrl(image.url) ??
-                      courseMainPlaceholder
+                      resolveCourseImageUrl(image) ?? courseMainPlaceholder
                     return (
                       <div
                         key={image.id ?? `${imageUrl}-${index}`}

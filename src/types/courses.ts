@@ -76,6 +76,17 @@ export type CourseImageResponse = {
   orderIndex?: number
 }
 
+export type CourseImageRequest = {
+  s3Key?: string
+  url?: string
+  role: CourseImageRole
+  altText?: string
+  width?: number
+  height?: number
+  mimeType?: string
+  orderIndex?: number
+}
+
 export type CourseResponse = {
   id?: number
   name?: string

@@ -45,3 +45,14 @@ export const COURSE_DAYS_OF_WEEK = [
   'SATURDAY',
   'SUNDAY',
 ] as const
+
+export const COURSE_IMAGE_ALLOWED_MIME_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+] as const
+
+export const COURSE_IMAGE_MAX_SIZE_MB = 5
+
+export const COURSE_IMAGE_MAX_SIZE_BYTES =
+  COURSE_IMAGE_MAX_SIZE_MB * 1024 * 1024

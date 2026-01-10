@@ -28,9 +28,9 @@ const LyceumCourseCard = ({
   const logoImage = getPreferredCourseImage(course.images, 'LOGO')
 
   const mainImageUrl =
-    resolveCourseImageUrl(mainImage?.url) ?? courseMainPlaceholder
+    resolveCourseImageUrl(mainImage) ?? courseMainPlaceholder
   const logoImageUrl =
-    resolveCourseImageUrl(logoImage?.url) ?? courseLogoPlaceholder
+    resolveCourseImageUrl(logoImage) ?? courseLogoPlaceholder
   const courseLink =
     course.id != null ? `/shkoli/${course.id}` : null
   const cardClassName =

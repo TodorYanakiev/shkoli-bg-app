@@ -70,13 +70,19 @@
     "passwordMin": "Password must be at least 8 characters.",
     "passwordMatch": "Passwords do not match.",
     "invalidOption": "Select a valid option.",
-    "number": "Enter a valid number."
+    "number": "Enter a valid number.",
+    "imageType": "Only {{formats}} images are allowed.",
+    "imageSize": "Image must be smaller than {{size}} MB."
   },
   "errors": {
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
     "courses": {
-      "createFailed": "We couldn't create this course. Try again."
+      "createFailed": "We couldn't create this course. Try again.",
+      "imageUploadFailed": "We couldn't upload this image. Try again.",
+      "imagesUploadFailed": "Some images could not be uploaded.",
+      "imageDuplicate": "This image has already been uploaded.",
+      "imageConfigMissing": "Image upload is not configured."
     },
     "lyceums": {
       "updateFailed": "We couldn't update this lyceum. Try again.",
@@ -420,6 +426,7 @@
             "details": "Details",
             "links": "Links",
             "schedule": "Schedule",
+            "images": "Images",
             "lecturers": "Lecturers"
           },
           "fields": {
@@ -437,6 +444,7 @@
           "actions": {
             "submit": "Create course",
             "submitting": "Creating...",
+            "uploadingImages": "Uploading images...",
             "cancel": "Cancel"
           }
         },
@@ -453,6 +461,26 @@
           "date": "Date",
           "reason": "Reason",
           "cancelled": "Cancelled"
+        },
+        "images": {
+          "helper": "Accepted formats: {{formats}}. Max size: {{size}} MB.",
+          "logoLabel": "Logo image",
+          "mainLabel": "Main image",
+          "galleryLabel": "Gallery images",
+          "galleryHint": "Add as many images as you want.",
+          "addGallery": "Add gallery images",
+          "remove": "Remove",
+          "altTextLabel": "Alt text",
+          "altTextPlaceholder": "Describe the image",
+          "previewAlt": "Selected course image preview",
+          "empty": "No image selected.",
+          "galleryEmpty": "No gallery images selected.",
+          "galleryItem": "Gallery image {{index}}",
+          "pending": "Ready to upload.",
+          "uploaded": "Uploaded.",
+          "error": "Upload failed.",
+          "progress": "{{progress}}% uploaded",
+          "loadError": "Unable to load this image."
         },
         "lecturers": {
           "loading": "Loading lecturers...",
