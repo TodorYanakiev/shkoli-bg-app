@@ -13,7 +13,7 @@ import LyceumLecturerCard from './components/LyceumLecturerCard'
 import { useLyceum } from '../hooks/useLyceum'
 import { useLyceumCourses } from '../hooks/useLyceumCourses'
 import { useLyceumLecturers } from '../hooks/useLyceumLecturers'
-import { useUsersByIds } from '../hooks/useUsersByIds'
+import { useUsersByIds } from '../../../hooks/useUsersByIds'
 import { useUserProfile } from '../../Profile/hooks/useUserProfile'
 
 const getLyceumErrorMessage = (
