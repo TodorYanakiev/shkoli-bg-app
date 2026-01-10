@@ -92,3 +92,18 @@ export type CourseResponse = {
   achievements?: string
   lecturerIds?: number[]
 }
+
+export type CourseRequest = {
+  name: string
+  description: string
+  type: CourseType
+  ageGroupList: CourseAgeGroup[]
+  schedule?: CourseSchedule
+  address?: string
+  price?: number
+  facebookLink?: string
+  websiteLink?: string
+  lyceumId?: number
+  achievements?: string
+  lecturerIds?: number[]
+}

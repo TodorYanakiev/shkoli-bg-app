@@ -340,27 +340,6 @@ const CourseDetailPage = () => {
       ),
     },
     {
-      key: 'course-add',
-      label: t('pages.shkoli.detail.sideNav.addCourse'),
-      to: '/shkoli/new',
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          className={navIconClassName}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 8v8" />
-          <path d="M8 12h8" />
-        </svg>
-      ),
-    },
-    {
       key: 'course-edit',
       label: t('pages.shkoli.detail.sideNav.editCourse'),
       to: `/shkoli/${courseId}/edit`,

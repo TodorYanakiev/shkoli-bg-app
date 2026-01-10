@@ -75,6 +75,9 @@
   "errors": {
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
+    "courses": {
+      "createFailed": "We couldn't create this course. Try again."
+    },
     "lyceums": {
       "updateFailed": "We couldn't update this lyceum. Try again.",
       "lecturers": {
@@ -110,6 +113,9 @@
       "loginSuccess": "Welcome back! You are signed in.",
       "logoutSuccess": "You have been logged out.",
       "registerSuccess": "Account created. You're signed in."
+    },
+    "courses": {
+      "createSuccess": "Course created successfully."
     },
     "lyceums": {
       "updateSuccess": "Lyceum updated successfully.",
@@ -340,7 +346,6 @@
           "lecturers": "Lecturers",
           "lyceum": "Lyceum",
           "gallery": "Gallery",
-          "addCourse": "Add new course",
           "editCourse": "Update course",
           "expand": "Expand menu",
           "collapse": "Collapse menu"
@@ -397,6 +402,65 @@
         "actions": {
           "openLyceum": "Open lyceum"
         }
+      },
+      "create": {
+        "title": "Add new course",
+        "subtitle": "Create a new course for this lyceum.",
+        "subtitleWithLyceum": "Create a new course for {{name}}.",
+        "backLink": "Back to lyceum",
+        "backFallback": "Back to courses",
+        "invalidLyceum": "Missing or invalid lyceum id.",
+        "loadFailed": "We couldn't load the lyceum details.",
+        "notFound": "Lyceum not found.",
+        "lyceumLabel": "Lyceum",
+        "lyceumFallback": "Not provided",
+        "form": {
+          "sections": {
+            "overview": "Course overview",
+            "details": "Details",
+            "links": "Links",
+            "schedule": "Schedule",
+            "lecturers": "Lecturers"
+          },
+          "fields": {
+            "name": "Course name",
+            "type": "Course type",
+            "typePlaceholder": "Select a type",
+            "ageGroups": "Age groups",
+            "description": "Description",
+            "price": "Price",
+            "address": "Address",
+            "achievements": "Achievements",
+            "facebookLink": "Facebook link",
+            "websiteLink": "Website link"
+          },
+          "actions": {
+            "submit": "Create course",
+            "submitting": "Creating...",
+            "cancel": "Cancel"
+          }
+        },
+        "schedule": {
+          "slotsTitle": "Schedule slots",
+          "slotsEmpty": "No schedule slots added yet.",
+          "addSlot": "Add schedule slot",
+          "removeSlot": "Remove slot",
+          "specialCasesTitle": "Special cases",
+          "specialCasesEmpty": "No special cases added yet.",
+          "addSpecialCase": "Add special case",
+          "removeSpecialCase": "Remove special case",
+          "dayOfWeekPlaceholder": "Select day",
+          "date": "Date",
+          "reason": "Reason",
+          "cancelled": "Cancelled"
+        },
+        "lecturers": {
+          "loading": "Loading lecturers...",
+          "error": "Unable to load lecturers.",
+          "empty": "No lecturers available for this lyceum.",
+          "hint": "Select the lecturers for this course.",
+          "unknown": "Lecturer"
+        }
       }
     },
     "map": {
@@ -424,6 +488,7 @@
           "info": "Lyceum info",
           "courses": "Courses",
           "lecturers": "Lecturers",
+          "addCourse": "Add new course",
           "expand": "Expand menu",
           "collapse": "Collapse menu"
         },

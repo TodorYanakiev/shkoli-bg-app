@@ -342,6 +342,15 @@ const LyceumDetailPage = () => {
   const canEditLyceum =
     isValidId &&
     (user?.role === 'ADMIN' || user?.administratedLyceumId === lyceumId)
+  const isLyceumLecturer = Boolean(
+    user?.id != null &&
+      lecturers?.some((lecturer) => lecturer.id === user.id),
+  )
+  const canAddCourse =
+    isValidId &&
+    (user?.role === 'ADMIN' ||
+      user?.administratedLyceumId === lyceumId ||
+      isLyceumLecturer)
   const navIconClassName = 'h-5 w-5'
   const sideNavWidth = !isDesktop
     ? '0px'
@@ -417,31 +426,58 @@ const LyceumDetailPage = () => {
       ),
     },
   ]
-  const sideNavItems: SideNavItem[] = canEditLyceum
-    ? [
-        ...baseSideNavItems,
-        {
-          key: 'lyceum-edit',
-          label: t('pages.lyceums.detail.editCta'),
-          to: `/lyceums/${lyceumId}/edit`,
-          icon: (
-            <svg
-              viewBox="0 0 24 24"
-              className={navIconClassName}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M4 16.5V20h3.5L19 8.5l-3.5-3.5L4 16.5z" />
-              <path d="M13.5 6.5L17 10" />
-            </svg>
-          ),
-        },
-      ]
-    : baseSideNavItems
+  const sideNavItems: SideNavItem[] = [
+    ...baseSideNavItems,
+    ...(canAddCourse
+      ? [
+          {
+            key: 'lyceum-add-course',
+            label: t('pages.lyceums.detail.sideNav.addCourse'),
+            to: `/shkoli/new?lyceumId=${lyceumId}`,
+            icon: (
+              <svg
+                viewBox="0 0 24 24"
+                className={navIconClassName}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 8v8" />
+                <path d="M8 12h8" />
+              </svg>
+            ),
+          },
+        ]
+      : []),
+    ...(canEditLyceum
+      ? [
+          {
+            key: 'lyceum-edit',
+            label: t('pages.lyceums.detail.editCta'),
+            to: `/lyceums/${lyceumId}/edit`,
+            icon: (
+              <svg
+                viewBox="0 0 24 24"
+                className={navIconClassName}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 16.5V20h3.5L19 8.5l-3.5-3.5L4 16.5z" />
+                <path d="M13.5 6.5L17 10" />
+              </svg>
+            ),
+          },
+        ]
+      : []),
+  ]
 
   const sideNavBaseButtonClassName =
     'group inline-flex items-center rounded-lg text-xs font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 lg:text-sm'

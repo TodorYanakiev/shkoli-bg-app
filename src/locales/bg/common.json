@@ -75,6 +75,9 @@
   "errors": {
     "network": "Не можем да се свържем със сървъра. Опитайте отново.",
     "generic": "Възникна грешка. Моля, опитайте отново.",
+    "courses": {
+      "createFailed": "Не успяхме да създадем тази школа. Опитайте отново."
+    },
     "lyceums": {
       "updateFailed": "Не успяхме да обновим читалището. Опитайте отново.",
       "lecturers": {
@@ -110,6 +113,9 @@
       "loginSuccess": "Добре дошли отново! Влязохте успешно.",
       "logoutSuccess": "Излязохте от профила си.",
       "registerSuccess": "Профилът е създаден. Влязохте успешно."
+    },
+    "courses": {
+      "createSuccess": "Школата е създадена успешно."
     },
     "lyceums": {
       "updateSuccess": "Читалището беше обновено успешно.",
@@ -165,12 +171,12 @@
     "ageGroups": {
       "TODDLER": "Малки деца",
       "CHILD": "Деца",
-      "PRE_TEEN": "Предтийнейджъри",
+      "PRE_TEEN": "Големи деца",
       "TEEN": "Тийнейджъри",
       "YOUNG_ADULT": "Млади възрастни",
       "ADULT": "Възрастни",
       "MATURE_ADULT": "Зрели възрастни",
-      "SENIOR": "Сеньори"
+      "SENIOR": "Пенсионери"
     },
     "recurrence": {
       "WEEKLY": "Седмично",
@@ -340,7 +346,6 @@
           "lecturers": "Преподаватели",
           "lyceum": "Читалище",
           "gallery": "Галерия",
-          "addCourse": "Добави нова школа",
           "editCourse": "Редактиране на школа",
           "expand": "Разшири менюто",
           "collapse": "Свий менюто"
@@ -367,7 +372,7 @@
         "achievementsPlaceholder": "Няма добавени постижения.",
         "schedule": {
           "empty": "Няма информация за графика засега.",
-          "slotLabel": "Сесия {{index}}",
+          "slotLabel": "Урок {{index}}",
           "recurrence": "Повтаряемост",
           "dayOfWeek": "Ден от седмицата",
           "dayOfMonth": "Ден от месеца",
@@ -397,6 +402,65 @@
         "actions": {
           "openLyceum": "Към читалището"
         }
+      },
+      "create": {
+        "title": "Добави нова школа",
+        "subtitle": "Създай нова школа за това читалище.",
+        "subtitleWithLyceum": "Създай нова школа за {{name}}.",
+        "backLink": "Назад към читалището",
+        "backFallback": "Назад към школите",
+        "invalidLyceum": "Липсва или е невалидно ID на читалище.",
+        "loadFailed": "Не успяхме да заредим данните за читалището.",
+        "notFound": "Читалището не е намерено.",
+        "lyceumLabel": "Читалище",
+        "lyceumFallback": "Няма данни",
+        "form": {
+          "sections": {
+            "overview": "Преглед на школата",
+            "details": "Детайли",
+            "links": "Връзки",
+            "schedule": "График",
+            "lecturers": "Преподаватели"
+          },
+          "fields": {
+            "name": "Име на школата",
+            "type": "Тип школа",
+            "typePlaceholder": "Избери тип",
+            "ageGroups": "Възрастови групи",
+            "description": "Описание",
+            "price": "Цена",
+            "address": "Адрес",
+            "achievements": "Постижения",
+            "facebookLink": "Facebook линк",
+            "websiteLink": "Уебсайт линк"
+          },
+          "actions": {
+            "submit": "Създай школа",
+            "submitting": "Създаване...",
+            "cancel": "Отказ"
+          }
+        },
+        "schedule": {
+          "slotsTitle": "Уроци",
+          "slotsEmpty": "Няма добавени уроци.",
+          "addSlot": "Добави урок",
+          "removeSlot": "Премахни урок",
+          "specialCasesTitle": "Специални случаи",
+          "specialCasesEmpty": "Няма добавени специални случаи.",
+          "addSpecialCase": "Добави специален случай",
+          "removeSpecialCase": "Премахни специален случай",
+          "dayOfWeekPlaceholder": "Избери ден",
+          "date": "Дата",
+          "reason": "Причина",
+          "cancelled": "Отменено"
+        },
+        "lecturers": {
+          "loading": "Зареждане на преподаватели...",
+          "error": "Не успяхме да заредим преподавателите.",
+          "empty": "Няма налични преподаватели за това читалище.",
+          "hint": "Избери преподаватели за тази школа.",
+          "unknown": "Преподавател"
+        }
       }
     },
     "map": {
@@ -424,6 +488,7 @@
           "info": "Информация",
           "courses": "Школи",
           "lecturers": "Преподаватели",
+          "addCourse": "Добави нова школа",
           "expand": "Разгъни менюто",
           "collapse": "Свий менюто"
         },

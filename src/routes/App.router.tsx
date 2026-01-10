@@ -14,6 +14,7 @@ import LyceumRightsPage from '../pages/Profile/LyceumRights'
 import ProfilePage from '../pages/Profile'
 import RegisterPage from '../pages/Register'
 import ShkoliPage from '../pages/Shkoli'
+import CourseCreatePage from '../pages/Shkoli/Create'
 import CourseDetailPage from '../pages/Shkoli/Detail'
 import ProtectedRoute from './ProtectedRoute'
 
@@ -42,6 +43,14 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/shkoli" replace /> },
       { path: 'shkoli', element: <ShkoliPage /> },
+      {
+        path: 'shkoli/new',
+        element: (
+          <ProtectedRoute>
+            <CourseCreatePage />
+          </ProtectedRoute>
+        ),
+      },
       { path: 'shkoli/:id', element: <CourseDetailPage /> },
       { path: 'lyceums', element: <LyceumsPage /> },
       { path: 'lyceums/:id', element: <LyceumDetailPage /> },
