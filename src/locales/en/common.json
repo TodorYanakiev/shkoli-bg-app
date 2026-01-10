@@ -340,6 +340,8 @@
           "lecturers": "Lecturers",
           "lyceum": "Lyceum",
           "gallery": "Gallery",
+          "addCourse": "Add new course",
+          "editCourse": "Update course",
           "expand": "Expand menu",
           "collapse": "Collapse menu"
         },
