@@ -14,6 +14,7 @@ import UserAvatar from '../../components/ui/UserAvatar'
 import { useAuthStatus } from '../../hooks/useAuthStatus'
 import { useLogoutMutation } from '../../hooks/useLogoutMutation'
 import { useUserProfile } from '../../pages/Profile/hooks/useUserProfile'
+import { useLyceumLecturers } from '../../pages/Lyceums/hooks/useLyceumLecturers'
 import type { ApiError } from '../../types/api'
 import { clearTokens } from '../../utils/authStorage'
 import { getUserDisplayName } from '../../utils/user'
@@ -34,6 +35,19 @@ const TopNav = () => {
     Number.isFinite(currentLyceumId) &&
     (currentUser?.role === 'ADMIN' ||
       currentUser?.administratedLyceumId === currentLyceumId)
+  const { data: lyceumLecturers } = useLyceumLecturers(
+    currentLyceumId ?? undefined,
+    {
+      enabled: isAuthenticated && Number.isFinite(currentLyceumId),
+    },
+  )
+  const isLyceumLecturer = Boolean(
+    currentUser?.id != null &&
+      lyceumLecturers?.some((lecturer) => lecturer.id === currentUser.id),
+  )
+  const canAddCourse = Boolean(
+    Number.isFinite(currentLyceumId) && (canEditLyceum || isLyceumLecturer),
+  )
 
   const profileName =
     getUserDisplayName(currentUser) || t('pages.profile.unknownUser')
@@ -246,13 +260,25 @@ const TopNav = () => {
           <NavLink to="/lyceums" className={mobileNavLinkClassName}>
             {t('nav.lyceums')}
           </NavLink>
-          {canEditLyceum && currentLyceumId ? (
-            <Link
-              to={`/lyceums/${currentLyceumId}/edit`}
-              className="ml-4 inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-brand/40 hover:text-brand"
-            >
-              {t('pages.lyceums.detail.editCta')}
-            </Link>
+          {canEditLyceum || canAddCourse ? (
+            <div className="ml-4 flex flex-col gap-2">
+              {canEditLyceum ? (
+                <Link
+                  to={`/lyceums/${currentLyceumId}/edit`}
+                  className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-brand/40 hover:text-brand"
+                >
+                  {t('pages.lyceums.detail.editCta')}
+                </Link>
+              ) : null}
+              {canAddCourse ? (
+                <Link
+                  to={`/shkoli/new?lyceumId=${currentLyceumId}`}
+                  className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-brand/40 hover:text-brand"
+                >
+                  {t('pages.lyceums.detail.sideNav.addCourse')}
+                </Link>
+              ) : null}
+            </div>
           ) : null}
           <NavLink to="/map" className={mobileNavLinkClassName}>
             {t('nav.map')}

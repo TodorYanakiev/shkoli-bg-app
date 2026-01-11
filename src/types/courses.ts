@@ -76,6 +76,17 @@ export type CourseImageResponse = {
   orderIndex?: number
 }
 
+export type CourseImageRequest = {
+  s3Key?: string
+  url?: string
+  role: CourseImageRole
+  altText?: string
+  width?: number
+  height?: number
+  mimeType?: string
+  orderIndex?: number
+}
+
 export type CourseResponse = {
   id?: number
   name?: string
@@ -84,6 +95,21 @@ export type CourseResponse = {
   ageGroupList?: CourseAgeGroup[]
   schedule?: CourseSchedule
   images?: CourseImageResponse[]
+  address?: string
+  price?: number
+  facebookLink?: string
+  websiteLink?: string
+  lyceumId?: number
+  achievements?: string
+  lecturerIds?: number[]
+}
+
+export type CourseRequest = {
+  name: string
+  description: string
+  type: CourseType
+  ageGroupList: CourseAgeGroup[]
+  schedule?: CourseSchedule
   address?: string
   price?: number
   facebookLink?: string

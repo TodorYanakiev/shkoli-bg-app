@@ -70,11 +70,20 @@
     "passwordMin": "Password must be at least 8 characters.",
     "passwordMatch": "Passwords do not match.",
     "invalidOption": "Select a valid option.",
-    "number": "Enter a valid number."
+    "number": "Enter a valid number.",
+    "imageType": "Only {{formats}} images are allowed.",
+    "imageSize": "Image must be smaller than {{size}} MB."
   },
   "errors": {
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
+    "courses": {
+      "createFailed": "We couldn't create this course. Try again.",
+      "imageUploadFailed": "We couldn't upload this image. Try again.",
+      "imagesUploadFailed": "Some images could not be uploaded.",
+      "imageDuplicate": "This image has already been uploaded.",
+      "imageConfigMissing": "Image upload is not configured."
+    },
     "lyceums": {
       "updateFailed": "We couldn't update this lyceum. Try again.",
       "lecturers": {
@@ -111,6 +120,9 @@
       "logoutSuccess": "You have been logged out.",
       "registerSuccess": "Account created. You're signed in."
     },
+    "courses": {
+      "createSuccess": "Course created successfully."
+    },
     "lyceums": {
       "updateSuccess": "Lyceum updated successfully.",
       "lecturerAdded": "Lecturer added successfully.",
@@ -138,6 +150,53 @@
         "town": "Town",
         "address": "Address"
       }
+    }
+  },
+  "courses": {
+    "types": {
+      "DANCE": "Dance",
+      "MUSIC": "Music",
+      "SINGING": "Singing",
+      "ACTING": "Acting",
+      "PHOTOGRAPHY": "Photography",
+      "PAINTING": "Painting",
+      "CRAFTING": "Crafting",
+      "SPORT": "Sport",
+      "YOGA": "Yoga",
+      "MARTIAL_ARTS": "Martial arts",
+      "MATH": "Math",
+      "SCIENCE": "Science",
+      "HISTORY": "History",
+      "GEOGRAPHY": "Geography",
+      "LITERATURE": "Literature",
+      "LANGUAGES": "Languages",
+      "DEBATES": "Debates",
+      "TECHNOLOGY": "Technology",
+      "COOKING": "Cooking"
+    },
+    "ageGroups": {
+      "TODDLER": "Toddlers",
+      "CHILD": "Children",
+      "PRE_TEEN": "Pre-teens",
+      "TEEN": "Teens",
+      "YOUNG_ADULT": "Young adults",
+      "ADULT": "Adults",
+      "MATURE_ADULT": "Mature adults",
+      "SENIOR": "Seniors"
+    },
+    "recurrence": {
+      "WEEKLY": "Weekly",
+      "MONTHLY": "Monthly",
+      "ONE_TIME": "One-time"
+    },
+    "daysOfWeek": {
+      "MONDAY": "Monday",
+      "TUESDAY": "Tuesday",
+      "WEDNESDAY": "Wednesday",
+      "THURSDAY": "Thursday",
+      "FRIDAY": "Friday",
+      "SATURDAY": "Saturday",
+      "SUNDAY": "Sunday"
     }
   },
   "pages": {
@@ -274,7 +333,163 @@
     },
     "shkoli": {
       "title": "Courses",
-      "subtitle": "Browse nearby courses and view their details."
+      "subtitle": "Browse nearby courses and view their details.",
+      "detail": {
+        "title": "Course details",
+        "subtitle": "Full information about this course.",
+        "back": "Back to courses",
+        "invalidId": "Invalid course id.",
+        "loadFailed": "We couldn't load this course. Try again.",
+        "notFound": "Course not found.",
+        "notProvided": "Not provided",
+        "loading": "Loading course...",
+        "priceFree": "Free",
+        "heroLabel": "Course overview",
+        "sideNav": {
+          "label": "Course page sections",
+          "overview": "Overview",
+          "schedule": "Schedule",
+          "lecturers": "Lecturers",
+          "lyceum": "Lyceum",
+          "gallery": "Gallery",
+          "editCourse": "Update course",
+          "expand": "Expand menu",
+          "collapse": "Collapse menu"
+        },
+        "sections": {
+          "overview": "Overview",
+          "schedule": "Schedule",
+          "lecturers": "Lecturers",
+          "lyceum": "Lyceum",
+          "links": "Links",
+          "gallery": "Gallery"
+        },
+        "fields": {
+          "type": "Type",
+          "ageGroups": "Age groups",
+          "price": "Price",
+          "address": "Address",
+          "achievements": "Achievements",
+          "description": "Description",
+          "facebook": "Facebook",
+          "website": "Website"
+        },
+        "descriptionPlaceholder": "No description provided yet.",
+        "achievementsPlaceholder": "No achievements listed yet.",
+        "schedule": {
+          "empty": "Schedule details are not available yet.",
+          "slotLabel": "Session {{index}}",
+          "recurrence": "Recurrence",
+          "dayOfWeek": "Day of week",
+          "dayOfMonth": "Day of month",
+          "startTime": "Start time",
+          "classesCount": "Classes per session",
+          "duration": "Class duration",
+          "gap": "Break between classes",
+          "minutes": "{{count}} min",
+          "specialCases": "Special cases",
+          "cancelled": "Cancelled",
+          "active": "Active",
+          "reason": "Reason"
+        },
+        "lecturersLoading": "Loading lecturers...",
+        "lecturersError": "Unable to load lecturers right now.",
+        "lecturersPlaceholder": "No lecturers listed for this course yet.",
+        "lyceumLoading": "Loading lyceum...",
+        "lyceumError": "Unable to load the lyceum right now.",
+        "lyceumPlaceholder": "Lyceum details are not available.",
+        "linksEmpty": "No links are available for this course.",
+        "galleryEmpty": "No gallery images yet.",
+        "images": {
+          "mainAlt": "Course main image for {{name}}",
+          "logoAlt": "Course logo for {{name}}",
+          "galleryAlt": "Gallery image {{index}} for {{name}}"
+        },
+        "actions": {
+          "openLyceum": "Open lyceum"
+        }
+      },
+      "create": {
+        "title": "Add new course",
+        "subtitle": "Create a new course for this lyceum.",
+        "subtitleWithLyceum": "Create a new course for {{name}}.",
+        "backLink": "Back to lyceum",
+        "backFallback": "Back to courses",
+        "invalidLyceum": "Missing or invalid lyceum id.",
+        "loadFailed": "We couldn't load the lyceum details.",
+        "notFound": "Lyceum not found.",
+        "lyceumLabel": "Lyceum",
+        "lyceumFallback": "Not provided",
+        "form": {
+          "sections": {
+            "overview": "Course overview",
+            "details": "Details",
+            "links": "Links",
+            "schedule": "Schedule",
+            "images": "Images",
+            "lecturers": "Lecturers"
+          },
+          "fields": {
+            "name": "Course name",
+            "type": "Course type",
+            "typePlaceholder": "Select a type",
+            "ageGroups": "Age groups",
+            "description": "Description",
+            "price": "Price",
+            "address": "Address",
+            "achievements": "Achievements",
+            "facebookLink": "Facebook link",
+            "websiteLink": "Website link"
+          },
+          "actions": {
+            "submit": "Create course",
+            "submitting": "Creating...",
+            "uploadingImages": "Uploading images...",
+            "cancel": "Cancel"
+          }
+        },
+        "schedule": {
+          "slotsTitle": "Schedule slots",
+          "slotsEmpty": "No schedule slots added yet.",
+          "addSlot": "Add schedule slot",
+          "removeSlot": "Remove slot",
+          "specialCasesTitle": "Special cases",
+          "specialCasesEmpty": "No special cases added yet.",
+          "addSpecialCase": "Add special case",
+          "removeSpecialCase": "Remove special case",
+          "dayOfWeekPlaceholder": "Select day",
+          "date": "Date",
+          "reason": "Reason",
+          "cancelled": "Cancelled"
+        },
+        "images": {
+          "helper": "Accepted formats: {{formats}}. Max size: {{size}} MB.",
+          "logoLabel": "Logo image",
+          "mainLabel": "Main image",
+          "galleryLabel": "Gallery images",
+          "galleryHint": "Add as many images as you want.",
+          "addGallery": "Add gallery images",
+          "remove": "Remove",
+          "altTextLabel": "Alt text",
+          "altTextPlaceholder": "Describe the image",
+          "previewAlt": "Selected course image preview",
+          "empty": "No image selected.",
+          "galleryEmpty": "No gallery images selected.",
+          "galleryItem": "Gallery image {{index}}",
+          "pending": "Ready to upload.",
+          "uploaded": "Uploaded.",
+          "error": "Upload failed.",
+          "progress": "{{progress}}% uploaded",
+          "loadError": "Unable to load this image."
+        },
+        "lecturers": {
+          "loading": "Loading lecturers...",
+          "error": "Unable to load lecturers.",
+          "empty": "No lecturers available for this lyceum.",
+          "hint": "Select the lecturers for this course.",
+          "unknown": "Lecturer"
+        }
+      }
     },
     "map": {
       "title": "Map",
@@ -301,6 +516,7 @@
           "info": "Lyceum info",
           "courses": "Courses",
           "lecturers": "Lecturers",
+          "addCourse": "Add new course",
           "expand": "Expand menu",
           "collapse": "Collapse menu"
         },
@@ -346,7 +562,8 @@
           "imageAlt": "Course main image for {{name}}",
           "logoAlt": "Course logo for {{name}}",
           "lecturerLabel": "Lecturer",
-          "additionalLecturers": "plus {{count}} more"
+          "additionalLecturers": "plus {{count}} more",
+          "openCourse": "Open course {{name}}"
         },
         "coursesCarousel": {
           "previous": "Previous courses",

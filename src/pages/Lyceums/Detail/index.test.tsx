@@ -29,7 +29,7 @@ vi.mock('../hooks/useLyceumLecturers', () => ({
   useLyceumLecturers: useLyceumLecturersMock,
 }))
 
-vi.mock('../hooks/useUsersByIds', () => ({
+vi.mock('../../../hooks/useUsersByIds', () => ({
   useUsersByIds: useUsersByIdsMock,
 }))
 

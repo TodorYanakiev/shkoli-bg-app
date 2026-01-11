@@ -13,7 +13,7 @@
         "items": {
           "save": {
             "title": "Запази любими",
-            "description": "Отбелязвай курсове и читалища, за да ги сравниш по-късно."
+            "description": "Отбелязвай школи и читалища, за да ги сравниш по-късно."
           },
           "compare": {
             "title": "Сравнявай бързо",
@@ -70,11 +70,20 @@
     "passwordMin": "Паролата трябва да е поне 8 символа.",
     "passwordMatch": "Паролите не съвпадат.",
     "invalidOption": "Изберете валидна опция.",
-    "number": "Въведете валидно число."
+    "number": "Въведете валидно число.",
+    "imageType": "Позволени са само изображения във формат {{formats}}.",
+    "imageSize": "Изображението трябва да е по-малко от {{size}} MB."
   },
   "errors": {
     "network": "Не можем да се свържем със сървъра. Опитайте отново.",
     "generic": "Възникна грешка. Моля, опитайте отново.",
+    "courses": {
+      "createFailed": "Не успяхме да създадем тази школа. Опитайте отново.",
+      "imageUploadFailed": "Не успяхме да качим това изображение. Опитайте отново.",
+      "imagesUploadFailed": "Някои изображения не бяха качени.",
+      "imageDuplicate": "Това изображение вече е качено.",
+      "imageConfigMissing": "Качването на изображения не е конфигурирано."
+    },
     "lyceums": {
       "updateFailed": "Не успяхме да обновим читалището. Опитайте отново.",
       "lecturers": {
@@ -111,6 +120,9 @@
       "logoutSuccess": "Излязохте от профила си.",
       "registerSuccess": "Профилът е създаден. Влязохте успешно."
     },
+    "courses": {
+      "createSuccess": "Школата е създадена успешно."
+    },
     "lyceums": {
       "updateSuccess": "Читалището беше обновено успешно.",
       "lecturerAdded": "Преподавателят беше добавен успешно.",
@@ -138,6 +150,53 @@
         "town": "Населено място",
         "address": "Адрес"
       }
+    }
+  },
+  "courses": {
+    "types": {
+      "DANCE": "Танци",
+      "MUSIC": "Музика",
+      "SINGING": "Пеене",
+      "ACTING": "Актьорско майсторство",
+      "PHOTOGRAPHY": "Фотография",
+      "PAINTING": "Рисуване",
+      "CRAFTING": "Занаяти",
+      "SPORT": "Спорт",
+      "YOGA": "Йога",
+      "MARTIAL_ARTS": "Бойни изкуства",
+      "MATH": "Математика",
+      "SCIENCE": "Науки",
+      "HISTORY": "История",
+      "GEOGRAPHY": "География",
+      "LITERATURE": "Литература",
+      "LANGUAGES": "Езици",
+      "DEBATES": "Дебати",
+      "TECHNOLOGY": "Технологии",
+      "COOKING": "Готварство"
+    },
+    "ageGroups": {
+      "TODDLER": "Малки деца",
+      "CHILD": "Деца",
+      "PRE_TEEN": "Големи деца",
+      "TEEN": "Тийнейджъри",
+      "YOUNG_ADULT": "Млади възрастни",
+      "ADULT": "Възрастни",
+      "MATURE_ADULT": "Зрели възрастни",
+      "SENIOR": "Пенсионери"
+    },
+    "recurrence": {
+      "WEEKLY": "Седмично",
+      "MONTHLY": "Месечно",
+      "ONE_TIME": "Еднократно"
+    },
+    "daysOfWeek": {
+      "MONDAY": "Понеделник",
+      "TUESDAY": "Вторник",
+      "WEDNESDAY": "Сряда",
+      "THURSDAY": "Четвъртък",
+      "FRIDAY": "Петък",
+      "SATURDAY": "Събота",
+      "SUNDAY": "Неделя"
     }
   },
   "pages": {
@@ -274,7 +333,163 @@
     },
     "shkoli": {
       "title": "Школи",
-      "subtitle": "Разгледайте близките школи и техните детайли."
+      "subtitle": "Разгледайте близките школи и техните детайли.",
+      "detail": {
+        "title": "Детайли за школа",
+        "subtitle": "Пълна информация за тази школа.",
+        "back": "Назад към школите",
+        "invalidId": "Невалидно ID на школа.",
+        "loadFailed": "Не успяхме да заредим школата. Опитайте отново.",
+        "notFound": "Школата не е намерена.",
+        "notProvided": "Няма данни",
+        "loading": "Зареждане на школа...",
+        "priceFree": "Безплатно",
+        "heroLabel": "Преглед на школата",
+        "sideNav": {
+          "label": "Секции на страницата на школата",
+          "overview": "Преглед",
+          "schedule": "График",
+          "lecturers": "Преподаватели",
+          "lyceum": "Читалище",
+          "gallery": "Галерия",
+          "editCourse": "Редактиране на школа",
+          "expand": "Разшири менюто",
+          "collapse": "Свий менюто"
+        },
+        "sections": {
+          "overview": "Преглед",
+          "schedule": "График",
+          "lecturers": "Преподаватели",
+          "lyceum": "Читалище",
+          "links": "Връзки",
+          "gallery": "Галерия"
+        },
+        "fields": {
+          "type": "Тип",
+          "ageGroups": "Възрастови групи",
+          "price": "Цена на занятие",
+          "address": "Адрес",
+          "achievements": "Постижения",
+          "description": "Описание",
+          "facebook": "Facebook",
+          "website": "Уебсайт"
+        },
+        "descriptionPlaceholder": "Няма описание към тази школа.",
+        "achievementsPlaceholder": "Няма добавени постижения.",
+        "schedule": {
+          "empty": "Няма информация за графика засега.",
+          "slotLabel": "Урок {{index}}",
+          "recurrence": "Повтаряемост",
+          "dayOfWeek": "Ден от седмицата",
+          "dayOfMonth": "Ден от месеца",
+          "startTime": "Начален час",
+          "classesCount": "Брой занятия",
+          "duration": "Продължителност",
+          "gap": "Почивка между занятията",
+          "minutes": "{{count}} мин",
+          "specialCases": "Специални случаи",
+          "cancelled": "Отменено",
+          "active": "Активно",
+          "reason": "Причина"
+        },
+        "lecturersLoading": "Зареждане на преподаватели...",
+        "lecturersError": "Не можем да заредим преподавателите в момента.",
+        "lecturersPlaceholder": "Все още няма преподаватели към тази школа.",
+        "lyceumLoading": "Зареждане на читалище...",
+        "lyceumError": "Не можем да заредим читалището в момента.",
+        "lyceumPlaceholder": "Няма налични данни за читалище.",
+        "linksEmpty": "Няма налични връзки за тази школа.",
+        "galleryEmpty": "Все още няма снимки в галерията.",
+        "images": {
+          "mainAlt": "Главна снимка на школа по {{name}}",
+          "logoAlt": "Лого на школа по {{name}}",
+          "galleryAlt": "Снимка {{index}} от галерията за {{name}}"
+        },
+        "actions": {
+          "openLyceum": "Към читалището"
+        }
+      },
+      "create": {
+        "title": "Добави нова школа",
+        "subtitle": "Създай нова школа за това читалище.",
+        "subtitleWithLyceum": "Създай нова школа за {{name}}.",
+        "backLink": "Назад към читалището",
+        "backFallback": "Назад към школите",
+        "invalidLyceum": "Липсва или е невалидно ID на читалище.",
+        "loadFailed": "Не успяхме да заредим данните за читалището.",
+        "notFound": "Читалището не е намерено.",
+        "lyceumLabel": "Читалище",
+        "lyceumFallback": "Няма данни",
+        "form": {
+          "sections": {
+            "overview": "Преглед на школата",
+            "details": "Детайли",
+            "links": "Връзки",
+            "schedule": "График",
+            "images": "Снимки",
+            "lecturers": "Преподаватели"
+          },
+          "fields": {
+            "name": "Име на школата",
+            "type": "Тип школа",
+            "typePlaceholder": "Избери тип",
+            "ageGroups": "Възрастови групи",
+            "description": "Описание",
+            "price": "Цена",
+            "address": "Адрес",
+            "achievements": "Постижения",
+            "facebookLink": "Facebook линк",
+            "websiteLink": "Уебсайт линк"
+          },
+          "actions": {
+            "submit": "Създай школа",
+            "submitting": "Създаване...",
+            "uploadingImages": "Качване на снимки...",
+            "cancel": "Отказ"
+          }
+        },
+        "schedule": {
+          "slotsTitle": "Уроци",
+          "slotsEmpty": "Няма добавени уроци.",
+          "addSlot": "Добави урок",
+          "removeSlot": "Премахни урок",
+          "specialCasesTitle": "Специални случаи",
+          "specialCasesEmpty": "Няма добавени специални случаи.",
+          "addSpecialCase": "Добави специален случай",
+          "removeSpecialCase": "Премахни специален случай",
+          "dayOfWeekPlaceholder": "Избери ден",
+          "date": "Дата",
+          "reason": "Причина",
+          "cancelled": "Отменено"
+        },
+        "images": {
+          "helper": "Позволени формати: {{formats}}. Максимален размер: {{size}} MB.",
+          "logoLabel": "Лого изображение",
+          "mainLabel": "Основно изображение",
+          "galleryLabel": "Галерия",
+          "galleryHint": "Добавете толкова снимки, колкото желаете.",
+          "addGallery": "Добави снимки в галерията",
+          "remove": "Премахни",
+          "altTextLabel": "Алтернативен текст",
+          "altTextPlaceholder": "Опишете изображението",
+          "previewAlt": "Преглед на избрано изображение",
+          "empty": "Няма избрано изображение.",
+          "galleryEmpty": "Няма избрани снимки в галерията.",
+          "galleryItem": "Снимка {{index}}",
+          "pending": "Готово за качване.",
+          "uploaded": "Качено.",
+          "error": "Неуспешно качване.",
+          "progress": "{{progress}}% качено",
+          "loadError": "Неуспешно зареждане на изображението."
+        },
+        "lecturers": {
+          "loading": "Зареждане на преподаватели...",
+          "error": "Не успяхме да заредим преподавателите.",
+          "empty": "Няма налични преподаватели за това читалище.",
+          "hint": "Избери преподаватели за тази школа.",
+          "unknown": "Преподавател"
+        }
+      }
     },
     "map": {
       "title": "Карта",
@@ -293,14 +508,15 @@
         "heroLabel": "Преглед на читалището",
         "countLabel": "{{count}}",
         "overviewLinks": {
-          "courses": "Щколи ({{count}})",
+          "courses": "Школи ({{count}})",
           "lecturers": "Преподаватели ({{count}})"
         },
         "sideNav": {
           "label": "Навигация в страницата",
           "info": "Информация",
-          "courses": "Курсове",
+          "courses": "Школи",
           "lecturers": "Преподаватели",
+          "addCourse": "Добави нова школа",
           "expand": "Разгъни менюто",
           "collapse": "Свий менюто"
         },
@@ -346,7 +562,8 @@
           "imageAlt": "Главна снимка на школа по {{name}}",
           "logoAlt": "Лого на школа по{{name}}",
           "lecturerLabel": "Преподавател",
-          "additionalLecturers": "плюс още {{count}}"
+          "additionalLecturers": "плюс още {{count}}",
+          "openCourse": "Отвори школа {{name}}"
         },
         "coursesCarousel": {
           "previous": "Предишна школа",

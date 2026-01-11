@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-import { getUsersByIds } from '../../../services/users'
-import type { ApiError } from '../../../types/api'
-import type { UserResponse } from '../../../types/users'
+import { getUsersByIds } from '../services/users'
+import type { ApiError } from '../types/api'
+import type { UserResponse } from '../types/users'
 
 export const usersByIdsQueryKey = (ids: number[]) =>
   ['users', 'byIds', ...ids] as const

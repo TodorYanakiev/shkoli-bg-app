@@ -1,43 +1,19 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import courseLogoPlaceholder from '../../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
-import { env } from '../../../../constants/env'
-import type {
-  CourseImageResponse,
-  CourseImageRole,
-  CourseResponse,
-} from '../../../../types/courses'
+import type { CourseResponse } from '../../../../types/courses'
+import {
+  getPreferredCourseImage,
+  resolveCourseImageUrl,
+} from '../../../../utils/courseImages'
 
 type LyceumCourseCardProps = {
   course: CourseResponse
   lecturerName: string
   additionalLecturers: number
   fallbackValue: string
-}
-
-const getImageByRole = (
-  images: CourseImageResponse[] | undefined,
-  role: CourseImageRole,
-) => images?.find((image) => image.role === role && image.url)
-
-const getPreferredImage = (
-  images: CourseImageResponse[] | undefined,
-  role: CourseImageRole,
-) => getImageByRole(images, role) ?? images?.find((image) => image.url)
-
-const resolveImageUrl = (url?: string) => {
-  if (!url) return null
-  if (!env.apiBaseUrl) return url
-
-  try {
-    const baseUrl = env.apiBaseUrl.endsWith('/')
-      ? env.apiBaseUrl
-      : `${env.apiBaseUrl}/`
-    return new URL(url, baseUrl).toString()
-  } catch {
-    return url
-  }
 }
 
 const LyceumCourseCard = ({
@@ -48,16 +24,19 @@ const LyceumCourseCard = ({
 }: LyceumCourseCardProps) => {
   const { t } = useTranslation()
   const courseName = course.name ?? fallbackValue
-  const mainImage = getPreferredImage(course.images, 'MAIN')
-  const logoImage = getPreferredImage(course.images, 'LOGO')
+  const mainImage = getPreferredCourseImage(course.images, 'MAIN')
+  const logoImage = getPreferredCourseImage(course.images, 'LOGO')
 
   const mainImageUrl =
-    resolveImageUrl(mainImage?.url) ?? courseMainPlaceholder
+    resolveCourseImageUrl(mainImage) ?? courseMainPlaceholder
   const logoImageUrl =
-    resolveImageUrl(logoImage?.url) ?? courseLogoPlaceholder
-
-  return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white/90 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-lg">
+    resolveCourseImageUrl(logoImage) ?? courseLogoPlaceholder
+  const courseLink =
+    course.id != null ? `/shkoli/${course.id}` : null
+  const cardClassName =
+    'group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white/90 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-lg'
+  const cardContent = (
+    <article className={cardClassName}>
       <div className="relative">
         <img
           src={mainImageUrl}
@@ -80,7 +59,7 @@ const LyceumCourseCard = ({
               logoImage?.altText ??
               t('pages.lyceums.detail.courseCard.logoAlt', { name: courseName })
             }
-            className="h-12 w-12 rounded-xl object-contain"
+            className="h-12 w-12 rounded-xl object-cover"
             loading="lazy"
             onError={(event) => {
               const target = event.currentTarget
@@ -108,6 +87,22 @@ const LyceumCourseCard = ({
         </p>
       </div>
     </article>
+  )
+
+  if (!courseLink) {
+    return cardContent
+  }
+
+  return (
+    <Link
+      to={courseLink}
+      aria-label={t('pages.lyceums.detail.courseCard.openCourse', {
+        name: courseName,
+      })}
+      className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
+    >
+      {cardContent}
+    </Link>
   )
 }
 
