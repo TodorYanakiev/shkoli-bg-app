@@ -59,7 +59,7 @@ const LyceumCourseCard = ({
               logoImage?.altText ??
               t('pages.lyceums.detail.courseCard.logoAlt', { name: courseName })
             }
-            className="h-12 w-12 rounded-xl object-contain"
+            className="h-12 w-12 rounded-xl object-cover"
             loading="lazy"
             onError={(event) => {
               const target = event.currentTarget

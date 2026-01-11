@@ -578,7 +578,7 @@ const CourseDetailPage = () => {
               <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                 <div className="p-5 sm:p-6">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+                    <div className="flex items-center justify-center rounded-2xl border border-white/80 bg-white/90 p-1 shadow-md">
                       <img
                         src={logoImageUrl}
                         alt={
@@ -587,7 +587,7 @@ const CourseDetailPage = () => {
                             name: courseName,
                           })
                         }
-                        className="h-full w-full object-contain"
+                        className="h-12 w-12 rounded-xl object-cover"
                         loading="lazy"
                         onError={(event) => {
                           const target = event.currentTarget
