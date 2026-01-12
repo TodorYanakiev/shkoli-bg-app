@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+.git
+.github
+.vscode
+.idea
+*.log
+*.local
+lhci-reports
+.lighthouseci
+playwright-report
+test-results
+coverage

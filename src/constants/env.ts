@@ -1,4 +1,4 @@
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? ''
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "/api";
 const s3AllowedPrefix =
   import.meta.env.VITE_S3_ALLOWED_PREFIX ?? 'courses/'
 const s3BucketName = import.meta.env.VITE_S3_BUCKET_NAME ?? ''
