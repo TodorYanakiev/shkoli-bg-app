@@ -177,6 +177,13 @@ const CourseDetailPage = () => {
   } = useLyceum(lyceumId, { enabled: Boolean(lyceumId) })
 
   const fallbackValue = t('pages.shkoli.detail.notProvided')
+  const getTrimmedString = (
+    value: string | null | undefined,
+  ): string | null => {
+    if (typeof value !== 'string') return null
+    const trimmed = value.trim()
+    return trimmed.length > 0 ? trimmed : null
+  }
   const courseName = course?.name ?? t('pages.shkoli.detail.title')
   const courseTypeLabel = course?.type
     ? t(`courses.types.${course.type}`)
@@ -186,13 +193,21 @@ const CourseDetailPage = () => {
     typeof course?.price === 'number'
       ? formatPrice(course.price, i18n.language, t)
       : fallbackValue
+  const trimmedAddress = getTrimmedString(course?.address)
+  const normalizedAchievements = getTrimmedString(course?.achievements)
+  const normalizedWebsiteLink = getTrimmedString(course?.websiteLink)
+  const normalizedFacebookLink = getTrimmedString(course?.facebookLink)
   const courseDetails = [
-    { label: t('pages.shkoli.detail.fields.price'), value: priceValue },
-    {
-      label: t('pages.shkoli.detail.fields.address'),
-      value: course?.address ?? fallbackValue,
-    },
-  ]
+    typeof course?.price === 'number'
+      ? { label: t('pages.shkoli.detail.fields.price'), value: priceValue }
+      : null,
+    trimmedAddress
+      ? {
+          label: t('pages.shkoli.detail.fields.address'),
+          value: trimmedAddress,
+        }
+      : null,
+  ].filter(Boolean) as Array<{ label: string; value: string }>
 
   const scheduleSlots = course?.schedule?.slots ?? []
   const scheduleSpecialCases = course?.schedule?.specialCases ?? []
@@ -638,53 +653,50 @@ const CourseDetailPage = () => {
                         </dd>
                       </div>
                     ))}
-                    <div className="space-y-1 sm:col-span-2">
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                        {t('pages.shkoli.detail.fields.achievements')}
-                      </dt>
-                      <dd className="font-medium text-slate-900">
-                        {course.achievements ??
-                          t('pages.shkoli.detail.achievementsPlaceholder')}
-                      </dd>
-                    </div>
-                    <div className="space-y-1 sm:col-span-2">
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                        {t('pages.shkoli.detail.fields.website')}
-                      </dt>
-                      <dd className="font-medium text-slate-900">
-                        {course.websiteLink ? (
+                    {normalizedAchievements ? (
+                      <div className="space-y-1 sm:col-span-2">
+                        <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                          {t('pages.shkoli.detail.fields.achievements')}
+                        </dt>
+                        <dd className="font-medium text-slate-900">
+                          {normalizedAchievements}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {normalizedWebsiteLink ? (
+                      <div className="space-y-1 sm:col-span-2">
+                        <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                          {t('pages.shkoli.detail.fields.website')}
+                        </dt>
+                        <dd className="font-medium text-slate-900">
                           <a
-                            href={course.websiteLink}
+                            href={normalizedWebsiteLink}
                             target="_blank"
                             rel="noreferrer"
                             className="break-all text-brand underline hover:text-brand-dark"
                           >
-                            {course.websiteLink}
+                            {normalizedWebsiteLink}
                           </a>
-                        ) : (
-                          fallbackValue
-                        )}
-                      </dd>
-                    </div>
-                    <div className="space-y-1 sm:col-span-2">
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                        {t('pages.shkoli.detail.fields.facebook')}
-                      </dt>
-                      <dd className="font-medium text-slate-900">
-                        {course.facebookLink ? (
+                        </dd>
+                      </div>
+                    ) : null}
+                    {normalizedFacebookLink ? (
+                      <div className="space-y-1 sm:col-span-2">
+                        <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                          {t('pages.shkoli.detail.fields.facebook')}
+                        </dt>
+                        <dd className="font-medium text-slate-900">
                           <a
-                            href={course.facebookLink}
+                            href={normalizedFacebookLink}
                             target="_blank"
                             rel="noreferrer"
                             className="break-all text-brand underline hover:text-brand-dark"
                           >
-                            {course.facebookLink}
+                            {normalizedFacebookLink}
                           </a>
-                        ) : (
-                          fallbackValue
-                        )}
-                      </dd>
-                    </div>
+                        </dd>
+                      </div>
+                    ) : null}
                   </dl>
                 </div>
                 <div className="relative">
