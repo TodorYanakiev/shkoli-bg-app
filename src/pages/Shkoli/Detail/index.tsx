@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 
 import courseLogoPlaceholder from '../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../assets/course-main-placeholder.svg'
+import { useAuthStatus } from '../../../hooks/useAuthStatus'
 import { useUsersByIds } from '../../../hooks/useUsersByIds'
 import type { ApiError } from '../../../types/api'
 import type {
@@ -19,6 +20,7 @@ import {
 import { getUserDisplayName } from '../../../utils/user'
 import { useLyceum } from '../../Lyceums/hooks/useLyceum'
 import { useCourse } from '../hooks/useCourse'
+import { useUserProfile } from '../../Profile/hooks/useUserProfile'
 
 const getCourseErrorMessage = (
   error: ApiError | null,
@@ -154,6 +156,8 @@ const CourseDetailPage = () => {
     if (typeof window === 'undefined') return true
     return window.matchMedia('(min-width: 1024px)').matches
   })
+  const { isAuthenticated } = useAuthStatus()
+  const { data: currentUser } = useUserProfile({ enabled: isAuthenticated })
 
   const courseId = Number(id)
   const isValidId = Number.isFinite(courseId)
@@ -234,13 +238,43 @@ const CourseDetailPage = () => {
     'pages.shkoli.detail.lyceumError',
     t,
   )
+  const userId = currentUser?.id
+  const isCourseLecturer =
+    isValidId && typeof userId === 'number' && lecturerIds.includes(userId)
+  const isLyceumAdministrator =
+    isValidId && currentUser?.administratedLyceumId === course?.lyceumId
+  const canEditCourse =
+    isValidId &&
+    (currentUser?.role === 'ADMIN' ||
+      isLyceumAdministrator ||
+      isCourseLecturer)
   const navIconClassName = 'h-5 w-5'
   const sideNavWidth = !isDesktop
     ? '0px'
     : isSideNavExpanded
       ? '16rem'
       : '4.75rem'
-  const sideNavItems: SideNavItem[] = [
+  const courseEditNavItem: SideNavItem = {
+    key: 'course-edit',
+    label: t('pages.shkoli.detail.sideNav.editCourse'),
+    to: `/shkoli/${courseId}/edit`,
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        className={navIconClassName}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 16.5V20h3.5L19 8.5l-3.5-3.5L4 16.5z" />
+        <path d="M13.5 6.5L17 10" />
+      </svg>
+    ),
+  }
+  const baseSideNavItems: SideNavItem[] = [
     {
       key: 'course-overview',
       label: t('pages.shkoli.detail.sideNav.overview'),
@@ -351,27 +385,10 @@ const CourseDetailPage = () => {
         </svg>
       ),
     },
-    {
-      key: 'course-edit',
-      label: t('pages.shkoli.detail.sideNav.editCourse'),
-      to: `/shkoli/${courseId}/edit`,
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          className={navIconClassName}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M4 16.5V20h3.5L19 8.5l-3.5-3.5L4 16.5z" />
-          <path d="M13.5 6.5L17 10" />
-        </svg>
-      ),
-    },
   ]
+  const sideNavItems: SideNavItem[] = canEditCourse
+    ? [...baseSideNavItems, courseEditNavItem]
+    : baseSideNavItems
 
   const sideNavBaseButtonClassName =
     'group inline-flex items-center rounded-lg text-xs font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 lg:text-sm'
