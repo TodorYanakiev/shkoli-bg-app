@@ -97,6 +97,7 @@ const LoginForm = () => {
           {t('pages.login.form.emailLabel')}
         </label>
         <input
+          data-testid="login-email"
           id="login-email"
           type="email"
           autoComplete="email"
@@ -125,6 +126,7 @@ const LoginForm = () => {
         </label>
         <div className="relative mt-1">
           <input
+            data-testid="login-password"
             id="login-password"
             type={isPasswordVisible ? 'text' : 'password'}
             autoComplete="current-password"
@@ -159,6 +161,7 @@ const LoginForm = () => {
         </div>
       ) : null}
       <button
+        data-testid="login-submit"
         type="submit"
         disabled={mutation.isPending}
         className="inline-flex w-full items-center justify-center rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:bg-slate-300"

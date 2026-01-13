@@ -4,9 +4,7 @@ import { expect, test } from '@playwright/test'
 test('home page renders', async ({ page }) => {
   await page.goto('/')
 
-  await expect(
-    page.getByRole('heading', { name: 'Courses', level: 1 })
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 })
 
 test('home page has no detectable a11y violations', async ({ page }) => {

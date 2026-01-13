@@ -34,7 +34,15 @@
     "app": {
       "nav": {
         "label": "Main navigation",
-        "toggle": "Toggle navigation"
+        "toggle": "Toggle navigation",
+        "languageSwitch": {
+          "label": "Language",
+          "switchTo": "Switch to {{language}}",
+          "options": {
+            "bg": "Bulgarian",
+            "en": "English"
+          }
+        }
       },
       "footer": {
         "description": "EducationNearby helps citizens find the right course faster.",

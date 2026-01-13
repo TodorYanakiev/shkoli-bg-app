@@ -10,6 +10,7 @@ import {
 
 import logo from '../../assets/logo.png'
 import { useToast } from '../../components/feedback/ToastContext'
+import LanguageSwitcher from '../../components/ui/LanguageSwitcher'
 import UserAvatar from '../../components/ui/UserAvatar'
 import { useAuthStatus } from '../../hooks/useAuthStatus'
 import { useLogoutMutation } from '../../hooks/useLogoutMutation'
@@ -218,6 +219,7 @@ const TopNav = () => {
                 </Link>
               </>
             )}
+            <LanguageSwitcher className="ml-2" />
           </div>
           <button
             type="button"
@@ -324,6 +326,9 @@ const TopNav = () => {
                 </Link>
               </>
             )}
+            <div className="border-t border-slate-200 pt-3">
+              <LanguageSwitcher className="ml-auto" />
+            </div>
           </div>
         </div>
       </div>
