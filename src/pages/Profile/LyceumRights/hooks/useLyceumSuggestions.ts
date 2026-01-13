@@ -4,8 +4,8 @@ import { getAllLyceums } from '../../../../services/lyceums'
 import type { ApiError } from '../../../../types/api'
 import type { LyceumResponse } from '../../../../types/lyceums'
 
-export const lyceumSuggestionsQueryKey = (_town?: string) =>
-  ['lyceums', 'all'] as const
+export const lyceumSuggestionsQueryKey = (town?: string) =>
+  ['lyceums', 'all', town ?? 'all'] as const
 
 type UseLyceumSuggestionsOptions = {
   enabled?: boolean

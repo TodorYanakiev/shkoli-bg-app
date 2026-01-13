@@ -308,7 +308,11 @@ const CourseCreatePage = () => {
     control,
     name: 'scheduleSpecialCases',
   })
-  const scheduleSlotValues = watch('scheduleSlots') ?? []
+  const watchedScheduleSlots = watch('scheduleSlots')
+  const scheduleSlotValues = useMemo(
+    () => watchedScheduleSlots ?? [],
+    [watchedScheduleSlots],
+  )
   const allowedImageTypesLabel = useMemo(
     () =>
       COURSE_IMAGE_ALLOWED_MIME_TYPES.map((type) =>
