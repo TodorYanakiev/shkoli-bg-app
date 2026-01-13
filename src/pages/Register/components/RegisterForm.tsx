@@ -102,6 +102,7 @@ const RegisterForm = () => {
             {t('pages.register.form.firstnameLabel')}
           </label>
           <input
+            data-testid="register-firstname"
             id="register-firstname"
             type="text"
             autoComplete="given-name"
@@ -131,6 +132,7 @@ const RegisterForm = () => {
             {t('pages.register.form.lastnameLabel')}
           </label>
           <input
+            data-testid="register-lastname"
             id="register-lastname"
             type="text"
             autoComplete="family-name"
@@ -161,6 +163,7 @@ const RegisterForm = () => {
           {t('pages.register.form.usernameLabel')}
         </label>
         <input
+          data-testid="register-username"
           id="register-username"
           type="text"
           autoComplete="username"
@@ -181,15 +184,16 @@ const RegisterForm = () => {
         ) : null}
       </div>
       <div>
-        <label
-          htmlFor="register-email"
-          className="text-sm font-semibold text-slate-800"
-        >
-          {t('pages.register.form.emailLabel')}
-        </label>
-        <input
-          id="register-email"
-          type="email"
+          <label
+            htmlFor="register-email"
+            className="text-sm font-semibold text-slate-800"
+          >
+            {t('pages.register.form.emailLabel')}
+          </label>
+          <input
+            data-testid="register-email"
+            id="register-email"
+            type="email"
           autoComplete="email"
           placeholder={t('pages.register.form.emailPlaceholder')}
           aria-invalid={Boolean(errors.email)}
@@ -208,16 +212,17 @@ const RegisterForm = () => {
         ) : null}
       </div>
       <div>
-        <label
-          htmlFor="register-password"
-          className="text-sm font-semibold text-slate-800"
-        >
-          {t('pages.register.form.passwordLabel')}
-        </label>
-        <div className="relative mt-1">
-          <input
-            id="register-password"
-            type={isPasswordVisible ? 'text' : 'password'}
+          <label
+            htmlFor="register-password"
+            className="text-sm font-semibold text-slate-800"
+          >
+            {t('pages.register.form.passwordLabel')}
+          </label>
+          <div className="relative mt-1">
+            <input
+              data-testid="register-password"
+              id="register-password"
+              type={isPasswordVisible ? 'text' : 'password'}
             autoComplete="new-password"
             placeholder={t('pages.register.form.passwordPlaceholder')}
             aria-invalid={Boolean(errors.password)}
@@ -244,16 +249,17 @@ const RegisterForm = () => {
         ) : null}
       </div>
       <div>
-        <label
-          htmlFor="register-password-repeat"
-          className="text-sm font-semibold text-slate-800"
-        >
-          {t('pages.register.form.repeatedPasswordLabel')}
-        </label>
-        <div className="relative mt-1">
-          <input
-            id="register-password-repeat"
-            type={isRepeatVisible ? 'text' : 'password'}
+          <label
+            htmlFor="register-password-repeat"
+            className="text-sm font-semibold text-slate-800"
+          >
+            {t('pages.register.form.repeatedPasswordLabel')}
+          </label>
+          <div className="relative mt-1">
+            <input
+              data-testid="register-password-repeat"
+              id="register-password-repeat"
+              type={isRepeatVisible ? 'text' : 'password'}
             autoComplete="new-password"
             placeholder={t('pages.register.form.repeatedPasswordPlaceholder')}
             aria-invalid={Boolean(errors.repeatedPassword)}
@@ -293,6 +299,7 @@ const RegisterForm = () => {
         </div>
       ) : null}
       <button
+        data-testid="register-submit"
         type="submit"
         disabled={mutation.isPending}
         className="inline-flex w-full items-center justify-center rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:bg-slate-300"

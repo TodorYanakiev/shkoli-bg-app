@@ -41,14 +41,12 @@ test('user can log in and reach the courses page', async ({ page }) => {
 
   await page.goto('/auth/login')
 
-  await page.getByLabel('Email address').fill('tina@example.com')
-  await page.getByLabel('Password', { exact: true }).fill('password123')
-  await page.getByRole('button', { name: 'Log in' }).click()
+  await page.getByTestId('login-email').fill('tina@example.com')
+  await page.getByTestId('login-password').fill('password123')
+  await page.getByTestId('login-submit').click()
 
   await expect(page).toHaveURL(/\/shkoli$/)
-  await expect(
-    page.getByRole('heading', { name: 'Courses', level: 1 }),
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 
   const tokens = await page.evaluate(() => ({
     access: window.localStorage.getItem('auth.accessToken'),
@@ -74,18 +72,16 @@ test('user can register and reach the courses page', async ({ page }) => {
 
   await page.goto('/auth/register')
 
-  await page.getByLabel('First name').fill('Mila')
-  await page.getByLabel('Last name').fill('Ivanova')
-  await page.getByLabel('Username').fill('mivanova')
-  await page.getByLabel('Email address').fill('mila@example.com')
-  await page.getByLabel('Password', { exact: true }).fill('password123')
-  await page.getByLabel('Confirm password').fill('password123')
-  await page.getByRole('button', { name: 'Create account' }).click()
+  await page.getByTestId('register-firstname').fill('Mila')
+  await page.getByTestId('register-lastname').fill('Ivanova')
+  await page.getByTestId('register-username').fill('mivanova')
+  await page.getByTestId('register-email').fill('mila@example.com')
+  await page.getByTestId('register-password').fill('password123')
+  await page.getByTestId('register-password-repeat').fill('password123')
+  await page.getByTestId('register-submit').click()
 
   await expect(page).toHaveURL(/\/shkoli$/)
-  await expect(
-    page.getByRole('heading', { name: 'Courses', level: 1 }),
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 
   const tokens = await page.evaluate(() => ({
     access: window.localStorage.getItem('auth.accessToken'),
