@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { filterLyceums, getAllLyceums } from '../../../../services/lyceums'
+import { getAllLyceums } from '../../../../services/lyceums'
 import type { ApiError } from '../../../../types/api'
 import type { LyceumResponse } from '../../../../types/lyceums'
 
-export const lyceumSuggestionsQueryKey = (town?: string) =>
-  ['lyceums', town ? 'filter' : 'all', town ?? 'all'] as const
+export const lyceumSuggestionsQueryKey = (_town?: string) =>
+  ['lyceums', 'all'] as const
 
 type UseLyceumSuggestionsOptions = {
   enabled?: boolean
@@ -17,7 +17,7 @@ export const useLyceumSuggestions = (
 ) =>
   useQuery<LyceumResponse[], ApiError>({
     queryKey: lyceumSuggestionsQueryKey(town),
-    queryFn: () => (town ? filterLyceums({ town }) : getAllLyceums()),
+    queryFn: getAllLyceums,
     enabled: options.enabled ?? Boolean(town),
     retry: false,
     staleTime: 5 * 60 * 1000,

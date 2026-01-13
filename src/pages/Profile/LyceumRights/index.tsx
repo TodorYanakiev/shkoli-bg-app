@@ -222,7 +222,14 @@ const LyceumRightsPage = () => {
       return []
     }
     const query = lyceumNameValue?.trim().toLowerCase()
-    const names = lyceumSuggestions
+    const normalizedTown = selectedTown?.trim().toLowerCase()
+    const suggestionsByTown = normalizedTown
+      ? lyceumSuggestions.filter(
+          (lyceum) =>
+            (lyceum.town ?? '').trim().toLowerCase() === normalizedTown,
+        )
+      : lyceumSuggestions
+    const names = suggestionsByTown
       .map((lyceum) => lyceum.name)
       .filter((name): name is string => Boolean(name))
     const filtered = query
@@ -230,7 +237,7 @@ const LyceumRightsPage = () => {
       : names
     const uniqueNames = Array.from(new Set(filtered))
     return uniqueNames.slice(0, MAX_SUGGESTIONS)
-  }, [hasSelectedTown, lyceumSuggestions, lyceumNameValue])
+  }, [selectedTown, lyceumSuggestions, lyceumNameValue])
 
   const suggestionMessage = useMemo(() => {
     if (isRequestLocked) {
