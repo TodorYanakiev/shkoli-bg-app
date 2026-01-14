@@ -87,6 +87,7 @@
     "generic": "Something went wrong. Please try again.",
     "courses": {
       "createFailed": "We couldn't create this course. Try again.",
+      "updateFailed": "We couldn't update this course. Try again.",
       "imageUploadFailed": "We couldn't upload this image. Try again.",
       "imagesUploadFailed": "Some images could not be uploaded.",
       "imageDuplicate": "This image has already been uploaded.",
@@ -129,7 +130,8 @@
       "registerSuccess": "Account created. You're signed in."
     },
     "courses": {
-      "createSuccess": "Course created successfully."
+      "createSuccess": "Course created successfully.",
+      "updateSuccess": "Course updated successfully."
     },
     "lyceums": {
       "updateSuccess": "Lyceum updated successfully.",
@@ -330,7 +332,7 @@
       },
       "details": {
         "title": "Profile details",
-        "fullName": "Full name",
+        "fullName": "Full  name",
         "username": "Username",
         "email": "Email address",
         "administratedLyceum": "Administrated lyceum",
@@ -496,6 +498,22 @@
           "empty": "No lecturers available for this lyceum.",
           "hint": "Select the lecturers for this course.",
           "unknown": "Lecturer"
+        }
+      },
+      "edit": {
+        "title": "Update course",
+        "subtitle": "Edit the course details and schedule.",
+        "back": "Back to course",
+        "invalidId": "Invalid course id.",
+        "loadFailed": "We couldn't load this course. Try again.",
+        "notFound": "Course not found.",
+        "loading": "Loading course...",
+        "form": {
+          "actions": {
+            "submit": "Save changes",
+            "submitting": "Saving...",
+            "cancel": "Cancel"
+          }
         }
       }
     },

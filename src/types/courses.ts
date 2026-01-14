@@ -118,3 +118,20 @@ export type CourseRequest = {
   achievements?: string
   lecturerIds?: number[]
 }
+
+export type CourseUpdateRequest = {
+  name?: string
+  description?: string
+  type?: CourseType
+  ageGroupList?: CourseAgeGroup[]
+  schedule?: CourseSchedule
+  address?: string
+  price?: number
+  facebookLink?: string
+  websiteLink?: string
+  lyceumId?: number
+  achievements?: string
+  lecturerIds?: number[]
+  lecturerIdsToAdd?: number[]
+  lecturerIdsToRemove?: number[]
+}

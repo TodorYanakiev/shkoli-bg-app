@@ -4,6 +4,7 @@ import type {
   CourseImageResponse,
   CourseRequest,
   CourseResponse,
+  CourseUpdateRequest,
 } from '../types/courses'
 
 export const getCourseById = async (courseId: number) => {
@@ -16,6 +17,17 @@ export const getCourseById = async (courseId: number) => {
 export const createCourse = async (payload: CourseRequest) => {
   const response = await httpClient.post<CourseResponse>(
     '/api/v1/courses',
+    payload,
+  )
+  return response.data
+}
+
+export const updateCourse = async (
+  courseId: number,
+  payload: CourseUpdateRequest,
+) => {
+  const response = await httpClient.put<CourseResponse>(
+    `/api/v1/courses/${courseId}`,
     payload,
   )
   return response.data
