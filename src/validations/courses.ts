@@ -58,9 +58,7 @@ const getCourseScheduleSlotSchema = (t: TFunction) =>
         }),
       dayOfMonth: getOptionalIntegerField(t),
       startTime: optionalTextField,
-      classesCount: getOptionalIntegerField(t),
       singleClassDurationMinutes: getOptionalIntegerField(t),
-      gapBetweenClassesMinutes: getOptionalIntegerField(t),
     })
     .superRefine((values, context) => {
       if (values.recurrence === 'WEEKLY' && values.dayOfWeek.trim() === '') {

@@ -160,12 +160,8 @@ const buildCourseSchedule = (
       dayOfWeek,
       dayOfMonth,
       startTime: normalizeOptionalText(slot.startTime),
-      classesCount: normalizeOptionalInteger(slot.classesCount),
       singleClassDurationMinutes: normalizeOptionalInteger(
         slot.singleClassDurationMinutes,
-      ),
-      gapBetweenClassesMinutes: normalizeOptionalInteger(
-        slot.gapBetweenClassesMinutes,
       ),
     }
   })
@@ -192,9 +188,7 @@ const defaultScheduleSlot = {
   dayOfWeek: '',
   dayOfMonth: '',
   startTime: '',
-  classesCount: '',
   singleClassDurationMinutes: '',
-  gapBetweenClassesMinutes: '',
 }
 
 const defaultSpecialCase = {
@@ -1121,24 +1115,6 @@ const CourseCreatePage = () => {
                             ) : null}
                           </label>
                           <label className="text-sm font-medium text-slate-700">
-                            {t('pages.shkoli.detail.schedule.classesCount')}
-                            <input
-                              type="number"
-                              min="1"
-                              {...register(
-                                `scheduleSlots.${index}.classesCount`,
-                              )}
-                              className={inputClassName(
-                                Boolean(slotErrors?.classesCount),
-                              )}
-                            />
-                            {slotErrors?.classesCount ? (
-                              <span className={errorTextClassName}>
-                                {slotErrors.classesCount.message}
-                              </span>
-                            ) : null}
-                          </label>
-                          <label className="text-sm font-medium text-slate-700">
                             {t('pages.shkoli.detail.schedule.duration')}
                             <input
                               type="number"
@@ -1153,24 +1129,6 @@ const CourseCreatePage = () => {
                             {slotErrors?.singleClassDurationMinutes ? (
                               <span className={errorTextClassName}>
                                 {slotErrors.singleClassDurationMinutes.message}
-                              </span>
-                            ) : null}
-                          </label>
-                          <label className="text-sm font-medium text-slate-700">
-                            {t('pages.shkoli.detail.schedule.gap')}
-                            <input
-                              type="number"
-                              min="0"
-                              {...register(
-                                `scheduleSlots.${index}.gapBetweenClassesMinutes`,
-                              )}
-                              className={inputClassName(
-                                Boolean(slotErrors?.gapBetweenClassesMinutes),
-                              )}
-                            />
-                            {slotErrors?.gapBetweenClassesMinutes ? (
-                              <span className={errorTextClassName}>
-                                {slotErrors.gapBetweenClassesMinutes.message}
                               </span>
                             ) : null}
                           </label>

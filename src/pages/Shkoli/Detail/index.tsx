@@ -778,25 +778,6 @@ const CourseDetailPage = () => {
                                 value: String(slot.dayOfMonth),
                               }
                             : null,
-                          typeof slot.classesCount === 'number'
-                            ? {
-                                label: t(
-                                  'pages.shkoli.detail.schedule.classesCount',
-                                ),
-                                value: String(slot.classesCount),
-                              }
-                            : null,
-                          typeof slot.gapBetweenClassesMinutes === 'number'
-                            ? {
-                                label: t('pages.shkoli.detail.schedule.gap'),
-                                value: t(
-                                  'pages.shkoli.detail.schedule.minutes',
-                                  {
-                                    count: slot.gapBetweenClassesMinutes,
-                                  },
-                                ),
-                              }
-                            : null,
                         ].filter(Boolean) as Array<{
                           label: string
                           value: string
