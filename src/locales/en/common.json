@@ -68,7 +68,8 @@
     "passwordToggle": {
       "show": "Show",
       "hide": "Hide"
-    }
+    },
+    "requiredLabel": "Required"
   },
   "validation": {
     "required": "This field is required.",

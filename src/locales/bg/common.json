@@ -68,7 +68,8 @@
     "passwordToggle": {
       "show": "Покажи",
       "hide": "Скрий"
-    }
+    },
+    "requiredLabel": "????????????"
   },
   "validation": {
     "required": "Полето е задължително.",

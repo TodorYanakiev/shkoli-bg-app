@@ -648,6 +648,14 @@ const CourseCreatePage = () => {
   const legendClassName =
     'text-xs font-semibold uppercase tracking-wide text-slate-500'
   const errorTextClassName = 'mt-1 text-xs font-medium text-rose-600'
+  const requiredIndicator = (
+    <>
+      <span className="ml-1 text-rose-500" aria-hidden="true">
+        *
+      </span>
+      <span className="sr-only"> {t('form.requiredLabel')}</span>
+    </>
+  )
   const actionBarClassName =
     'flex flex-col gap-3 rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 sm:flex-row sm:items-center'
   const primaryActionButtonClassName =
@@ -830,6 +838,7 @@ const CourseCreatePage = () => {
             <div className="grid gap-4 md:grid-cols-2">
               <label className="text-sm font-medium text-slate-700">
                 {t('pages.shkoli.create.form.fields.name')}
+                {requiredIndicator}
                 <input
                   type="text"
                   {...register('name')}
@@ -844,6 +853,7 @@ const CourseCreatePage = () => {
               </label>
               <label className="text-sm font-medium text-slate-700">
                 {t('pages.shkoli.create.form.fields.type')}
+                {requiredIndicator}
                 <select
                   {...register('type')}
                   className={inputClassName(Boolean(errors.type))}
@@ -867,6 +877,7 @@ const CourseCreatePage = () => {
             <div className="space-y-2">
               <p className="text-sm font-medium text-slate-700">
                 {t('pages.shkoli.create.form.fields.ageGroups')}
+                {requiredIndicator}
               </p>
               <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                 {COURSE_AGE_GROUPS.map((group) => (
@@ -892,6 +903,7 @@ const CourseCreatePage = () => {
             </div>
             <label className="text-sm font-medium text-slate-700">
               {t('pages.shkoli.create.form.fields.description')}
+              {requiredIndicator}
               <textarea
                 {...register('description')}
                 rows={4}
@@ -1031,6 +1043,7 @@ const CourseCreatePage = () => {
                         <div className="grid gap-3 md:grid-cols-2">
                           <label className="text-sm font-medium text-slate-700">
                             {t('pages.shkoli.detail.schedule.recurrence')}
+                            {requiredIndicator}
                             <select
                               {...register(`scheduleSlots.${index}.recurrence`)}
                               className={inputClassName(
@@ -1052,6 +1065,7 @@ const CourseCreatePage = () => {
                           {isWeekly ? (
                             <label className="text-sm font-medium text-slate-700">
                               {t('pages.shkoli.detail.schedule.dayOfWeek')}
+                              {requiredIndicator}
                               <select
                                 {...register(
                                   `scheduleSlots.${index}.dayOfWeek`,
@@ -1081,6 +1095,7 @@ const CourseCreatePage = () => {
                           {isMonthly ? (
                             <label className="text-sm font-medium text-slate-700">
                               {t('pages.shkoli.detail.schedule.dayOfMonth')}
+                              {requiredIndicator}
                               <input
                                 type="number"
                                 min="1"
@@ -1180,6 +1195,7 @@ const CourseCreatePage = () => {
                         <div className="grid gap-3 md:grid-cols-2">
                           <label className="text-sm font-medium text-slate-700">
                             {t('pages.shkoli.create.schedule.date')}
+                            {requiredIndicator}
                             <input
                               type="date"
                               {...register(
