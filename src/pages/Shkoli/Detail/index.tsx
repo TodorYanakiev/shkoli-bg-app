@@ -878,6 +878,9 @@ const CourseDetailPage = () => {
                       <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                         {t('pages.shkoli.detail.schedule.specialCases')}
                       </p>
+                      <p className="mt-1 text-xs text-slate-500">
+                        {t('pages.shkoli.detail.schedule.specialCasesHelp')}
+                      </p>
                       <ul className="mt-4 grid gap-3 text-sm text-slate-700 sm:grid-cols-2">
                         {scheduleSpecialCases.map((entry, index) => (
                           <li

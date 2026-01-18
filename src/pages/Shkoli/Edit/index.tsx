@@ -1358,6 +1358,9 @@ const CourseEditPage = () => {
                   {t('pages.shkoli.create.schedule.addSpecialCase')}
                 </button>
               </div>
+              <p className="text-xs text-slate-500">
+                {t('pages.shkoli.create.schedule.specialCasesHelp')}
+              </p>
               {scheduleSpecialCases.fields.length === 0 ? (
                 <p className="text-sm text-slate-600">
                   {t('pages.shkoli.create.schedule.specialCasesEmpty')}

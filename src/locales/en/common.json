@@ -398,6 +398,7 @@
           "gap": "Break between classes",
           "minutes": "{{count}} min",
           "specialCases": "Special cases",
+          "specialCasesHelp": "Special cases are one-off changes to the regular schedule, like cancellations or extra sessions.",
           "cancelled": "Cancelled",
           "active": "Active",
           "reason": "Reason"
@@ -464,6 +465,7 @@
           "addSlot": "Add schedule slot",
           "removeSlot": "Remove slot",
           "specialCasesTitle": "Special cases",
+          "specialCasesHelp": "Use special cases to record one-off changes to the regular schedule, like cancellations or extra sessions.",
           "specialCasesEmpty": "No special cases added yet.",
           "addSpecialCase": "Add special case",
           "removeSpecialCase": "Remove special case",
