@@ -508,6 +508,19 @@
         "loadFailed": "We couldn't load this course. Try again.",
         "notFound": "Course not found.",
         "loading": "Loading course...",
+        "images": {
+          "title": "Images",
+          "loading": "Loading images...",
+          "error": "Unable to load images.",
+          "empty": "No images added yet.",
+          "none": "No images for this section.",
+          "currentLogo": "Current logo",
+          "currentMain": "Current main image",
+          "currentGallery": "Current gallery",
+          "order": "Gallery image {{index}}",
+          "altFallback": "Course image",
+          "unavailable": "Image unavailable"
+        },
         "form": {
           "actions": {
             "submit": "Save changes",
