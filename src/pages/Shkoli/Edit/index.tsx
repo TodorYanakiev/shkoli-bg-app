@@ -238,12 +238,13 @@ const isApiError = (value: unknown): value is ApiError =>
   'kind' in value
 
 const CourseEditPage = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { showToast } = useToast()
   const queryClient = useQueryClient()
   const schema = useMemo(() => getCourseCreateSchema(t), [t])
+  const timePickerLang = i18n.language === 'bg' ? 'bg' : 'en-GB'
 
   const courseId = Number(id)
   const isValidId = Number.isFinite(courseId)
@@ -1349,10 +1350,13 @@ const CourseEditPage = () => {
                             {t('pages.shkoli.detail.schedule.startTime')}
                             <input
                               type="time"
+                              lang={timePickerLang}
+                              step={60}
                               {...register(`scheduleSlots.${index}.startTime`)}
                               className={inputClassName(
                                 Boolean(slotErrors?.startTime),
                               )}
+                              disabled={isSubmitting}
                             />
                             {slotErrors?.startTime ? (
                               <span className={errorTextClassName}>
