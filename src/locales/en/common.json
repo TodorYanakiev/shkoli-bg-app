@@ -68,7 +68,8 @@
     "passwordToggle": {
       "show": "Show",
       "hide": "Hide"
-    }
+    },
+    "requiredLabel": "Required"
   },
   "validation": {
     "required": "This field is required.",
@@ -87,6 +88,7 @@
     "generic": "Something went wrong. Please try again.",
     "courses": {
       "createFailed": "We couldn't create this course. Try again.",
+      "updateFailed": "We couldn't update this course. Try again.",
       "imageUploadFailed": "We couldn't upload this image. Try again.",
       "imagesUploadFailed": "Some images could not be uploaded.",
       "imageDuplicate": "This image has already been uploaded.",
@@ -129,7 +131,8 @@
       "registerSuccess": "Account created. You're signed in."
     },
     "courses": {
-      "createSuccess": "Course created successfully."
+      "createSuccess": "Course created successfully.",
+      "updateSuccess": "Course updated successfully."
     },
     "lyceums": {
       "updateSuccess": "Lyceum updated successfully.",
@@ -146,6 +149,8 @@
     "lyceumCard": {
       "title": "Administrated lyceum",
       "subtitle": "Key details for the lyceum you manage.",
+      "lecturerTitle": "Lectured lyceum",
+      "lecturerSubtitle": "Key details for the lyceum where you teach.",
       "imageAlt": "Lyceum exterior",
       "loading": "Loading lyceum details...",
       "error": "Unable to load lyceum details right now.",
@@ -167,7 +172,6 @@
       "SINGING": "Singing",
       "ACTING": "Acting",
       "PHOTOGRAPHY": "Photography",
-      "PAINTING": "Painting",
       "CRAFTING": "Crafting",
       "SPORT": "Sport",
       "YOGA": "Yoga",
@@ -180,16 +184,76 @@
       "LANGUAGES": "Languages",
       "DEBATES": "Debates",
       "TECHNOLOGY": "Technology",
-      "COOKING": "Cooking"
+      "COOKING": "Cooking",
+      "PIANO": "Piano",
+      "GUITAR": "Guitar",
+      "VIOLIN": "Violin",
+      "ACCORDION": "Accordion",
+      "DRUMS": "Drums",
+      "PIPE": "Pipe",
+      "FLUTE": "Flute",
+      "KAVAL": "Kaval",
+      "TAMBURA": "Tambura",
+      "TRUMPET": "Trumpet",
+      "MANDOLINE": "Mandoline",
+      "SAXOPHONE": "Saxophone",
+      "SYNTHESIZER": "Synthesizer",
+      "GADULKA": "Gadulka",
+      "VOCAL_SINGING": "Vocal Singing",
+      "FOLK_SINGING": "Folk Singing",
+      "POP_SINGING": "Pop Singing",
+      "CLASSICAL_SINGING": "Classical Singing",
+      "OPERA_SINGING": "Opera Singing",
+      "CHOIR_SINGING": "Choir Singing",
+      "FOLK_DANCES": "Folk Dances",
+      "BALLET": "Ballet",
+      "MODERN_DANCES": "Modern Dances",
+      "HIP_HOP_DANCES": "Hip Hop Dances",
+      "LATIN_DANCES": "Latin Dances",
+      "SPORT_DANCES": "Sport Dances",
+      "ZUMBA": "Zumba",
+      "K_POP_DANCES": "K-pop Dances",
+      "PAINTING": "Painting",
+      "ICONOGRAPHY": "Iconography",
+      "CERAMICS": "Ceramics",
+      "GLASS_PAINTING": "Glass Painting",
+      "EMBROIDERY": "Embroidery",
+      "BATIK": "Batik",
+      "DECOUPAGE": "Decoupage",
+      "QUILLING": "Quilling",
+      "WEAVING": "Weaving",
+      "POTTERY": "Pottery",
+      "JEWELRY_MAKING": "Jewelry Making",
+      "WOOD_CARVING": "Wood Carving",
+      "HANDICRAFTS": "Handicrafts",
+      "MARTENITSA_MAKING": "Martenitsa Making",
+      "POETRY": "Poetry",
+      "CREATIVE_WRITING": "Creative Writing",
+      "DRAMA": "Drama",
+      "SPOKEN_WORD": "Spoken Word",
+      "PUPPET_THEATER": "Puppet Theater",
+      "DRAMA_TROUPES": "Drama Troupes",
+      "HEALTH": "Health",
+      "PATRIOTISM": "Patriotism",
+      "ECOLOGY": "Ecology",
+      "CHESS": "Chess",
+      "COMPUTERS": "Computers",
+      "ROBOTICS": "Robotics",
+      "NATIONAL_ASSESSMENT_BEL_MATH": "National Assessment BEL Math",
+      "APPLYING_TO_ART_SCHOOLS": "Applying To Art Schools",
+      "TABLE_TENNIS": "Table Tennis",
+      "AIKIDO": "Aikido",
+      "AEROBICS": "Aerobics",
+      "SKATEBOARDING": "Skateboarding",
+      "STUNT_DRIVING": "Stunt Driving",
+      "CALLIGRAPHY": "Calligraphy",
+      "IKEBANA": "Ikebana"
     },
     "ageGroups": {
-      "TODDLER": "Toddlers",
-      "CHILD": "Children",
-      "PRE_TEEN": "Pre-teens",
-      "TEEN": "Teens",
-      "YOUNG_ADULT": "Young adults",
-      "ADULT": "Adults",
-      "MATURE_ADULT": "Mature adults",
+      "TODDLER": "Toddlers (0-6y)",
+      "CHILD": "Children (7-12y)",
+      "TEEN": "Teens (13-18y)",
+      "ADULT": "Adults (18+)",
       "SENIOR": "Seniors"
     },
     "recurrence": {
@@ -261,6 +325,26 @@
         "lyceumAdmin": "Lyceum administrator",
         "unknown": "Unknown"
       },
+      "lecturedLyceums": {
+        "count": "Lyceum {{current}} of {{total}}",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "lecturedCourses": {
+        "count": "Course {{current}} of {{total}}",
+        "previous": "Previous",
+        "next": "Next",
+        "loading": "Loading courses...",
+        "error": "Unable to load courses right now.",
+        "empty": "No courses assigned yet.",
+        "card": {
+          "imageAlt": "Course main image for {{name}}",
+          "logoAlt": "Course logo for {{name}}",
+          "lecturerLabel": "Lecturer",
+          "additionalLecturers": "plus {{count}} more",
+          "openCourse": "Open course {{name}}"
+        }
+      },
       "actions": {
         "title": "Account actions",
         "changePassword": "Change password",
@@ -330,7 +414,7 @@
       },
       "details": {
         "title": "Profile details",
-        "fullName": "Full name",
+        "fullName": "Full  name",
         "username": "Username",
         "email": "Email address",
         "administratedLyceum": "Administrated lyceum",
@@ -396,6 +480,7 @@
           "gap": "Break between classes",
           "minutes": "{{count}} min",
           "specialCases": "Special cases",
+          "specialCasesHelp": "Special cases are one-off changes to the regular schedule, like cancellations or extra sessions.",
           "cancelled": "Cancelled",
           "active": "Active",
           "reason": "Reason"
@@ -444,6 +529,8 @@
             "ageGroups": "Age groups",
             "description": "Description",
             "price": "Price",
+            "isInLyceum": "Course takes place in the lyceum",
+            "isInLyceumHint": "Uncheck to provide a different address.",
             "address": "Address",
             "achievements": "Achievements",
             "facebookLink": "Facebook link",
@@ -462,6 +549,7 @@
           "addSlot": "Add schedule slot",
           "removeSlot": "Remove slot",
           "specialCasesTitle": "Special cases",
+          "specialCasesHelp": "Use special cases to record one-off changes to the regular schedule, like cancellations or extra sessions.",
           "specialCasesEmpty": "No special cases added yet.",
           "addSpecialCase": "Add special case",
           "removeSpecialCase": "Remove special case",
@@ -496,6 +584,35 @@
           "empty": "No lecturers available for this lyceum.",
           "hint": "Select the lecturers for this course.",
           "unknown": "Lecturer"
+        }
+      },
+      "edit": {
+        "title": "Update course",
+        "subtitle": "Edit the course details and schedule.",
+        "back": "Back to course",
+        "invalidId": "Invalid course id.",
+        "loadFailed": "We couldn't load this course. Try again.",
+        "notFound": "Course not found.",
+        "loading": "Loading course...",
+        "images": {
+          "title": "Images",
+          "loading": "Loading images...",
+          "error": "Unable to load images.",
+          "empty": "No images added yet.",
+          "none": "No images for this section.",
+          "currentLogo": "Current logo",
+          "currentMain": "Current main image",
+          "currentGallery": "Current gallery",
+          "order": "Gallery image {{index}}",
+          "altFallback": "Course image",
+          "unavailable": "Image unavailable"
+        },
+        "form": {
+          "actions": {
+            "submit": "Save changes",
+            "submitting": "Saving...",
+            "cancel": "Cancel"
+          }
         }
       }
     },

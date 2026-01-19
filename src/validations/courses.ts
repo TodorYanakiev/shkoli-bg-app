@@ -58,9 +58,7 @@ const getCourseScheduleSlotSchema = (t: TFunction) =>
         }),
       dayOfMonth: getOptionalIntegerField(t),
       startTime: optionalTextField,
-      classesCount: getOptionalIntegerField(t),
       singleClassDurationMinutes: getOptionalIntegerField(t),
-      gapBetweenClassesMinutes: getOptionalIntegerField(t),
     })
     .superRefine((values, context) => {
       if (values.recurrence === 'WEEKLY' && values.dayOfWeek.trim() === '') {
@@ -91,31 +89,43 @@ const getCourseSpecialCaseSchema = (t: TFunction) =>
   })
 
 export const getCourseCreateSchema = (t: TFunction) =>
-  z.object({
-    name: z.string().trim().min(1, t('validation.required')),
-    description: z.string().trim().min(1, t('validation.required')),
-    type: z
-      .string()
-      .trim()
-      .min(1, t('validation.required'))
-      .refine(isCourseType, {
-        message: t('validation.invalidOption'),
-      }),
-    ageGroupList: z
-      .array(z.string().trim())
-      .min(1, t('validation.required'))
-      .refine((values) => values.every(isCourseAgeGroup), {
-        message: t('validation.invalidOption'),
-      }),
-    price: getOptionalNumberField(t),
-    address: optionalTextField,
-    achievements: optionalTextField,
-    facebookLink: optionalTextField,
-    websiteLink: optionalTextField,
-    lecturerIds: z.array(z.string().trim()).optional(),
-    scheduleSlots: z.array(getCourseScheduleSlotSchema(t)),
-    scheduleSpecialCases: z.array(getCourseSpecialCaseSchema(t)),
-  })
+  z
+    .object({
+      name: z.string().trim().min(1, t('validation.required')),
+      description: z.string().trim().min(1, t('validation.required')),
+      type: z
+        .string()
+        .trim()
+        .min(1, t('validation.required'))
+        .refine(isCourseType, {
+          message: t('validation.invalidOption'),
+        }),
+      ageGroupList: z
+        .array(z.string().trim())
+        .min(1, t('validation.required'))
+        .refine((values) => values.every(isCourseAgeGroup), {
+          message: t('validation.invalidOption'),
+        }),
+      price: getOptionalNumberField(t),
+      isInLyceum: z.boolean().optional(),
+      address: optionalTextField,
+      achievements: optionalTextField,
+      facebookLink: optionalTextField,
+      websiteLink: optionalTextField,
+      lecturerIds: z.array(z.string().trim()).optional(),
+      scheduleSlots: z.array(getCourseScheduleSlotSchema(t)),
+      scheduleSpecialCases: z.array(getCourseSpecialCaseSchema(t)),
+    })
+    .superRefine((values, context) => {
+      const isInLyceum = values.isInLyceum ?? true
+      if (!isInLyceum && values.address.trim() === '') {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('validation.required'),
+          path: ['address'],
+        })
+      }
+    })
 
 export type CourseCreateFormValues = z.infer<
   ReturnType<typeof getCourseCreateSchema>

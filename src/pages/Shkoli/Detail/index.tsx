@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 
 import courseLogoPlaceholder from '../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../assets/course-main-placeholder.svg'
+import { useAuthStatus } from '../../../hooks/useAuthStatus'
 import { useUsersByIds } from '../../../hooks/useUsersByIds'
 import type { ApiError } from '../../../types/api'
 import type {
@@ -19,6 +20,7 @@ import {
 import { getUserDisplayName } from '../../../utils/user'
 import { useLyceum } from '../../Lyceums/hooks/useLyceum'
 import { useCourse } from '../hooks/useCourse'
+import { useUserProfile } from '../../Profile/hooks/useUserProfile'
 
 const getCourseErrorMessage = (
   error: ApiError | null,
@@ -154,6 +156,8 @@ const CourseDetailPage = () => {
     if (typeof window === 'undefined') return true
     return window.matchMedia('(min-width: 1024px)').matches
   })
+  const { isAuthenticated } = useAuthStatus()
+  const { data: currentUser } = useUserProfile({ enabled: isAuthenticated })
 
   const courseId = Number(id)
   const isValidId = Number.isFinite(courseId)
@@ -177,6 +181,13 @@ const CourseDetailPage = () => {
   } = useLyceum(lyceumId, { enabled: Boolean(lyceumId) })
 
   const fallbackValue = t('pages.shkoli.detail.notProvided')
+  const getTrimmedString = (
+    value: string | null | undefined,
+  ): string | null => {
+    if (typeof value !== 'string') return null
+    const trimmed = value.trim()
+    return trimmed.length > 0 ? trimmed : null
+  }
   const courseName = course?.name ?? t('pages.shkoli.detail.title')
   const courseTypeLabel = course?.type
     ? t(`courses.types.${course.type}`)
@@ -186,13 +197,21 @@ const CourseDetailPage = () => {
     typeof course?.price === 'number'
       ? formatPrice(course.price, i18n.language, t)
       : fallbackValue
+  const trimmedAddress = getTrimmedString(course?.address)
+  const normalizedAchievements = getTrimmedString(course?.achievements)
+  const normalizedWebsiteLink = getTrimmedString(course?.websiteLink)
+  const normalizedFacebookLink = getTrimmedString(course?.facebookLink)
   const courseDetails = [
-    { label: t('pages.shkoli.detail.fields.price'), value: priceValue },
-    {
-      label: t('pages.shkoli.detail.fields.address'),
-      value: course?.address ?? fallbackValue,
-    },
-  ]
+    typeof course?.price === 'number'
+      ? { label: t('pages.shkoli.detail.fields.price'), value: priceValue }
+      : null,
+    trimmedAddress
+      ? {
+          label: t('pages.shkoli.detail.fields.address'),
+          value: trimmedAddress,
+        }
+      : null,
+  ].filter(Boolean) as Array<{ label: string; value: string }>
 
   const scheduleSlots = course?.schedule?.slots ?? []
   const scheduleSpecialCases = course?.schedule?.specialCases ?? []
@@ -219,13 +238,43 @@ const CourseDetailPage = () => {
     'pages.shkoli.detail.lyceumError',
     t,
   )
+  const userId = currentUser?.id
+  const isCourseLecturer =
+    isValidId && typeof userId === 'number' && lecturerIds.includes(userId)
+  const isLyceumAdministrator =
+    isValidId && currentUser?.administratedLyceumId === course?.lyceumId
+  const canEditCourse =
+    isValidId &&
+    (currentUser?.role === 'ADMIN' ||
+      isLyceumAdministrator ||
+      isCourseLecturer)
   const navIconClassName = 'h-5 w-5'
   const sideNavWidth = !isDesktop
     ? '0px'
     : isSideNavExpanded
       ? '16rem'
       : '4.75rem'
-  const sideNavItems: SideNavItem[] = [
+  const courseEditNavItem: SideNavItem = {
+    key: 'course-edit',
+    label: t('pages.shkoli.detail.sideNav.editCourse'),
+    to: `/shkoli/${courseId}/edit`,
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        className={navIconClassName}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 16.5V20h3.5L19 8.5l-3.5-3.5L4 16.5z" />
+        <path d="M13.5 6.5L17 10" />
+      </svg>
+    ),
+  }
+  const baseSideNavItems: SideNavItem[] = [
     {
       key: 'course-overview',
       label: t('pages.shkoli.detail.sideNav.overview'),
@@ -336,27 +385,10 @@ const CourseDetailPage = () => {
         </svg>
       ),
     },
-    {
-      key: 'course-edit',
-      label: t('pages.shkoli.detail.sideNav.editCourse'),
-      to: `/shkoli/${courseId}/edit`,
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          className={navIconClassName}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M4 16.5V20h3.5L19 8.5l-3.5-3.5L4 16.5z" />
-          <path d="M13.5 6.5L17 10" />
-        </svg>
-      ),
-    },
   ]
+  const sideNavItems: SideNavItem[] = canEditCourse
+    ? [...baseSideNavItems, courseEditNavItem]
+    : baseSideNavItems
 
   const sideNavBaseButtonClassName =
     'group inline-flex items-center rounded-lg text-xs font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 lg:text-sm'
@@ -638,53 +670,50 @@ const CourseDetailPage = () => {
                         </dd>
                       </div>
                     ))}
-                    <div className="space-y-1 sm:col-span-2">
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                        {t('pages.shkoli.detail.fields.achievements')}
-                      </dt>
-                      <dd className="font-medium text-slate-900">
-                        {course.achievements ??
-                          t('pages.shkoli.detail.achievementsPlaceholder')}
-                      </dd>
-                    </div>
-                    <div className="space-y-1 sm:col-span-2">
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                        {t('pages.shkoli.detail.fields.website')}
-                      </dt>
-                      <dd className="font-medium text-slate-900">
-                        {course.websiteLink ? (
+                    {normalizedAchievements ? (
+                      <div className="space-y-1 sm:col-span-2">
+                        <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                          {t('pages.shkoli.detail.fields.achievements')}
+                        </dt>
+                        <dd className="font-medium text-slate-900">
+                          {normalizedAchievements}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {normalizedWebsiteLink ? (
+                      <div className="space-y-1 sm:col-span-2">
+                        <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                          {t('pages.shkoli.detail.fields.website')}
+                        </dt>
+                        <dd className="font-medium text-slate-900">
                           <a
-                            href={course.websiteLink}
+                            href={normalizedWebsiteLink}
                             target="_blank"
                             rel="noreferrer"
                             className="break-all text-brand underline hover:text-brand-dark"
                           >
-                            {course.websiteLink}
+                            {normalizedWebsiteLink}
                           </a>
-                        ) : (
-                          fallbackValue
-                        )}
-                      </dd>
-                    </div>
-                    <div className="space-y-1 sm:col-span-2">
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                        {t('pages.shkoli.detail.fields.facebook')}
-                      </dt>
-                      <dd className="font-medium text-slate-900">
-                        {course.facebookLink ? (
+                        </dd>
+                      </div>
+                    ) : null}
+                    {normalizedFacebookLink ? (
+                      <div className="space-y-1 sm:col-span-2">
+                        <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                          {t('pages.shkoli.detail.fields.facebook')}
+                        </dt>
+                        <dd className="font-medium text-slate-900">
                           <a
-                            href={course.facebookLink}
+                            href={normalizedFacebookLink}
                             target="_blank"
                             rel="noreferrer"
                             className="break-all text-brand underline hover:text-brand-dark"
                           >
-                            {course.facebookLink}
+                            {normalizedFacebookLink}
                           </a>
-                        ) : (
-                          fallbackValue
-                        )}
-                      </dd>
-                    </div>
+                        </dd>
+                      </div>
+                    ) : null}
                   </dl>
                 </div>
                 <div className="relative">
@@ -747,25 +776,6 @@ const CourseDetailPage = () => {
                                   'pages.shkoli.detail.schedule.dayOfMonth',
                                 ),
                                 value: String(slot.dayOfMonth),
-                              }
-                            : null,
-                          typeof slot.classesCount === 'number'
-                            ? {
-                                label: t(
-                                  'pages.shkoli.detail.schedule.classesCount',
-                                ),
-                                value: String(slot.classesCount),
-                              }
-                            : null,
-                          typeof slot.gapBetweenClassesMinutes === 'number'
-                            ? {
-                                label: t('pages.shkoli.detail.schedule.gap'),
-                                value: t(
-                                  'pages.shkoli.detail.schedule.minutes',
-                                  {
-                                    count: slot.gapBetweenClassesMinutes,
-                                  },
-                                ),
                               }
                             : null,
                         ].filter(Boolean) as Array<{
@@ -867,6 +877,9 @@ const CourseDetailPage = () => {
                     <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
                       <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                         {t('pages.shkoli.detail.schedule.specialCases')}
+                      </p>
+                      <p className="mt-1 text-xs text-slate-500">
+                        {t('pages.shkoli.detail.schedule.specialCasesHelp')}
                       </p>
                       <ul className="mt-4 grid gap-3 text-sm text-slate-700 sm:grid-cols-2">
                         {scheduleSpecialCases.map((entry, index) => (

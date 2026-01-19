@@ -13,6 +13,8 @@ type LyceumCardProps = {
   imageSrc?: string
   linkTo?: string
   linkLabel?: string
+  title?: string
+  subtitle?: string
 }
 
 const LyceumCard = ({
@@ -23,6 +25,8 @@ const LyceumCard = ({
   imageSrc,
   linkTo,
   linkLabel,
+  title,
+  subtitle,
 }: LyceumCardProps) => {
   const { t } = useTranslation()
   const resolvedImage = imageSrc ?? placeholderImage
@@ -112,10 +116,10 @@ const LyceumCard = ({
       </div>
       <div className="mt-4">
         <h2 className="text-sm font-semibold text-slate-900">
-          {t('components.lyceumCard.title')}
+          {title ?? t('components.lyceumCard.title')}
         </h2>
         <p className="mt-1 text-xs text-slate-500">
-          {t('components.lyceumCard.subtitle')}
+          {subtitle ?? t('components.lyceumCard.subtitle')}
         </p>
       </div>
       <div className="mt-4">{renderContent()}</div>

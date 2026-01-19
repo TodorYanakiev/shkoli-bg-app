@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -6,7 +7,10 @@ import LyceumCard from '../../components/ui/LyceumCard'
 import UserAvatar from '../../components/ui/UserAvatar'
 import type { ApiError } from '../../types/api'
 import { getUserDisplayName, getUserFullName } from '../../utils/user'
+import LecturedCourseCard from './components/LecturedCourseCard'
 import { useAdministratedLyceum } from './hooks/useAdministratedLyceum'
+import { useLecturedCourses } from './hooks/useLecturedCourses'
+import { useLecturedLyceums } from './hooks/useLecturedLyceums'
 import { useUserProfile } from './hooks/useUserProfile'
 
 const getProfileErrorMessage = (
@@ -33,6 +37,20 @@ const ProfilePage = () => {
   const email = user?.email ?? t('pages.profile.emptyValue')
   const hasLyceumAdministration = Boolean(user?.administratedLyceumId)
   const administratedLyceumId = user?.administratedLyceumId
+  const lecturedLyceumIds = useMemo(() => {
+    const rawIds = user?.lecturedLyceumIds ?? []
+    const normalizedIds = rawIds.filter(
+      (id): id is number => typeof id === 'number' && Number.isFinite(id),
+    )
+    return Array.from(new Set(normalizedIds))
+  }, [user?.lecturedLyceumIds])
+  const hasLecturedLyceum = lecturedLyceumIds.length > 0
+  const [lecturedLyceumIndex, setLecturedLyceumIndex] = useState(0)
+  const lecturerId = user?.id
+  const hasLecturedCourses = Boolean(
+    typeof lecturerId === 'number' &&
+      ((user?.lecturedCourseIds?.length ?? 0) > 0 || hasLecturedLyceum),
+  )
   const {
     data: administratedLyceum,
     isLoading: isAdministratedLyceumLoading,
@@ -40,6 +58,42 @@ const ProfilePage = () => {
   } = useAdministratedLyceum(administratedLyceumId, {
     enabled: Boolean(administratedLyceumId),
   })
+  const lecturedLyceumQueries = useLecturedLyceums(lecturedLyceumIds, {
+    enabled: hasLecturedLyceum,
+  })
+  const lecturedLyceumCount = lecturedLyceumIds.length
+  const activeLecturedQuery =
+    lecturedLyceumQueries[lecturedLyceumIndex] ?? null
+  const activeLecturedLyceum = activeLecturedQuery?.data
+  const isLecturedLyceumLoading =
+    activeLecturedQuery?.isLoading || activeLecturedQuery?.isFetching || false
+  const lecturedLyceumError = activeLecturedQuery?.error ?? null
+  const {
+    data: lecturedCourses = [],
+    isLoading: isLecturedCoursesLoading,
+    error: lecturedCoursesError,
+  } = useLecturedCourses(lecturerId, {
+    enabled: hasLecturedCourses,
+  })
+  const normalizedLecturedCourses = useMemo(() => {
+    if (lecturedCourses.length === 0) return []
+    const unique = new Map<number, (typeof lecturedCourses)[number]>()
+    const withoutId: typeof lecturedCourses = []
+    lecturedCourses.forEach((course) => {
+      if (typeof course.id === 'number') {
+        if (!unique.has(course.id)) {
+          unique.set(course.id, course)
+        }
+      } else {
+        withoutId.push(course)
+      }
+    })
+    return [...unique.values(), ...withoutId]
+  }, [lecturedCourses])
+  const lecturedCoursesCount = normalizedLecturedCourses.length
+  const [lecturedCourseIndex, setLecturedCourseIndex] = useState(0)
+  const activeLecturedCourse =
+    normalizedLecturedCourses[lecturedCourseIndex] ?? null
   const roleLabel = hasLyceumAdministration
     ? t('pages.profile.roles.lyceumAdmin')
     : user?.role
@@ -58,6 +112,45 @@ const ProfilePage = () => {
         : administratedLyceum?.name ??
           t('pages.profile.details.administratedLyceumUnknown')
     : t('pages.profile.emptyValue')
+
+  useEffect(() => {
+    if (lecturedLyceumIndex >= lecturedLyceumCount) {
+      setLecturedLyceumIndex(0)
+    }
+  }, [lecturedLyceumCount, lecturedLyceumIndex])
+
+  useEffect(() => {
+    if (lecturedCourseIndex >= lecturedCoursesCount) {
+      setLecturedCourseIndex(0)
+    }
+  }, [lecturedCourseIndex, lecturedCoursesCount])
+
+  const handleLecturedPrevious = () => {
+    if (lecturedLyceumCount <= 1) return
+    setLecturedLyceumIndex((prev) =>
+      (prev - 1 + lecturedLyceumCount) % lecturedLyceumCount,
+    )
+  }
+
+  const handleLecturedNext = () => {
+    if (lecturedLyceumCount <= 1) return
+    setLecturedLyceumIndex((prev) => (prev + 1) % lecturedLyceumCount)
+  }
+
+  const showLecturedControls = lecturedLyceumCount > 1
+  const showCourseControls = lecturedCoursesCount > 1
+
+  const handleLecturedCoursePrevious = () => {
+    if (lecturedCoursesCount <= 1) return
+    setLecturedCourseIndex((prev) =>
+      (prev - 1 + lecturedCoursesCount) % lecturedCoursesCount,
+    )
+  }
+
+  const handleLecturedCourseNext = () => {
+    if (lecturedCoursesCount <= 1) return
+    setLecturedCourseIndex((prev) => (prev + 1) % lecturedCoursesCount)
+  }
 
   return (
     <section className="space-y-6">
@@ -160,15 +253,137 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
-          {hasLyceumAdministration ? (
-            <LyceumCard
-              lyceum={administratedLyceum}
-              isLoading={isAdministratedLyceumLoading}
-              error={administratedLyceumError ?? null}
-              className="lg:ml-auto"
-              linkTo={`/lyceums/${administratedLyceumId}`}
-              linkLabel={t('components.lyceumCard.manageCta')}
-            />
+          {hasLyceumAdministration || hasLecturedLyceum || hasLecturedCourses ? (
+            <div
+              className={[
+                'lg:ml-auto',
+                hasLecturedCourses && (hasLyceumAdministration || hasLecturedLyceum)
+                  ? 'grid gap-4 lg:grid-cols-2 lg:items-start'
+                  : 'space-y-4',
+              ].join(' ')}
+            >
+              {hasLecturedCourses ? (
+                <div className="space-y-3">
+                  {showCourseControls ? (
+                    <div className="flex items-center justify-between text-xs text-slate-500">
+                      <span>
+                        {t('pages.profile.lecturedCourses.count', {
+                          current: lecturedCourseIndex + 1,
+                          total: lecturedCoursesCount,
+                        })}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handleLecturedCoursePrevious}
+                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
+                          aria-label={t(
+                            'pages.profile.lecturedCourses.previous',
+                          )}
+                        >
+                          {t('pages.profile.lecturedCourses.previous')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleLecturedCourseNext}
+                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
+                          aria-label={t('pages.profile.lecturedCourses.next')}
+                        >
+                          {t('pages.profile.lecturedCourses.next')}
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                  {isLecturedCoursesLoading ? (
+                    <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
+                      {t('pages.profile.lecturedCourses.loading')}
+                    </div>
+                  ) : lecturedCoursesError ? (
+                    <div
+                      className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
+                      role="alert"
+                    >
+                      {t('pages.profile.lecturedCourses.error')}
+                    </div>
+                  ) : lecturedCoursesCount === 0 ? (
+                    <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
+                      {t('pages.profile.lecturedCourses.empty')}
+                    </div>
+                  ) : activeLecturedCourse ? (
+                    <LecturedCourseCard
+                      course={activeLecturedCourse}
+                      lecturerName={displayName}
+                      additionalLecturers={Math.max(
+                        0,
+                        (activeLecturedCourse.lecturerIds?.length ?? 0) - 1,
+                      )}
+                      fallbackValue={t('pages.profile.emptyValue')}
+                    />
+                  ) : null}
+                </div>
+              ) : null}
+              {hasLyceumAdministration || hasLecturedLyceum ? (
+                <div className="space-y-4">
+                  {hasLyceumAdministration ? (
+                    <LyceumCard
+                      lyceum={administratedLyceum}
+                      isLoading={isAdministratedLyceumLoading}
+                      error={administratedLyceumError ?? null}
+                      linkTo={`/lyceums/${administratedLyceumId}`}
+                      linkLabel={t('components.lyceumCard.manageCta')}
+                    />
+                  ) : null}
+                  {hasLecturedLyceum ? (
+                    <div className="space-y-3">
+                      {showLecturedControls ? (
+                        <div className="flex items-center justify-between text-xs text-slate-500">
+                          <span>
+                            {t('pages.profile.lecturedLyceums.count', {
+                              current: lecturedLyceumIndex + 1,
+                              total: lecturedLyceumCount,
+                            })}
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={handleLecturedPrevious}
+                              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
+                              aria-label={t(
+                                'pages.profile.lecturedLyceums.previous',
+                              )}
+                            >
+                              {t('pages.profile.lecturedLyceums.previous')}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleLecturedNext}
+                              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
+                              aria-label={t(
+                                'pages.profile.lecturedLyceums.next',
+                              )}
+                            >
+                              {t('pages.profile.lecturedLyceums.next')}
+                            </button>
+                          </div>
+                        </div>
+                      ) : null}
+                      <LyceumCard
+                        lyceum={activeLecturedLyceum}
+                        isLoading={isLecturedLyceumLoading}
+                        error={lecturedLyceumError}
+                        linkTo={
+                          activeLecturedLyceum?.id
+                            ? `/lyceums/${activeLecturedLyceum.id}`
+                            : undefined
+                        }
+                        title={t('components.lyceumCard.lecturerTitle')}
+                        subtitle={t('components.lyceumCard.lecturerSubtitle')}
+                      />
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
           ) : null}
         </div>
       ) : (

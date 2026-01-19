@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useToast } from '../../../components/feedback/ToastContext'
@@ -20,30 +20,36 @@ import { env } from '../../../constants/env'
 import type { ApiError } from '../../../types/api'
 import type {
   CourseAgeGroup,
+  CourseImageResponse,
   CourseImageRole,
-  CourseRequest,
   CourseSchedule,
   CourseScheduleDayOfWeek,
   CourseScheduleRecurrence,
   CourseScheduleSlot,
   CourseScheduleSpecialCase,
   CourseType,
+  CourseUpdateRequest,
 } from '../../../types/courses'
-import { uploadFileToS3 } from '../../../services/s3'
+import { resolveCourseImageUrl } from '../../../utils/courseImages'
 import { getUserDisplayName } from '../../../utils/user'
 import {
   getCourseCreateSchema,
   type CourseCreateFormValues,
 } from '../../../validations/courses'
+import { uploadFileToS3 } from '../../../services/s3'
 import { useUserProfile } from '../../Profile/hooks/useUserProfile'
 import { lyceumCoursesQueryKey } from '../../Lyceums/hooks/useLyceumCourses'
-import { useLyceum } from '../../Lyceums/hooks/useLyceum'
 import { useLyceumLecturers } from '../../Lyceums/hooks/useLyceumLecturers'
-import { courseDetailQueryKey } from '../hooks/useCourse'
-import { useCreateCourseMutation } from '../hooks/useCreateCourseMutation'
+import {
+  courseImagesQueryKey,
+  useCourseImages,
+} from '../hooks/useCourseImages'
+import { courseDetailQueryKey, useCourse } from '../hooks/useCourse'
+import { useDeleteCourseImageMutation } from '../hooks/useDeleteCourseImageMutation'
 import { useRegisterCourseImageMutation } from '../hooks/useRegisterCourseImageMutation'
+import { useUpdateCourseMutation } from '../hooks/useUpdateCourseMutation'
 
-const getCreateCourseLoadErrorMessage = (
+const getCourseEditLoadErrorMessage = (
   error: ApiError | null,
   t: (key: string) => string,
 ) => {
@@ -54,10 +60,10 @@ const getCreateCourseLoadErrorMessage = (
   if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
     return t('errors.auth.forbidden')
   }
-  return t('pages.shkoli.create.loadFailed')
+  return t('pages.shkoli.edit.loadFailed')
 }
 
-const getCreateCourseErrorMessage = (
+const getCourseUpdateErrorMessage = (
   error: ApiError | null,
   t: (key: string) => string,
 ) => {
@@ -68,7 +74,35 @@ const getCreateCourseErrorMessage = (
   if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
     return t('errors.auth.forbidden')
   }
-  return t('errors.courses.createFailed')
+  return t('errors.courses.updateFailed')
+}
+
+const getCourseImagesErrorMessage = (
+  error: ApiError | null,
+  t: (key: string) => string,
+) => {
+  if (!error) return null
+  if (error.kind === 'network') {
+    return t('errors.network')
+  }
+  if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
+    return t('errors.auth.forbidden')
+  }
+  return t('pages.shkoli.edit.images.error')
+}
+
+const getCourseImageActionErrorMessage = (
+  error: ApiError | null,
+  t: (key: string) => string,
+) => {
+  if (!error) return null
+  if (error.kind === 'network') {
+    return t('errors.network')
+  }
+  if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
+    return t('errors.auth.forbidden')
+  }
+  return t('errors.generic')
 }
 
 const normalizeOptionalText = (value: string) => {
@@ -203,48 +237,61 @@ const isApiError = (value: unknown): value is ApiError =>
   'status' in value &&
   'kind' in value
 
-const CourseCreatePage = () => {
+const CourseEditPage = () => {
   const { t, i18n } = useTranslation()
-  const [searchParams] = useSearchParams()
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { showToast } = useToast()
   const queryClient = useQueryClient()
   const schema = useMemo(() => getCourseCreateSchema(t), [t])
   const timePickerLang = i18n.language === 'bg' ? 'bg' : 'en-GB'
 
-  const lyceumIdParam = searchParams.get('lyceumId')
-  const lyceumId = lyceumIdParam ? Number(lyceumIdParam) : null
-  const isValidLyceumId = lyceumId != null && Number.isFinite(lyceumId)
+  const courseId = Number(id)
+  const isValidId = Number.isFinite(courseId)
 
   const {
-    data: lyceum,
-    isLoading: isLyceumLoading,
-    error: lyceumError,
-  } = useLyceum(lyceumId ?? undefined, { enabled: isValidLyceumId })
-  const {
-    data: lecturers,
-    isLoading: isLecturersLoading,
-    error: lecturersError,
-  } = useLyceumLecturers(lyceumId ?? undefined, { enabled: isValidLyceumId })
+    data: course,
+    isLoading: isCourseLoading,
+    error: courseError,
+  } = useCourse(courseId, { enabled: isValidId })
   const {
     data: user,
     isLoading: isUserLoading,
     error: userError,
   } = useUserProfile()
 
-  const isUserAdminForLyceum =
-    lyceumId != null &&
-    (user?.role === 'ADMIN' || user?.administratedLyceumId === lyceumId)
-  const isLyceumLecturer = Boolean(
-    user?.id != null &&
-      lecturers?.some((lecturer) => lecturer.id === user.id),
+  const lyceumId = course?.lyceumId
+  const {
+    data: lecturers,
+    isLoading: isLecturersLoading,
+    error: lecturersError,
+  } = useLyceumLecturers(lyceumId, { enabled: Boolean(lyceumId) })
+
+  const isCourseLecturer = Boolean(
+    user?.id != null && course?.lecturerIds?.includes(user.id),
   )
-  const hasCourseAccess = Boolean(
-    lyceumId != null && (isUserAdminForLyceum || isLyceumLecturer),
+  const isLyceumAdministrator =
+    user?.administratedLyceumId != null &&
+    lyceumId != null &&
+    user.administratedLyceumId === lyceumId
+  const hasEditAccess = Boolean(
+    course &&
+      (user?.role === 'ADMIN' ||
+        isLyceumAdministrator ||
+        isCourseLecturer),
   )
 
-  const mutation = useCreateCourseMutation()
+  const {
+    data: courseImages = [],
+    isLoading: isImagesLoading,
+    error: courseImagesError,
+  } = useCourseImages(courseId, {
+    enabled: isValidId && hasEditAccess,
+  })
+
+  const mutation = useUpdateCourseMutation()
   const registerImageMutation = useRegisterCourseImageMutation()
+  const deleteImageMutation = useDeleteCourseImageMutation()
   const [logoImage, setLogoImage] = useState<PendingCourseImage | null>(
     null,
   )
@@ -269,12 +316,12 @@ const CourseCreatePage = () => {
     mainImage: null as PendingCourseImage | null,
     galleryImages: [] as PendingCourseImage[],
   })
-
   const {
     register,
     handleSubmit,
     control,
     setValue,
+    reset,
     watch,
     formState: { errors },
   } = useForm<CourseCreateFormValues>({
@@ -517,12 +564,16 @@ const CourseCreatePage = () => {
     return t('errors.courses.imageUploadFailed')
   }
 
-  const uploadCourseImages = async (courseId: number) => {
+  const uploadCourseImages = async (
+    selectedCourseId: number,
+    options: { skipRoles?: Set<CourseImageRole> } = {},
+  ) => {
+    const { skipRoles } = options
     const images: PendingCourseImage[] = [
       ...(logoImage ? [logoImage] : []),
       ...(mainImage ? [mainImage] : []),
       ...galleryImages,
-    ]
+    ].filter((image) => !skipRoles || !skipRoles.has(image.role))
 
     if (images.length === 0) {
       return { uploadedCount: 0, failedCount: 0 }
@@ -546,7 +597,7 @@ const CourseCreatePage = () => {
               ? galleryImages.findIndex((item) => item.id === image.id)
               : undefined
           const s3Key = buildCourseImageS3Key(
-            courseId,
+            selectedCourseId,
             image.role,
             image.file.name,
             orderIndex,
@@ -559,7 +610,7 @@ const CourseCreatePage = () => {
           })
 
           await registerImageMutation.mutateAsync({
-            courseId,
+            courseId: selectedCourseId,
             data: {
               s3Key,
               role: image.role,
@@ -594,6 +645,99 @@ const CourseCreatePage = () => {
     return { uploadedCount, failedCount }
   }
 
+  const getDeleteErrorMessage = (error: unknown) => {
+    if (isApiError(error)) {
+      return (
+        getCourseImageActionErrorMessage(error, t) ?? t('errors.generic')
+      )
+    }
+    return t('errors.generic')
+  }
+
+  const deleteExistingImages = async (
+    selectedCourseId: number,
+    imagesToDelete: CourseImageResponse[],
+  ) => {
+    const deletable = imagesToDelete.filter(
+      (image): image is CourseImageResponse & { id: number } =>
+        typeof image.id === 'number',
+    )
+
+    if (deletable.length === 0) {
+      return { ok: true, deleted: 0 }
+    }
+
+    for (const image of deletable) {
+      try {
+        await deleteImageMutation.mutateAsync({
+          courseId: selectedCourseId,
+          imageId: image.id,
+        })
+      } catch (error) {
+        return {
+          ok: false,
+          deleted: 0,
+          errorMessage: getDeleteErrorMessage(error),
+        }
+      }
+    }
+
+    return { ok: true, deleted: deletable.length }
+  }
+
+  const handleDeleteExistingImage = (image: CourseImageResponse) => {
+    if (!image.id || !isValidId) return
+    deleteImageMutation.mutate(
+      { courseId, imageId: image.id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: courseImagesQueryKey(courseId),
+          })
+        },
+      },
+    )
+  }
+
+  useEffect(() => {
+    if (!course) return
+
+    reset({
+      name: course.name ?? '',
+      description: course.description ?? '',
+      type: course.type ?? '',
+      ageGroupList: course.ageGroupList ?? [],
+      price:
+        typeof course.price === 'number' ? course.price.toString() : '',
+      isInLyceum: (course.address ?? '').trim() === '',
+      address: course.address ?? '',
+      achievements: course.achievements ?? '',
+      facebookLink: course.facebookLink ?? '',
+      websiteLink: course.websiteLink ?? '',
+      lecturerIds:
+        course.lecturerIds?.map((value) => value.toString()) ?? [],
+      scheduleSlots:
+        course.schedule?.slots?.map((slot) => ({
+          recurrence: slot.recurrence ?? 'WEEKLY',
+          dayOfWeek: slot.dayOfWeek ?? '',
+          dayOfMonth:
+            typeof slot.dayOfMonth === 'number'
+              ? slot.dayOfMonth.toString()
+              : '',
+          startTime: slot.startTime ?? '',
+          singleClassDurationMinutes:
+            typeof slot.singleClassDurationMinutes === 'number'
+              ? slot.singleClassDurationMinutes.toString()
+              : '',
+        })) ?? [],
+      scheduleSpecialCases:
+        course.schedule?.specialCases?.map((entry) => ({
+          date: entry.date ?? '',
+          cancelled: entry.cancelled ?? false,
+          reason: entry.reason ?? '',
+        })) ?? [],
+    })
+  }, [course, reset])
   useEffect(() => {
     scheduleSlotValues.forEach((slot, index) => {
       if (!slot) return
@@ -677,7 +821,7 @@ const CourseCreatePage = () => {
     'inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:text-slate-400 sm:w-auto'
 
   const onSubmit = async (values: CourseCreateFormValues) => {
-    if (!isValidLyceumId || !hasCourseAccess) return
+    if (!isValidId || !course || !hasEditAccess) return
 
     const uniqueAgeGroups = Array.from(
       new Set(values.ageGroupList),
@@ -689,13 +833,12 @@ const CourseCreatePage = () => {
     const schedule = buildCourseSchedule(values)
     const isInLyceumValue = values.isInLyceum ?? true
 
-    const payload: CourseRequest = {
+    const payload: CourseUpdateRequest = {
       name: values.name.trim(),
       description: values.description.trim(),
       type: values.type as CourseType,
       ageGroupList: uniqueAgeGroups,
       schedule,
-      lyceumId,
       address: isInLyceumValue
         ? undefined
         : normalizeOptionalText(values.address),
@@ -703,31 +846,82 @@ const CourseCreatePage = () => {
       achievements: normalizeOptionalText(values.achievements),
       facebookLink: normalizeOptionalText(values.facebookLink),
       websiteLink: normalizeOptionalText(values.websiteLink),
-      lecturerIds: lecturerIds.length > 0 ? lecturerIds : undefined,
+      lecturerIds,
     }
 
     try {
-      const data = await mutation.mutateAsync(payload)
+      const data = await mutation.mutateAsync({ id: courseId, payload })
+      queryClient.setQueryData(courseDetailQueryKey(courseId), data)
       if (lyceumId != null) {
         queryClient.invalidateQueries({
           queryKey: lyceumCoursesQueryKey(lyceumId),
         })
       }
 
-      const courseId = data.id
-      const imageResult =
-        courseId != null
-          ? await uploadCourseImages(courseId)
-          : { uploadedCount: 0, failedCount: 0 }
+      const skipRoles = new Set<CourseImageRole>()
+      let didDeleteImages = false
 
-      if (courseId != null) {
+      if (logoImage) {
+        const deleteResult = await deleteExistingImages(
+          courseId,
+          logoImages,
+        )
+        if (!deleteResult.ok) {
+          const errorMessage =
+            deleteResult.errorMessage ?? t('errors.generic')
+          skipRoles.add('LOGO')
+          updateImageState(logoImage.id, {
+            status: 'error',
+            error: errorMessage,
+          })
+          showToast({
+            message: errorMessage,
+            tone: 'error',
+          })
+        } else if (deleteResult.deleted > 0) {
+          didDeleteImages = true
+        }
+      }
+
+      if (mainImage) {
+        const deleteResult = await deleteExistingImages(
+          courseId,
+          mainImages,
+        )
+        if (!deleteResult.ok) {
+          const errorMessage =
+            deleteResult.errorMessage ?? t('errors.generic')
+          skipRoles.add('MAIN')
+          updateImageState(mainImage.id, {
+            status: 'error',
+            error: errorMessage,
+          })
+          showToast({
+            message: errorMessage,
+            tone: 'error',
+          })
+        } else if (deleteResult.deleted > 0) {
+          didDeleteImages = true
+        }
+      }
+
+      const imageResult = await uploadCourseImages(courseId, {
+        skipRoles,
+      })
+      const hasImageChanges =
+        didDeleteImages || imageResult.uploadedCount > 0
+
+      if (hasImageChanges) {
+        queryClient.invalidateQueries({
+          queryKey: courseImagesQueryKey(courseId),
+        })
         queryClient.invalidateQueries({
           queryKey: courseDetailQueryKey(courseId),
         })
       }
 
       showToast({
-        message: t('feedback.courses.createSuccess'),
+        message: t('feedback.courses.updateSuccess'),
         tone: 'success',
       })
 
@@ -738,34 +932,54 @@ const CourseCreatePage = () => {
         })
       }
 
-      if (courseId != null) {
-        navigate(`/shkoli/${courseId}`, { replace: true })
-      } else if (lyceumId != null) {
-        navigate(`/lyceums/${lyceumId}`, { replace: true })
-      } else {
-        navigate('/shkoli', { replace: true })
-      }
+      navigate(`/shkoli/${courseId}`, { replace: true })
     } catch {
       // handled by mutation state
     }
   }
 
-  const isAccessLoading =
-    isValidLyceumId && !isUserAdminForLyceum && isLecturersLoading
-  const isLoading = isLyceumLoading || isUserLoading || isAccessLoading
-  const loadErrorMessage = getCreateCourseLoadErrorMessage(
-    lyceumError ??
-      userError ??
-      (!isUserAdminForLyceum ? lecturersError ?? null : null),
+  const isLoading = isCourseLoading || isUserLoading
+  const loadErrorMessage = getCourseEditLoadErrorMessage(
+    courseError ?? userError ?? null,
     t,
   )
-  const submitErrorMessage = getCreateCourseErrorMessage(
+  const imagesErrorMessage = getCourseImagesErrorMessage(
+    courseImagesError ?? null,
+    t,
+  )
+  const imageActionErrorMessage = getCourseImageActionErrorMessage(
+    deleteImageMutation.error ?? null,
+    t,
+  )
+  const submitErrorMessage = getCourseUpdateErrorMessage(
     mutation.error ?? null,
     t,
   )
   const isSubmitting = mutation.isPending || isUploadingImages
+  const logoImages = courseImages.filter(
+    (image) => image.role === 'LOGO',
+  )
+  const mainImages = courseImages.filter(
+    (image) => image.role === 'MAIN',
+  )
+  const existingGalleryImages = [...courseImages]
+    .filter((image) => image.role === 'GALLERY')
+    .sort(
+      (a, b) =>
+        (a.orderIndex ?? Number.MAX_SAFE_INTEGER) -
+        (b.orderIndex ?? Number.MAX_SAFE_INTEGER),
+    )
+  const isDeletePending = deleteImageMutation.isPending
+  const getExistingImageKey = (
+    image: CourseImageResponse,
+    index: number,
+  ) =>
+    image.id ??
+    image.url ??
+    image.s3Key ??
+    `${image.role ?? 'image'}-${index}`
 
-  const pageTitle = `${t('pages.shkoli.create.title')} | ${t('app.title')}`
+  const pageTitle = `${t('pages.shkoli.edit.title')} | ${t('app.title')}`
 
   return (
     <section className="space-y-6">
@@ -775,36 +989,33 @@ const CourseCreatePage = () => {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">
-            {t('pages.shkoli.create.title')}
+            {t('pages.shkoli.edit.title')}
           </h1>
           <p className="text-sm text-slate-600">
-            {lyceum?.name
-              ? t('pages.shkoli.create.subtitleWithLyceum', {
-                  name: lyceum.name,
-                })
-              : t('pages.shkoli.create.subtitle')}
+            {t('pages.shkoli.edit.subtitle')}
           </p>
         </div>
         <Link
-          to={isValidLyceumId ? `/lyceums/${lyceumId}` : '/shkoli'}
+          to={isValidId ? `/shkoli/${courseId}` : '/shkoli'}
           className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 sm:w-auto"
         >
-          {isValidLyceumId
-            ? t('pages.shkoli.create.backLink')
-            : t('pages.shkoli.create.backFallback')}
+          {t('pages.shkoli.edit.back')}
         </Link>
       </div>
-      {!isValidLyceumId ? (
+      {!isValidId ? (
         <div
           className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
           role="alert"
         >
-          {t('pages.shkoli.create.invalidLyceum')}
+          {t('pages.shkoli.edit.invalidId')}
         </div>
       ) : isLoading ? (
         <div className="space-y-4">
           <div className="h-32 animate-pulse rounded-2xl bg-slate-200" />
           <div className="h-60 animate-pulse rounded-2xl bg-slate-200" />
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
+            {t('pages.shkoli.edit.loading')}
+          </div>
         </div>
       ) : loadErrorMessage ? (
         <div
@@ -813,16 +1024,16 @@ const CourseCreatePage = () => {
         >
           {loadErrorMessage}
         </div>
-      ) : !hasCourseAccess ? (
+      ) : !course ? (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-700 shadow-sm">
+          {t('pages.shkoli.edit.notFound')}
+        </div>
+      ) : !hasEditAccess ? (
         <div
           className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
           role="alert"
         >
           {t('errors.auth.forbidden')}
-        </div>
-      ) : !lyceum ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-700 shadow-sm">
-          {t('pages.shkoli.create.notFound')}
         </div>
       ) : (
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -834,19 +1045,6 @@ const CourseCreatePage = () => {
               {submitErrorMessage}
             </div>
           ) : null}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              {t('pages.shkoli.create.lyceumLabel')}
-            </p>
-            <p className="mt-2 text-lg font-semibold text-slate-900">
-              {lyceum.name ?? t('pages.shkoli.create.lyceumFallback')}
-            </p>
-            <p className="mt-1 text-sm text-slate-600">
-              {[lyceum.town, lyceum.address].filter(Boolean).join(', ') ||
-                t('pages.shkoli.create.lyceumFallback')}
-            </p>
-          </div>
-
           <fieldset className={fieldsetClassName}>
             <legend className={legendClassName}>
               {t('pages.shkoli.create.form.sections.overview')}
@@ -1295,302 +1493,499 @@ const CourseCreatePage = () => {
 
           <fieldset className={fieldsetClassName}>
             <legend className={legendClassName}>
-              {t('pages.shkoli.create.form.sections.images')}
+              {t('pages.shkoli.edit.images.title')}
             </legend>
-            <p className="text-sm text-slate-600">
-              {t('pages.shkoli.create.images.helper', {
-                size: COURSE_IMAGE_MAX_SIZE_MB,
-                formats: allowedImageTypesLabel,
-              })}
-            </p>
-            <div className="grid gap-4 pt-2 md:grid-cols-2">
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-slate-700">
-                    {t('pages.shkoli.create.images.logoLabel')}
-                  </p>
-                  {logoImage ? (
-                    <button
-                      type="button"
-                      onClick={() => removeSingleImage('LOGO')}
-                      disabled={isSubmitting}
-                      className="text-xs font-semibold text-rose-600 transition hover:text-rose-700 disabled:cursor-not-allowed disabled:text-rose-300"
-                    >
-                      {t('pages.shkoli.create.images.remove')}
-                    </button>
-                  ) : null}
-                </div>
-                <input
-                  type="file"
-                  accept={COURSE_IMAGE_ALLOWED_MIME_TYPES.join(',')}
-                  onChange={(event) =>
-                    handleSingleImageSelect(event, 'LOGO')
-                  }
-                  disabled={isSubmitting}
-                  className="mt-3 w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-100 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-slate-700 hover:file:bg-slate-200"
-                />
-                {logoImageError ? (
-                  <span className={errorTextClassName}>{logoImageError}</span>
-                ) : null}
-                {logoImage ? (
-                  <div className="mt-4 flex gap-3">
-                    <img
-                      src={logoImage.previewUrl}
-                      alt={t('pages.shkoli.create.images.previewAlt')}
-                      className="h-20 w-20 rounded-xl border border-slate-200 object-cover"
-                    />
-                    <div className="flex-1 space-y-2">
-                      <label className="text-xs font-medium text-slate-600">
-                        {t('pages.shkoli.create.images.altTextLabel')}
-                        <input
-                          type="text"
-                          value={logoImage.altText}
-                          onChange={(event) =>
-                            setLogoImage((prev) =>
-                              prev
-                                ? { ...prev, altText: event.target.value }
-                                : prev,
-                            )
-                          }
-                          disabled={isSubmitting}
-                          className={inputClassName(false)}
-                          placeholder={t(
-                            'pages.shkoli.create.images.altTextPlaceholder',
-                          )}
-                        />
-                      </label>
-                      <div className="flex flex-wrap gap-2 text-xs text-slate-500">
-                        {logoImage.width && logoImage.height ? (
-                          <span>
-                            {logoImage.width}x{logoImage.height}px
-                          </span>
-                        ) : null}
-                        <span>{formatImageSize(logoImage.file.size)}</span>
-                        <span>{logoImage.mimeType || logoImage.file.type}</span>
-                      </div>
-                      <p
-                        className={`text-xs font-medium ${getImageStatusClassName(logoImage)}`}
-                      >
-                        {getImageStatusLabel(logoImage)}
-                      </p>
-                      {logoImage.status === 'uploading' ? (
-                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                          <div
-                            className="h-full rounded-full bg-brand transition-all"
-                            style={{
-                              width: `${logoImage.progress}%`,
-                            }}
-                          />
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                ) : (
-                  <p className="mt-2 text-xs text-slate-500">
-                    {t('pages.shkoli.create.images.empty')}
-                  </p>
-                )}
-              </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-slate-700">
-                    {t('pages.shkoli.create.images.mainLabel')}
-                  </p>
-                  {mainImage ? (
-                    <button
-                      type="button"
-                      onClick={() => removeSingleImage('MAIN')}
-                      disabled={isSubmitting}
-                      className="text-xs font-semibold text-rose-600 transition hover:text-rose-700 disabled:cursor-not-allowed disabled:text-rose-300"
-                    >
-                      {t('pages.shkoli.create.images.remove')}
-                    </button>
-                  ) : null}
-                </div>
-                <input
-                  type="file"
-                  accept={COURSE_IMAGE_ALLOWED_MIME_TYPES.join(',')}
-                  onChange={(event) =>
-                    handleSingleImageSelect(event, 'MAIN')
-                  }
-                  disabled={isSubmitting}
-                  className="mt-3 w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-100 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-slate-700 hover:file:bg-slate-200"
-                />
-                {mainImageError ? (
-                  <span className={errorTextClassName}>{mainImageError}</span>
-                ) : null}
-                {mainImage ? (
-                  <div className="mt-4 flex gap-3">
-                    <img
-                      src={mainImage.previewUrl}
-                      alt={t('pages.shkoli.create.images.previewAlt')}
-                      className="h-20 w-20 rounded-xl border border-slate-200 object-cover"
-                    />
-                    <div className="flex-1 space-y-2">
-                      <label className="text-xs font-medium text-slate-600">
-                        {t('pages.shkoli.create.images.altTextLabel')}
-                        <input
-                          type="text"
-                          value={mainImage.altText}
-                          onChange={(event) =>
-                            setMainImage((prev) =>
-                              prev
-                                ? { ...prev, altText: event.target.value }
-                                : prev,
-                            )
-                          }
-                          disabled={isSubmitting}
-                          className={inputClassName(false)}
-                          placeholder={t(
-                            'pages.shkoli.create.images.altTextPlaceholder',
-                          )}
-                        />
-                      </label>
-                      <div className="flex flex-wrap gap-2 text-xs text-slate-500">
-                        {mainImage.width && mainImage.height ? (
-                          <span>
-                            {mainImage.width}x{mainImage.height}px
-                          </span>
-                        ) : null}
-                        <span>{formatImageSize(mainImage.file.size)}</span>
-                        <span>{mainImage.mimeType || mainImage.file.type}</span>
-                      </div>
-                      <p
-                        className={`text-xs font-medium ${getImageStatusClassName(mainImage)}`}
-                      >
-                        {getImageStatusLabel(mainImage)}
-                      </p>
-                      {mainImage.status === 'uploading' ? (
-                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                          <div
-                            className="h-full rounded-full bg-brand transition-all"
-                            style={{
-                              width: `${mainImage.progress}%`,
-                            }}
-                          />
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                ) : (
-                  <p className="mt-2 text-xs text-slate-500">
-                    {t('pages.shkoli.create.images.empty')}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            {isImagesLoading ? (
+              <p className="text-sm text-slate-600">
+                {t('pages.shkoli.edit.images.loading')}
+              </p>
+            ) : imagesErrorMessage ? (
+              <p className="text-sm text-rose-600">{imagesErrorMessage}</p>
+            ) : courseImages.length === 0 ? (
+              <p className="text-sm text-slate-600">
+                {t('pages.shkoli.edit.images.empty')}
+              </p>
+            ) : (
+              <div className="space-y-4">
                 <div>
-                  <p className="text-sm font-semibold text-slate-700">
-                    {t('pages.shkoli.create.images.galleryLabel')}
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    {t('pages.shkoli.edit.images.currentLogo')}
                   </p>
-                  <p className="text-xs text-slate-500">
-                    {t('pages.shkoli.create.images.galleryHint')}
-                  </p>
+                  {logoImages.length > 0 ? (
+                    <div className="mt-2 flex flex-wrap gap-3">
+                      {logoImages.map((image, index) => {
+                        const imageUrl = resolveCourseImageUrl(image)
+                        const altText =
+                          image.altText ??
+                          t('pages.shkoli.edit.images.altFallback')
+                        return (
+                          <div
+                            key={getExistingImageKey(image, index)}
+                            className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3"
+                          >
+                            {imageUrl ? (
+                              <img
+                                src={imageUrl}
+                                alt={altText}
+                                className="h-16 w-16 rounded-xl border border-slate-200 object-cover"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-[10px] text-slate-500">
+                                {t('pages.shkoli.edit.images.unavailable')}
+                              </div>
+                            )}
+                            <div className="text-xs text-slate-600">
+                              <p className="font-semibold text-slate-800">
+                                {altText}
+                              </p>
+                              {image.mimeType ? (
+                                <p>{image.mimeType}</p>
+                              ) : null}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteExistingImage(image)}
+                              disabled={isDeletePending || isSubmitting}
+                              className="ml-auto text-xs font-semibold text-rose-600 transition hover:text-rose-700 disabled:cursor-not-allowed disabled:text-rose-300"
+                            >
+                              {t('pages.shkoli.create.images.remove')}
+                            </button>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-sm text-slate-600">
+                      {t('pages.shkoli.edit.images.none')}
+                    </p>
+                  )}
                 </div>
-                <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900">
-                  {t('pages.shkoli.create.images.addGallery')}
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    {t('pages.shkoli.edit.images.currentMain')}
+                  </p>
+                  {mainImages.length > 0 ? (
+                    <div className="mt-2 flex flex-wrap gap-3">
+                      {mainImages.map((image, index) => {
+                        const imageUrl = resolveCourseImageUrl(image)
+                        const altText =
+                          image.altText ??
+                          t('pages.shkoli.edit.images.altFallback')
+                        return (
+                          <div
+                            key={getExistingImageKey(image, index)}
+                            className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3"
+                          >
+                            {imageUrl ? (
+                              <img
+                                src={imageUrl}
+                                alt={altText}
+                                className="h-16 w-24 rounded-xl border border-slate-200 object-cover"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className="flex h-16 w-24 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-[10px] text-slate-500">
+                                {t('pages.shkoli.edit.images.unavailable')}
+                              </div>
+                            )}
+                            <div className="text-xs text-slate-600">
+                              <p className="font-semibold text-slate-800">
+                                {altText}
+                              </p>
+                              {image.mimeType ? (
+                                <p>{image.mimeType}</p>
+                              ) : null}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteExistingImage(image)}
+                              disabled={isDeletePending || isSubmitting}
+                              className="ml-auto text-xs font-semibold text-rose-600 transition hover:text-rose-700 disabled:cursor-not-allowed disabled:text-rose-300"
+                            >
+                              {t('pages.shkoli.create.images.remove')}
+                            </button>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-sm text-slate-600">
+                      {t('pages.shkoli.edit.images.none')}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    {t('pages.shkoli.edit.images.currentGallery')}
+                  </p>
+                  {existingGalleryImages.length > 0 ? (
+                    <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                      {existingGalleryImages.map((image, index) => {
+                        const imageUrl = resolveCourseImageUrl(image)
+                        const altText =
+                          image.altText ??
+                          t('pages.shkoli.edit.images.altFallback')
+                        return (
+                          <div
+                            key={getExistingImageKey(image, index)}
+                            className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3"
+                          >
+                            {imageUrl ? (
+                              <img
+                                src={imageUrl}
+                                alt={altText}
+                                className="h-16 w-16 rounded-xl border border-slate-200 object-cover"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-[10px] text-slate-500">
+                                {t('pages.shkoli.edit.images.unavailable')}
+                              </div>
+                            )}
+                            <div className="text-xs text-slate-600">
+                              <p className="font-semibold text-slate-800">
+                                {altText}
+                              </p>
+                              {typeof image.orderIndex === 'number' ? (
+                                <p>
+                                  {t('pages.shkoli.edit.images.order', {
+                                    index: image.orderIndex + 1,
+                                  })}
+                                </p>
+                              ) : null}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteExistingImage(image)}
+                              disabled={isDeletePending || isSubmitting}
+                              className="ml-auto text-xs font-semibold text-rose-600 transition hover:text-rose-700 disabled:cursor-not-allowed disabled:text-rose-300"
+                            >
+                              {t('pages.shkoli.create.images.remove')}
+                            </button>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-sm text-slate-600">
+                      {t('pages.shkoli.edit.images.none')}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+            {imageActionErrorMessage ? (
+              <p className="mt-3 text-sm text-rose-600">
+                {imageActionErrorMessage}
+              </p>
+            ) : null}
+            <div className="mt-6">
+              <p className="text-sm text-slate-600">
+                {t('pages.shkoli.create.images.helper', {
+                  size: COURSE_IMAGE_MAX_SIZE_MB,
+                  formats: allowedImageTypesLabel,
+                })}
+              </p>
+              <div className="grid gap-4 pt-2 md:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-slate-700">
+                      {t('pages.shkoli.create.images.logoLabel')}
+                    </p>
+                    {logoImage ? (
+                      <button
+                        type="button"
+                        onClick={() => removeSingleImage('LOGO')}
+                        disabled={isSubmitting}
+                        className="text-xs font-semibold text-rose-600 transition hover:text-rose-700 disabled:cursor-not-allowed disabled:text-rose-300"
+                      >
+                        {t('pages.shkoli.create.images.remove')}
+                      </button>
+                    ) : null}
+                  </div>
                   <input
                     type="file"
                     accept={COURSE_IMAGE_ALLOWED_MIME_TYPES.join(',')}
-                    multiple
-                    onChange={handleGallerySelect}
+                    onChange={(event) =>
+                      handleSingleImageSelect(event, 'LOGO')
+                    }
                     disabled={isSubmitting}
-                    className="sr-only"
+                    className="mt-3 w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-100 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-slate-700 hover:file:bg-slate-200"
                   />
-                </label>
-              </div>
-              {galleryImageError ? (
-                <span className={errorTextClassName}>
-                  {galleryImageError}
-                </span>
-              ) : null}
-              {galleryImages.length === 0 ? (
-                <p className="mt-3 text-xs text-slate-500">
-                  {t('pages.shkoli.create.images.galleryEmpty')}
-                </p>
-              ) : (
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  {galleryImages.map((image, index) => (
-                    <div
-                      key={image.id}
-                      className="rounded-xl border border-slate-200 p-3"
-                    >
-                      <div className="flex items-start gap-3">
-                        <img
-                          src={image.previewUrl}
-                          alt={t('pages.shkoli.create.images.previewAlt')}
-                          className="h-16 w-16 rounded-lg border border-slate-200 object-cover"
-                        />
-                        <div className="flex-1 space-y-2">
-                          <p className="text-xs font-semibold text-slate-600">
-                            {t('pages.shkoli.create.images.galleryItem', {
-                              index: index + 1,
-                            })}
-                          </p>
-                          <label className="text-xs font-medium text-slate-600">
-                            {t('pages.shkoli.create.images.altTextLabel')}
-                            <input
-                              type="text"
-                              value={image.altText}
-                              onChange={(event) =>
-                                setGalleryImages((prev) =>
-                                  prev.map((item) =>
-                                    item.id === image.id
-                                      ? {
-                                          ...item,
-                                          altText: event.target.value,
-                                        }
-                                      : item,
-                                  ),
-                                )
-                              }
-                              disabled={isSubmitting}
-                              className={inputClassName(false)}
-                              placeholder={t(
-                                'pages.shkoli.create.images.altTextPlaceholder',
-                              )}
-                            />
-                          </label>
-                          <div className="flex flex-wrap gap-2 text-xs text-slate-500">
-                            {image.width && image.height ? (
-                              <span>
-                                {image.width}x{image.height}px
-                              </span>
-                            ) : null}
-                            <span>{formatImageSize(image.file.size)}</span>
-                            <span>{image.mimeType || image.file.type}</span>
-                          </div>
-                          <p
-                            className={`text-xs font-medium ${getImageStatusClassName(image)}`}
-                          >
-                            {getImageStatusLabel(image)}
-                          </p>
-                          {image.status === 'uploading' ? (
-                            <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                              <div
-                                className="h-full rounded-full bg-brand transition-all"
-                                style={{
-                                  width: `${image.progress}%`,
-                                }}
-                              />
-                            </div>
+                  {logoImageError ? (
+                    <span className={errorTextClassName}>
+                      {logoImageError}
+                    </span>
+                  ) : null}
+                  {logoImage ? (
+                    <div className="mt-4 flex gap-3">
+                      <img
+                        src={logoImage.previewUrl}
+                        alt={t('pages.shkoli.create.images.previewAlt')}
+                        className="h-20 w-20 rounded-xl border border-slate-200 object-cover"
+                      />
+                      <div className="flex-1 space-y-2">
+                        <label className="text-xs font-medium text-slate-600">
+                          {t('pages.shkoli.create.images.altTextLabel')}
+                          <input
+                            type="text"
+                            value={logoImage.altText}
+                            onChange={(event) =>
+                              setLogoImage((prev) =>
+                                prev
+                                  ? { ...prev, altText: event.target.value }
+                                  : prev,
+                              )
+                            }
+                            disabled={isSubmitting}
+                            className={inputClassName(false)}
+                            placeholder={t(
+                              'pages.shkoli.create.images.altTextPlaceholder',
+                            )}
+                          />
+                        </label>
+                        <div className="flex flex-wrap gap-2 text-xs text-slate-500">
+                          {logoImage.width && logoImage.height ? (
+                            <span>
+                              {logoImage.width}x{logoImage.height}px
+                            </span>
                           ) : null}
+                          <span>{formatImageSize(logoImage.file.size)}</span>
+                          <span>
+                            {logoImage.mimeType || logoImage.file.type}
+                          </span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => removeGalleryImage(image.id)}
-                          disabled={isSubmitting}
-                          className="text-xs font-semibold text-rose-600 transition hover:text-rose-700 disabled:cursor-not-allowed disabled:text-rose-300"
+                        <p
+                          className={`text-xs font-medium ${getImageStatusClassName(logoImage)}`}
                         >
-                          {t('pages.shkoli.create.images.remove')}
-                        </button>
+                          {getImageStatusLabel(logoImage)}
+                        </p>
+                        {logoImage.status === 'uploading' ? (
+                          <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                            <div
+                              className="h-full rounded-full bg-brand transition-all"
+                              style={{
+                                width: `${logoImage.progress}%`,
+                              }}
+                            />
+                          </div>
+                        ) : null}
                       </div>
                     </div>
-                  ))}
+                  ) : (
+                    <p className="mt-2 text-xs text-slate-500">
+                      {t('pages.shkoli.create.images.empty')}
+                    </p>
+                  )}
                 </div>
-              )}
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-slate-700">
+                      {t('pages.shkoli.create.images.mainLabel')}
+                    </p>
+                    {mainImage ? (
+                      <button
+                        type="button"
+                        onClick={() => removeSingleImage('MAIN')}
+                        disabled={isSubmitting}
+                        className="text-xs font-semibold text-rose-600 transition hover:text-rose-700 disabled:cursor-not-allowed disabled:text-rose-300"
+                      >
+                        {t('pages.shkoli.create.images.remove')}
+                      </button>
+                    ) : null}
+                  </div>
+                  <input
+                    type="file"
+                    accept={COURSE_IMAGE_ALLOWED_MIME_TYPES.join(',')}
+                    onChange={(event) =>
+                      handleSingleImageSelect(event, 'MAIN')
+                    }
+                    disabled={isSubmitting}
+                    className="mt-3 w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-100 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-slate-700 hover:file:bg-slate-200"
+                  />
+                  {mainImageError ? (
+                    <span className={errorTextClassName}>
+                      {mainImageError}
+                    </span>
+                  ) : null}
+                  {mainImage ? (
+                    <div className="mt-4 flex gap-3">
+                      <img
+                        src={mainImage.previewUrl}
+                        alt={t('pages.shkoli.create.images.previewAlt')}
+                        className="h-20 w-20 rounded-xl border border-slate-200 object-cover"
+                      />
+                      <div className="flex-1 space-y-2">
+                        <label className="text-xs font-medium text-slate-600">
+                          {t('pages.shkoli.create.images.altTextLabel')}
+                          <input
+                            type="text"
+                            value={mainImage.altText}
+                            onChange={(event) =>
+                              setMainImage((prev) =>
+                                prev
+                                  ? { ...prev, altText: event.target.value }
+                                  : prev,
+                              )
+                            }
+                            disabled={isSubmitting}
+                            className={inputClassName(false)}
+                            placeholder={t(
+                              'pages.shkoli.create.images.altTextPlaceholder',
+                            )}
+                          />
+                        </label>
+                        <div className="flex flex-wrap gap-2 text-xs text-slate-500">
+                          {mainImage.width && mainImage.height ? (
+                            <span>
+                              {mainImage.width}x{mainImage.height}px
+                            </span>
+                          ) : null}
+                          <span>{formatImageSize(mainImage.file.size)}</span>
+                          <span>
+                            {mainImage.mimeType || mainImage.file.type}
+                          </span>
+                        </div>
+                        <p
+                          className={`text-xs font-medium ${getImageStatusClassName(mainImage)}`}
+                        >
+                          {getImageStatusLabel(mainImage)}
+                        </p>
+                        {mainImage.status === 'uploading' ? (
+                          <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                            <div
+                              className="h-full rounded-full bg-brand transition-all"
+                              style={{
+                                width: `${mainImage.progress}%`,
+                              }}
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-xs text-slate-500">
+                      {t('pages.shkoli.create.images.empty')}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-700">
+                      {t('pages.shkoli.create.images.galleryLabel')}
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      {t('pages.shkoli.create.images.galleryHint')}
+                    </p>
+                  </div>
+                  <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900">
+                    {t('pages.shkoli.create.images.addGallery')}
+                    <input
+                      type="file"
+                      accept={COURSE_IMAGE_ALLOWED_MIME_TYPES.join(',')}
+                      multiple
+                      onChange={handleGallerySelect}
+                      disabled={isSubmitting}
+                      className="sr-only"
+                    />
+                  </label>
+                </div>
+                {galleryImageError ? (
+                  <span className={errorTextClassName}>
+                    {galleryImageError}
+                  </span>
+                ) : null}
+                {galleryImages.length === 0 ? (
+                  <p className="mt-3 text-xs text-slate-500">
+                    {t('pages.shkoli.create.images.galleryEmpty')}
+                  </p>
+                ) : (
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {galleryImages.map((image, index) => (
+                      <div
+                        key={image.id}
+                        className="rounded-xl border border-slate-200 p-3"
+                      >
+                        <div className="flex items-start gap-3">
+                          <img
+                            src={image.previewUrl}
+                            alt={t('pages.shkoli.create.images.previewAlt')}
+                            className="h-16 w-16 rounded-lg border border-slate-200 object-cover"
+                          />
+                          <div className="flex-1 space-y-2">
+                            <p className="text-xs font-semibold text-slate-600">
+                              {t('pages.shkoli.create.images.galleryItem', {
+                                index: index + 1,
+                              })}
+                            </p>
+                            <label className="text-xs font-medium text-slate-600">
+                              {t('pages.shkoli.create.images.altTextLabel')}
+                              <input
+                                type="text"
+                                value={image.altText}
+                                onChange={(event) =>
+                                  setGalleryImages((prev) =>
+                                    prev.map((item) =>
+                                      item.id === image.id
+                                        ? {
+                                            ...item,
+                                            altText: event.target.value,
+                                          }
+                                        : item,
+                                    ),
+                                  )
+                                }
+                                disabled={isSubmitting}
+                                className={inputClassName(false)}
+                                placeholder={t(
+                                  'pages.shkoli.create.images.altTextPlaceholder',
+                                )}
+                              />
+                            </label>
+                            <div className="flex flex-wrap gap-2 text-xs text-slate-500">
+                              {image.width && image.height ? (
+                                <span>
+                                  {image.width}x{image.height}px
+                                </span>
+                              ) : null}
+                              <span>{formatImageSize(image.file.size)}</span>
+                              <span>
+                                {image.mimeType || image.file.type}
+                              </span>
+                            </div>
+                            <p
+                              className={`text-xs font-medium ${getImageStatusClassName(image)}`}
+                            >
+                              {getImageStatusLabel(image)}
+                            </p>
+                            {image.status === 'uploading' ? (
+                              <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                                <div
+                                  className="h-full rounded-full bg-brand transition-all"
+                                  style={{
+                                    width: `${image.progress}%`,
+                                  }}
+                                />
+                              </div>
+                            ) : null}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeGalleryImage(image.id)}
+                            disabled={isSubmitting}
+                            className="text-xs font-semibold text-rose-600 transition hover:text-rose-700 disabled:cursor-not-allowed disabled:text-rose-300"
+                          >
+                            {t('pages.shkoli.create.images.remove')}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </fieldset>
 
@@ -1652,14 +2047,12 @@ const CourseCreatePage = () => {
               className={primaryActionButtonClassName}
               disabled={isSubmitting}
             >
-              {mutation.isPending
-                ? t('pages.shkoli.create.form.actions.submitting')
-                : isUploadingImages
-                  ? t('pages.shkoli.create.form.actions.uploadingImages')
-                  : t('pages.shkoli.create.form.actions.submit')}
+              {isSubmitting
+                ? t('pages.shkoli.edit.form.actions.submitting')
+                : t('pages.shkoli.edit.form.actions.submit')}
             </button>
             <Link
-              to={isValidLyceumId ? `/lyceums/${lyceumId}` : '/shkoli'}
+              to={`/shkoli/${courseId}`}
               className={secondaryActionButtonClassName}
               aria-disabled={isSubmitting}
               tabIndex={isSubmitting ? -1 : 0}
@@ -1669,7 +2062,7 @@ const CourseCreatePage = () => {
                 }
               }}
             >
-              {t('pages.shkoli.create.form.actions.cancel')}
+              {t('pages.shkoli.edit.form.actions.cancel')}
             </Link>
           </div>
         </form>
@@ -1678,4 +2071,4 @@ const CourseCreatePage = () => {
   )
 }
 
-export default CourseCreatePage
+export default CourseEditPage
