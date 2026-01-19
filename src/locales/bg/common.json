@@ -159,7 +159,9 @@
         "name": "Име",
         "town": "Населено място",
         "address": "Адрес"
-      }
+      },
+      "lecturerTitle": "Моите читалища",
+      "lecturerSubtitle": "Читалища, в които сте преподавател."
     }
   },
   "courses": {
@@ -339,6 +341,11 @@
         "administratedLyceumLoading": "Зареждане на читалище...",
         "administratedLyceumUnavailable": "Не можем да заредим читалището.",
         "administratedLyceumUnknown": "Читалището не е намерено."
+      },
+      "lecturedLyceums": {
+        "count": "Читалище {{current}} от {{total}}",
+        "previous": "Предишно",
+        "next": "Следващо"
       }
     },
     "shkoli": {

@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -7,6 +8,7 @@ import UserAvatar from '../../components/ui/UserAvatar'
 import type { ApiError } from '../../types/api'
 import { getUserDisplayName, getUserFullName } from '../../utils/user'
 import { useAdministratedLyceum } from './hooks/useAdministratedLyceum'
+import { useLecturedLyceums } from './hooks/useLecturedLyceums'
 import { useUserProfile } from './hooks/useUserProfile'
 
 const getProfileErrorMessage = (
@@ -33,6 +35,15 @@ const ProfilePage = () => {
   const email = user?.email ?? t('pages.profile.emptyValue')
   const hasLyceumAdministration = Boolean(user?.administratedLyceumId)
   const administratedLyceumId = user?.administratedLyceumId
+  const lecturedLyceumIds = useMemo(() => {
+    const rawIds = user?.lecturedLyceumIds ?? []
+    const normalizedIds = rawIds.filter(
+      (id): id is number => typeof id === 'number' && Number.isFinite(id),
+    )
+    return Array.from(new Set(normalizedIds))
+  }, [user?.lecturedLyceumIds])
+  const hasLecturedLyceum = lecturedLyceumIds.length > 0
+  const [lecturedLyceumIndex, setLecturedLyceumIndex] = useState(0)
   const {
     data: administratedLyceum,
     isLoading: isAdministratedLyceumLoading,
@@ -40,6 +51,16 @@ const ProfilePage = () => {
   } = useAdministratedLyceum(administratedLyceumId, {
     enabled: Boolean(administratedLyceumId),
   })
+  const lecturedLyceumQueries = useLecturedLyceums(lecturedLyceumIds, {
+    enabled: hasLecturedLyceum,
+  })
+  const lecturedLyceumCount = lecturedLyceumIds.length
+  const activeLecturedQuery =
+    lecturedLyceumQueries[lecturedLyceumIndex] ?? null
+  const activeLecturedLyceum = activeLecturedQuery?.data
+  const isLecturedLyceumLoading =
+    activeLecturedQuery?.isLoading || activeLecturedQuery?.isFetching || false
+  const lecturedLyceumError = activeLecturedQuery?.error ?? null
   const roleLabel = hasLyceumAdministration
     ? t('pages.profile.roles.lyceumAdmin')
     : user?.role
@@ -58,6 +79,26 @@ const ProfilePage = () => {
         : administratedLyceum?.name ??
           t('pages.profile.details.administratedLyceumUnknown')
     : t('pages.profile.emptyValue')
+
+  useEffect(() => {
+    if (lecturedLyceumIndex >= lecturedLyceumCount) {
+      setLecturedLyceumIndex(0)
+    }
+  }, [lecturedLyceumCount, lecturedLyceumIndex])
+
+  const handleLecturedPrevious = () => {
+    if (lecturedLyceumCount <= 1) return
+    setLecturedLyceumIndex((prev) =>
+      (prev - 1 + lecturedLyceumCount) % lecturedLyceumCount,
+    )
+  }
+
+  const handleLecturedNext = () => {
+    if (lecturedLyceumCount <= 1) return
+    setLecturedLyceumIndex((prev) => (prev + 1) % lecturedLyceumCount)
+  }
+
+  const showLecturedControls = lecturedLyceumCount > 1
 
   return (
     <section className="space-y-6">
@@ -160,15 +201,62 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
-          {hasLyceumAdministration ? (
-            <LyceumCard
-              lyceum={administratedLyceum}
-              isLoading={isAdministratedLyceumLoading}
-              error={administratedLyceumError ?? null}
-              className="lg:ml-auto"
-              linkTo={`/lyceums/${administratedLyceumId}`}
-              linkLabel={t('components.lyceumCard.manageCta')}
-            />
+          {hasLyceumAdministration || hasLecturedLyceum ? (
+            <div className="space-y-4 lg:ml-auto">
+              {hasLyceumAdministration ? (
+                <LyceumCard
+                  lyceum={administratedLyceum}
+                  isLoading={isAdministratedLyceumLoading}
+                  error={administratedLyceumError ?? null}
+                  linkTo={`/lyceums/${administratedLyceumId}`}
+                  linkLabel={t('components.lyceumCard.manageCta')}
+                />
+              ) : null}
+              {hasLecturedLyceum ? (
+                <div className="space-y-3">
+                  {showLecturedControls ? (
+                    <div className="flex items-center justify-between text-xs text-slate-500">
+                      <span>
+                        {t('pages.profile.lecturedLyceums.count', {
+                          current: lecturedLyceumIndex + 1,
+                          total: lecturedLyceumCount,
+                        })}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handleLecturedPrevious}
+                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
+                          aria-label={t('pages.profile.lecturedLyceums.previous')}
+                        >
+                          {t('pages.profile.lecturedLyceums.previous')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleLecturedNext}
+                          className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
+                          aria-label={t('pages.profile.lecturedLyceums.next')}
+                        >
+                          {t('pages.profile.lecturedLyceums.next')}
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                  <LyceumCard
+                    lyceum={activeLecturedLyceum}
+                    isLoading={isLecturedLyceumLoading}
+                    error={lecturedLyceumError}
+                    linkTo={
+                      activeLecturedLyceum?.id
+                        ? `/lyceums/${activeLecturedLyceum.id}`
+                        : undefined
+                    }
+                    title={t('components.lyceumCard.lecturerTitle')}
+                    subtitle={t('components.lyceumCard.lecturerSubtitle')}
+                  />
+                </div>
+              ) : null}
+            </div>
           ) : null}
         </div>
       ) : (

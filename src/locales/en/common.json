@@ -149,6 +149,8 @@
     "lyceumCard": {
       "title": "Administrated lyceum",
       "subtitle": "Key details for the lyceum you manage.",
+      "lecturerTitle": "Lectured lyceum",
+      "lecturerSubtitle": "Key details for the lyceum where you teach.",
       "imageAlt": "Lyceum exterior",
       "loading": "Loading lyceum details...",
       "error": "Unable to load lyceum details right now.",
@@ -263,6 +265,11 @@
         "admin": "Admin",
         "lyceumAdmin": "Lyceum administrator",
         "unknown": "Unknown"
+      },
+      "lecturedLyceums": {
+        "count": "Lyceum {{current}} of {{total}}",
+        "previous": "Previous",
+        "next": "Next"
       },
       "actions": {
         "title": "Account actions",

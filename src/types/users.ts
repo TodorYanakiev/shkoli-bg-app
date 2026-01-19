@@ -11,6 +11,8 @@ export type UserIdentity = {
 export type CurrentUser = UserIdentity & {
   role?: 'USER' | 'ADMIN'
   administratedLyceumId?: number
+  lecturedCourseIds?: number[]
+  lecturedLyceumIds?: number[]
   enabled?: boolean
 }
 
