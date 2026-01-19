@@ -23,11 +23,8 @@ export const COURSE_TYPES = [
 export const COURSE_AGE_GROUPS = [
   'TODDLER',
   'CHILD',
-  'PRE_TEEN',
   'TEEN',
-  'YOUNG_ADULT',
   'ADULT',
-  'MATURE_ADULT',
   'SENIOR',
 ] as const
 

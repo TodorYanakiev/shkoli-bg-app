@@ -22,11 +22,8 @@ export type CourseType =
 export type CourseAgeGroup =
   | 'TODDLER'
   | 'CHILD'
-  | 'PRE_TEEN'
   | 'TEEN'
-  | 'YOUNG_ADULT'
   | 'ADULT'
-  | 'MATURE_ADULT'
   | 'SENIOR'
 
 export type CourseScheduleRecurrence = 'WEEKLY' | 'MONTHLY' | 'ONE_TIME'

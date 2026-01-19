@@ -188,13 +188,10 @@
       "COOKING": "Cooking"
     },
     "ageGroups": {
-      "TODDLER": "Toddlers",
-      "CHILD": "Children",
-      "PRE_TEEN": "Pre-teens",
-      "TEEN": "Teens",
-      "YOUNG_ADULT": "Young adults",
-      "ADULT": "Adults",
-      "MATURE_ADULT": "Mature adults",
+      "TODDLER": "Toddlers (0-6y)",
+      "CHILD": "Children (7-12y)",
+      "TEEN": "Teens (13-18y)",
+      "ADULT": "Adults (18+)",
       "SENIOR": "Seniors"
     },
     "recurrence": {
