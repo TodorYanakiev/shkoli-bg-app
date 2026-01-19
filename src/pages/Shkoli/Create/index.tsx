@@ -284,6 +284,7 @@ const CourseCreatePage = () => {
       type: '',
       ageGroupList: [],
       price: '',
+      isInLyceum: true,
       address: '',
       achievements: '',
       facebookLink: '',
@@ -303,6 +304,7 @@ const CourseCreatePage = () => {
     name: 'scheduleSpecialCases',
   })
   const scheduleSlotValues = watch('scheduleSlots') ?? []
+  const isInLyceum = watch('isInLyceum') ?? true
   const allowedImageTypesLabel = useMemo(
     () =>
       COURSE_IMAGE_ALLOWED_MIME_TYPES.map((type) =>
@@ -612,6 +614,11 @@ const CourseCreatePage = () => {
   }, [scheduleSlotValues, setValue])
 
   useEffect(() => {
+    if (!isInLyceum) return
+    setValue('address', '', { shouldValidate: true })
+  }, [isInLyceum, setValue])
+
+  useEffect(() => {
     if (typeof window === 'undefined') return
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
   }, [])
@@ -679,6 +686,7 @@ const CourseCreatePage = () => {
         ?.map((value) => Number(value))
         .filter(Number.isFinite) ?? []
     const schedule = buildCourseSchedule(values)
+    const isInLyceumValue = values.isInLyceum ?? true
 
     const payload: CourseRequest = {
       name: values.name.trim(),
@@ -687,7 +695,9 @@ const CourseCreatePage = () => {
       ageGroupList: uniqueAgeGroups,
       schedule,
       lyceumId,
-      address: normalizeOptionalText(values.address),
+      address: isInLyceumValue
+        ? undefined
+        : normalizeOptionalText(values.address),
       price: normalizeOptionalNumber(values.price),
       achievements: normalizeOptionalText(values.achievements),
       facebookLink: normalizeOptionalText(values.facebookLink),
@@ -944,20 +954,38 @@ const CourseCreatePage = () => {
                   </span>
                 ) : null}
               </label>
-              <label className="text-sm font-medium text-slate-700">
-                {t('pages.shkoli.create.form.fields.address')}
-                <input
-                  type="text"
-                  {...register('address')}
-                  placeholder={t('pages.shkoli.create.form.fields.address')}
-                  className={inputClassName(Boolean(errors.address))}
-                />
-                {errors.address ? (
-                  <span className={errorTextClassName}>
-                    {errors.address.message}
+              <div className="space-y-2 md:col-span-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                  <input
+                    type="checkbox"
+                    {...register('isInLyceum')}
+                    className="h-4 w-4 rounded border-slate-300 text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                  />
+                  <span>
+                    {t('pages.shkoli.create.form.fields.isInLyceum')}
                   </span>
-                ) : null}
-              </label>
+                </label>
+                <p className="text-xs text-slate-500">
+                  {t('pages.shkoli.create.form.fields.isInLyceumHint')}
+                </p>
+              </div>
+              {!isInLyceum ? (
+                <label className="text-sm font-medium text-slate-700 md:col-span-2">
+                  {t('pages.shkoli.create.form.fields.address')}
+                  {requiredIndicator}
+                  <input
+                    type="text"
+                    {...register('address')}
+                    placeholder={t('pages.shkoli.create.form.fields.address')}
+                    className={inputClassName(Boolean(errors.address))}
+                  />
+                  {errors.address ? (
+                    <span className={errorTextClassName}>
+                      {errors.address.message}
+                    </span>
+                  ) : null}
+                </label>
+              ) : null}
             </div>
             <label className="text-sm font-medium text-slate-700">
               {t('pages.shkoli.create.form.fields.achievements')}

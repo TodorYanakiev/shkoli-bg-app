@@ -346,6 +346,21 @@
         "count": "Читалище {{current}} от {{total}}",
         "previous": "Предишно",
         "next": "Следващо"
+      },
+      "lecturedCourses": {
+        "count": "Школа {{current}} от {{total}}",
+        "previous": "Предишна",
+        "next": "Следваща",
+        "loading": "Зареждане на школи...",
+        "error": "Не можем да заредим школите в момента.",
+        "empty": "Все още няма назначени школи.",
+        "card": {
+          "imageAlt": "Главна снимка на школа по {{name}}",
+          "logoAlt": "Лого на школа по {{name}}",
+          "lecturerLabel": "Преподавател",
+          "additionalLecturers": "още {{count}}",
+          "openCourse": "Отвори школа {{name}}"
+        }
       }
     },
     "shkoli": {
@@ -457,7 +472,9 @@
             "address": "Адрес",
             "achievements": "Постижения",
             "facebookLink": "Facebook линк",
-            "websiteLink": "Уебсайт линк"
+            "websiteLink": "Уебсайт линк",
+            "isInLyceum": "Провежда се в читалището",
+            "isInLyceumHint": "Изберете ако тази школа се провежда в читалището."
           },
           "actions": {
             "submit": "Създай школа",

@@ -271,6 +271,21 @@
         "previous": "Previous",
         "next": "Next"
       },
+      "lecturedCourses": {
+        "count": "Course {{current}} of {{total}}",
+        "previous": "Previous",
+        "next": "Next",
+        "loading": "Loading courses...",
+        "error": "Unable to load courses right now.",
+        "empty": "No courses assigned yet.",
+        "card": {
+          "imageAlt": "Course main image for {{name}}",
+          "logoAlt": "Course logo for {{name}}",
+          "lecturerLabel": "Lecturer",
+          "additionalLecturers": "plus {{count}} more",
+          "openCourse": "Open course {{name}}"
+        }
+      },
       "actions": {
         "title": "Account actions",
         "changePassword": "Change password",
@@ -455,6 +470,8 @@
             "ageGroups": "Age groups",
             "description": "Description",
             "price": "Price",
+            "isInLyceum": "Course takes place in the lyceum",
+            "isInLyceumHint": "Uncheck to provide a different address.",
             "address": "Address",
             "achievements": "Achievements",
             "facebookLink": "Facebook link",

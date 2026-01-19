@@ -51,6 +51,13 @@ export const getCourseImages = async (courseId: number) => {
   return response.data
 }
 
+export const getCoursesByLecturer = async (lecturerId: number) => {
+  const response = await httpClient.get<CourseResponse[]>(
+    `/api/v1/courses/lecturers/${lecturerId}`,
+  )
+  return response.data
+}
+
 export const deleteCourseImage = async (
   courseId: number,
   imageId: number,
