@@ -650,7 +650,7 @@ const LyceumDetailPage = () => {
               >
                 <div className={sideNavListClassName}>
                   {sideNavItems.map((item) => {
-                    if ('to' in item) {
+                    if (typeof item.to === 'string') {
                       return (
                         <Link
                           key={item.key}
@@ -670,7 +670,7 @@ const LyceumDetailPage = () => {
                       )
                     }
 
-                    if ('href' in item) {
+                    if (typeof item.href === 'string') {
                       return (
                         <a
                           key={item.key}
