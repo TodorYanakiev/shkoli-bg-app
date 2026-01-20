@@ -38,6 +38,10 @@ import {
 } from '../../../validations/courses'
 import { uploadFileToS3 } from '../../../services/s3'
 import { useUserProfile } from '../../Profile/hooks/useUserProfile'
+import {
+  lecturedCoursesQueryKey,
+  lecturedCoursesQueryKeyBase,
+} from '../../Profile/hooks/useLecturedCourses'
 import { lyceumCoursesQueryKey } from '../../Lyceums/hooks/useLyceumCourses'
 import { useLyceumLecturers } from '../../Lyceums/hooks/useLyceumLecturers'
 import {
@@ -855,6 +859,29 @@ const CourseEditPage = () => {
       if (lyceumId != null) {
         queryClient.invalidateQueries({
           queryKey: lyceumCoursesQueryKey(lyceumId),
+        })
+      }
+      const lecturersToRefresh = new Set<number>()
+      const previousLecturers = course?.lecturerIds ?? []
+      previousLecturers.forEach((id) => {
+        if (typeof id === 'number' && Number.isFinite(id)) {
+          lecturersToRefresh.add(id)
+        }
+      })
+      lecturerIds.forEach((id) => {
+        if (Number.isFinite(id)) {
+          lecturersToRefresh.add(id)
+        }
+      })
+      if (lecturersToRefresh.size > 0) {
+        lecturersToRefresh.forEach((id) => {
+          queryClient.invalidateQueries({
+            queryKey: lecturedCoursesQueryKey(id),
+          })
+        })
+      } else {
+        queryClient.invalidateQueries({
+          queryKey: lecturedCoursesQueryKeyBase,
         })
       }
 

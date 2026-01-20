@@ -36,6 +36,10 @@ import {
   type CourseCreateFormValues,
 } from '../../../validations/courses'
 import { useUserProfile } from '../../Profile/hooks/useUserProfile'
+import {
+  lecturedCoursesQueryKey,
+  lecturedCoursesQueryKeyBase,
+} from '../../Profile/hooks/useLecturedCourses'
 import { lyceumCoursesQueryKey } from '../../Lyceums/hooks/useLyceumCourses'
 import { useLyceum } from '../../Lyceums/hooks/useLyceum'
 import { useLyceumLecturers } from '../../Lyceums/hooks/useLyceumLecturers'
@@ -711,6 +715,19 @@ const CourseCreatePage = () => {
       if (lyceumId != null) {
         queryClient.invalidateQueries({
           queryKey: lyceumCoursesQueryKey(lyceumId),
+        })
+      }
+      if (lecturerIds.length > 0) {
+        lecturerIds.forEach((id) => {
+          if (Number.isFinite(id)) {
+            queryClient.invalidateQueries({
+              queryKey: lecturedCoursesQueryKey(id),
+            })
+          }
+        })
+      } else {
+        queryClient.invalidateQueries({
+          queryKey: lecturedCoursesQueryKeyBase,
         })
       }
 
