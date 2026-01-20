@@ -2,7 +2,7 @@ import httpClient from './httpClient'
 import type { CourseResponse } from '../types/courses'
 import type {
   LyceumFilterParams,
-  LyceumLecturerRequest,
+  LyceumLecturerInviteRequest,
   LyceumRequest,
   LyceumRightsRequest,
   LyceumRightsVerificationRequest,
@@ -68,8 +68,10 @@ export const getLyceumLecturers = async (lyceumId: number) => {
   return response.data
 }
 
-export const addLyceumLecturer = async (payload: LyceumLecturerRequest) => {
-  await httpClient.post('/api/v1/lyceums/lecturers', payload)
+export const inviteLyceumLecturer = async (
+  payload: LyceumLecturerInviteRequest,
+) => {
+  await httpClient.post('/api/v1/lyceums/lecturers/invite', payload)
 }
 
 export const removeLyceumLecturer = async (
