@@ -4,6 +4,8 @@ import { getCoursesByLecturer } from '../../../services/courses'
 import type { ApiError } from '../../../types/api'
 import type { CourseResponse } from '../../../types/courses'
 
+export const lecturedCoursesQueryKeyBase = ['courses', 'lecturer'] as const
+
 export const lecturedCoursesQueryKey = (lecturerId?: number) =>
   ['courses', 'lecturer', lecturerId] as const
 
