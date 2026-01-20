@@ -642,6 +642,7 @@
           "courses": "Courses",
           "lecturers": "Lecturers",
           "addCourse": "Add new course",
+          "addLecturer": "Add lecturer",
           "expand": "Expand menu",
           "collapse": "Collapse menu"
         },

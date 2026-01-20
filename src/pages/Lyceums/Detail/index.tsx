@@ -15,6 +15,7 @@ import { useLyceumCourses } from '../hooks/useLyceumCourses'
 import { useLyceumLecturers } from '../hooks/useLyceumLecturers'
 import { useUsersByIds } from '../../../hooks/useUsersByIds'
 import { useUserProfile } from '../../Profile/hooks/useUserProfile'
+import LyceumLecturerInviteModal from './components/LyceumLecturerInviteModal'
 
 const getLyceumErrorMessage = (
   error: ApiError | null,
@@ -67,6 +68,8 @@ type SideNavItem =
       icon: ReactNode
       href: string
       to?: never
+      onClick?: never
+      controlsId?: never
     }
   | {
       key: string
@@ -74,6 +77,17 @@ type SideNavItem =
       icon: ReactNode
       to: string
       href?: never
+      onClick?: never
+      controlsId?: never
+    }
+  | {
+      key: string
+      label: string
+      icon: ReactNode
+      onClick: () => void
+      controlsId?: string
+      href?: never
+      to?: never
     }
 
 const useCarouselMetrics = (
@@ -164,6 +178,7 @@ const LyceumDetailPage = () => {
 
   const [courseStartIndex, setCourseStartIndex] = useState(0)
   const [lecturerStartIndex, setLecturerStartIndex] = useState(0)
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
 
   const fallbackValue = t('pages.lyceums.detail.notProvided')
   const coursesCount = courses?.length ?? 0
@@ -351,6 +366,8 @@ const LyceumDetailPage = () => {
     (user?.role === 'ADMIN' ||
       user?.administratedLyceumId === lyceumId ||
       isLyceumLecturer)
+  const canInviteLecturer = canEditLyceum
+  const inviteModalId = 'lyceum-invite-lecturer-modal'
   const navIconClassName = 'h-5 w-5'
   const sideNavWidth = !isDesktop
     ? '0px'
@@ -448,6 +465,33 @@ const LyceumDetailPage = () => {
                 <circle cx="12" cy="12" r="9" />
                 <path d="M12 8v8" />
                 <path d="M8 12h8" />
+              </svg>
+            ),
+          },
+        ]
+      : []),
+    ...(canInviteLecturer
+      ? [
+          {
+            key: 'lyceum-add-lecturer',
+            label: t('pages.lyceums.detail.sideNav.addLecturer'),
+            onClick: () => setIsInviteModalOpen(true),
+            controlsId: inviteModalId,
+            icon: (
+              <svg
+                viewBox="0 0 24 24"
+                className={navIconClassName}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M8 12.5a3.5 3.5 0 1 0-3.5-3.5A3.5 3.5 0 0 0 8 12.5z" />
+                <path d="M4 19.5a4 4 0 0 1 8 0" />
+                <path d="M18 8v6" />
+                <path d="M15 11h6" />
               </svg>
             ),
           },
@@ -605,26 +649,55 @@ const LyceumDetailPage = () => {
                 className={sideNavContainerClassName}
               >
                 <div className={sideNavListClassName}>
-                  {sideNavItems.map((item) =>
-                    item.to ? (
-                      <Link
+                  {sideNavItems.map((item) => {
+                    if ('to' in item) {
+                      return (
+                        <Link
+                          key={item.key}
+                          to={item.to}
+                          title={item.label}
+                          className={sideNavItemClassName}
+                        >
+                          <span className={sideNavIconClassName}>
+                            {item.icon}
+                          </span>
+                          {isSideNavExpanded ? (
+                            <span>{item.label}</span>
+                          ) : (
+                            <span className="sr-only">{item.label}</span>
+                          )}
+                        </Link>
+                      )
+                    }
+
+                    if ('href' in item) {
+                      return (
+                        <a
+                          key={item.key}
+                          href={item.href}
+                          title={item.label}
+                          className={sideNavItemClassName}
+                        >
+                          <span className={sideNavIconClassName}>
+                            {item.icon}
+                          </span>
+                          {isSideNavExpanded ? (
+                            <span>{item.label}</span>
+                          ) : (
+                            <span className="sr-only">{item.label}</span>
+                          )}
+                        </a>
+                      )
+                    }
+
+                    return (
+                      <button
                         key={item.key}
-                        to={item.to}
+                        type="button"
+                        onClick={item.onClick}
                         title={item.label}
-                        className={sideNavItemClassName}
-                      >
-                        <span className={sideNavIconClassName}>{item.icon}</span>
-                        {isSideNavExpanded ? (
-                          <span>{item.label}</span>
-                        ) : (
-                          <span className="sr-only">{item.label}</span>
-                        )}
-                      </Link>
-                    ) : (
-                      <a
-                        key={item.key}
-                        href={item.href}
-                        title={item.label}
+                        aria-haspopup="dialog"
+                        aria-controls={item.controlsId}
                         className={sideNavItemClassName}
                       >
                         <span className={sideNavIconClassName}>
@@ -635,9 +708,9 @@ const LyceumDetailPage = () => {
                         ) : (
                           <span className="sr-only">{item.label}</span>
                         )}
-                      </a>
-                    ),
-                  )}
+                      </button>
+                    )
+                  })}
                 </div>
                 <button
                   type="button"
@@ -1010,6 +1083,13 @@ const LyceumDetailPage = () => {
         </div>
       </div>
       )}
+      {isInviteModalOpen && canInviteLecturer && isValidId ? (
+        <LyceumLecturerInviteModal
+          lyceumId={lyceumId}
+          modalId={inviteModalId}
+          onClose={() => setIsInviteModalOpen(false)}
+        />
+      ) : null}
     </section>
   )
 }
