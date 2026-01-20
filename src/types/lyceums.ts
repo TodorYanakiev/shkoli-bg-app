@@ -7,8 +7,8 @@ export type LyceumRightsVerificationRequest = {
   verificationCode: string
 }
 
-export type LyceumLecturerRequest = {
-  userId: number
+export type LyceumLecturerInviteRequest = {
+  email: string
   lyceumId?: number
 }
 

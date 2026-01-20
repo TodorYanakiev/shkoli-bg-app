@@ -1,12 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useToast } from '../../../../components/feedback/ToastContext'
 import type { ApiError } from '../../../../types/api'
-import type { UserResponse } from '../../../../types/users'
 import { getUserDisplayName } from '../../../../utils/user'
 import {
   getLyceumLecturerSchema,
@@ -17,12 +16,12 @@ import {
   useLyceumLecturers,
 } from '../../hooks/useLyceumLecturers'
 import { useUsers } from '../../hooks/useUsers'
-import { useAddLyceumLecturerMutation } from '../../hooks/useAddLyceumLecturerMutation'
+import { useInviteLyceumLecturerMutation } from '../../hooks/useInviteLyceumLecturerMutation'
 import { useRemoveLyceumLecturerMutation } from '../../hooks/useRemoveLyceumLecturerMutation'
 
 const MAX_SUGGESTIONS = 8
 
-const getAddLecturerErrorMessage = (
+const getInviteLecturerErrorMessage = (
   error: ApiError | null,
   t: (key: string) => string,
 ) => {
@@ -95,7 +94,6 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
   const queryClient = useQueryClient()
   const schema = useMemo(() => getLyceumLecturerSchema(t), [t])
   const [removingId, setRemovingId] = useState<number | null>(null)
-  const [manualErrorEmail, setManualErrorEmail] = useState<string | null>(null)
   const [confirmingId, setConfirmingId] = useState<number | null>(null)
 
   const {
@@ -109,14 +107,12 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
     error: usersError,
   } = useUsers({ enabled: Number.isFinite(lyceumId) })
 
-  const addMutation = useAddLyceumLecturerMutation()
+  const inviteMutation = useInviteLyceumLecturerMutation()
   const removeMutation = useRemoveLyceumLecturerMutation()
 
   const {
     register,
     handleSubmit,
-    setError,
-    clearErrors,
     watch,
     reset,
     formState: { errors },
@@ -129,25 +125,6 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
 
   const emailValue = watch('email')
   const trimmedEmailValue = emailValue?.trim().toLowerCase() ?? ''
-
-  useEffect(() => {
-    if (!manualErrorEmail) return
-    if (trimmedEmailValue !== manualErrorEmail) {
-      clearErrors('email')
-      setManualErrorEmail(null)
-    }
-  }, [manualErrorEmail, trimmedEmailValue, clearErrors])
-
-  const usersByEmail = useMemo(() => {
-    if (!users) {
-      return new Map<string, UserResponse>()
-    }
-    return new Map(
-      users
-        .filter((user) => Boolean(user.email))
-        .map((user) => [user.email?.toLowerCase() ?? '', user]),
-    )
-  }, [users])
 
   const suggestionEmails = useMemo(() => {
     if (!users) {
@@ -167,21 +144,9 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
 
   const onAddSubmit = (values: LyceumLecturerFormValues) => {
     const normalizedEmail = values.email.trim().toLowerCase()
-    const matchedUser = usersByEmail.get(normalizedEmail)
-
-    if (!matchedUser?.id) {
-      setError('email', {
-        type: 'manual',
-        message: t('errors.lyceums.lecturers.emailNotFound'),
-      })
-      setManualErrorEmail(normalizedEmail)
-      return
-    }
-
-    const userId = matchedUser.id
-    addMutation.reset()
-    addMutation.mutate(
-      { userId, lyceumId },
+    inviteMutation.reset()
+    inviteMutation.mutate(
+      { email: normalizedEmail, lyceumId },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
@@ -221,8 +186,8 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
     )
   }
 
-  const addErrorMessage = getAddLecturerErrorMessage(
-    addMutation.error ?? null,
+  const inviteErrorMessage = getInviteLecturerErrorMessage(
+    inviteMutation.error ?? null,
     t,
   )
   const removeErrorMessage = getRemoveLecturerErrorMessage(
@@ -286,8 +251,7 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
   const cancelButtonClassName =
     'inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-800 disabled:cursor-not-allowed disabled:opacity-60'
 
-  const isAddDisabled =
-    addMutation.isPending || isUsersLoading || Boolean(usersError)
+  const isAddDisabled = inviteMutation.isPending
 
   return (
     <div className="relative w-full overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 p-5 shadow-sm backdrop-blur sm:p-6">
@@ -318,7 +282,7 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
             <form
               onSubmit={handleSubmit(onAddSubmit)}
               className="mt-4 space-y-3"
-              aria-busy={addMutation.isPending}
+              aria-busy={inviteMutation.isPending}
             >
               <div>
                 <label
@@ -363,12 +327,12 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
                   </p>
                 ) : null}
               </div>
-              {addErrorMessage ? (
+              {inviteErrorMessage ? (
                 <div
                   className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700"
                   role="alert"
                 >
-                  {addErrorMessage}
+                  {inviteErrorMessage}
                 </div>
               ) : null}
               <button
@@ -376,7 +340,7 @@ const LyceumLecturerManager = ({ lyceumId }: LyceumLecturerManagerProps) => {
                 disabled={isAddDisabled}
                 className={actionButtonClassName}
               >
-                {addMutation.isPending
+                {inviteMutation.isPending
                   ? t('pages.lyceums.edit.lecturers.form.submitting')
                   : t('pages.lyceums.edit.lecturers.form.submit')}
               </button>
