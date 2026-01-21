@@ -34,7 +34,7 @@ const TopNav = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [isCourseActionsOpen, setIsCourseActionsOpen] = useState(false)
   const [isLyceumActionsOpen, setIsLyceumActionsOpen] = useState(false)
-  const headerRef = useRef<HTMLElement | null>(null)
+  const topBarRef = useRef<HTMLDivElement | null>(null)
   const profileMenuRef = useRef<HTMLDivElement | null>(null)
   const courseMatch = location.pathname.match(/^\/shkoli\/(\d+)(?:\/.*)?$/)
   const currentCourseId = courseMatch ? Number(courseMatch[1]) : null
@@ -213,12 +213,12 @@ const TopNav = () => {
 
   useEffect(() => {
     if (typeof document === 'undefined') return
-    const header = headerRef.current
-    if (!header) return
+    const topBar = topBarRef.current
+    if (!topBar) return
 
     const root = document.documentElement
     const updateHeight = () => {
-      root.style.setProperty('--topnav-height', `${header.offsetHeight}px`)
+      root.style.setProperty('--topnav-height', `${topBar.offsetHeight}px`)
     }
 
     updateHeight()
@@ -232,7 +232,7 @@ const TopNav = () => {
     }
 
     const observer = new ResizeObserver(updateHeight)
-    observer.observe(header)
+    observer.observe(topBar)
     return () => {
       observer.disconnect()
       root.style.removeProperty('--topnav-height')
@@ -240,11 +240,11 @@ const TopNav = () => {
   }, [isMenuOpen, logoutErrorMessage])
 
   return (
-    <header
-      ref={headerRef}
-      className="sticky top-0 z-20 w-full border-b border-slate-200 bg-white/95 backdrop-blur"
-    >
-      <div className="flex w-full items-center justify-between px-4 py-4 sm:px-6 lg:px-12">
+    <header className="sticky top-0 z-20 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
+      <div
+        ref={topBarRef}
+        className="flex w-full items-center justify-between px-4 py-4 sm:px-6 lg:px-12"
+      >
         <Link
           to="/shkoli"
           className="group flex items-center gap-3"
@@ -371,6 +371,9 @@ const TopNav = () => {
             )}
             <LanguageSwitcher className="ml-2" />
           </div>
+          <div className="md:hidden">
+            <LanguageSwitcher />
+          </div>
           <button
             type="button"
             aria-label={t('layouts.app.nav.toggle')}
@@ -399,13 +402,13 @@ const TopNav = () => {
       <div
         id="mobile-nav"
         aria-hidden={!isMenuOpen}
-        className={`border-t border-slate-200 bg-white transition-[max-height,opacity] duration-200 ease-out md:hidden ${
+        className={`overflow-hidden border-t border-slate-200 bg-white transition-[max-height,opacity] duration-200 ease-out md:hidden ${
           isMenuOpen
-            ? 'max-h-[420px] opacity-100'
+            ? 'max-h-[calc(100vh-var(--topnav-height))] opacity-100'
             : 'max-h-0 opacity-0 pointer-events-none'
         }`}
       >
-        <div className="flex flex-col gap-3 px-4 py-4">
+        <div className="flex max-h-[calc(100vh-var(--topnav-height))] flex-col gap-3 overflow-y-auto px-4 py-4">
           <div className="flex items-center gap-2">
             <NavLink
               to="/shkoli"
@@ -541,14 +544,63 @@ const TopNav = () => {
           <div className="flex flex-col gap-2 pt-2">
             {isAuthenticated ? (
               <>
-                <Link
-                  to="/profile"
-                  aria-label={t('nav.profileLink')}
-                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  <UserAvatar alt={profileAvatarAlt} size="sm" />
-                  <span>{t('nav.profile')}</span>
-                </Link>
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/profile"
+                    aria-label={t('nav.profileLink')}
+                    className="flex flex-1 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                  >
+                    <UserAvatar alt={profileAvatarAlt} size="sm" />
+                    <span>{t('nav.profile')}</span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    disabled={logoutMutation.isPending}
+                    aria-label={
+                      logoutMutation.isPending
+                        ? t('nav.loggingOut')
+                        : t('nav.logout')
+                    }
+                    title={
+                      logoutMutation.isPending
+                        ? t('nav.loggingOut')
+                        : t('nav.logout')
+                    }
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+                  >
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="h-4 w-4"
+                    >
+                      <path
+                        d="M8 5H5.5A1.5 1.5 0 0 0 4 6.5v7A1.5 1.5 0 0 0 5.5 15H8"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M11.5 7.5L15 10l-3.5 2.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M8 10h7"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
                 {hasAdministratedLyceum ? (
                   <Link
                     to={`/lyceums/${administratedLyceumId}`}
@@ -557,16 +609,6 @@ const TopNav = () => {
                     <span>{administratedLyceumLabel}</span>
                   </Link>
                 ) : null}
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  disabled={logoutMutation.isPending}
-                  className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
-                >
-                  {logoutMutation.isPending
-                    ? t('nav.loggingOut')
-                    : t('nav.logout')}
-                </button>
               </>
             ) : (
               <>
@@ -584,9 +626,6 @@ const TopNav = () => {
                 </Link>
               </>
             )}
-            <div className="border-t border-slate-200 pt-3">
-              <LanguageSwitcher className="ml-auto" />
-            </div>
           </div>
         </div>
       </div>
