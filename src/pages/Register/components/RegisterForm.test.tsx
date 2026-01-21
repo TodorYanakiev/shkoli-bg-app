@@ -172,7 +172,7 @@ describe('RegisterForm', () => {
       message: "Account created. You're signed in.",
       tone: 'success',
     })
-    expect(navigateMock).toHaveBeenCalledWith('/shkoli', { replace: true })
+    expect(navigateMock).toHaveBeenCalledWith('/profile', { replace: true })
   })
 
   it('shows pending state', () => {

@@ -67,7 +67,7 @@ const RegisterForm = () => {
           message: t('feedback.auth.registerSuccess'),
           tone: 'success',
         })
-        navigate('/shkoli', { replace: true })
+        navigate('/profile', { replace: true })
       },
     })
   }

@@ -59,8 +59,10 @@
     "login": "Вход",
     "register": "Регистрация",
     "profile": "Профил",
+    "profileMenuLabel": "Отвори менюто на профила",
     "profileLink": "Отвори профила",
     "profileAvatarAlt": "Профилна снимка на {{name}}",
+    "administratedLyceum": "Администрирано читалище",
     "logout": "Изход",
     "loggingOut": "Излизане..."
   },
