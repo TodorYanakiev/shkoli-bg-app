@@ -17,6 +17,7 @@ import { useLogoutMutation } from '../../hooks/useLogoutMutation'
 import { useAdministratedLyceum } from '../../pages/Profile/hooks/useAdministratedLyceum'
 import { useUserProfile } from '../../pages/Profile/hooks/useUserProfile'
 import { useLyceumLecturers } from '../../pages/Lyceums/hooks/useLyceumLecturers'
+import { useCourse } from '../../pages/Shkoli/hooks/useCourse'
 import type { ApiError } from '../../types/api'
 import { clearTokens } from '../../utils/authStorage'
 import { getUserDisplayName } from '../../utils/user'
@@ -31,8 +32,13 @@ const TopNav = () => {
   const { showToast } = useToast()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const [isCourseActionsOpen, setIsCourseActionsOpen] = useState(false)
+  const [isLyceumActionsOpen, setIsLyceumActionsOpen] = useState(false)
   const headerRef = useRef<HTMLElement | null>(null)
   const profileMenuRef = useRef<HTMLDivElement | null>(null)
+  const courseMatch = location.pathname.match(/^\/shkoli\/(\d+)(?:\/.*)?$/)
+  const currentCourseId = courseMatch ? Number(courseMatch[1]) : null
+  const isCourseIdValid = Number.isFinite(currentCourseId)
   const lyceumMatch = location.pathname.match(/^\/lyceums\/(\d+)(?:\/.*)?$/)
   const currentLyceumId = lyceumMatch ? Number(lyceumMatch[1]) : null
   const canEditLyceum =
@@ -53,6 +59,27 @@ const TopNav = () => {
     Number.isFinite(currentLyceumId) && (canEditLyceum || isLyceumLecturer),
   )
   const canInviteLecturer = canEditLyceum
+  const hasLyceumActions = canEditLyceum || canAddCourse || canInviteLecturer
+
+  const { data: currentCourse } = useCourse(currentCourseId ?? undefined, {
+    enabled: isAuthenticated && isCourseIdValid,
+  })
+  const courseLecturerIds = currentCourse?.lecturerIds ?? []
+  const isCourseLecturer =
+    isCourseIdValid &&
+    typeof currentUser?.id === 'number' &&
+    courseLecturerIds.includes(currentUser.id)
+  const isCourseLyceumAdmin =
+    isCourseIdValid &&
+    typeof currentUser?.administratedLyceumId === 'number' &&
+    currentUser.administratedLyceumId === currentCourse?.lyceumId
+  const canEditCourse = Boolean(
+    isCourseIdValid &&
+      (currentUser?.role === 'ADMIN' ||
+        isCourseLyceumAdmin ||
+        isCourseLecturer),
+  )
+  const hasCourseActions = canEditCourse
 
   const administratedLyceumId =
     typeof currentUser?.administratedLyceumId === 'number' &&
@@ -81,7 +108,29 @@ const TopNav = () => {
   useEffect(() => {
     setIsMenuOpen(false)
     setIsProfileMenuOpen(false)
+    setIsCourseActionsOpen(false)
+    setIsLyceumActionsOpen(false)
   }, [location.pathname, location.search])
+
+  useEffect(() => {
+    if (!hasCourseActions) {
+      setIsCourseActionsOpen(false)
+      return
+    }
+    if (isMenuOpen) {
+      setIsCourseActionsOpen(true)
+    }
+  }, [hasCourseActions, isMenuOpen])
+
+  useEffect(() => {
+    if (!hasLyceumActions) {
+      setIsLyceumActionsOpen(false)
+      return
+    }
+    if (isMenuOpen) {
+      setIsLyceumActionsOpen(true)
+    }
+  }, [hasLyceumActions, isMenuOpen])
 
   const navLinkClassName = ({ isActive }: NavLinkRenderProps) =>
     [
@@ -357,14 +406,106 @@ const TopNav = () => {
         }`}
       >
         <div className="flex flex-col gap-3 px-4 py-4">
-          <NavLink to="/shkoli" className={mobileNavLinkClassName}>
-            {t('nav.shkoli')}
-          </NavLink>
-          <NavLink to="/lyceums" className={mobileNavLinkClassName}>
-            {t('nav.lyceums')}
-          </NavLink>
-          {canEditLyceum || canAddCourse ? (
-            <div className="ml-4 flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <NavLink
+              to="/shkoli"
+              className={(props) =>
+                `${mobileNavLinkClassName(props)} flex-1`
+              }
+            >
+              {t('nav.shkoli')}
+            </NavLink>
+            {hasCourseActions ? (
+              <button
+                type="button"
+                onClick={() => setIsCourseActionsOpen((prev) => !prev)}
+                aria-expanded={isCourseActionsOpen}
+                aria-controls="mobile-course-actions"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-brand/40 hover:text-brand"
+              >
+                <svg
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                  className={`h-4 w-4 transition ${
+                    isCourseActionsOpen ? 'rotate-180' : ''
+                  }`}
+                >
+                  <path
+                    d="M5.5 7.5l4.5 4.5 4.5-4.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            ) : null}
+          </div>
+          {hasCourseActions ? (
+            <div
+              id="mobile-course-actions"
+              aria-hidden={!isCourseActionsOpen}
+              className={`ml-4 flex flex-col gap-2 overflow-hidden transition-[max-height,opacity] duration-200 ease-out ${
+                isCourseActionsOpen
+                  ? 'max-h-32 opacity-100'
+                  : 'max-h-0 opacity-0 pointer-events-none'
+              }`}
+            >
+              <Link
+                to={`/shkoli/${currentCourseId}/edit`}
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-brand/40 hover:text-brand"
+              >
+                {t('pages.shkoli.detail.sideNav.editCourse')}
+              </Link>
+            </div>
+          ) : null}
+          <div className="flex items-center gap-2">
+            <NavLink
+              to="/lyceums"
+              className={(props) =>
+                `${mobileNavLinkClassName(props)} flex-1`
+              }
+            >
+              {t('nav.lyceums')}
+            </NavLink>
+            {hasLyceumActions ? (
+              <button
+                type="button"
+                onClick={() => setIsLyceumActionsOpen((prev) => !prev)}
+                aria-expanded={isLyceumActionsOpen}
+                aria-controls="mobile-lyceum-actions"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:border-brand/40 hover:text-brand"
+              >
+                <svg
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                  className={`h-4 w-4 transition ${
+                    isLyceumActionsOpen ? 'rotate-180' : ''
+                  }`}
+                >
+                  <path
+                    d="M5.5 7.5l4.5 4.5 4.5-4.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            ) : null}
+          </div>
+          {hasLyceumActions ? (
+            <div
+              id="mobile-lyceum-actions"
+              aria-hidden={!isLyceumActionsOpen}
+              className={`ml-4 flex flex-col gap-2 overflow-hidden transition-[max-height,opacity] duration-200 ease-out ${
+                isLyceumActionsOpen
+                  ? 'max-h-48 opacity-100'
+                  : 'max-h-0 opacity-0 pointer-events-none'
+              }`}
+            >
               {canEditLyceum ? (
                 <Link
                   to={`/lyceums/${currentLyceumId}/edit`}
