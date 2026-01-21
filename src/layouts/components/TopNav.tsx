@@ -14,6 +14,7 @@ import LanguageSwitcher from '../../components/ui/LanguageSwitcher'
 import UserAvatar from '../../components/ui/UserAvatar'
 import { useAuthStatus } from '../../hooks/useAuthStatus'
 import { useLogoutMutation } from '../../hooks/useLogoutMutation'
+import { useAdministratedLyceum } from '../../pages/Profile/hooks/useAdministratedLyceum'
 import { useUserProfile } from '../../pages/Profile/hooks/useUserProfile'
 import { useLyceumLecturers } from '../../pages/Lyceums/hooks/useLyceumLecturers'
 import type { ApiError } from '../../types/api'
@@ -29,7 +30,9 @@ const TopNav = () => {
   const logoutMutation = useLogoutMutation()
   const { showToast } = useToast()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const headerRef = useRef<HTMLElement | null>(null)
+  const profileMenuRef = useRef<HTMLDivElement | null>(null)
   const lyceumMatch = location.pathname.match(/^\/lyceums\/(\d+)(?:\/.*)?$/)
   const currentLyceumId = lyceumMatch ? Number(lyceumMatch[1]) : null
   const canEditLyceum =
@@ -50,12 +53,33 @@ const TopNav = () => {
     Number.isFinite(currentLyceumId) && (canEditLyceum || isLyceumLecturer),
   )
 
+  const administratedLyceumId =
+    typeof currentUser?.administratedLyceumId === 'number' &&
+    Number.isFinite(currentUser.administratedLyceumId)
+      ? currentUser.administratedLyceumId
+      : null
+  const hasAdministratedLyceum = administratedLyceumId !== null
+  const {
+    data: administratedLyceum,
+    isLoading: isAdministratedLyceumLoading,
+    error: administratedLyceumError,
+  } = useAdministratedLyceum(administratedLyceumId ?? undefined, {
+    enabled: isAuthenticated && hasAdministratedLyceum,
+  })
   const profileName =
     getUserDisplayName(currentUser) || t('pages.profile.unknownUser')
   const profileAvatarAlt = t('nav.profileAvatarAlt', { name: profileName })
+  const administratedLyceumLabel = administratedLyceum?.name
+    ? administratedLyceum.name
+    : isAdministratedLyceumLoading
+      ? t('pages.profile.details.administratedLyceumLoading')
+      : administratedLyceumError
+        ? t('pages.profile.details.administratedLyceumUnavailable')
+        : t('pages.profile.details.administratedLyceumUnknown')
 
   useEffect(() => {
     setIsMenuOpen(false)
+    setIsProfileMenuOpen(false)
   }, [location.pathname])
 
   const navLinkClassName = ({ isActive }: NavLinkRenderProps) =>
@@ -111,6 +135,31 @@ const TopNav = () => {
     logoutMutation.error ?? null,
     t,
   )
+
+  useEffect(() => {
+    if (typeof document === 'undefined' || !isProfileMenuOpen) return undefined
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!profileMenuRef.current) return
+      if (!profileMenuRef.current.contains(event.target as Node)) {
+        setIsProfileMenuOpen(false)
+      }
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsProfileMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isProfileMenuOpen])
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -184,14 +233,65 @@ const TopNav = () => {
           <div className="hidden items-center gap-2 md:flex">
             {isAuthenticated ? (
               <>
-                <Link
-                  to="/profile"
-                  aria-label={t('nav.profileLink')}
-                  title={profileName}
-                  className="inline-flex items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                >
-                  <UserAvatar alt={profileAvatarAlt} size="sm" />
-                </Link>
+                <div ref={profileMenuRef} className="relative">
+                  <button
+                    type="button"
+                    aria-label={t('nav.profileMenuLabel')}
+                    aria-haspopup="menu"
+                    aria-expanded={isProfileMenuOpen}
+                    aria-controls="profile-menu"
+                    title={profileName}
+                    onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+                    className="inline-flex items-center gap-1 rounded-full border border-transparent bg-white pr-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                  >
+                    <UserAvatar alt={profileAvatarAlt} size="sm" />
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className={`h-4 w-4 text-slate-600 transition ${
+                        isProfileMenuOpen ? 'rotate-180' : ''
+                      }`}
+                    >
+                      <path
+                        d="M5.5 7.5l4.5 4.5 4.5-4.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <div
+                    id="profile-menu"
+                    role="menu"
+                    aria-hidden={!isProfileMenuOpen}
+                    className={`absolute right-0 mt-2 w-56 origin-top-right rounded-xl border border-slate-200 bg-white p-2 shadow-lg transition ${
+                      isProfileMenuOpen
+                        ? 'scale-100 opacity-100'
+                        : 'pointer-events-none scale-95 opacity-0'
+                    }`}
+                  >
+                    {hasAdministratedLyceum ? (
+                      <Link
+                        to={`/lyceums/${administratedLyceumId}`}
+                        role="menuitem"
+                        onClick={() => setIsProfileMenuOpen(false)}
+                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
+                      >
+                        {administratedLyceumLabel}
+                      </Link>
+                    ) : null}
+                    <Link
+                      to="/profile"
+                      role="menuitem"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                      className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
+                    >
+                      {t('nav.profile')}
+                    </Link>
+                  </div>
+                </div>
                 <button
                   type="button"
                   onClick={handleLogout}
@@ -299,6 +399,14 @@ const TopNav = () => {
                   <UserAvatar alt={profileAvatarAlt} size="sm" />
                   <span>{t('nav.profile')}</span>
                 </Link>
+                {hasAdministratedLyceum ? (
+                  <Link
+                    to={`/lyceums/${administratedLyceumId}`}
+                    className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                  >
+                    <span>{administratedLyceumLabel}</span>
+                  </Link>
+                ) : null}
                 <button
                   type="button"
                   onClick={handleLogout}

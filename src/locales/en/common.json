@@ -59,8 +59,10 @@
     "login": "Log in",
     "register": "Register",
     "profile": "Profile",
+    "profileMenuLabel": "Open profile menu",
     "profileLink": "Open profile",
     "profileAvatarAlt": "Profile picture for {{name}}",
+    "administratedLyceum": "Administrated lyceum",
     "logout": "Log out",
     "loggingOut": "Logging out..."
   },
