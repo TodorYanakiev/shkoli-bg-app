@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode, RefObject } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 
 import placeholderImage from '../../../assets/lyceum-placeholder.svg'
 import { useAuthStatus } from '../../../hooks/useAuthStatus'
@@ -146,6 +146,7 @@ const useCarouselMetrics = (
 const LyceumDetailPage = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { isAuthenticated } = useAuthStatus()
   const { data: user } = useUserProfile({ enabled: isAuthenticated })
   const [isDesktop, setIsDesktop] = useState(() => {
@@ -179,6 +180,7 @@ const LyceumDetailPage = () => {
   const [courseStartIndex, setCourseStartIndex] = useState(0)
   const [lecturerStartIndex, setLecturerStartIndex] = useState(0)
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
+  const shouldOpenInviteModal = searchParams.get('inviteLecturer') === '1'
 
   const fallbackValue = t('pages.lyceums.detail.notProvided')
   const coursesCount = courses?.length ?? 0
@@ -367,6 +369,25 @@ const LyceumDetailPage = () => {
       user?.administratedLyceumId === lyceumId ||
       isLyceumLecturer)
   const canInviteLecturer = canEditLyceum
+
+  useEffect(() => {
+    if (shouldOpenInviteModal && canInviteLecturer) {
+      setIsInviteModalOpen(true)
+    }
+  }, [shouldOpenInviteModal, canInviteLecturer])
+
+  const clearInviteParam = () => {
+    if (!searchParams.has('inviteLecturer')) return
+    const nextParams = new URLSearchParams(searchParams)
+    nextParams.delete('inviteLecturer')
+    setSearchParams(nextParams, { replace: true })
+  }
+
+  const handleCloseInviteModal = () => {
+    setIsInviteModalOpen(false)
+    clearInviteParam()
+  }
+
   const inviteModalId = 'lyceum-invite-lecturer-modal'
   const navIconClassName = 'h-5 w-5'
   const sideNavWidth = !isDesktop
@@ -1087,7 +1108,7 @@ const LyceumDetailPage = () => {
         <LyceumLecturerInviteModal
           lyceumId={lyceumId}
           modalId={inviteModalId}
-          onClose={() => setIsInviteModalOpen(false)}
+          onClose={handleCloseInviteModal}
         />
       ) : null}
     </section>

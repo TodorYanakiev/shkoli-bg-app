@@ -52,6 +52,7 @@ const TopNav = () => {
   const canAddCourse = Boolean(
     Number.isFinite(currentLyceumId) && (canEditLyceum || isLyceumLecturer),
   )
+  const canInviteLecturer = canEditLyceum
 
   const administratedLyceumId =
     typeof currentUser?.administratedLyceumId === 'number' &&
@@ -80,7 +81,7 @@ const TopNav = () => {
   useEffect(() => {
     setIsMenuOpen(false)
     setIsProfileMenuOpen(false)
-  }, [location.pathname])
+  }, [location.pathname, location.search])
 
   const navLinkClassName = ({ isActive }: NavLinkRenderProps) =>
     [
@@ -378,6 +379,14 @@ const TopNav = () => {
                   className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-brand/40 hover:text-brand"
                 >
                   {t('pages.lyceums.detail.sideNav.addCourse')}
+                </Link>
+              ) : null}
+              {canInviteLecturer ? (
+                <Link
+                  to={`/lyceums/${currentLyceumId}?inviteLecturer=1`}
+                  className="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-brand/40 hover:text-brand"
+                >
+                  {t('pages.lyceums.detail.sideNav.addLecturer')}
                 </Link>
               ) : null}
             </div>
