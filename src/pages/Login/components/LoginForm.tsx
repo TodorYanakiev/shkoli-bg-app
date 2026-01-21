@@ -63,7 +63,7 @@ const LoginForm = () => {
           message: t('feedback.auth.loginSuccess'),
           tone: 'success',
         })
-        navigate('/shkoli', { replace: true })
+        navigate('/profile', { replace: true })
       },
     })
   }

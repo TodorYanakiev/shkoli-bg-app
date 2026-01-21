@@ -26,7 +26,7 @@ const mockJsonEndpoint = async (
   })
 }
 
-test('user can log in and reach the courses page', async ({ page }) => {
+test('user can log in and reach the profile page', async ({ page }) => {
   await mockJsonEndpoint(page, '**/api/v1/auth/authenticate', {
     access_token: 'access-token',
     refresh_token: 'refresh-token',
@@ -45,7 +45,7 @@ test('user can log in and reach the courses page', async ({ page }) => {
   await page.getByTestId('login-password').fill('password123')
   await page.getByTestId('login-submit').click()
 
-  await expect(page).toHaveURL(/\/shkoli$/)
+  await expect(page).toHaveURL(/\/profile$/)
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 
   const tokens = await page.evaluate(() => ({
@@ -57,7 +57,7 @@ test('user can log in and reach the courses page', async ({ page }) => {
   expect(tokens.refresh).toBe('refresh-token')
 })
 
-test('user can register and reach the courses page', async ({ page }) => {
+test('user can register and reach the profile page', async ({ page }) => {
   await mockJsonEndpoint(page, '**/api/v1/auth/register', {
     access_token: 'access-token',
     refresh_token: 'refresh-token',
@@ -80,7 +80,7 @@ test('user can register and reach the courses page', async ({ page }) => {
   await page.getByTestId('register-password-repeat').fill('password123')
   await page.getByTestId('register-submit').click()
 
-  await expect(page).toHaveURL(/\/shkoli$/)
+  await expect(page).toHaveURL(/\/profile$/)
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 
   const tokens = await page.evaluate(() => ({
