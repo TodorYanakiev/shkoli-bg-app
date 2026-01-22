@@ -3,7 +3,12 @@ import type { TFunction } from 'i18next'
 
 import courseLogoPlaceholder from '../../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
-import type { CourseResponse, CourseImageResponse } from '../../../../types/courses'
+import type {
+  CourseImageResponse,
+  CourseResponse,
+  CourseScheduleSlot,
+  CourseScheduleSpecialCase,
+} from '../../../../types/courses'
 import {
   getPreferredCourseImage,
   resolveCourseImageUrl,
@@ -32,8 +37,8 @@ type CourseDetailView = {
   normalizedWebsiteLink: string | null
   normalizedFacebookLink: string | null
   courseDetails: CourseDetailValue[]
-  scheduleSlots: NonNullable<CourseResponse['schedule']>['slots']
-  scheduleSpecialCases: NonNullable<CourseResponse['schedule']>['specialCases']
+  scheduleSlots: CourseScheduleSlot[]
+  scheduleSpecialCases: CourseScheduleSpecialCase[]
   logoImage?: CourseImageResponse
   mainImage?: CourseImageResponse
   logoImageUrl: string
