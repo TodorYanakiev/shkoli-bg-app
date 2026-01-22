@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 
-import { env } from '../constants/env'
+import { env } from './env'
 import { clearTokens, getAccessToken } from '../utils/authStorage'
 import type { ApiError } from '../types/api'
 
