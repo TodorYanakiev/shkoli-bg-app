@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import type { TFunction } from 'i18next'
 
@@ -51,6 +51,7 @@ export const useCourseEditForm = ({
   })
   const scheduleSlotValues = watch('scheduleSlots') ?? []
   const isInLyceum = watch('isInLyceum') ?? true
+  const previousIsInLyceum = useRef<boolean | null>(null)
 
   useEffect(() => {
     if (!course) return
@@ -112,8 +113,13 @@ export const useCourseEditForm = ({
   }, [scheduleSlotValues, setValue])
 
   useEffect(() => {
-    if (!isInLyceum) return
-    setValue('address', '', { shouldValidate: true })
+    const previousValue = previousIsInLyceum.current
+    previousIsInLyceum.current = isInLyceum
+    if (previousValue === null) return
+    if (previousValue && isInLyceum) return
+    if (!previousValue && isInLyceum) {
+      setValue('address', '', { shouldValidate: true })
+    }
   }, [isInLyceum, setValue])
 
   return {
