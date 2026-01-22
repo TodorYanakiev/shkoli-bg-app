@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { HelmetProvider } from 'react-helmet-async'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -43,7 +44,7 @@ vi.mock('./hooks/useVerifyLyceumRightsMutation', () => ({
   useVerifyLyceumRightsMutation: useVerifyLyceumRightsMutationMock,
 }))
 
-vi.mock('../../../constants/lyceums', () => {
+vi.mock('../../../../constants/lyceums', () => {
   const towns = ['Sofia', 'Plovdiv'] as const
   return { LYCEUM_TOWNS: towns }
 })
@@ -114,14 +115,21 @@ type VerifyMutationResult = {
 let requestMutationState: RequestMutationResult
 let verifyMutationState: VerifyMutationResult
 
-const renderPage = () =>
-  render(
-    <HelmetProvider>
-      <MemoryRouter>
-        <LyceumRightsPage />
-      </MemoryRouter>
-    </HelmetProvider>,
+const renderPage = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  })
+
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <HelmetProvider>
+        <MemoryRouter>
+          <LyceumRightsPage />
+        </MemoryRouter>
+      </HelmetProvider>
+    </QueryClientProvider>,
   )
+}
 
 beforeAll(async () => {
   await i18n.changeLanguage('en')
