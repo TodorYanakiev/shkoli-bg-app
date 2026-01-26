@@ -44,7 +44,7 @@ vi.mock('./hooks/useVerifyLyceumRightsMutation', () => ({
   useVerifyLyceumRightsMutation: useVerifyLyceumRightsMutationMock,
 }))
 
-vi.mock('../../../../constants/lyceums', () => {
+vi.mock('../../../constants/lyceums', () => {
   const towns = ['Sofia', 'Plovdiv'] as const
   return { LYCEUM_TOWNS: towns }
 })
