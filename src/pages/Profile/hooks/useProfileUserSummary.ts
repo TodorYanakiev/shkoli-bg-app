@@ -22,10 +22,12 @@ export const useProfileUserSummary = (
   user: CurrentUser | null | undefined,
   t: TFunction,
 ): ProfileUserSummary => {
-  const displayName = getUserDisplayName(user) || t('pages.profile.unknownUser')
-  const fullName = getUserFullName(user) || t('pages.profile.emptyValue')
-  const username = user?.username ?? t('pages.profile.emptyValue')
-  const email = user?.email ?? t('pages.profile.emptyValue')
+  const safeUser = user ?? undefined
+  const displayName =
+    getUserDisplayName(safeUser) || t('pages.profile.unknownUser')
+  const fullName = getUserFullName(safeUser) || t('pages.profile.emptyValue')
+  const username = safeUser?.username ?? t('pages.profile.emptyValue')
+  const email = safeUser?.email ?? t('pages.profile.emptyValue')
   const hasLyceumAdministration = Boolean(user?.administratedLyceumId)
   const administratedLyceumId = user?.administratedLyceumId
   const lecturedLyceumIds = useMemo(() => {
