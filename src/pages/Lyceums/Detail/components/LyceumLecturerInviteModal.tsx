@@ -9,7 +9,7 @@ import type { ApiError } from '../../../../types/api'
 import {
   getLyceumLecturerSchema,
   type LyceumLecturerFormValues,
-} from '../../../../validations/lyceums'
+} from '../../validations/lyceumLecturerSchema'
 import { useInviteLyceumLecturerMutation } from '../../hooks/useInviteLyceumLecturerMutation'
 import { lyceumLecturersQueryKey } from '../../hooks/useLyceumLecturers'
 import { useUsers } from '../../hooks/useUsers'

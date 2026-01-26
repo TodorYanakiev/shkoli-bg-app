@@ -31,3 +31,5 @@ AGENTS.md
 .env
 .env.production
 .env.example
+
+coverage/

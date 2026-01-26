@@ -1,0 +1,57 @@
+import type { TFunction } from 'i18next'
+import type { FieldErrors, UseFormRegister } from 'react-hook-form'
+
+import { courseEditStyles } from './courseEditStyles'
+import type { CourseEditFormValues } from '../validations/courseEditSchema'
+
+type CourseEditLinksSectionProps = {
+  register: UseFormRegister<CourseEditFormValues>
+  errors: FieldErrors<CourseEditFormValues>
+  t: TFunction
+}
+
+export const CourseEditLinksSection = ({
+  register,
+  errors,
+  t,
+}: CourseEditLinksSectionProps) => (
+  <fieldset className={courseEditStyles.fieldsetClassName}>
+    <legend className={courseEditStyles.legendClassName}>
+      {t('pages.shkoli.create.form.sections.links')}
+    </legend>
+    <div className="grid gap-4 md:grid-cols-2">
+      <label className="text-sm font-medium text-slate-700">
+        {t('pages.shkoli.create.form.fields.websiteLink')}
+        <input
+          type="url"
+          {...register('websiteLink')}
+          placeholder={t('pages.shkoli.create.form.fields.websiteLink')}
+          className={courseEditStyles.inputClassName(
+            Boolean(errors.websiteLink),
+          )}
+        />
+        {errors.websiteLink ? (
+          <span className={courseEditStyles.errorTextClassName}>
+            {errors.websiteLink.message}
+          </span>
+        ) : null}
+      </label>
+      <label className="text-sm font-medium text-slate-700">
+        {t('pages.shkoli.create.form.fields.facebookLink')}
+        <input
+          type="url"
+          {...register('facebookLink')}
+          placeholder={t('pages.shkoli.create.form.fields.facebookLink')}
+          className={courseEditStyles.inputClassName(
+            Boolean(errors.facebookLink),
+          )}
+        />
+        {errors.facebookLink ? (
+          <span className={courseEditStyles.errorTextClassName}>
+            {errors.facebookLink.message}
+          </span>
+        ) : null}
+      </label>
+    </div>
+  </fieldset>
+)
