@@ -48,6 +48,7 @@ export const buildCourseSchedule = (
       dayOfWeek,
       dayOfMonth,
       startTime: normalizeOptionalText(slot.startTime),
+      endTime: normalizeOptionalText(slot.endTime),
       singleClassDurationMinutes: normalizeOptionalInteger(
         slot.singleClassDurationMinutes,
       ),
@@ -76,6 +77,7 @@ export const defaultScheduleSlot = {
   dayOfWeek: '',
   dayOfMonth: '',
   startTime: '',
+  endTime: '',
   singleClassDurationMinutes: '',
 }
 

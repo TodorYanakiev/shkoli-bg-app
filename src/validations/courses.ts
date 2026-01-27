@@ -58,6 +58,7 @@ const getCourseScheduleSlotSchema = (t: TFunction) =>
         }),
       dayOfMonth: getOptionalIntegerField(t),
       startTime: optionalTextField,
+      endTime: optionalTextField,
       singleClassDurationMinutes: getOptionalIntegerField(t),
     })
     .superRefine((values, context) => {
