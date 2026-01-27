@@ -2,6 +2,7 @@ import type {
   CourseScheduleSlot,
   CourseScheduleSpecialCase,
 } from '../../../../types/courses'
+import type { TFunction } from 'i18next'
 import { BGN_PER_EUR } from '../../../../constants/currency'
 import type { ScheduleBadge } from '../types'
 
