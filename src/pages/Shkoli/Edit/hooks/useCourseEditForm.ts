@@ -78,6 +78,7 @@ export const useCourseEditForm = ({
               ? slot.dayOfMonth.toString()
               : '',
           startTime: slot.startTime ?? '',
+          endTime: slot.endTime ?? '',
           singleClassDurationMinutes:
             typeof slot.singleClassDurationMinutes === 'number'
               ? slot.singleClassDurationMinutes.toString()

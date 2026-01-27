@@ -30,6 +30,8 @@ type CourseDetailView = {
   courseName: string
   courseTypeLabel: string
   hasCourseType: boolean
+  showCurrencyBadge: boolean
+  currencyBadgeLabel: string
   courseDescription: string
   ageGroups: string[]
   priceValue: string
@@ -58,12 +60,14 @@ export const useCourseDetailView = ({
       ? t(`courses.types.${course.type}`)
       : fallbackValue
     const hasCourseType = Boolean(course?.type)
+    const showCurrencyBadge = typeof course?.price === 'number'
+    const currencyBadgeLabel = t('pages.shkoli.detail.currencyBadge')
     const courseDescription =
       course?.description ?? t('pages.shkoli.detail.descriptionPlaceholder')
     const ageGroups = course?.ageGroupList ?? []
     const priceValue =
       typeof course?.price === 'number'
-        ? formatPrice(course.price, locale, t)
+        ? formatPrice(course.price, locale)
         : fallbackValue
     const trimmedAddress = getTrimmedString(course?.address)
     const normalizedAchievements = getTrimmedString(course?.achievements)
@@ -101,6 +105,8 @@ export const useCourseDetailView = ({
       courseName,
       courseTypeLabel,
       hasCourseType,
+      showCurrencyBadge,
+      currencyBadgeLabel,
       courseDescription,
       ageGroups,
       priceValue,

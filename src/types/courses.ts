@@ -104,6 +104,7 @@ export type CourseScheduleSlot = {
   dayOfWeek?: CourseScheduleDayOfWeek
   dayOfMonth?: number
   startTime?: string
+  endTime?: string
   classesCount?: number
   singleClassDurationMinutes?: number
   gapBetweenClassesMinutes?: number

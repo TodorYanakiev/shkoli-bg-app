@@ -43,13 +43,20 @@ export const CourseDetailScheduleSlots = ({
         const startTimeValue = slot.startTime
           ? formatScheduleTime(slot.startTime)
           : null
+        const endTimeValue = slot.endTime
+          ? formatScheduleTime(slot.endTime)
+          : null
+        const timeRangeValue =
+          startTimeValue && endTimeValue
+            ? `${startTimeValue} - ${endTimeValue}`
+            : startTimeValue ?? endTimeValue
         const durationValue =
           typeof slot.singleClassDurationMinutes === 'number'
             ? t('pages.shkoli.detail.schedule.minutes', {
                 count: slot.singleClassDurationMinutes,
               })
             : null
-        const hasLeftColumn = Boolean(startTimeValue || durationValue)
+        const hasLeftColumn = Boolean(timeRangeValue || durationValue)
         const hasMetaItems = metaItems.length > 0
         return (
           <div
@@ -74,13 +81,13 @@ export const CourseDetailScheduleSlots = ({
                 <div className="flex flex-wrap gap-2">
                   {hasLeftColumn ? (
                     <div className="flex flex-col gap-2">
-                      {startTimeValue ? (
+                      {timeRangeValue ? (
                         <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600">
                           <span className="text-slate-400">
-                            {t('pages.shkoli.detail.schedule.startTime')}
+                            {t('pages.shkoli.detail.schedule.time')}
                           </span>
                           <span className="font-semibold text-slate-900">
-                            {startTimeValue}
+                            {timeRangeValue}
                           </span>
                         </span>
                       ) : null}

@@ -170,6 +170,24 @@ const ScheduleSlots = ({
                   ) : null}
                 </label>
                 <label className="text-sm font-medium text-slate-700">
+                  {t('pages.shkoli.detail.schedule.endTime')}
+                  <input
+                    type="time"
+                    lang={timePickerLang}
+                    step={60}
+                    {...register(`scheduleSlots.${index}.endTime`)}
+                    className={courseEditStyles.inputClassName(
+                      Boolean(slotErrors?.endTime),
+                    )}
+                    disabled={isSubmitting}
+                  />
+                  {slotErrors?.endTime ? (
+                    <span className={courseEditStyles.errorTextClassName}>
+                      {slotErrors.endTime.message}
+                    </span>
+                  ) : null}
+                </label>
+                <label className="text-sm font-medium text-slate-700">
                   {t('pages.shkoli.detail.schedule.duration')}
                   <input
                     type="number"
