@@ -438,6 +438,7 @@
         "loading": "Зареждане на школа...",
         "priceFree": "Безплатно",
         "heroLabel": "Преглед на школата",
+        "currencyBadge": "EUR",
         "sideNav": {
           "label": "Секции на страницата на школата",
           "overview": "Преглед",
@@ -530,6 +531,7 @@
             "ageGroups": "Възрастови групи",
             "description": "Описание",
             "price": "Цена",
+            "priceHintEuro": "Цената трябва да е в евро.",
             "address": "Адрес",
             "achievements": "Постижения",
             "facebookLink": "Facebook линк",

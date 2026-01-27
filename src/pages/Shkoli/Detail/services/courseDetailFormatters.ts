@@ -1,29 +1,31 @@
-import type { TFunction } from 'i18next'
-
 import type {
   CourseScheduleSlot,
   CourseScheduleSpecialCase,
 } from '../../../../types/courses'
+import { BGN_PER_EUR } from '../../../../constants/currency'
 import type { ScheduleBadge } from '../types'
 
-export const formatPrice = (
-  price: number,
+const formatCurrency = (
+  value: number,
   locale: string,
-  t: TFunction,
+  currency: 'EUR' | 'BGN',
 ) => {
-  if (price === 0) {
-    return t('pages.shkoli.detail.priceFree')
-  }
-
   try {
     return new Intl.NumberFormat(locale, {
       style: 'currency',
-      currency: 'BGN',
+      currency,
+      minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(price)
+    }).format(value)
   } catch {
-    return price.toFixed(2)
+    return value.toFixed(2)
   }
+}
+
+export const formatPrice = (price: number, locale: string) => {
+  const euroLabel = formatCurrency(price, locale, 'EUR')
+  const levaLabel = formatCurrency(price * BGN_PER_EUR, locale, 'BGN')
+  return `${euroLabel} / ${levaLabel}`
 }
 
 export const formatScheduleDate = (value: string, locale: string) => {

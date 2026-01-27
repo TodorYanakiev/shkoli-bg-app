@@ -40,6 +40,9 @@ export const CourseCreateDetailsSection = ({
             {errors.price.message}
           </span>
         ) : null}
+        <p className="mt-1 text-xs text-slate-500">
+          {t('pages.shkoli.create.form.fields.priceHintEuro')}
+        </p>
       </label>
       <div className="space-y-2 md:col-span-2">
         <label className="flex items-center gap-2 text-sm font-medium text-slate-700">

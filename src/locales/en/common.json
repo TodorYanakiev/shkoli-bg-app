@@ -439,6 +439,7 @@
         "loading": "Loading course...",
         "priceFree": "Free",
         "heroLabel": "Course overview",
+        "currencyBadge": "EUR",
         "sideNav": {
           "label": "Course page sections",
           "overview": "Overview",
@@ -531,6 +532,7 @@
             "ageGroups": "Age groups",
             "description": "Description",
             "price": "Price",
+            "priceHintEuro": "Price must be in euro.",
             "isInLyceum": "Course takes place in the lyceum",
             "isInLyceumHint": "Uncheck to provide a different address.",
             "address": "Address",
