@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { CONTACT_EMAIL } from '../../constants/contact'
 
 const AppFooter = () => {
   const { t } = useTranslation()
@@ -12,6 +13,14 @@ const AppFooter = () => {
             {t('app.title')}
           </p>
           <p>{t('layouts.app.footer.description')}</p>
+          <p className="text-xs text-slate-500">
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="font-medium text-slate-700 transition-colors hover:text-brand-dark"
+            >
+              {t('layouts.app.footer.contact', { email: CONTACT_EMAIL })}
+            </a>
+          </p>
           <p className="text-xs text-slate-400">
             {t('layouts.app.footer.notice')}
           </p>

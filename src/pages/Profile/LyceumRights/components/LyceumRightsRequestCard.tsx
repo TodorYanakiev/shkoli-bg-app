@@ -1,5 +1,6 @@
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { CONTACT_EMAIL } from '../../../../constants/contact'
 import { LYCEUM_TOWNS } from '../../../../constants/lyceums'
 import type { RequestOutcome } from '../types'
 import {
@@ -95,7 +96,7 @@ const LyceumRightsRequestCard = ({
               ].join(' ')}
               role="status"
             >
-              {t(requestOutcomeMessageKey)}
+              {t(requestOutcomeMessageKey, { email: CONTACT_EMAIL })}
             </div>
           ) : null}
           <div>
