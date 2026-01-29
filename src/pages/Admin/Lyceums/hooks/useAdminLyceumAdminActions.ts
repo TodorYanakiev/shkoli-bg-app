@@ -6,6 +6,7 @@ import { useToast } from '../../../../components/feedback/ToastContext'
 import type { ApiError } from '../../../../types/api'
 import type { AppError } from '../../../../types/appError'
 import { adminLyceumAdminsQueryKey } from './useAdminLyceumAdmins'
+import { adminLyceumsQueryKey } from './useAdminLyceums'
 import { useAssignLyceumAdminMutation } from './useAssignLyceumAdminMutation'
 import { useRemoveLyceumAdminMutation } from './useRemoveLyceumAdminMutation'
 import {
@@ -53,6 +54,7 @@ export const useAdminLyceumAdminActions = (
         queryClient.invalidateQueries({
           queryKey: adminLyceumAdminsQueryKey(targetLyceumId),
         })
+        queryClient.invalidateQueries({ queryKey: adminLyceumsQueryKey })
         showToast({
           message: t('feedback.lyceums.adminAdded'),
           tone: 'success',
