@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next'
 
 type AdminLyceumsHeaderProps = {
-  totalLyceums: number
+  verifiedCount: number
   isLoading: boolean
 }
 
 export const AdminLyceumsHeader = ({
-  totalLyceums,
+  verifiedCount,
   isLoading,
 }: AdminLyceumsHeaderProps) => {
   const { t } = useTranslation()
@@ -26,7 +26,9 @@ export const AdminLyceumsHeader = ({
         <span>
           {isLoading
             ? t('pages.admin.lyceums.loading')
-            : t('pages.admin.lyceums.countLabel', { count: totalLyceums })}
+            : t('pages.admin.lyceums.verifiedCountLabel', {
+                count: verifiedCount,
+              })}
         </span>
       </div>
     </div>

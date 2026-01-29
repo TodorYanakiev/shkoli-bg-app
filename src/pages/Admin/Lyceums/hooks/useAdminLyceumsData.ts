@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import type { AppError } from '../../../../types/appError'
 import type { LyceumResponse } from '../../../../types/lyceums'
 import type { AdminLyceumsPagination } from '../types'
@@ -10,11 +12,19 @@ type AdminLyceumsData = {
   isLoading: boolean
   error: AppError | null
   pagination: AdminLyceumsPagination
+  verifiedCount: number
 }
 
 export const useAdminLyceumsData = (): AdminLyceumsData => {
   const { data, isLoading, error } = useAdminLyceums()
   const allLyceums = data ?? []
+  const verifiedCount = useMemo(
+    () =>
+      allLyceums.filter(
+        (lyceum) => lyceum.verificationStatus === 'VERIFIED',
+      ).length,
+    [allLyceums],
+  )
   const { pageItems, pagination } = useAdminLyceumsPagination(allLyceums, {
     isLoading,
   })
@@ -24,5 +34,6 @@ export const useAdminLyceumsData = (): AdminLyceumsData => {
     isLoading,
     error: getAdminLyceumsLoadError(error ?? null),
     pagination,
+    verifiedCount,
   }
 }

@@ -35,26 +35,34 @@ export const AdminLyceumCard = ({ lyceum }: AdminLyceumCardProps) => {
   const locationLabel = [lyceum.town, lyceum.municipality]
     .filter(Boolean)
     .join(', ')
+  const canEdit = Boolean(lyceum.id)
+  const actionBaseClassName =
+    'inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold transition'
+  const actionClassName = `${actionBaseClassName} border-slate-200 bg-white text-slate-600 hover:border-brand/40 hover:text-brand`
+  const deleteClassName = `${actionBaseClassName} border-rose-200 bg-rose-50 text-rose-700 hover:border-rose-300`
 
   return (
     <article className="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand/10 text-brand">
-          <svg
-            viewBox="0 0 24 24"
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.7"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M4 11h16" />
-            <path d="M6 7h12" />
-            <path d="M7 15h10" />
-            <path d="M9 19h6" />
-          </svg>
+        <div className="flex flex-wrap items-center gap-2">
+          {canEdit ? (
+            <Link to={`/lyceums/${lyceum.id}/edit`} className={actionClassName}>
+              {t('pages.admin.lyceums.actions.update')}
+            </Link>
+          ) : (
+            <span
+              className={`${actionClassName} cursor-not-allowed opacity-60`}
+              aria-disabled="true"
+            >
+              {t('pages.admin.lyceums.actions.update')}
+            </span>
+          )}
+          <button type="button" className={deleteClassName}>
+            {t('pages.admin.lyceums.actions.delete')}
+          </button>
+          <button type="button" className={actionClassName}>
+            {t('pages.admin.lyceums.actions.manageAdmins')}
+          </button>
         </div>
         <span
           className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${getVerificationBadgeStyles(

@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import type { LyceumResponse } from '../../../../types/lyceums'
 import type { AdminLyceumsPaginationResult } from '../types'
@@ -19,7 +19,25 @@ export const useAdminLyceumsPagination = (
   items: LyceumResponse[],
   options: UseAdminLyceumsPaginationOptions = {},
 ): AdminLyceumsPaginationResult => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const searchParams = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search],
+  )
+  const setSearchParams = useCallback(
+    (nextParams: URLSearchParams, options?: { replace?: boolean }) => {
+      const nextSearch = nextParams.toString()
+      navigate(
+        {
+          pathname: location.pathname,
+          search: nextSearch ? `?${nextSearch}` : '',
+        },
+        options,
+      )
+    },
+    [location.pathname, navigate],
+  )
   const totalItems = items.length
   const rawPage = Number(searchParams.get(PAGE_PARAM))
   const parsedPage = Number.isFinite(rawPage)
@@ -32,14 +50,20 @@ export const useAdminLyceumsPagination = (
   useEffect(() => {
     if (options.isLoading) return
     if (currentPage === safePage) return
-    const nextParams = new URLSearchParams(searchParams)
+    const nextParams = new URLSearchParams(location.search)
     if (currentPage === DEFAULT_PAGE) {
       nextParams.delete(PAGE_PARAM)
     } else {
       nextParams.set(PAGE_PARAM, String(currentPage))
     }
     setSearchParams(nextParams, { replace: true })
-  }, [currentPage, options.isLoading, safePage, searchParams, setSearchParams])
+  }, [
+    currentPage,
+    location.search,
+    options.isLoading,
+    safePage,
+    setSearchParams,
+  ])
 
   const startIndex = (currentPage - 1) * PAGE_SIZE
   const endIndex = Math.min(startIndex + PAGE_SIZE, totalItems)
@@ -51,7 +75,7 @@ export const useAdminLyceumsPagination = (
 
   const goToPage = (page: number) => {
     const nextPage = clampPage(page, totalPages)
-    const nextParams = new URLSearchParams(searchParams)
+    const nextParams = new URLSearchParams(location.search)
     if (nextPage === DEFAULT_PAGE) {
       nextParams.delete(PAGE_PARAM)
     } else {

@@ -49,7 +49,7 @@ export const AdminLyceumsGrid = ({
   const { t } = useTranslation()
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="relative overflow-hidden rounded-3xl p-6 shadow-sm">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-8 left-10 h-24 w-24 rounded-full bg-brand/10 blur-2xl" />
         <div className="absolute bottom-6 right-8 h-28 w-28 rounded-full bg-emerald-100/80 blur-3xl" />

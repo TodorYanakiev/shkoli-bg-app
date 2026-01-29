@@ -814,11 +814,17 @@
         "empty": "Няма налични читалища.",
         "loadFailed": "Не успяхме да заредим читалищата.",
         "countLabel": "{{count}} читалища",
+        "verifiedCountLabel": "{{count}} \u043f\u043e\u0442\u0432\u044a\u0440\u0434\u0435\u043d\u0438",
         "rangeLabel": "Показване на {{start}}-{{end}} от {{total}}",
         "pagination": {
           "previous": "Предишна страница",
           "next": "Следваща страница",
           "page": "Страница {{current}} от {{total}}"
+        },
+        "actions": {
+          "update": "\u0420\u0435\u0434\u0430\u043a\u0446\u0438\u044f",
+          "delete": "\u0418\u0437\u0442\u0440\u0438\u0432\u0430\u043d\u0435",
+          "manageAdmins": "\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440\u0438"
         }
       },
       "users": {

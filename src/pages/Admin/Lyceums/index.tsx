@@ -7,7 +7,8 @@ import { useAdminLyceumsData } from './hooks/useAdminLyceumsData'
 
 const AdminLyceumsPage = () => {
   const { t } = useTranslation()
-  const { lyceums, isLoading, error, pagination } = useAdminLyceumsData()
+  const { lyceums, isLoading, error, pagination, verifiedCount } =
+    useAdminLyceumsData()
 
   return (
     <section className="space-y-6">
@@ -17,7 +18,7 @@ const AdminLyceumsPage = () => {
         )} | ${t('app.title')}`}</title>
       </Helmet>
       <AdminLyceumsHeader
-        totalLyceums={pagination.totalItems}
+        verifiedCount={verifiedCount}
         isLoading={isLoading}
       />
       <AdminLyceumsGrid
