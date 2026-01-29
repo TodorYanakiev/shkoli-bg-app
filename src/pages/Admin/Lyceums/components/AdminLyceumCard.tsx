@@ -5,6 +5,8 @@ import type { LyceumResponse } from '../../../../types/lyceums'
 
 type AdminLyceumCardProps = {
   lyceum: LyceumResponse
+  onRequestDelete?: (id?: number, name?: string) => void
+  isDeleting?: boolean
 }
 
 const getVerificationBadgeStyles = (
@@ -22,7 +24,11 @@ const getVerificationBadgeStyles = (
   return 'bg-slate-100 text-slate-600 border-slate-200'
 }
 
-export const AdminLyceumCard = ({ lyceum }: AdminLyceumCardProps) => {
+export const AdminLyceumCard = ({
+  lyceum,
+  onRequestDelete,
+  isDeleting = false,
+}: AdminLyceumCardProps) => {
   const { t } = useTranslation()
   const fallback = t('pages.lyceums.detail.notProvided')
   const verificationLabel = lyceum.verificationStatus
@@ -39,7 +45,13 @@ export const AdminLyceumCard = ({ lyceum }: AdminLyceumCardProps) => {
   const actionBaseClassName =
     'inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold transition'
   const actionClassName = `${actionBaseClassName} border-slate-200 bg-white text-slate-600 hover:border-brand/40 hover:text-brand`
-  const deleteClassName = `${actionBaseClassName} border-rose-200 bg-rose-50 text-rose-700 hover:border-rose-300`
+  const deleteClassName = [
+    actionBaseClassName,
+    'border-rose-200 bg-rose-50 text-rose-700 hover:border-rose-300',
+    isDeleting ? 'cursor-wait opacity-70' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <article className="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
@@ -57,8 +69,15 @@ export const AdminLyceumCard = ({ lyceum }: AdminLyceumCardProps) => {
               {t('pages.admin.lyceums.actions.update')}
             </span>
           )}
-          <button type="button" className={deleteClassName}>
-            {t('pages.admin.lyceums.actions.delete')}
+          <button
+            type="button"
+            className={deleteClassName}
+            onClick={() => onRequestDelete?.(lyceum.id, lyceum.name)}
+            disabled={!lyceum.id || isDeleting}
+          >
+            {isDeleting
+              ? t('pages.admin.lyceums.actions.deleting')
+              : t('pages.admin.lyceums.actions.delete')}
           </button>
           <button type="button" className={actionClassName}>
             {t('pages.admin.lyceums.actions.manageAdmins')}

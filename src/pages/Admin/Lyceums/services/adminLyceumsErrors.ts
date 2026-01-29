@@ -46,3 +46,6 @@ const mapApiError = (error: ApiError, fallbackKey: string): AppError => {
 
 export const getAdminLyceumsLoadError = (error: ApiError | null) =>
   error ? mapApiError(error, 'pages.admin.lyceums.loadFailed') : null
+
+export const getAdminLyceumsDeleteError = (error: ApiError | null) =>
+  error ? mapApiError(error, 'errors.lyceums.deleteFailed') : null

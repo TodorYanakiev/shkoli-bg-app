@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { AppError } from '../../../../types/appError'
 import type { LyceumResponse } from '../../../../types/lyceums'
 import type { AdminLyceumsPagination } from '../types'
 import { AdminLyceumCard } from './AdminLyceumCard'
+import { AdminLyceumDeleteModal } from './AdminLyceumDeleteModal'
 import { AdminLyceumsPaginationControls } from './AdminLyceumsPagination'
+import { useAdminLyceumActions } from '../hooks/useAdminLyceumActions'
 
 type AdminLyceumsGridProps = {
   lyceums: LyceumResponse[]
@@ -47,59 +50,90 @@ export const AdminLyceumsGrid = ({
   pagination,
 }: AdminLyceumsGridProps) => {
   const { t } = useTranslation()
+  const { onDelete, isDeleting } = useAdminLyceumActions()
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: number
+    name?: string
+  } | null>(null)
+
+  const isDeleteSubmitting = deleteTarget
+    ? isDeleting(deleteTarget.id)
+    : false
 
   return (
-    <div className="relative overflow-hidden rounded-3xl px-3 py-6 shadow-sm sm:p-6">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-8 left-10 h-24 w-24 rounded-full bg-brand/10 blur-2xl" />
-        <div className="absolute bottom-6 right-8 h-28 w-28 rounded-full bg-emerald-100/80 blur-3xl" />
-      </div>
-      {isLoading ? (
-        <div className="space-y-4">
-          <p className="text-sm text-slate-600">
-            {t('pages.admin.lyceums.loading')}
-          </p>
-          <AdminLyceumsSkeleton />
+    <>
+      <div className="relative overflow-hidden rounded-3xl px-3 py-6 shadow-sm sm:p-6">
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -top-8 left-10 h-24 w-24 rounded-full bg-brand/10 blur-2xl" />
+          <div className="absolute bottom-6 right-8 h-28 w-28 rounded-full bg-emerald-100/80 blur-3xl" />
         </div>
-      ) : error ? (
-        <div
-          className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"
-          role="alert"
-        >
-          {t(error.messageKey)}
-        </div>
-      ) : pagination.totalItems === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-4 text-sm text-slate-600">
-          {t('pages.admin.lyceums.empty')}
-        </div>
-      ) : (
-        <div className="space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <span className="text-xs text-slate-500">
-              {t('pages.admin.lyceums.rangeLabel', {
-                start: pagination.pageStart,
-                end: pagination.pageEnd,
-                total: pagination.totalItems,
-              })}
-            </span>
-            <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
-              {t('pages.admin.lyceums.countLabel', {
-                count: pagination.totalItems,
-              })}
-            </span>
+        {isLoading ? (
+          <div className="space-y-4">
+            <p className="text-sm text-slate-600">
+              {t('pages.admin.lyceums.loading')}
+            </p>
+            <AdminLyceumsSkeleton />
           </div>
-          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {lyceums.map((lyceum, index) => (
-              <li key={lyceum.id ?? `admin-lyceum-${index}`} className="h-full">
-                <AdminLyceumCard lyceum={lyceum} />
-              </li>
-            ))}
-          </ul>
-          {pagination.hasMultiplePages ? (
-            <AdminLyceumsPaginationControls pagination={pagination} />
-          ) : null}
-        </div>
-      )}
-    </div>
+        ) : error ? (
+          <div
+            className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"
+            role="alert"
+          >
+            {t(error.messageKey)}
+          </div>
+        ) : pagination.totalItems === 0 ? (
+          <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-4 text-sm text-slate-600">
+            {t('pages.admin.lyceums.empty')}
+          </div>
+        ) : (
+          <div className="space-y-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <span className="text-xs text-slate-500">
+                {t('pages.admin.lyceums.rangeLabel', {
+                  start: pagination.pageStart,
+                  end: pagination.pageEnd,
+                  total: pagination.totalItems,
+                })}
+              </span>
+              <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                {t('pages.admin.lyceums.countLabel', {
+                  count: pagination.totalItems,
+                })}
+              </span>
+            </div>
+            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {lyceums.map((lyceum, index) => (
+                <li key={lyceum.id ?? `admin-lyceum-${index}`} className="h-full">
+                  <AdminLyceumCard
+                    lyceum={lyceum}
+                    onRequestDelete={(id, name) => {
+                      if (!id) return
+                      setDeleteTarget({ id, name })
+                    }}
+                    isDeleting={isDeleting(lyceum.id)}
+                  />
+                </li>
+              ))}
+            </ul>
+            {pagination.hasMultiplePages ? (
+              <AdminLyceumsPaginationControls pagination={pagination} />
+            ) : null}
+          </div>
+        )}
+      </div>
+      <AdminLyceumDeleteModal
+        isOpen={Boolean(deleteTarget)}
+        lyceumName={deleteTarget?.name}
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={async () => {
+          if (!deleteTarget) return
+          const didDelete = await onDelete(deleteTarget.id)
+          if (didDelete) {
+            setDeleteTarget(null)
+          }
+        }}
+        isSubmitting={isDeleteSubmitting}
+      />
+    </>
   )
 }

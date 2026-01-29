@@ -46,6 +46,10 @@ export const updateLyceum = async (id: number, payload: LyceumRequest) => {
   return response.data
 }
 
+export const deleteLyceum = async (id: number) => {
+  await httpClient.delete(`/api/v1/lyceums/${id}`)
+}
+
 export const filterLyceums = async (params: LyceumFilterParams) => {
   const response = await httpClient.get<LyceumResponse[]>(
     '/api/v1/lyceums/filter',

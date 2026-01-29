@@ -99,6 +99,7 @@
     },
     "lyceums": {
       "updateFailed": "We couldn't update this lyceum. Try again.",
+      "deleteFailed": "We couldn't delete this lyceum. Try again.",
       "lecturers": {
         "addFailed": "We couldn't send this invitation. Try again.",
         "removeFailed": "We couldn't remove this lecturer. Try again.",
@@ -139,6 +140,7 @@
     },
     "lyceums": {
       "updateSuccess": "Lyceum updated successfully.",
+      "deleteSuccess": "Lyceum deleted successfully.",
       "lecturerAdded": "Invitation sent. If the user already exists, they are now a lecturer.",
       "lecturerRemoved": "Lecturer removed successfully."
     },
@@ -825,7 +827,14 @@
         "actions": {
           "update": "Update",
           "delete": "Delete",
+          "deleting": "Deleting...",
           "manageAdmins": "Manage admins"
+        },
+        "deleteConfirm": {
+          "title": "Delete lyceum",
+          "description": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+          "confirm": "Delete lyceum",
+          "cancel": "Cancel"
         }
       },
       "users": {
