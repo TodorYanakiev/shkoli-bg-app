@@ -792,6 +792,31 @@
     "admin": {
       "title": "Admin",
       "subtitle": "Manage global settings and administration tasks.",
+      "navLabel": "Admin sections",
+      "tabs": {
+        "courses": "Courses",
+        "lyceums": "Lyceums",
+        "users": "Users"
+      },
+      "sideNav": {
+        "expand": "Expand menu",
+        "collapse": "Collapse menu"
+      },
+      "courses": {
+        "title": "Courses",
+        "subtitle": "Review and manage course content.",
+        "placeholder": "Course management tools will appear here."
+      },
+      "lyceums": {
+        "title": "Lyceums",
+        "subtitle": "Manage lyceum profiles and verification.",
+        "placeholder": "Lyceum administration tools will appear here."
+      },
+      "users": {
+        "title": "Users",
+        "subtitle": "Manage user access and roles.",
+        "placeholder": "User administration tools will appear here."
+      },
       "loading": "Loading admin access...",
       "empty": "Admin details are not available yet."
     },

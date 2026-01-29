@@ -1,18 +1,29 @@
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
+import { Outlet } from 'react-router-dom'
+
+import { AdminSideNav } from './components/AdminSideNav'
+import { AdminSubNav } from './components/AdminSubNav'
+import { useAdminLayout } from './hooks/useAdminLayout'
 
 const AdminPage = () => {
   const { t } = useTranslation()
+  const { isDesktop, isSideNavExpanded, setIsSideNavExpanded, sideNavWidth } =
+    useAdminLayout()
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-6">
       <Helmet>
         <title>{`${t('pages.admin.title')} | ${t('app.title')}`}</title>
       </Helmet>
-      <h1 className="text-2xl font-semibold text-slate-900">
-        {t('pages.admin.title')}
-      </h1>
-      <p className="text-sm text-slate-600">{t('pages.admin.subtitle')}</p>
+      <AdminSideNav
+        isDesktop={isDesktop}
+        isSideNavExpanded={isSideNavExpanded}
+        sideNavWidth={sideNavWidth}
+        onToggle={() => setIsSideNavExpanded((prev) => !prev)}
+      />
+      <AdminSubNav />
+      <Outlet />
     </section>
   )
 }

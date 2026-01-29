@@ -4,6 +4,9 @@ import AppLayout from '../layouts/AppLayout'
 import AuthLayout from '../layouts/AuthLayout'
 import AboutPage from '../pages/About'
 import AdminPage from '../pages/Admin'
+import AdminCoursesPage from '../pages/Admin/Courses'
+import AdminLyceumsPage from '../pages/Admin/Lyceums'
+import AdminUsersPage from '../pages/Admin/Users'
 import LoginPage from '../pages/Login'
 import LyceumsPage from '../pages/Lyceums'
 import LyceumDetailPage from '../pages/Lyceums/Detail'
@@ -82,6 +85,12 @@ const router = createBrowserRouter([
             <AdminPage />
           </AdminRoute>
         ),
+        children: [
+          { index: true, element: <Navigate to="courses" replace /> },
+          { path: 'courses', element: <AdminCoursesPage /> },
+          { path: 'lyceums', element: <AdminLyceumsPage /> },
+          { path: 'users', element: <AdminUsersPage /> },
+        ],
       },
       {
         path: 'profile/change-password',
