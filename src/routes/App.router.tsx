@@ -3,6 +3,7 @@ import { Navigate, createBrowserRouter } from 'react-router-dom'
 import AppLayout from '../layouts/AppLayout'
 import AuthLayout from '../layouts/AuthLayout'
 import AboutPage from '../pages/About'
+import AdminPage from '../pages/Admin'
 import LoginPage from '../pages/Login'
 import LyceumsPage from '../pages/Lyceums'
 import LyceumDetailPage from '../pages/Lyceums/Detail'
@@ -17,6 +18,7 @@ import ShkoliPage from '../pages/Shkoli'
 import CourseCreatePage from '../pages/Shkoli/Create'
 import CourseDetailPage from '../pages/Shkoli/Detail'
 import CourseEditPage from '../pages/Shkoli/Edit'
+import AdminRoute from './AdminRoute'
 import ProtectedRoute from './ProtectedRoute'
 
 const router = createBrowserRouter([
@@ -73,6 +75,14 @@ const router = createBrowserRouter([
       },
       { path: 'map', element: <MapPage /> },
       { path: 'about', element: <AboutPage /> },
+      {
+        path: 'admin',
+        element: (
+          <AdminRoute>
+            <AdminPage />
+          </AdminRoute>
+        ),
+      },
       {
         path: 'profile/change-password',
         element: (

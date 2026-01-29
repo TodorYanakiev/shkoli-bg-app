@@ -16,6 +16,7 @@ type TopNavData = {
   isAuthenticated: boolean
   profileName: string
   profileAvatarAlt: string
+  isGlobalAdmin: boolean
   administratedLyceumId: number | null
   hasAdministratedLyceum: boolean
   administratedLyceumLabel: string
@@ -35,6 +36,7 @@ export const useTopNavData = ({
 }: UseTopNavDataOptions): TopNavData => {
   const { isAuthenticated } = useAuthStatus()
   const { data: currentUser } = useUserProfile({ enabled: isAuthenticated })
+  const isGlobalAdmin = currentUser?.role === 'ADMIN'
 
   const courseMatch = pathname.match(/^\/shkoli\/(\d+)(?:\/.*)?$/)
   const currentCourseId = courseMatch ? Number(courseMatch[1]) : null
@@ -112,6 +114,7 @@ export const useTopNavData = ({
     isAuthenticated,
     profileName,
     profileAvatarAlt,
+    isGlobalAdmin,
     administratedLyceumId,
     hasAdministratedLyceum,
     administratedLyceumLabel,

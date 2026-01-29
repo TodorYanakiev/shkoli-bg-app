@@ -3,6 +3,7 @@ import { NavLink, type NavLinkRenderProps } from 'react-router-dom'
 
 type TopNavDesktopNavProps = {
   t: TFunction
+  isGlobalAdmin: boolean
 }
 
 const navLinkClassName = ({ isActive }: NavLinkRenderProps) =>
@@ -13,7 +14,10 @@ const navLinkClassName = ({ isActive }: NavLinkRenderProps) =>
       : 'border-transparent text-slate-600 hover:border-brand/40 hover:text-brand-dark',
   ].join(' ')
 
-export const TopNavDesktopNav = ({ t }: TopNavDesktopNavProps) => (
+export const TopNavDesktopNav = ({
+  t,
+  isGlobalAdmin,
+}: TopNavDesktopNavProps) => (
   <nav
     aria-label={t('layouts.app.nav.label')}
     className="hidden items-center gap-1 md:flex"
@@ -30,5 +34,10 @@ export const TopNavDesktopNav = ({ t }: TopNavDesktopNavProps) => (
     <NavLink to="/about" className={navLinkClassName}>
       {t('nav.about')}
     </NavLink>
+    {isGlobalAdmin ? (
+      <NavLink to="/admin" className={navLinkClassName}>
+        {t('nav.admin')}
+      </NavLink>
+    ) : null}
   </nav>
 )

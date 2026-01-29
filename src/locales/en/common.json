@@ -56,6 +56,7 @@
     "lyceums": "Lyceums",
     "map": "Map",
     "about": "About us",
+    "admin": "Admin",
     "login": "Log in",
     "register": "Register",
     "profile": "Profile",
@@ -787,6 +788,12 @@
     "about": {
       "title": "About us",
       "subtitle": "Learn more about the EducationNearby project."
+    },
+    "admin": {
+      "title": "Admin",
+      "subtitle": "Manage global settings and administration tasks.",
+      "loading": "Loading admin access...",
+      "empty": "Admin details are not available yet."
     },
     "notFound": {
       "title": "Page not found",
