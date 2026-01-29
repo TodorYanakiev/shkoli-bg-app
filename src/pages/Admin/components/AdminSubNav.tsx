@@ -18,7 +18,7 @@ export const AdminSubNav = () => {
   return (
     <nav
       aria-label={t('pages.admin.navLabel')}
-      className="flex items-center gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-sm lg:hidden"
+      className="flex w-full items-center justify-center gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-sm lg:hidden"
     >
       {items.map((item) => (
         <NavLink key={item.id} to={item.to} className={tabClassName}>
