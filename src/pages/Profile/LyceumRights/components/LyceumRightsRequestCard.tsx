@@ -49,6 +49,20 @@ const LyceumRightsRequestCard = ({
   const requestOutcomeMessageKey = requestOutcome
     ? getRequestOutcomeMessageKey(requestOutcome)
     : null
+  const shouldShowContact =
+    hasRequested || Boolean(requestOutcome) || shouldShowRequestError
+  const contactElement = (
+    <p className="text-xs text-slate-500">
+      <a
+        href={`mailto:${CONTACT_EMAIL}`}
+        className="font-semibold text-brand transition-colors hover:text-brand-dark"
+      >
+        {t('pages.profile.lyceumRights.request.contact', {
+          email: CONTACT_EMAIL,
+        })}
+      </a>
+    </p>
+  )
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -73,6 +87,7 @@ const LyceumRightsRequestCard = ({
               town: requestedLyceum?.town ?? '',
             })}
           </div>
+          {contactElement}
           <button
             type="button"
             onClick={onStartOver}
@@ -99,6 +114,7 @@ const LyceumRightsRequestCard = ({
               {t(requestOutcomeMessageKey, { email: CONTACT_EMAIL })}
             </div>
           ) : null}
+          {shouldShowContact ? contactElement : null}
           <div>
             <label
               htmlFor="lyceum-rights-name"
