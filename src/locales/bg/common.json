@@ -654,7 +654,7 @@
         },
         "editCta": "Редактиране на читалище",
         "labels": {
-          "verification": "Потвърждение: {{status}}"
+          "verification": "{{status}}"
         },
         "verificationStatus": {
           "VERIFIED": "Потвърдено",
