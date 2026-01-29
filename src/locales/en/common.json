@@ -100,6 +100,16 @@
     "lyceums": {
       "updateFailed": "We couldn't update this lyceum. Try again.",
       "deleteFailed": "We couldn't delete this lyceum. Try again.",
+      "admins": {
+        "loadFailed": "We couldn't load the admins for this lyceum.",
+        "addFailed": "We couldn't add this admin. Try again.",
+        "addInvalid": "Enter a valid admin email.",
+        "removeFailed": "We couldn't remove this admin. Try again.",
+        "removeInvalid": "That user is not an administrator for this lyceum.",
+        "notFound": "We couldn't find that user or lyceum.",
+        "emailNotFound": "We couldn't find a user with that email.",
+        "alreadyAssigned": "That user already administrates another lyceum."
+      },
       "lecturers": {
         "addFailed": "We couldn't send this invitation. Try again.",
         "removeFailed": "We couldn't remove this lecturer. Try again.",
@@ -141,6 +151,8 @@
     "lyceums": {
       "updateSuccess": "Lyceum updated successfully.",
       "deleteSuccess": "Lyceum deleted successfully.",
+      "adminAdded": "Administrator assigned successfully.",
+      "adminRemoved": "Administrator removed successfully.",
       "lecturerAdded": "Invitation sent. If the user already exists, they are now a lecturer.",
       "lecturerRemoved": "Lecturer removed successfully."
     },
@@ -829,6 +841,34 @@
           "delete": "Delete",
           "deleting": "Deleting...",
           "manageAdmins": "Manage admins"
+        },
+        "admins": {
+          "title": "Lyceum administrators",
+          "subtitle": "Manage administrators for {{name}}.",
+          "form": {
+            "title": "Add administrator",
+            "subtitle": "Enter the email of the user to grant access.",
+            "emailLabel": "Admin email",
+            "emailPlaceholder": "email@example.com",
+            "submit": "Add admin",
+            "submitting": "Adding admin..."
+          },
+          "suggestions": {
+            "loading": "Loading user suggestions...",
+            "error": "Unable to load user suggestions.",
+            "hint": "Start typing to see matching users.",
+            "empty": "No users match this email."
+          },
+          "list": {
+            "title": "Current administrators",
+            "subtitle": "Admins who can manage this lyceum.",
+            "loading": "Loading administrators...",
+            "empty": "No administrators found.",
+            "remove": "Remove",
+            "confirm": "Confirm",
+            "cancel": "Cancel"
+          },
+          "loadFailed": "Unable to load administrators."
         },
         "deleteConfirm": {
           "title": "Delete lyceum",

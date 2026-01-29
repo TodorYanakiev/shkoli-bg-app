@@ -49,3 +49,31 @@ export const getAdminLyceumsLoadError = (error: ApiError | null) =>
 
 export const getAdminLyceumsDeleteError = (error: ApiError | null) =>
   error ? mapApiError(error, 'errors.lyceums.deleteFailed') : null
+
+export const getAdminLyceumsAdminsLoadError = (error: ApiError | null) =>
+  error ? mapApiError(error, 'pages.admin.lyceums.admins.loadFailed') : null
+
+export const getAdminLyceumsAdminAssignError = (error: ApiError | null) => {
+  if (!error) return null
+  if (error.status === 409) {
+    return mapApiError(error, 'errors.lyceums.admins.alreadyAssigned')
+  }
+  if (error.status === 404) {
+    return mapApiError(error, 'errors.lyceums.admins.notFound')
+  }
+  if (error.status === 400) {
+    return mapApiError(error, 'errors.lyceums.admins.addInvalid')
+  }
+  return mapApiError(error, 'errors.lyceums.admins.addFailed')
+}
+
+export const getAdminLyceumsAdminRemoveError = (error: ApiError | null) => {
+  if (!error) return null
+  if (error.status === 404) {
+    return mapApiError(error, 'errors.lyceums.admins.notFound')
+  }
+  if (error.status === 400) {
+    return mapApiError(error, 'errors.lyceums.admins.removeInvalid')
+  }
+  return mapApiError(error, 'errors.lyceums.admins.removeFailed')
+}

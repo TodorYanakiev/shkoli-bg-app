@@ -6,6 +6,7 @@ import type { LyceumResponse } from '../../../../types/lyceums'
 import type { AdminLyceumsPagination } from '../types'
 import { AdminLyceumCard } from './AdminLyceumCard'
 import { AdminLyceumDeleteModal } from './AdminLyceumDeleteModal'
+import { AdminLyceumAdminsModal } from './AdminLyceumAdminsModal'
 import { AdminLyceumsPaginationControls } from './AdminLyceumsPagination'
 import { useAdminLyceumActions } from '../hooks/useAdminLyceumActions'
 
@@ -51,6 +52,10 @@ export const AdminLyceumsGrid = ({
 }: AdminLyceumsGridProps) => {
   const { t } = useTranslation()
   const { onDelete, isDeleting } = useAdminLyceumActions()
+  const [adminTarget, setAdminTarget] = useState<{
+    id: number
+    name?: string
+  } | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<{
     id: number
     name?: string
@@ -110,6 +115,10 @@ export const AdminLyceumsGrid = ({
                       if (!id) return
                       setDeleteTarget({ id, name })
                     }}
+                    onManageAdmins={(id, name) => {
+                      if (!id) return
+                      setAdminTarget({ id, name })
+                    }}
                     isDeleting={isDeleting(lyceum.id)}
                   />
                 </li>
@@ -134,6 +143,14 @@ export const AdminLyceumsGrid = ({
         }}
         isSubmitting={isDeleteSubmitting}
       />
+      {adminTarget ? (
+        <AdminLyceumAdminsModal
+          lyceumId={adminTarget.id}
+          lyceumName={adminTarget.name}
+          isOpen={Boolean(adminTarget)}
+          onClose={() => setAdminTarget(null)}
+        />
+      ) : null}
     </>
   )
 }
