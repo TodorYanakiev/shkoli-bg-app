@@ -46,6 +46,7 @@
       },
       "footer": {
         "description": "EducationNearby helps citizens find the right course faster.",
+        "contact": "Contact: {{email}}",
         "linksLabel": "Quick links",
         "notice": "All rights reserved."
       }
@@ -374,6 +375,8 @@
         "request": {
           "title": "Request verification email",
           "description": "Use the registered lyceum name and town so we can email the official address.",
+          "contact": "Having trouble? Contact us at {{email}}.",
+          "contactNotFound": "Can't find the lyceum? Contact us at {{email}}.",
           "form": {
             "lyceumNameLabel": "Lyceum name",
             "lyceumNamePlaceholder": "Official lyceum name",
@@ -395,8 +398,8 @@
             "requestedLyceum": "Lyceum: {{lyceumName}} ({{town}}).",
             "alreadyAdmin": "Attention: You already administrate this lyceum. Requests are disabled.",
             "alreadyAdminOther": "Attention: You already administrate another lyceum. Requests are disabled.",
-            "missingEmail": "Attention: We could not reach the lyceum via email. Please contact us.",
-            "notFound": "Attention: We could not find this lyceum. Check the details or contact us.",
+            "missingEmail": "Attention: We could not reach the lyceum via email. Please contact us at {{email}}.",
+            "notFound": "Attention: We could not find this lyceum. Check the details or contact us at {{email}}.",
             "unknown": "Attention: We couldn't complete the request. Please try again."
           },
           "startOver": "Send another request"
@@ -786,7 +789,8 @@
     },
     "about": {
       "title": "About us",
-      "subtitle": "Learn more about the EducationNearby project."
+      "subtitle": "Learn more about the EducationNearby project.",
+      "contact": "Contact us at {{email}}."
     },
     "notFound": {
       "title": "Page not found",

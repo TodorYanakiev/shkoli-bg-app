@@ -1,5 +1,6 @@
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { CONTACT_EMAIL } from '../../../../constants/contact'
 import { LYCEUM_TOWNS } from '../../../../constants/lyceums'
 import type { RequestOutcome } from '../types'
 import {
@@ -48,6 +49,22 @@ const LyceumRightsRequestCard = ({
   const requestOutcomeMessageKey = requestOutcome
     ? getRequestOutcomeMessageKey(requestOutcome)
     : null
+  const contactMessageKey =
+    requestOutcome?.type === 'notFound'
+      ? 'pages.profile.lyceumRights.request.contactNotFound'
+      : 'pages.profile.lyceumRights.request.contact'
+  const contactElement = (
+    <p className="text-xs text-slate-500">
+      <a
+        href={`mailto:${CONTACT_EMAIL}`}
+        className="font-semibold text-brand transition-colors hover:text-brand-dark"
+      >
+        {t(contactMessageKey, {
+          email: CONTACT_EMAIL,
+        })}
+      </a>
+    </p>
+  )
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -57,6 +74,7 @@ const LyceumRightsRequestCard = ({
       <p className="mt-2 text-sm text-slate-600">
         {t('pages.profile.lyceumRights.request.description')}
       </p>
+      {contactElement}
       {hasRequested ? (
         <div className="mt-4 space-y-3">
           <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
@@ -95,7 +113,7 @@ const LyceumRightsRequestCard = ({
               ].join(' ')}
               role="status"
             >
-              {t(requestOutcomeMessageKey)}
+              {t(requestOutcomeMessageKey, { email: CONTACT_EMAIL })}
             </div>
           ) : null}
           <div>
