@@ -375,7 +375,8 @@
         "request": {
           "title": "Request verification email",
           "description": "Use the registered lyceum name and town so we can email the official address.",
-          "contact": "If the email is incorrect, contact us at {{email}}.",
+          "contact": "Having trouble? Contact us at {{email}}.",
+          "contactNotFound": "Can't find the lyceum? Contact us at {{email}}.",
           "form": {
             "lyceumNameLabel": "Lyceum name",
             "lyceumNamePlaceholder": "Official lyceum name",

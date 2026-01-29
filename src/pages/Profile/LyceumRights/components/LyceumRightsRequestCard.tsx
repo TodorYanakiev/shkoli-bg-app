@@ -49,15 +49,17 @@ const LyceumRightsRequestCard = ({
   const requestOutcomeMessageKey = requestOutcome
     ? getRequestOutcomeMessageKey(requestOutcome)
     : null
-  const shouldShowContact =
-    hasRequested || Boolean(requestOutcome) || shouldShowRequestError
+  const contactMessageKey =
+    requestOutcome?.type === 'notFound'
+      ? 'pages.profile.lyceumRights.request.contactNotFound'
+      : 'pages.profile.lyceumRights.request.contact'
   const contactElement = (
     <p className="text-xs text-slate-500">
       <a
         href={`mailto:${CONTACT_EMAIL}`}
         className="font-semibold text-brand transition-colors hover:text-brand-dark"
       >
-        {t('pages.profile.lyceumRights.request.contact', {
+        {t(contactMessageKey, {
           email: CONTACT_EMAIL,
         })}
       </a>
@@ -72,6 +74,7 @@ const LyceumRightsRequestCard = ({
       <p className="mt-2 text-sm text-slate-600">
         {t('pages.profile.lyceumRights.request.description')}
       </p>
+      {contactElement}
       {hasRequested ? (
         <div className="mt-4 space-y-3">
           <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
@@ -87,7 +90,6 @@ const LyceumRightsRequestCard = ({
               town: requestedLyceum?.town ?? '',
             })}
           </div>
-          {contactElement}
           <button
             type="button"
             onClick={onStartOver}
@@ -114,7 +116,6 @@ const LyceumRightsRequestCard = ({
               {t(requestOutcomeMessageKey, { email: CONTACT_EMAIL })}
             </div>
           ) : null}
-          {shouldShowContact ? contactElement : null}
           <div>
             <label
               htmlFor="lyceum-rights-name"
