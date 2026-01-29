@@ -1,27 +1,31 @@
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
+import { AdminLyceumsGrid } from './components/AdminLyceumsGrid'
+import { AdminLyceumsHeader } from './components/AdminLyceumsHeader'
+import { useAdminLyceumsData } from './hooks/useAdminLyceumsData'
+
 const AdminLyceumsPage = () => {
   const { t } = useTranslation()
+  const { lyceums, isLoading, error, pagination } = useAdminLyceumsData()
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-6">
       <Helmet>
         <title>{`${t('pages.admin.lyceums.title')} | ${t(
           'pages.admin.title',
         )} | ${t('app.title')}`}</title>
       </Helmet>
-      <div className="space-y-1">
-        <h2 className="text-xl font-semibold text-slate-900">
-          {t('pages.admin.lyceums.title')}
-        </h2>
-        <p className="text-sm text-slate-600">
-          {t('pages.admin.lyceums.subtitle')}
-        </p>
-      </div>
-      <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm text-slate-600">
-        {t('pages.admin.lyceums.placeholder')}
-      </div>
+      <AdminLyceumsHeader
+        totalLyceums={pagination.totalItems}
+        isLoading={isLoading}
+      />
+      <AdminLyceumsGrid
+        lyceums={lyceums}
+        isLoading={isLoading}
+        error={error}
+        pagination={pagination}
+      />
     </section>
   )
 }

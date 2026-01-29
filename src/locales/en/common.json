@@ -810,7 +810,17 @@
       "lyceums": {
         "title": "Lyceums",
         "subtitle": "Manage lyceum profiles and verification.",
-        "placeholder": "Lyceum administration tools will appear here."
+        "placeholder": "Lyceum administration tools will appear here.",
+        "loading": "Loading lyceums...",
+        "empty": "No lyceums available yet.",
+        "loadFailed": "We couldn't load the lyceums right now.",
+        "countLabel": "{{count}} lyceums",
+        "rangeLabel": "Showing {{start}}-{{end}} of {{total}}",
+        "pagination": {
+          "previous": "Previous page",
+          "next": "Next page",
+          "page": "Page {{current}} of {{total}}"
+        }
       },
       "users": {
         "title": "Users",
