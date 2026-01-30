@@ -19,7 +19,7 @@ export const AdminLyceumAdminsModal = ({
   onClose,
 }: AdminLyceumAdminsModalProps) => {
   const { t } = useTranslation()
-  const adminActions = useAdminLyceumAdminActions(lyceumId)
+  const adminActions = useAdminLyceumAdminActions()
 
   useEffect(() => {
     if (!isOpen) return undefined

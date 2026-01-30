@@ -24,9 +24,7 @@ type AdminLyceumAdminActions = {
   onRemove: (lyceumId: number, userId?: number) => Promise<boolean>
 }
 
-export const useAdminLyceumAdminActions = (
-  lyceumId: number,
-): AdminLyceumAdminActions => {
+export const useAdminLyceumAdminActions = (): AdminLyceumAdminActions => {
   const { t } = useTranslation()
   const { showToast } = useToast()
   const queryClient = useQueryClient()
