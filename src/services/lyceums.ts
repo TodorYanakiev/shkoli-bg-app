@@ -46,6 +46,35 @@ export const updateLyceum = async (id: number, payload: LyceumRequest) => {
   return response.data
 }
 
+export const deleteLyceum = async (id: number) => {
+  await httpClient.delete(`/api/v1/lyceums/${id}`)
+}
+
+export const getLyceumAdmins = async (lyceumId: number) => {
+  const response = await httpClient.get<UserResponse[]>(
+    `/api/v1/lyceums/${lyceumId}/admins`,
+  )
+  return response.data
+}
+
+export const assignLyceumAdministrator = async (
+  lyceumId: number,
+  userId: number,
+) => {
+  await httpClient.put(
+    `/api/v1/lyceums/${lyceumId}/administrators/${userId}`,
+  )
+}
+
+export const removeLyceumAdministrator = async (
+  lyceumId: number,
+  userId: number,
+) => {
+  await httpClient.delete(
+    `/api/v1/lyceums/${lyceumId}/administrators/${userId}`,
+  )
+}
+
 export const filterLyceums = async (params: LyceumFilterParams) => {
   const response = await httpClient.get<LyceumResponse[]>(
     '/api/v1/lyceums/filter',

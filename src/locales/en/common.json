@@ -57,6 +57,7 @@
     "lyceums": "Lyceums",
     "map": "Map",
     "about": "About us",
+    "admin": "Admin",
     "login": "Log in",
     "register": "Register",
     "profile": "Profile",
@@ -99,6 +100,17 @@
     },
     "lyceums": {
       "updateFailed": "We couldn't update this lyceum. Try again.",
+      "deleteFailed": "We couldn't delete this lyceum. Try again.",
+      "admins": {
+        "loadFailed": "We couldn't load the admins for this lyceum.",
+        "addFailed": "We couldn't add this admin. Try again.",
+        "addInvalid": "Enter a valid admin email.",
+        "removeFailed": "We couldn't remove this admin. Try again.",
+        "removeInvalid": "That user is not an administrator for this lyceum.",
+        "notFound": "We couldn't find that user or lyceum.",
+        "emailNotFound": "We couldn't find a user with that email.",
+        "alreadyAssigned": "That user already administrates another lyceum."
+      },
       "lecturers": {
         "addFailed": "We couldn't send this invitation. Try again.",
         "removeFailed": "We couldn't remove this lecturer. Try again.",
@@ -139,6 +151,9 @@
     },
     "lyceums": {
       "updateSuccess": "Lyceum updated successfully.",
+      "deleteSuccess": "Lyceum deleted successfully.",
+      "adminAdded": "Administrator assigned successfully.",
+      "adminRemoved": "Administrator removed successfully.",
       "lecturerAdded": "Invitation sent. If the user already exists, they are now a lecturer.",
       "lecturerRemoved": "Lecturer removed successfully."
     },
@@ -791,6 +806,88 @@
       "title": "About us",
       "subtitle": "Learn more about the EducationNearby project.",
       "contact": "Contact us at {{email}}."
+    },
+    "admin": {
+      "title": "Admin",
+      "subtitle": "Manage global settings and administration tasks.",
+      "navLabel": "Admin sections",
+      "tabs": {
+        "courses": "Courses",
+        "lyceums": "Lyceums",
+        "users": "Users"
+      },
+      "sideNav": {
+        "expand": "Expand menu",
+        "collapse": "Collapse menu"
+      },
+      "courses": {
+        "title": "Courses",
+        "subtitle": "Review and manage course content.",
+        "placeholder": "Course management tools will appear here."
+      },
+      "lyceums": {
+        "title": "Lyceums",
+        "subtitle": "Manage lyceum profiles and verification.",
+        "placeholder": "Lyceum administration tools will appear here.",
+        "loading": "Loading lyceums...",
+        "empty": "No lyceums available yet.",
+        "loadFailed": "We couldn't load the lyceums right now.",
+        "countLabel": "{{count}} lyceums",
+        "verifiedCountLabel": "{{count}} verified",
+        "rangeLabel": "Showing {{start}}-{{end}} of {{total}}",
+        "pagination": {
+          "previous": "Previous page",
+          "next": "Next page",
+          "page": "Page {{current}} of {{total}}"
+        },
+        "actions": {
+          "update": "Update",
+          "delete": "Delete",
+          "deleting": "Deleting...",
+          "manageAdmins": "Manage admins"
+        },
+        "admins": {
+          "title": "Lyceum administrators",
+          "subtitle": "Manage administrators for {{name}}.",
+          "form": {
+            "title": "Add administrator",
+            "subtitle": "Enter the email of the user to grant access.",
+            "emailLabel": "Admin email",
+            "emailPlaceholder": "email@example.com",
+            "submit": "Add admin",
+            "submitting": "Adding admin..."
+          },
+          "suggestions": {
+            "loading": "Loading user suggestions...",
+            "error": "Unable to load user suggestions.",
+            "hint": "Start typing to see matching users.",
+            "empty": "No users match this email."
+          },
+          "list": {
+            "title": "Current administrators",
+            "subtitle": "Admins who can manage this lyceum.",
+            "loading": "Loading administrators...",
+            "empty": "No administrators found.",
+            "remove": "Remove",
+            "confirm": "Confirm",
+            "cancel": "Cancel"
+          },
+          "loadFailed": "Unable to load administrators."
+        },
+        "deleteConfirm": {
+          "title": "Delete lyceum",
+          "description": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+          "confirm": "Delete lyceum",
+          "cancel": "Cancel"
+        }
+      },
+      "users": {
+        "title": "Users",
+        "subtitle": "Manage user access and roles.",
+        "placeholder": "User administration tools will appear here."
+      },
+      "loading": "Loading admin access...",
+      "empty": "Admin details are not available yet."
     },
     "notFound": {
       "title": "Page not found",

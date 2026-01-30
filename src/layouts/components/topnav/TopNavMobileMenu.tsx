@@ -8,6 +8,7 @@ import { TopNavMobileAuth } from './TopNavMobileAuth'
 type TopNavMobileMenuProps = {
   isOpen: boolean
   isAuthenticated: boolean
+  isGlobalAdmin: boolean
   hasCourseActions: boolean
   isCourseActionsOpen: boolean
   onToggleCourseActions: () => void
@@ -39,6 +40,7 @@ const mobileNavLinkClassName = ({ isActive }: NavLinkRenderProps) =>
 export const TopNavMobileMenu = ({
   isOpen,
   isAuthenticated,
+  isGlobalAdmin,
   hasCourseActions,
   isCourseActionsOpen,
   onToggleCourseActions,
@@ -93,6 +95,11 @@ export const TopNavMobileMenu = ({
       <NavLink to="/about" className={mobileNavLinkClassName}>
         {t('nav.about')}
       </NavLink>
+      {isGlobalAdmin ? (
+        <NavLink to="/admin" className={mobileNavLinkClassName}>
+          {t('nav.admin')}
+        </NavLink>
+      ) : null}
       <TopNavMobileAuth
         isAuthenticated={isAuthenticated}
         profileAvatarAlt={profileAvatarAlt}

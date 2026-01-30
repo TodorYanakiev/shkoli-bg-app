@@ -24,6 +24,7 @@ const TopNav = () => {
     isAuthenticated,
     profileName,
     profileAvatarAlt,
+    isGlobalAdmin,
     administratedLyceumId,
     hasAdministratedLyceum,
     administratedLyceumLabel,
@@ -107,7 +108,7 @@ const TopNav = () => {
           title={t('app.title')}
         />
         <div className="ml-auto flex items-center gap-3">
-          <TopNavDesktopNav t={t} />
+          <TopNavDesktopNav t={t} isGlobalAdmin={isGlobalAdmin} />
           <TopNavDesktopActions
             isAuthenticated={isAuthenticated}
             profileName={profileName}
@@ -155,6 +156,7 @@ const TopNav = () => {
       <TopNavMobileMenu
         isOpen={isMenuOpen}
         isAuthenticated={isAuthenticated}
+        isGlobalAdmin={isGlobalAdmin}
         hasCourseActions={hasCourseActions}
         isCourseActionsOpen={isCourseActionsOpen}
         onToggleCourseActions={() =>
