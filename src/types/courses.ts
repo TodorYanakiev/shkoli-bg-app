@@ -81,6 +81,22 @@ export type CourseType =
   | 'CALLIGRAPHY'
   | 'IKEBANA'
 
+export type CourseExecutionType = 'INDIVIDUAL' | 'GROUP'
+
+export type CourseActiveMonth =
+  | 'JANUARY'
+  | 'FEBRUARY'
+  | 'MARCH'
+  | 'APRIL'
+  | 'MAY'
+  | 'JUNE'
+  | 'JULY'
+  | 'AUGUST'
+  | 'SEPTEMBER'
+  | 'OCTOBER'
+  | 'NOVEMBER'
+  | 'DECEMBER'
+
 export type CourseAgeGroup =
   | 'TODDLER'
   | 'CHILD'
@@ -152,6 +168,7 @@ export type CourseResponse = {
   name?: string
   description?: string
   type?: CourseType
+  executionType?: CourseExecutionType
   ageGroupList?: CourseAgeGroup[]
   schedule?: CourseSchedule
   images?: CourseImageResponse[]
@@ -161,6 +178,8 @@ export type CourseResponse = {
   websiteLink?: string
   lyceumId?: number
   achievements?: string
+  activeStartMonth?: CourseActiveMonth
+  activeEndMonth?: CourseActiveMonth
   lecturerIds?: number[]
 }
 
@@ -168,6 +187,7 @@ export type CourseRequest = {
   name: string
   description: string
   type: CourseType
+  executionType?: CourseExecutionType
   ageGroupList: CourseAgeGroup[]
   schedule?: CourseSchedule
   address?: string
@@ -176,6 +196,8 @@ export type CourseRequest = {
   websiteLink?: string
   lyceumId?: number
   achievements?: string
+  activeStartMonth?: CourseActiveMonth
+  activeEndMonth?: CourseActiveMonth
   lecturerIds?: number[]
 }
 
@@ -183,6 +205,7 @@ export type CourseUpdateRequest = {
   name?: string
   description?: string
   type?: CourseType
+  executionType?: CourseExecutionType
   ageGroupList?: CourseAgeGroup[]
   schedule?: CourseSchedule
   address?: string
@@ -191,6 +214,8 @@ export type CourseUpdateRequest = {
   websiteLink?: string
   lyceumId?: number
   achievements?: string
+  activeStartMonth?: CourseActiveMonth
+  activeEndMonth?: CourseActiveMonth
   lecturerIds?: number[]
   lecturerIdsToAdd?: number[]
   lecturerIdsToRemove?: number[]

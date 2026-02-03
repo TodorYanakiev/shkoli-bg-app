@@ -3,6 +3,7 @@ import type { FieldErrors, UseFormRegister } from 'react-hook-form'
 
 import {
   COURSE_AGE_GROUPS,
+  COURSE_EXECUTION_TYPES,
   COURSE_TYPES,
 } from '../../../../constants/courses'
 import { courseEditStyles } from './courseEditStyles'
@@ -59,6 +60,31 @@ export const CourseEditOverviewSection = ({
         {errors.type ? (
           <span className={courseEditStyles.errorTextClassName}>
             {errors.type.message}
+          </span>
+        ) : null}
+      </label>
+      <label className="text-sm font-medium text-slate-700">
+        {t('pages.shkoli.create.form.fields.executionType')}
+        <select
+          {...register('executionType')}
+          className={courseEditStyles.inputClassName(
+            Boolean(errors.executionType),
+          )}
+        >
+          <option value="">
+            {t(
+              'pages.shkoli.create.form.fields.executionTypePlaceholder',
+            )}
+          </option>
+          {COURSE_EXECUTION_TYPES.map((value) => (
+            <option key={value} value={value}>
+              {t(`courses.executionTypes.${value}`)}
+            </option>
+          ))}
+        </select>
+        {errors.executionType ? (
+          <span className={courseEditStyles.errorTextClassName}>
+            {errors.executionType.message}
           </span>
         ) : null}
       </label>

@@ -40,8 +40,6 @@ const CourseDetailPage = () => {
     courseName,
     courseTypeLabel,
     hasCourseType,
-    showCurrencyBadge,
-    currencyBadgeLabel,
     courseDescription,
     ageGroups,
     courseDetails,
@@ -150,8 +148,6 @@ const CourseDetailPage = () => {
                 courseName={courseName}
                 courseTypeLabel={courseTypeLabel}
                 showCourseTypeBadge={hasCourseType}
-                showCurrencyBadge={showCurrencyBadge}
-                currencyBadgeLabel={currencyBadgeLabel}
                 courseDescription={courseDescription}
                 ageGroups={ageGroups}
                 courseDetails={courseDetails}

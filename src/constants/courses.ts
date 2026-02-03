@@ -82,6 +82,23 @@ export const COURSE_TYPES = [
   'IKEBANA',
 ] as const
 
+export const COURSE_EXECUTION_TYPES = ['INDIVIDUAL', 'GROUP'] as const
+
+export const COURSE_ACTIVE_MONTHS = [
+  'JANUARY',
+  'FEBRUARY',
+  'MARCH',
+  'APRIL',
+  'MAY',
+  'JUNE',
+  'JULY',
+  'AUGUST',
+  'SEPTEMBER',
+  'OCTOBER',
+  'NOVEMBER',
+  'DECEMBER',
+] as const
+
 export const COURSE_AGE_GROUPS = [
   'TODDLER',
   'CHILD',
