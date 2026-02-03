@@ -1,8 +1,3 @@
-import { S3Client } from '@aws-sdk/client-s3'
-import { CognitoIdentityClient } from '@aws-sdk/client-cognito-identity'
-import { fromCognitoIdentityPool } from '@aws-sdk/credential-provider-cognito-identity'
-import { Upload } from '@aws-sdk/lib-storage'
-
 import { env } from '../constants/env'
 
 type UploadFileToS3Params = {
@@ -11,10 +6,18 @@ type UploadFileToS3Params = {
   onProgress?: (progress: number) => void
 }
 
-const getS3Client = () => {
+const getS3Client = async () => {
   if (!env.awsRegion || !env.awsIdentityPoolId) {
     throw new Error('s3_config_missing')
   }
+
+  const { CognitoIdentityClient } = await import(
+    '@aws-sdk/client-cognito-identity'
+  )
+  const { fromCognitoIdentityPool } = await import(
+    '@aws-sdk/credential-provider-cognito-identity'
+  )
+  const { S3Client } = await import('@aws-sdk/client-s3')
 
   const identityClient = new CognitoIdentityClient({
     region: env.awsRegion,
@@ -39,7 +42,8 @@ export const uploadFileToS3 = async ({
     throw new Error('s3_bucket_missing')
   }
 
-  const client = getS3Client()
+  const client = await getS3Client()
+  const { Upload } = await import('@aws-sdk/lib-storage')
   const uploader = new Upload({
     client,
     params: {

@@ -30,8 +30,6 @@ type CourseDetailView = {
   courseName: string
   courseTypeLabel: string
   hasCourseType: boolean
-  showCurrencyBadge: boolean
-  currencyBadgeLabel: string
   courseDescription: string
   ageGroups: string[]
   priceValue: string
@@ -60,8 +58,6 @@ export const useCourseDetailView = ({
       ? t(`courses.types.${course.type}`)
       : fallbackValue
     const hasCourseType = Boolean(course?.type)
-    const showCurrencyBadge = typeof course?.price === 'number'
-    const currencyBadgeLabel = t('pages.shkoli.detail.currencyBadge')
     const courseDescription =
       course?.description ?? t('pages.shkoli.detail.descriptionPlaceholder')
     const ageGroups = course?.ageGroupList ?? []
@@ -69,6 +65,21 @@ export const useCourseDetailView = ({
       typeof course?.price === 'number'
         ? formatPrice(course.price, locale)
         : fallbackValue
+    const executionTypeLabel = course?.executionType
+      ? t(`courses.executionTypes.${course.executionType}`)
+      : null
+    const activeStartMonthLabel = course?.activeStartMonth
+      ? t(`courses.months.${course.activeStartMonth}`)
+      : null
+    const activeEndMonthLabel = course?.activeEndMonth
+      ? t(`courses.months.${course.activeEndMonth}`)
+      : null
+    const activeMonthsValue =
+      activeStartMonthLabel && activeEndMonthLabel
+        ? activeStartMonthLabel === activeEndMonthLabel
+          ? activeStartMonthLabel
+          : `${activeStartMonthLabel} - ${activeEndMonthLabel}`
+        : null
     const trimmedAddress = getTrimmedString(course?.address)
     const normalizedAchievements = getTrimmedString(course?.achievements)
     const normalizedWebsiteLink = getTrimmedString(course?.websiteLink)
@@ -84,6 +95,18 @@ export const useCourseDetailView = ({
         ? {
             label: t('pages.shkoli.detail.fields.address'),
             value: trimmedAddress,
+          }
+        : null,
+      executionTypeLabel
+        ? {
+            label: t('pages.shkoli.detail.fields.executionType'),
+            value: executionTypeLabel,
+          }
+        : null,
+      activeMonthsValue
+        ? {
+            label: t('pages.shkoli.detail.fields.activeMonths'),
+            value: activeMonthsValue,
           }
         : null,
     ].filter(Boolean) as CourseDetailValue[]
@@ -105,8 +128,6 @@ export const useCourseDetailView = ({
       courseName,
       courseTypeLabel,
       hasCourseType,
-      showCurrencyBadge,
-      currencyBadgeLabel,
       courseDescription,
       ageGroups,
       priceValue,

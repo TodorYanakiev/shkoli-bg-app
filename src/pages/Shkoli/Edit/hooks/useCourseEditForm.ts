@@ -26,6 +26,7 @@ export const useCourseEditForm = ({
       name: '',
       description: '',
       type: '',
+      executionType: '',
       ageGroupList: [],
       price: '',
       isInLyceum: true,
@@ -33,6 +34,8 @@ export const useCourseEditForm = ({
       achievements: '',
       facebookLink: '',
       websiteLink: '',
+      activeStartMonth: '',
+      activeEndMonth: '',
       lecturerIds: [],
       scheduleSlots: [],
       scheduleSpecialCases: [],
@@ -60,6 +63,7 @@ export const useCourseEditForm = ({
       name: course.name ?? '',
       description: course.description ?? '',
       type: course.type ?? '',
+      executionType: course.executionType ?? '',
       ageGroupList: course.ageGroupList ?? [],
       price: typeof course.price === 'number' ? course.price.toString() : '',
       isInLyceum: (course.address ?? '').trim() === '',
@@ -67,6 +71,8 @@ export const useCourseEditForm = ({
       achievements: course.achievements ?? '',
       facebookLink: course.facebookLink ?? '',
       websiteLink: course.websiteLink ?? '',
+      activeStartMonth: course.activeStartMonth ?? '',
+      activeEndMonth: course.activeEndMonth ?? '',
       lecturerIds:
         course.lecturerIds?.map((value) => value.toString()) ?? [],
       scheduleSlots:

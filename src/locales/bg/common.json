@@ -272,7 +272,25 @@
       "CHILD": "Деца (7-12 г.)",
       "TEEN": "Тийнейджъри (13-18 г.)",
       "ADULT": "Възрастни (18+)",
-      "SENIOR": "Пенсионери"
+      "SENIOR": "Възрастни (60+)"
+    },
+    "executionTypes": {
+      "INDIVIDUAL": "Индивидуално",
+      "GROUP": "Групово"
+    },
+    "months": {
+      "JANUARY": "Януари",
+      "FEBRUARY": "Февруари",
+      "MARCH": "Март",
+      "APRIL": "Април",
+      "MAY": "Май",
+      "JUNE": "Юни",
+      "JULY": "Юли",
+      "AUGUST": "Август",
+      "SEPTEMBER": "Септември",
+      "OCTOBER": "Октомври",
+      "NOVEMBER": "Ноември",
+      "DECEMBER": "Декември"
     },
     "recurrence": {
       "WEEKLY": "Седмично",
@@ -457,7 +475,6 @@
         "loading": "Зареждане на школа...",
         "priceFree": "Безплатно",
         "heroLabel": "Преглед на школата",
-        "currencyBadge": "EUR",
         "sideNav": {
           "label": "Секции на страницата на школата",
           "overview": "Преглед",
@@ -479,9 +496,11 @@
         },
         "fields": {
           "type": "Тип",
+          "executionType": "Форма на провеждане",
           "ageGroups": "Възрастови групи",
           "price": "Цена на занятие",
           "address": "Адрес",
+          "activeMonths": "Активни месеци",
           "achievements": "Постижения",
           "description": "Описание",
           "facebook": "Facebook",
@@ -549,10 +568,16 @@
             "name": "Име на школата",
             "type": "Тип школа",
             "typePlaceholder": "Избери тип",
+            "executionType": "Форма на провеждане",
+            "executionTypePlaceholder": "Избери форма",
             "ageGroups": "Възрастови групи",
             "description": "Описание",
             "price": "Цена",
             "priceHintEuro": "Цената трябва да е в евро.",
+            "activeStartMonth": "Начален месец",
+            "activeEndMonth": "Краен месец",
+            "activeMonthPlaceholder": "Избери месец",
+            "activeMonthsHint": "Ако школата е активна само в определени месеци, избери начален и краен месец.",
             "address": "Адрес",
             "achievements": "Постижения",
             "facebookLink": "Facebook линк",

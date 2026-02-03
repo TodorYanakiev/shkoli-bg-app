@@ -272,7 +272,25 @@
       "CHILD": "Children (7-12y)",
       "TEEN": "Teens (13-18y)",
       "ADULT": "Adults (18+)",
-      "SENIOR": "Seniors"
+      "SENIOR": "Adults (60+)"
+    },
+    "executionTypes": {
+      "INDIVIDUAL": "Individual",
+      "GROUP": "Group"
+    },
+    "months": {
+      "JANUARY": "January",
+      "FEBRUARY": "February",
+      "MARCH": "March",
+      "APRIL": "April",
+      "MAY": "May",
+      "JUNE": "June",
+      "JULY": "July",
+      "AUGUST": "August",
+      "SEPTEMBER": "September",
+      "OCTOBER": "October",
+      "NOVEMBER": "November",
+      "DECEMBER": "December"
     },
     "recurrence": {
       "WEEKLY": "Weekly",
@@ -457,7 +475,6 @@
         "loading": "Loading course...",
         "priceFree": "Free",
         "heroLabel": "Course overview",
-        "currencyBadge": "EUR",
         "sideNav": {
           "label": "Course page sections",
           "overview": "Overview",
@@ -479,9 +496,11 @@
         },
         "fields": {
           "type": "Type",
+          "executionType": "Execution type",
           "ageGroups": "Age groups",
           "price": "Price",
           "address": "Address",
+          "activeMonths": "Active months",
           "achievements": "Achievements",
           "description": "Description",
           "facebook": "Facebook",
@@ -549,10 +568,16 @@
             "name": "Course name",
             "type": "Course type",
             "typePlaceholder": "Select a type",
+            "executionType": "Execution type",
+            "executionTypePlaceholder": "Select an execution type",
             "ageGroups": "Age groups",
             "description": "Description",
             "price": "Price",
             "priceHintEuro": "Price must be in euro.",
+            "activeStartMonth": "Active start month",
+            "activeEndMonth": "Active end month",
+            "activeMonthPlaceholder": "Select a month",
+            "activeMonthsHint": "If the course runs only in specific months, select both a start and an end month.",
             "isInLyceum": "Course takes place in the lyceum",
             "isInLyceumHint": "Uncheck to provide a different address.",
             "address": "Address",

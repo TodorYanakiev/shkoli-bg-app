@@ -9,8 +9,6 @@ type CourseDetailOverviewSectionProps = {
   courseName: string
   courseTypeLabel: string
   showCourseTypeBadge: boolean
-  showCurrencyBadge: boolean
-  currencyBadgeLabel: string
   courseDescription: string
   ageGroups: string[]
   courseDetails: CourseDetailValue[]
@@ -28,8 +26,6 @@ export const CourseDetailOverviewSection = ({
   courseName,
   courseTypeLabel,
   showCourseTypeBadge,
-  showCurrencyBadge,
-  currencyBadgeLabel,
   courseDescription,
   ageGroups,
   courseDetails,
@@ -77,16 +73,11 @@ export const CourseDetailOverviewSection = ({
             <p className="text-sm text-slate-600">{courseTypeLabel}</p>
           </div>
         </div>
-        {showCourseTypeBadge || showCurrencyBadge || ageGroups.length > 0 ? (
+        {showCourseTypeBadge || ageGroups.length > 0 ? (
           <div className="mt-4 flex flex-wrap gap-2">
             {showCourseTypeBadge ? (
               <span className="inline-flex items-center rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
                 {courseTypeLabel}
-              </span>
-            ) : null}
-            {showCurrencyBadge ? (
-              <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                {currencyBadgeLabel}
               </span>
             ) : null}
             {ageGroups.map((group) => (
