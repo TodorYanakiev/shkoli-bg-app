@@ -272,7 +272,7 @@
       "CHILD": "Children (7-12y)",
       "TEEN": "Teens (13-18y)",
       "ADULT": "Adults (18+)",
-      "SENIOR": "Seniors"
+      "SENIOR": "Adults (60+)"
     },
     "recurrence": {
       "WEEKLY": "Weekly",
