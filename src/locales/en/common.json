@@ -507,7 +507,8 @@
           "untitled": "Untitled course",
           "ratingLabel": "Rating {{rating}} of {{max}}",
           "openCourse": "Open course {{name}}",
-          "locationLoading": "Loading location..."
+          "locationLoading": "Loading location...",
+          "ageMore": "+{{count}} more"
         },
         "pagination": {
           "more": "Show more",

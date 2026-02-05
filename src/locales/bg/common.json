@@ -272,7 +272,7 @@
       "CHILD": "Деца (7-12 г.)",
       "TEEN": "Тийнейджъри (13-18 г.)",
       "ADULT": "Възрастни (18+)",
-      "SENIOR": "Пенсионери"
+      "SENIOR": "Възрастни (60+)"
     },
     "recurrence": {
       "WEEKLY": "Седмично",
@@ -507,7 +507,8 @@
           "untitled": "Школа без име",
           "ratingLabel": "Оценка {{rating}} от {{max}}",
           "openCourse": "Отвори школа {{name}}",
-          "locationLoading": "Зареждане на локацията..."
+          "locationLoading": "Зареждане на локацията...",
+          "ageMore": "+{{count}} още"
         },
         "pagination": {
           "more": "Показване още",
