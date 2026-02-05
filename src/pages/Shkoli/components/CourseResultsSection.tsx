@@ -54,12 +54,6 @@ const CourseResultsSection = ({
           <h2 className="text-xl font-semibold text-slate-900">
             {t('pages.shkoli.list.results.title')}
           </h2>
-          <p className="mt-1 text-sm text-slate-600">
-            {t('pages.shkoli.list.results.count', {
-              shown: shownCount,
-              total: totalElements,
-            })}
-          </p>
         </div>
         <div className="flex items-center gap-2">
           {isFetching && !isLoading ? (
