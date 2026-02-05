@@ -451,7 +451,7 @@
         "heroSubtitle": "Филтрирайте лесно по интерес, възраст и цена, за да намерите най-добрата школа за вашето дете.",
         "filters": {
           "typeLabel": "Тип",
-          "typePlaceholder": "Тип...",
+          "typePlaceholder": "Тип школа...",
           "typeMore": "+още {{count}}",
           "typeNoResults": "Няма резултати.",
           "ageLabel": "Възраст",
@@ -510,7 +510,13 @@
         },
         "pagination": {
           "more": "Показване още",
-          "moreLoading": "Зареждане..."
+          "moreLoading": "Зареждане...",
+          "first": "Първа",
+          "prev": "Предишна",
+          "next": "Следваща",
+          "last": "Последна",
+          "page": "Страница {{current}} от {{total}}",
+          "shown": "Показани {{shown}} от {{total}}"
         }
       },
       "detail": {

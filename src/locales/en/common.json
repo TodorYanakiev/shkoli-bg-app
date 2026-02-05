@@ -510,7 +510,13 @@
         },
         "pagination": {
           "more": "Show more",
-          "moreLoading": "Loading..."
+          "moreLoading": "Loading...",
+          "first": "First",
+          "prev": "Prev",
+          "next": "Next",
+          "last": "Last",
+          "page": "Page {{current}} of {{total}}",
+          "shown": "Showing {{shown}} of {{total}}"
         }
       },
       "detail": {
