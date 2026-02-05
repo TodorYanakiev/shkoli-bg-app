@@ -26,10 +26,9 @@ export const getCourseFilterSchema = (t: TFunction) =>
         .refine((values) => values.every(isCourseType), {
           message: t('validation.invalidOption'),
         }),
-      ageGroup: z
-        .string()
-        .trim()
-        .refine((value) => value === '' || isCourseAgeGroup(value), {
+      ageGroups: z
+        .array(z.string().trim())
+        .refine((values) => values.every(isCourseAgeGroup), {
           message: t('validation.invalidOption'),
         }),
       minPrice: getOptionalNumberField(t),

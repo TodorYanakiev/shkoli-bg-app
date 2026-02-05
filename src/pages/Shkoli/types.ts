@@ -12,7 +12,7 @@ export type CourseSortKey = (typeof COURSE_SORT_OPTIONS)[number]
 
 export type CourseFilterState = {
   courseTypes?: CourseType[]
-  ageGroup?: CourseAgeGroup
+  ageGroups?: CourseAgeGroup[]
   minPrice?: number
   maxPrice?: number
   sort?: CourseSortKey

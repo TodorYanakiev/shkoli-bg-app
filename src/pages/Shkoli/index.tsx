@@ -66,7 +66,7 @@ const ShkoliPage = () => {
           onClear={clearFilters}
           isFetching={isFetching}
           courseTypes={state.courseTypes}
-          ageGroup={state.ageGroup}
+          ageGroups={state.ageGroups}
           minPrice={state.minPrice}
           maxPrice={state.maxPrice}
           locale={i18n.language}

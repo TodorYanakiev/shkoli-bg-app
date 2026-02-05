@@ -60,9 +60,8 @@ export const useCourseFilters = () => {
     [searchParams],
   )
 
-  const ageGroup = useMemo(
-    () =>
-      pickAllowedList(searchParams.getAll('ageGroups'), COURSE_AGE_GROUPS)[0],
+  const ageGroups = useMemo(
+    () => pickAllowedList(searchParams.getAll('ageGroups'), COURSE_AGE_GROUPS),
     [searchParams],
   )
 
@@ -84,26 +83,26 @@ export const useCourseFilters = () => {
   const state = useMemo<CourseFilterState>(
     () => ({
       courseTypes: courseTypes.length > 0 ? courseTypes : undefined,
-      ageGroup,
+      ageGroups: ageGroups.length > 0 ? ageGroups : undefined,
       minPrice,
       maxPrice,
       sort,
       page,
     }),
-    [courseTypes, ageGroup, minPrice, maxPrice, sort, page],
+    [courseTypes, ageGroups, minPrice, maxPrice, sort, page],
   )
 
   const formDefaults = useMemo<CourseFilterFormValues>(
     () => ({
       courseTypes,
-      ageGroup: ageGroup ?? '',
+      ageGroups,
       minPrice: minPrice != null ? minPriceRaw : '',
       maxPrice: maxPrice != null ? maxPriceRaw : '',
       sort: sort ?? '',
     }),
     [
       courseTypes,
-      ageGroup,
+      ageGroups,
       minPrice,
       maxPrice,
       sort,
@@ -117,12 +116,12 @@ export const useCourseFilters = () => {
       page: Math.max(0, page - 1),
       size: COURSE_PAGE_SIZE,
       courseTypes: courseTypes.length > 0 ? courseTypes : undefined,
-      ageGroups: ageGroup ? [ageGroup] : undefined,
+      ageGroups: ageGroups.length > 0 ? ageGroups : undefined,
       minPrice,
       maxPrice,
       sort,
     }),
-    [page, courseTypes, ageGroup, minPrice, maxPrice, sort],
+    [page, courseTypes, ageGroups, minPrice, maxPrice, sort],
   )
 
   const applyFilters = useCallback(
@@ -133,9 +132,9 @@ export const useCourseFilters = () => {
         nextParams.append('courseTypes', type)
       })
 
-      if (values.ageGroup) {
-        nextParams.set('ageGroups', values.ageGroup)
-      }
+      values.ageGroups.forEach((group) => {
+        nextParams.append('ageGroups', group)
+      })
 
       if (values.minPrice.trim() !== '') {
         nextParams.set('minPrice', values.minPrice.trim())

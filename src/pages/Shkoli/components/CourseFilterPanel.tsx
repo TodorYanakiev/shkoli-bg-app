@@ -12,6 +12,7 @@ import type { CourseAgeGroup, CourseType } from '../../../types/courses'
 import { getSortedCourseTypes } from '../../../utils/courseTypes'
 import type { CourseFilterFormValues } from '../validations/courseFilterSchema'
 import { CourseFilterChips } from './CourseFilterChips'
+import { CoursePriceRangeSlider } from './CoursePriceRangeSlider'
 
 type CourseFilterPanelProps = {
   form: UseFormReturn<CourseFilterFormValues>
@@ -21,7 +22,7 @@ type CourseFilterPanelProps = {
   onClear: () => void
   isFetching: boolean
   courseTypes?: CourseType[]
-  ageGroup?: CourseAgeGroup
+  ageGroups?: CourseAgeGroup[]
   minPrice?: number
   maxPrice?: number
   locale: string
@@ -32,6 +33,8 @@ const ageOptions: { value: CourseAgeGroup; key: string }[] = [
   { value: 'TODDLER', key: 'toddler' },
   { value: 'CHILD', key: 'child' },
   { value: 'TEEN', key: 'teen' },
+  { value: 'ADULT', key: 'adult' },
+  { value: 'SENIOR', key: 'senior' },
 ]
 
 const sortOptions = [
@@ -50,7 +53,7 @@ const CourseFilterPanel = ({
   onClear,
   isFetching,
   courseTypes,
-  ageGroup,
+  ageGroups,
   minPrice,
   maxPrice,
   locale,
@@ -234,7 +237,7 @@ const CourseFilterPanel = ({
               }}
             />
           </div>
-          <div className="flex min-w-[260px] flex-[1.2] items-center gap-3 rounded-full border border-emerald-100/80 bg-emerald-50/70 px-4 py-2">
+          <div className="flex min-w-[240px] flex-[1.2] items-center gap-2 rounded-full border border-emerald-100/80 bg-emerald-50/70 px-3 py-1.5">
             <svg
               viewBox="0 0 24 24"
               className="h-5 w-5 text-emerald-700"
@@ -257,40 +260,35 @@ const CourseFilterPanel = ({
             </span>
             <Controller
               control={control}
-              name="ageGroup"
+              name="ageGroups"
               render={({ field }) => {
-                const activeIndex = ageOptions.findIndex(
-                  (option) => option.value === field.value,
-                )
+                const selectedGroups = Array.isArray(field.value)
+                  ? field.value
+                  : []
+
+                const toggleGroup = (value: CourseAgeGroup) => {
+                  if (selectedGroups.includes(value)) {
+                    field.onChange(
+                      selectedGroups.filter((group) => group !== value),
+                    )
+                    return
+                  }
+                  field.onChange([...selectedGroups, value])
+                }
 
                 return (
-                  <div className="relative flex flex-1 rounded-full bg-white/90 p-1 shadow-inner">
-                    <div
-                      className="absolute inset-y-1 left-1 rounded-full bg-emerald-100/90 shadow-sm transition-transform duration-300"
-                      style={{
-                        width: 'calc((100% - 0.5rem) / 3)',
-                        transform:
-                          activeIndex >= 0
-                            ? `translateX(${activeIndex * 100}%)`
-                            : 'translateX(0%)',
-                        opacity: activeIndex >= 0 ? 1 : 0,
-                      }}
-                    />
+            <div className="relative flex flex-1 overflow-hidden rounded-full bg-white/90 p-0.5 shadow-inner">
                     {ageOptions.map((option) => {
-                      const isActive = field.value === option.value
+                      const isActive = selectedGroups.includes(option.value)
                       return (
                         <button
                           key={option.value}
                           type="button"
-                          onClick={() =>
-                            field.onChange(
-                              isActive ? '' : option.value,
-                            )
-                          }
-                          className={`relative z-10 flex-1 rounded-full px-2 py-1 text-[11px] font-semibold transition ${
+                          onClick={() => toggleGroup(option.value)}
+                          className={`relative z-10 flex-1 -ml-1 rounded-full px-2 py-1 text-[11px] font-semibold transition first:ml-0 ${
                             isActive
-                              ? 'text-emerald-900'
-                              : 'text-slate-500'
+                              ? 'bg-emerald-100/90 text-emerald-900 shadow-sm'
+                              : 'text-slate-500 hover:text-emerald-800'
                           }`}
                           aria-pressed={isActive}
                         >
@@ -379,47 +377,19 @@ const CourseFilterPanel = ({
                 </svg>
               </div>
             </div>
-            <div className="rounded-2xl border border-slate-200/70 bg-white/80 px-4 py-3 shadow-sm">
-              <label className="text-xs font-semibold text-slate-600">
-                {t('pages.shkoli.list.filters.priceFrom')}
-              </label>
-              <input
-                type="text"
-                inputMode="decimal"
-                {...register('minPrice')}
-                className="mt-2 w-full rounded-lg border border-slate-200/80 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-emerald-200"
-                placeholder="0"
-              />
-              {errors.minPrice ? (
-                <p className="mt-1 text-xs text-rose-600">
-                  {errors.minPrice.message}
-                </p>
-              ) : null}
-            </div>
-            <div className="rounded-2xl border border-slate-200/70 bg-white/80 px-4 py-3 shadow-sm">
-              <label className="text-xs font-semibold text-slate-600">
-                {t('pages.shkoli.list.filters.priceTo')}
-              </label>
-              <input
-                type="text"
-                inputMode="decimal"
-                {...register('maxPrice')}
-                className="mt-2 w-full rounded-lg border border-slate-200/80 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-emerald-200"
-                placeholder="300"
-              />
-              {errors.maxPrice ? (
-                <p className="mt-1 text-xs text-rose-600">
-                  {errors.maxPrice.message}
-                </p>
-              ) : null}
-            </div>
+            <CoursePriceRangeSlider
+              control={control}
+              errors={errors}
+              locale={locale}
+              t={t}
+            />
           </div>
         ) : null}
 
         <div className="mt-4">
           <CourseFilterChips
             courseTypes={courseTypes}
-            ageGroup={ageGroup}
+            ageGroups={ageGroups}
             minPrice={minPrice}
             maxPrice={maxPrice}
             onClear={onClear}

@@ -458,7 +458,9 @@
           "ageShort": {
             "toddler": "0-6y",
             "child": "7-12y",
-            "teen": "13-18y"
+            "teen": "13-18y",
+            "adult": "18+",
+            "senior": "65+"
           },
           "moreFilters": "More filters",
           "apply": "Apply",

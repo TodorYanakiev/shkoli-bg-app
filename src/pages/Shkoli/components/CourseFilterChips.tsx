@@ -5,7 +5,7 @@ import type { CourseAgeGroup, CourseType } from '../../../types/courses'
 
 type CourseFilterChipsProps = {
   courseTypes?: CourseType[]
-  ageGroup?: CourseAgeGroup
+  ageGroups?: CourseAgeGroup[]
   minPrice?: number
   maxPrice?: number
   onClear: () => void
@@ -15,7 +15,7 @@ type CourseFilterChipsProps = {
 
 export const CourseFilterChips = ({
   courseTypes,
-  ageGroup,
+  ageGroups,
   minPrice,
   maxPrice,
   onClear,
@@ -36,12 +36,12 @@ export const CourseFilterChips = ({
     })
   })
 
-  if (ageGroup) {
+  ageGroups?.forEach((group) => {
     chips.push({
-      key: 'ageGroup',
-      label: t(`courses.ageGroups.${ageGroup}`),
+      key: `ageGroup-${group}`,
+      label: t(`courses.ageGroups.${group}`),
     })
-  }
+  })
 
   if (minPrice != null || maxPrice != null) {
     const minLabel =
