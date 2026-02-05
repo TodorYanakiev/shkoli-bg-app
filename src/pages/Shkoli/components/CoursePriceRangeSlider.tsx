@@ -88,8 +88,8 @@ export const CoursePriceRangeSlider = ({
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200/70 bg-white/80 px-4 py-3 shadow-sm sm:col-span-2">
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-slate-600">
+    <div className="rounded-2xl border border-slate-200/70 bg-white/80 px-3 py-2 shadow-sm">
+      <div className="flex items-center justify-between gap-2 text-[11px] font-semibold text-slate-600">
         <span>
           {t('pages.shkoli.list.filters.priceFrom')}{' '}
           <span className="text-emerald-800">
@@ -103,10 +103,10 @@ export const CoursePriceRangeSlider = ({
           </span>
         </span>
       </div>
-      <div className="relative mt-3 h-6">
-        <div className="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 rounded-full bg-slate-200" />
+      <div className="relative mt-2 h-5">
+        <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-slate-200" />
         <div
-          className="absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-emerald-500/80"
+          className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-emerald-500/80"
           style={{
             left: `${leftPercent}%`,
             width: `${rightPercent - leftPercent}%`,
@@ -137,7 +137,7 @@ export const CoursePriceRangeSlider = ({
           aria-label={t('pages.shkoli.list.filters.priceTo')}
         />
       </div>
-      <div className="mt-2 flex items-center justify-between text-[11px] text-slate-500">
+      <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500">
         <span>{formatter.format(PRICE_MIN)}</span>
         <span>{formatter.format(PRICE_MAX)}</span>
       </div>

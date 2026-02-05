@@ -1,7 +1,11 @@
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
 
-import { COURSE_AGE_GROUPS, COURSE_TYPES } from '../../../constants/courses'
+import {
+  COURSE_AGE_GROUPS,
+  COURSE_DAYS_OF_WEEK,
+  COURSE_TYPES,
+} from '../../../constants/courses'
 import { COURSE_SORT_OPTIONS } from '../types'
 
 const isCourseType = (value: string) =>
@@ -9,6 +13,19 @@ const isCourseType = (value: string) =>
 
 const isCourseAgeGroup = (value: string) =>
   COURSE_AGE_GROUPS.includes(value as (typeof COURSE_AGE_GROUPS)[number])
+
+const isCourseDayOfWeek = (value: string) =>
+  COURSE_DAYS_OF_WEEK.includes(
+    value as (typeof COURSE_DAYS_OF_WEEK)[number],
+  )
+
+const isTimeValue = (value: string) =>
+  /^([01]\d|2[0-3]):[0-5]\d$/.test(value)
+
+const parseTimeToMinutes = (value: string) => {
+  const [hours, minutes] = value.split(':').map(Number)
+  return hours * 60 + minutes
+}
 
 const getOptionalNumberField = (t: TFunction) =>
   z.string().trim().refine(
@@ -31,11 +48,39 @@ export const getCourseFilterSchema = (t: TFunction) =>
         .refine((values) => values.every(isCourseAgeGroup), {
           message: t('validation.invalidOption'),
         }),
+      dayOfWeek: z
+        .array(z.string().trim())
+        .refine((values) => values.every(isCourseDayOfWeek), {
+          message: t('validation.invalidOption'),
+        }),
+      startTimeFrom: z
+        .string()
+        .trim()
+        .refine((value) => value === '' || isTimeValue(value), {
+          message: t('validation.invalidOption'),
+        }),
+      startTimeTo: z
+        .string()
+        .trim()
+        .refine((value) => value === '' || isTimeValue(value), {
+          message: t('validation.invalidOption'),
+        }),
       minPrice: getOptionalNumberField(t),
       maxPrice: getOptionalNumberField(t),
       sort: z.enum(COURSE_SORT_OPTIONS),
     })
     .superRefine((values, context) => {
+      if (values.startTimeFrom && values.startTimeTo) {
+        const start = parseTimeToMinutes(values.startTimeFrom)
+        const end = parseTimeToMinutes(values.startTimeTo)
+        if (start > end) {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t('validation.invalidOption'),
+            path: ['startTimeTo'],
+          })
+        }
+      }
       if (values.minPrice.trim() === '' || values.maxPrice.trim() === '') {
         return
       }

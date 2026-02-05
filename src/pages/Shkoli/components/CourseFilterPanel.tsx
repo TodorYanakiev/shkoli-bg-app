@@ -8,7 +8,12 @@ import {
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import type { TFunction } from 'i18next'
 
-import type { CourseAgeGroup, CourseType } from '../../../types/courses'
+import type {
+  CourseAgeGroup,
+  CourseScheduleDayOfWeek,
+  CourseType,
+} from '../../../types/courses'
+import { COURSE_DAYS_OF_WEEK } from '../../../constants/courses'
 import { getSortedCourseTypes } from '../../../utils/courseTypes'
 import type { CourseFilterFormValues } from '../validations/courseFilterSchema'
 import { CourseFilterChips } from './CourseFilterChips'
@@ -23,6 +28,9 @@ type CourseFilterPanelProps = {
   isFetching: boolean
   courseTypes?: CourseType[]
   ageGroups?: CourseAgeGroup[]
+  dayOfWeek?: CourseScheduleDayOfWeek[]
+  startTimeFrom?: string
+  startTimeTo?: string
   minPrice?: number
   maxPrice?: number
   locale: string
@@ -45,6 +53,11 @@ const sortOptions = [
   { value: 'name,desc', key: 'nameDesc' },
 ]
 
+const dayOptions = COURSE_DAYS_OF_WEEK.map((day) => ({
+  value: day,
+  labelKey: `courses.daysOfWeek.${day}`,
+}))
+
 const CourseFilterPanel = ({
   form,
   onSubmit,
@@ -54,6 +67,9 @@ const CourseFilterPanel = ({
   isFetching,
   courseTypes,
   ageGroups,
+  dayOfWeek,
+  startTimeFrom,
+  startTimeTo,
   minPrice,
   maxPrice,
   locale,
@@ -72,14 +88,19 @@ const CourseFilterPanel = ({
   const [typeQuery, setTypeQuery] = useState('')
   const typeInputRef = useRef<HTMLInputElement | null>(null)
   const typeMenuRef = useRef<HTMLDivElement | null>(null)
+  const [isDayMenuOpen, setIsDayMenuOpen] = useState(false)
+  const [dayQuery, setDayQuery] = useState('')
+  const dayInputRef = useRef<HTMLInputElement | null>(null)
+  const dayMenuRef = useRef<HTMLDivElement | null>(null)
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     setIsTypeMenuOpen(false)
+    setIsDayMenuOpen(false)
     onSubmit(event)
   }
 
   useEffect(() => {
-    if (!isTypeMenuOpen) return
+    if (!isTypeMenuOpen && !isDayMenuOpen) return
     const handleOutsideClick = (event: MouseEvent) => {
       if (
         typeMenuRef.current &&
@@ -87,17 +108,28 @@ const CourseFilterPanel = ({
       ) {
         setIsTypeMenuOpen(false)
       }
+      if (
+        dayMenuRef.current &&
+        !dayMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsDayMenuOpen(false)
+      }
     }
     document.addEventListener('mousedown', handleOutsideClick)
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick)
     }
-  }, [isTypeMenuOpen])
+  }, [isTypeMenuOpen, isDayMenuOpen])
 
   useEffect(() => {
     if (isTypeMenuOpen) return
     setTypeQuery('')
   }, [isTypeMenuOpen])
+
+  useEffect(() => {
+    if (isDayMenuOpen) return
+    setDayQuery('')
+  }, [isDayMenuOpen])
 
   const filteredCourseTypes = useMemo(() => {
     const normalizedQuery = typeQuery.trim().toLocaleLowerCase(locale)
@@ -108,6 +140,14 @@ const CourseFilterPanel = ({
         .includes(normalizedQuery),
     )
   }, [sortedCourseTypes, typeQuery, locale, t])
+
+  const filteredDayOptions = useMemo(() => {
+    const normalizedQuery = dayQuery.trim().toLocaleLowerCase(locale)
+    if (!normalizedQuery) return dayOptions
+    return dayOptions.filter((option) =>
+      t(option.labelKey).toLocaleLowerCase(locale).includes(normalizedQuery),
+    )
+  }, [dayQuery, locale, t])
 
   return (
     <form onSubmit={handleSubmit} className="mt-8">
@@ -204,11 +244,11 @@ const CourseFilterPanel = ({
                     </button>
                     {isTypeMenuOpen ? (
                       <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-64 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
-                        {filteredCourseTypes.length === 0 ? (
-                          <p className="px-3 py-2 text-xs text-slate-500">
-                            {t(
-                              'pages.shkoli.list.filters.typeNoResults',
-                            )}
+                {filteredCourseTypes.length === 0 ? (
+                  <p className="px-3 py-2 text-xs text-slate-500">
+                    {t(
+                      'pages.shkoli.list.filters.typeNoResults',
+                    )}
                           </p>
                         ) : (
                           filteredCourseTypes.map((type) => {
@@ -377,6 +417,158 @@ const CourseFilterPanel = ({
                 </svg>
               </div>
             </div>
+            <div className="rounded-2xl border border-slate-200/70 bg-white/80 px-4 py-3 shadow-sm">
+              <label className="text-xs font-semibold text-slate-600">
+                {t('pages.shkoli.list.filters.dayLabel')}
+              </label>
+              <Controller
+                control={control}
+                name="dayOfWeek"
+                render={({ field }) => {
+                  const selectedDays = Array.isArray(field.value)
+                    ? field.value
+                    : []
+                  const selectedLabels = dayOptions
+                    .filter((option) =>
+                      selectedDays.includes(option.value),
+                    )
+                    .map((option) => t(option.labelKey))
+                  const selectedText =
+                    selectedLabels.length === 0
+                      ? t('pages.shkoli.list.filters.dayPlaceholder')
+                      : selectedLabels.length <= 2
+                        ? selectedLabels.join(', ')
+                        : `${selectedLabels
+                            .slice(0, 2)
+                            .join(', ')} ${t(
+                            'pages.shkoli.list.filters.dayMore',
+                            { count: selectedLabels.length - 2 },
+                          )}`
+
+                  const toggleDay = (value: CourseScheduleDayOfWeek) => {
+                    if (selectedDays.includes(value)) {
+                      field.onChange(
+                        selectedDays.filter((day) => day !== value),
+                      )
+                      return
+                    }
+                    field.onChange([...selectedDays, value])
+                  }
+
+                  return (
+                    <div
+                      className="relative mt-2 flex items-center gap-2"
+                      ref={dayMenuRef}
+                    >
+                      <input
+                        type="text"
+                        value={dayQuery}
+                        onChange={(event) => {
+                          setDayQuery(event.target.value)
+                          if (!isDayMenuOpen) {
+                            setIsDayMenuOpen(true)
+                          }
+                        }}
+                        onFocus={() => setIsDayMenuOpen(true)}
+                        placeholder={selectedText}
+                        className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none placeholder:text-slate-500"
+                        aria-label={t('pages.shkoli.list.filters.dayLabel')}
+                        aria-expanded={isDayMenuOpen}
+                        ref={dayInputRef}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsDayMenuOpen((prev) => !prev)
+                          if (!isDayMenuOpen) {
+                            dayInputRef.current?.focus()
+                          }
+                        }}
+                        className="flex h-5 w-5 items-center justify-center"
+                        aria-label={t('pages.shkoli.list.filters.dayLabel')}
+                      >
+                        <svg
+                          viewBox="0 0 20 20"
+                          className={`h-4 w-4 text-slate-400 transition-transform ${
+                            isDayMenuOpen ? 'rotate-180' : ''
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        >
+                          <path
+                            d="M5 7l5 5 5-5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                      {isDayMenuOpen ? (
+                        <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-56 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
+                          {filteredDayOptions.length === 0 ? (
+                            <p className="px-3 py-2 text-xs text-slate-500">
+                              {t(
+                                'pages.shkoli.list.filters.dayNoResults',
+                              )}
+                            </p>
+                          ) : (
+                            filteredDayOptions.map((option) => {
+                              const isSelected = selectedDays.includes(
+                                option.value,
+                              )
+                              return (
+                                <label
+                                  key={option.value}
+                                  className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-emerald-50/80"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    onChange={() =>
+                                      toggleDay(option.value)
+                                    }
+                                    className="h-4 w-4 rounded border-slate-300 text-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                                  />
+                                  <span>{t(option.labelKey)}</span>
+                                </label>
+                              )
+                            })
+                          )}
+                        </div>
+                      ) : null}
+                    </div>
+                  )
+                }}
+              />
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <label className="text-[11px] font-semibold text-slate-600">
+                  {t('pages.shkoli.list.filters.timeFrom')}
+                  <input
+                    type="time"
+                    {...register('startTimeFrom')}
+                    className="mt-1 w-full rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200"
+                  />
+                </label>
+                <label className="text-[11px] font-semibold text-slate-600">
+                  {t('pages.shkoli.list.filters.timeTo')}
+                  <input
+                    type="time"
+                    {...register('startTimeTo')}
+                    className="mt-1 w-full rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200"
+                  />
+                </label>
+              </div>
+              {errors.startTimeFrom ? (
+                <p className="mt-2 text-xs text-rose-600">
+                  {errors.startTimeFrom.message}
+                </p>
+              ) : null}
+              {errors.startTimeTo ? (
+                <p className="mt-1 text-xs text-rose-600">
+                  {errors.startTimeTo.message}
+                </p>
+              ) : null}
+            </div>
             <CoursePriceRangeSlider
               control={control}
               errors={errors}
@@ -390,6 +582,9 @@ const CourseFilterPanel = ({
           <CourseFilterChips
             courseTypes={courseTypes}
             ageGroups={ageGroups}
+            dayOfWeek={dayOfWeek}
+            startTimeFrom={startTimeFrom}
+            startTimeTo={startTimeTo}
             minPrice={minPrice}
             maxPrice={maxPrice}
             onClear={onClear}

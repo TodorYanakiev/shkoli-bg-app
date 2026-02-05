@@ -1,11 +1,18 @@
 import { useMemo } from 'react'
 import type { TFunction } from 'i18next'
 
-import type { CourseAgeGroup, CourseType } from '../../../types/courses'
+import type {
+  CourseAgeGroup,
+  CourseScheduleDayOfWeek,
+  CourseType,
+} from '../../../types/courses'
 
 type CourseFilterChipsProps = {
   courseTypes?: CourseType[]
   ageGroups?: CourseAgeGroup[]
+  dayOfWeek?: CourseScheduleDayOfWeek[]
+  startTimeFrom?: string
+  startTimeTo?: string
   minPrice?: number
   maxPrice?: number
   onClear: () => void
@@ -16,6 +23,9 @@ type CourseFilterChipsProps = {
 export const CourseFilterChips = ({
   courseTypes,
   ageGroups,
+  dayOfWeek,
+  startTimeFrom,
+  startTimeTo,
   minPrice,
   maxPrice,
   onClear,
@@ -42,6 +52,39 @@ export const CourseFilterChips = ({
       label: t(`courses.ageGroups.${group}`),
     })
   })
+
+  dayOfWeek?.forEach((day) => {
+    chips.push({
+      key: `dayOfWeek-${day}`,
+      label: t(`courses.daysOfWeek.${day}`),
+    })
+  })
+
+  if (startTimeFrom || startTimeTo) {
+    if (startTimeFrom && startTimeTo) {
+      chips.push({
+        key: 'timeRange',
+        label: t('pages.shkoli.list.filters.timeRange', {
+          from: startTimeFrom,
+          to: startTimeTo,
+        }),
+      })
+    } else if (startTimeFrom) {
+      chips.push({
+        key: 'timeFrom',
+        label: t('pages.shkoli.list.filters.timeFromChip', {
+          value: startTimeFrom,
+        }),
+      })
+    } else if (startTimeTo) {
+      chips.push({
+        key: 'timeTo',
+        label: t('pages.shkoli.list.filters.timeToChip', {
+          value: startTimeTo,
+        }),
+      })
+    }
+  }
 
   if (minPrice != null || maxPrice != null) {
     const minLabel =

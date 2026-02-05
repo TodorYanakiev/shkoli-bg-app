@@ -1,7 +1,11 @@
 import { useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { COURSE_AGE_GROUPS, COURSE_TYPES } from '../../../constants/courses'
+import {
+  COURSE_AGE_GROUPS,
+  COURSE_DAYS_OF_WEEK,
+  COURSE_TYPES,
+} from '../../../constants/courses'
 import type { CourseFilterFormValues } from '../validations/courseFilterSchema'
 import {
   COURSE_SORT_OPTIONS,
@@ -17,6 +21,11 @@ const parseNumber = (value: string | null) => {
   if (!value) return undefined
   const parsed = Number(value)
   return Number.isFinite(parsed) ? parsed : undefined
+}
+
+const parseTime = (value: string | null) => {
+  if (!value) return undefined
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(value) ? value : undefined
 }
 
 const pickAllowedList = <T extends string>(
@@ -65,6 +74,12 @@ export const useCourseFilters = () => {
     [searchParams],
   )
 
+  const dayOfWeek = useMemo(
+    () =>
+      pickAllowedList(searchParams.getAll('dayOfWeek'), COURSE_DAYS_OF_WEEK),
+    [searchParams],
+  )
+
   const sort = useMemo(
     () => parseSort(searchParams.get('sort')),
     [searchParams],
@@ -79,23 +94,42 @@ export const useCourseFilters = () => {
   const maxPriceRaw = searchParams.get('maxPrice') ?? ''
   const minPrice = parseNumber(minPriceRaw)
   const maxPrice = parseNumber(maxPriceRaw)
+  const startTimeFrom =
+    parseTime(searchParams.get('startTimeFrom')) ?? ''
+  const startTimeTo = parseTime(searchParams.get('startTimeTo')) ?? ''
 
   const state = useMemo<CourseFilterState>(
     () => ({
       courseTypes: courseTypes.length > 0 ? courseTypes : undefined,
       ageGroups: ageGroups.length > 0 ? ageGroups : undefined,
+      dayOfWeek: dayOfWeek.length > 0 ? dayOfWeek : undefined,
+      startTimeFrom: startTimeFrom || undefined,
+      startTimeTo: startTimeTo || undefined,
       minPrice,
       maxPrice,
       sort,
       page,
     }),
-    [courseTypes, ageGroups, minPrice, maxPrice, sort, page],
+    [
+      courseTypes,
+      ageGroups,
+      dayOfWeek,
+      startTimeFrom,
+      startTimeTo,
+      minPrice,
+      maxPrice,
+      sort,
+      page,
+    ],
   )
 
   const formDefaults = useMemo<CourseFilterFormValues>(
     () => ({
       courseTypes,
       ageGroups,
+      dayOfWeek,
+      startTimeFrom,
+      startTimeTo,
       minPrice: minPrice != null ? minPriceRaw : '',
       maxPrice: maxPrice != null ? maxPriceRaw : '',
       sort: sort ?? '',
@@ -103,6 +137,9 @@ export const useCourseFilters = () => {
     [
       courseTypes,
       ageGroups,
+      dayOfWeek,
+      startTimeFrom,
+      startTimeTo,
       minPrice,
       maxPrice,
       sort,
@@ -117,11 +154,24 @@ export const useCourseFilters = () => {
       size: COURSE_PAGE_SIZE,
       courseTypes: courseTypes.length > 0 ? courseTypes : undefined,
       ageGroups: ageGroups.length > 0 ? ageGroups : undefined,
+      dayOfWeek: dayOfWeek.length > 0 ? dayOfWeek : undefined,
+      startTimeFrom: startTimeFrom || undefined,
+      startTimeTo: startTimeTo || undefined,
       minPrice,
       maxPrice,
       sort,
     }),
-    [page, courseTypes, ageGroups, minPrice, maxPrice, sort],
+    [
+      page,
+      courseTypes,
+      ageGroups,
+      dayOfWeek,
+      startTimeFrom,
+      startTimeTo,
+      minPrice,
+      maxPrice,
+      sort,
+    ],
   )
 
   const applyFilters = useCallback(
@@ -135,6 +185,18 @@ export const useCourseFilters = () => {
       values.ageGroups.forEach((group) => {
         nextParams.append('ageGroups', group)
       })
+
+      values.dayOfWeek.forEach((day) => {
+        nextParams.append('dayOfWeek', day)
+      })
+
+      if (values.startTimeFrom) {
+        nextParams.set('startTimeFrom', values.startTimeFrom)
+      }
+
+      if (values.startTimeTo) {
+        nextParams.set('startTimeTo', values.startTimeTo)
+      }
 
       if (values.minPrice.trim() !== '') {
         nextParams.set('minPrice', values.minPrice.trim())

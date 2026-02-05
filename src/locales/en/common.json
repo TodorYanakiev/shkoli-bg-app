@@ -473,11 +473,20 @@
             "nameAsc": "Name: A-Z",
             "nameDesc": "Name: Z-A"
           },
+          "dayLabel": "Day of week",
+          "dayPlaceholder": "Any day",
+          "timeFrom": "Start from",
+          "timeTo": "Start to",
           "priceFrom": "Price from",
           "priceTo": "Price to",
           "priceRange": "Price: {{min}} - {{max}}",
           "priceFromChip": "Price from {{value}}",
-          "priceToChip": "Price to {{value}}"
+          "priceToChip": "Price to {{value}}",
+          "timeRange": "Time: {{from}} - {{to}}",
+          "timeFromChip": "From {{value}}",
+          "timeToChip": "To {{value}}",
+          "dayMore": "+{{count}} more",
+          "dayNoResults": "No matching days."
         },
         "results": {
           "title": "Results",

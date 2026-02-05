@@ -1,4 +1,9 @@
-import type { CourseAgeGroup, CourseResponse, CourseType } from '../../types/courses'
+import type {
+  CourseAgeGroup,
+  CourseResponse,
+  CourseType,
+  CourseScheduleDayOfWeek,
+} from '../../types/courses'
 
 export const COURSE_SORT_OPTIONS = [
   '',
@@ -13,6 +18,9 @@ export type CourseSortKey = (typeof COURSE_SORT_OPTIONS)[number]
 export type CourseFilterState = {
   courseTypes?: CourseType[]
   ageGroups?: CourseAgeGroup[]
+  dayOfWeek?: CourseScheduleDayOfWeek[]
+  startTimeFrom?: string
+  startTimeTo?: string
   minPrice?: number
   maxPrice?: number
   sort?: CourseSortKey
@@ -24,6 +32,9 @@ export type CourseFilterQuery = {
   size: number
   courseTypes?: CourseType[]
   ageGroups?: CourseAgeGroup[]
+  dayOfWeek?: CourseScheduleDayOfWeek[]
+  startTimeFrom?: string
+  startTimeTo?: string
   minPrice?: number
   maxPrice?: number
   sort?: CourseSortKey

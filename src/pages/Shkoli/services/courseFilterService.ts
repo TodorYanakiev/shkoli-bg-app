@@ -18,6 +18,18 @@ export const filterCourses = async (query: CourseFilterQuery) => {
     params.append('ageGroups', group)
   })
 
+  query.dayOfWeek?.forEach((day) => {
+    params.append('dayOfWeek', day)
+  })
+
+  if (query.startTimeFrom) {
+    params.set('startTimeFrom', query.startTimeFrom)
+  }
+
+  if (query.startTimeTo) {
+    params.set('startTimeTo', query.startTimeTo)
+  }
+
   if (query.minPrice != null) {
     params.set('minPrice', query.minPrice.toString())
   }

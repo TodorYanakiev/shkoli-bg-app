@@ -25,16 +25,37 @@ const ShkoliPage = () => {
   const form = useCourseFilterForm({ t, defaultValues: formDefaults })
   const onSubmit = form.handleSubmit(applyFilters)
   const [isExpanded, setIsExpanded] = useState(
-    Boolean(state.sort || state.minPrice != null || state.maxPrice != null),
+    Boolean(
+      state.sort ||
+        state.minPrice != null ||
+        state.maxPrice != null ||
+        (state.dayOfWeek?.length ?? 0) > 0 ||
+        state.startTimeFrom ||
+        state.startTimeTo,
+    ),
   )
 
   useShkoliPageBackground()
 
   useEffect(() => {
-    if (state.sort || state.minPrice != null || state.maxPrice != null) {
+    if (
+      state.sort ||
+      state.minPrice != null ||
+      state.maxPrice != null ||
+      (state.dayOfWeek?.length ?? 0) > 0 ||
+      state.startTimeFrom ||
+      state.startTimeTo
+    ) {
       setIsExpanded(true)
     }
-  }, [state.sort, state.minPrice, state.maxPrice])
+  }, [
+    state.sort,
+    state.minPrice,
+    state.maxPrice,
+    state.dayOfWeek?.length,
+    state.startTimeFrom,
+    state.startTimeTo,
+  ])
 
   const { data, isLoading, isFetching, error } = useCoursesFilter(query)
   const appError = useMemo(
@@ -67,6 +88,9 @@ const ShkoliPage = () => {
           isFetching={isFetching}
           courseTypes={state.courseTypes}
           ageGroups={state.ageGroups}
+          dayOfWeek={state.dayOfWeek}
+          startTimeFrom={state.startTimeFrom}
+          startTimeTo={state.startTimeTo}
           minPrice={state.minPrice}
           maxPrice={state.maxPrice}
           locale={i18n.language}

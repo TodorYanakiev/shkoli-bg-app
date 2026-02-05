@@ -235,8 +235,8 @@
   .price-range-input::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     border-radius: 9999px;
     background: #0f766e;
     border: 2px solid #ecfdf3;
@@ -245,8 +245,8 @@
   }
 
   .price-range-input::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     border-radius: 9999px;
     background: #0f766e;
     border: 2px solid #ecfdf3;
