@@ -446,6 +446,60 @@
     "shkoli": {
       "title": "Школи",
       "subtitle": "Разгледайте близките школи и техните детайли.",
+      "list": {
+        "heroTitle": "Открийте подходящата школа",
+        "heroSubtitle": "Филтрирайте лесно по интерес, възраст и цена, за да намерите най-добрата школа за вашето дете.",
+        "filters": {
+          "typeLabel": "Тип",
+          "typePlaceholder": "Тип...",
+          "ageLabel": "Възраст",
+          "ageShort": {
+            "toddler": "0-6 г.",
+            "child": "7-12 г.",
+            "teen": "13-18 г."
+          },
+          "moreFilters": "Още филтри",
+          "apply": "Приложи",
+          "clearAll": "Изчисти всичко",
+          "sortLabel": "Сортиране",
+          "sort": {
+            "default": "По подразбиране",
+            "priceAsc": "Цена: ниска към висока",
+            "priceDesc": "Цена: висока към ниска",
+            "nameAsc": "Име: А-Я",
+            "nameDesc": "Име: Я-А"
+          },
+          "priceFrom": "Цена от",
+          "priceTo": "Цена до",
+          "priceRange": "Цена: {{min}} - {{max}}",
+          "priceFromChip": "Цена от {{value}}",
+          "priceToChip": "Цена до {{value}}"
+        },
+        "results": {
+          "title": "Резултати",
+          "count": "{{shown}} от {{total}} резултата",
+          "totalBadge": "Общо резултати: {{total}}"
+        },
+        "states": {
+          "loading": "Зареждане на школи...",
+          "error": "Не можем да заредим школите в момента.",
+          "empty": "Няма школи по тези критерии."
+        },
+        "card": {
+          "imageAlt": "Снимка на школа {{name}}",
+          "priceUnit": "евро",
+          "priceFree": "Безплатно",
+          "locationFallback": "Локацията липсва",
+          "descriptionFallback": "Няма описание.",
+          "untitled": "Школа без име",
+          "ratingLabel": "Оценка {{rating}} от {{max}}",
+          "openCourse": "Отвори школа {{name}}"
+        },
+        "pagination": {
+          "more": "Показване още",
+          "moreLoading": "Зареждане..."
+        }
+      },
       "detail": {
         "title": "Детайли за школа",
         "subtitle": "Пълна информация за тази школа.",
