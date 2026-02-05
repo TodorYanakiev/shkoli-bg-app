@@ -174,6 +174,7 @@ const CourseEditPage = () => {
           <CourseEditOverviewSection
             register={register}
             errors={errors}
+            locale={i18n.language}
             t={t}
           />
           <CourseEditDetailsSection

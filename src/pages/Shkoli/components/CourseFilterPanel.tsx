@@ -1,9 +1,9 @@
-import type { FormEvent } from 'react'
+import { type FormEvent, useMemo } from 'react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import type { TFunction } from 'i18next'
 
-import { COURSE_TYPES } from '../../../constants/courses'
 import type { CourseAgeGroup, CourseType } from '../../../types/courses'
+import { getSortedCourseTypes } from '../../../utils/courseTypes'
 import type { CourseFilterFormValues } from '../validations/courseFilterSchema'
 import { CourseFilterChips } from './CourseFilterChips'
 
@@ -55,6 +55,10 @@ const CourseFilterPanel = ({
     control,
     formState: { errors },
   } = form
+  const sortedCourseTypes = useMemo(
+    () => getSortedCourseTypes(t, locale),
+    [locale, t],
+  )
 
   return (
     <form onSubmit={onSubmit} className="mt-8">
@@ -79,7 +83,7 @@ const CourseFilterPanel = ({
               <option value="">
                 {t('pages.shkoli.list.filters.typePlaceholder')}
               </option>
-              {COURSE_TYPES.map((type) => (
+              {sortedCourseTypes.map((type) => (
                 <option key={type} value={type}>
                   {t(`courses.types.${type}`)}
                 </option>
