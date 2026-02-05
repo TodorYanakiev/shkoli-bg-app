@@ -4,7 +4,7 @@ import type { TFunction } from 'i18next'
 import type { CourseAgeGroup, CourseType } from '../../../types/courses'
 
 type CourseFilterChipsProps = {
-  courseType?: CourseType
+  courseTypes?: CourseType[]
   ageGroup?: CourseAgeGroup
   minPrice?: number
   maxPrice?: number
@@ -14,7 +14,7 @@ type CourseFilterChipsProps = {
 }
 
 export const CourseFilterChips = ({
-  courseType,
+  courseTypes,
   ageGroup,
   minPrice,
   maxPrice,
@@ -29,12 +29,12 @@ export const CourseFilterChips = ({
 
   const chips: { key: string; label: string }[] = []
 
-  if (courseType) {
+  courseTypes?.forEach((type) => {
     chips.push({
-      key: 'courseType',
-      label: t(`courses.types.${courseType}`),
+      key: `courseType-${type}`,
+      label: t(`courses.types.${type}`),
     })
-  }
+  })
 
   if (ageGroup) {
     chips.push({

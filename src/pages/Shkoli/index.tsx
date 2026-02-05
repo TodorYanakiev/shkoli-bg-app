@@ -65,7 +65,7 @@ const ShkoliPage = () => {
           onToggleExpanded={() => setIsExpanded((prev) => !prev)}
           onClear={clearFilters}
           isFetching={isFetching}
-          courseType={state.courseType}
+          courseTypes={state.courseTypes}
           ageGroup={state.ageGroup}
           minPrice={state.minPrice}
           maxPrice={state.maxPrice}

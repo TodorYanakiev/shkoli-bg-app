@@ -11,7 +11,7 @@ export const COURSE_SORT_OPTIONS = [
 export type CourseSortKey = (typeof COURSE_SORT_OPTIONS)[number]
 
 export type CourseFilterState = {
-  courseType?: CourseType
+  courseTypes?: CourseType[]
   ageGroup?: CourseAgeGroup
   minPrice?: number
   maxPrice?: number

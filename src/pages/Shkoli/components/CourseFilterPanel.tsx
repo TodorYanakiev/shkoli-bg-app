@@ -1,4 +1,10 @@
-import { type FormEvent, useMemo } from 'react'
+import {
+  type FormEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import type { TFunction } from 'i18next'
 
@@ -14,7 +20,7 @@ type CourseFilterPanelProps = {
   onToggleExpanded: () => void
   onClear: () => void
   isFetching: boolean
-  courseType?: CourseType
+  courseTypes?: CourseType[]
   ageGroup?: CourseAgeGroup
   minPrice?: number
   maxPrice?: number
@@ -43,7 +49,7 @@ const CourseFilterPanel = ({
   onToggleExpanded,
   onClear,
   isFetching,
-  courseType,
+  courseTypes,
   ageGroup,
   minPrice,
   maxPrice,
@@ -59,9 +65,49 @@ const CourseFilterPanel = ({
     () => getSortedCourseTypes(t, locale),
     [locale, t],
   )
+  const [isTypeMenuOpen, setIsTypeMenuOpen] = useState(false)
+  const [typeQuery, setTypeQuery] = useState('')
+  const typeInputRef = useRef<HTMLInputElement | null>(null)
+  const typeMenuRef = useRef<HTMLDivElement | null>(null)
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    setIsTypeMenuOpen(false)
+    onSubmit(event)
+  }
+
+  useEffect(() => {
+    if (!isTypeMenuOpen) return
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        typeMenuRef.current &&
+        !typeMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsTypeMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleOutsideClick)
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick)
+    }
+  }, [isTypeMenuOpen])
+
+  useEffect(() => {
+    if (isTypeMenuOpen) return
+    setTypeQuery('')
+  }, [isTypeMenuOpen])
+
+  const filteredCourseTypes = useMemo(() => {
+    const normalizedQuery = typeQuery.trim().toLocaleLowerCase(locale)
+    if (!normalizedQuery) return sortedCourseTypes
+    return sortedCourseTypes.filter((type) =>
+      t(`courses.types.${type}`)
+        .toLocaleLowerCase(locale)
+        .includes(normalizedQuery),
+    )
+  }, [sortedCourseTypes, typeQuery, locale, t])
 
   return (
-    <form onSubmit={onSubmit} className="mt-8">
+    <form onSubmit={handleSubmit} className="mt-8">
       <div className="rounded-[32px] border border-white/80 bg-white/90 p-4 shadow-[0_45px_90px_-65px_rgba(15,23,42,0.5)] backdrop-blur-md sm:p-6">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <div className="flex min-w-[220px] flex-1 items-center gap-3 rounded-full border border-slate-200/80 bg-white/80 px-4 py-2 shadow-sm transition focus-within:border-emerald-200">
@@ -75,33 +121,118 @@ const CourseFilterPanel = ({
               <circle cx="9" cy="9" r="6" />
               <path d="M13.5 13.5L18 18" strokeLinecap="round" />
             </svg>
-            <select
-              {...register('courseType')}
-              className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none"
-              aria-label={t('pages.shkoli.list.filters.typeLabel')}
-            >
-              <option value="">
-                {t('pages.shkoli.list.filters.typePlaceholder')}
-              </option>
-              {sortedCourseTypes.map((type) => (
-                <option key={type} value={type}>
-                  {t(`courses.types.${type}`)}
-                </option>
-              ))}
-            </select>
-            <svg
-              viewBox="0 0 20 20"
-              className="h-4 w-4 text-slate-400"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-            >
-              <path
-                d="M5 7l5 5 5-5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <Controller
+              control={control}
+              name="courseTypes"
+              render={({ field }) => {
+                const selectedTypes = Array.isArray(field.value)
+                  ? field.value
+                  : []
+                const selectedLabels = sortedCourseTypes
+                  .filter((type) => selectedTypes.includes(type))
+                  .map((type) => t(`courses.types.${type}`))
+                const selectedText =
+                  selectedLabels.length === 0
+                    ? t('pages.shkoli.list.filters.typePlaceholder')
+                    : selectedLabels.length <= 2
+                      ? selectedLabels.join(', ')
+                      : `${selectedLabels.slice(0, 2).join(', ')} ${t(
+                          'pages.shkoli.list.filters.typeMore',
+                          { count: selectedLabels.length - 2 },
+                        )}`
+
+                const toggleType = (value: CourseType) => {
+                  if (selectedTypes.includes(value)) {
+                    field.onChange(
+                      selectedTypes.filter((type) => type !== value),
+                    )
+                    return
+                  }
+                  field.onChange([...selectedTypes, value])
+                }
+
+                return (
+                  <div
+                    className="relative flex w-full items-center gap-2"
+                    ref={typeMenuRef}
+                  >
+                    <input
+                      type="text"
+                      value={typeQuery}
+                      onChange={(event) => {
+                        setTypeQuery(event.target.value)
+                        if (!isTypeMenuOpen) {
+                          setIsTypeMenuOpen(true)
+                        }
+                      }}
+                      onFocus={() => setIsTypeMenuOpen(true)}
+                      placeholder={selectedText}
+                      className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none placeholder:text-slate-500"
+                      aria-label={t('pages.shkoli.list.filters.typeLabel')}
+                      aria-expanded={isTypeMenuOpen}
+                      ref={typeInputRef}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsTypeMenuOpen((prev) => !prev)
+                        if (!isTypeMenuOpen) {
+                          typeInputRef.current?.focus()
+                        }
+                      }}
+                      className="flex h-5 w-5 items-center justify-center"
+                      aria-label={t('pages.shkoli.list.filters.typeLabel')}
+                    >
+                      <svg
+                        viewBox="0 0 20 20"
+                        className={`h-4 w-4 text-slate-400 transition-transform ${
+                          isTypeMenuOpen ? 'rotate-180' : ''
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      >
+                        <path
+                          d="M5 7l5 5 5-5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    {isTypeMenuOpen ? (
+                      <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-64 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
+                        {filteredCourseTypes.length === 0 ? (
+                          <p className="px-3 py-2 text-xs text-slate-500">
+                            {t(
+                              'pages.shkoli.list.filters.typeNoResults',
+                            )}
+                          </p>
+                        ) : (
+                          filteredCourseTypes.map((type) => {
+                            const isSelected =
+                              selectedTypes.includes(type)
+                            return (
+                              <label
+                                key={type}
+                                className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-emerald-50/80"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={() => toggleType(type)}
+                                  className="h-4 w-4 rounded border-slate-300 text-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                                />
+                                <span>{t(`courses.types.${type}`)}</span>
+                              </label>
+                            )
+                          })
+                        )}
+                      </div>
+                    ) : null}
+                  </div>
+                )
+              }}
+            />
           </div>
           <div className="flex min-w-[260px] flex-[1.2] items-center gap-3 rounded-full border border-emerald-100/80 bg-emerald-50/70 px-4 py-2">
             <svg
@@ -287,7 +418,7 @@ const CourseFilterPanel = ({
 
         <div className="mt-4">
           <CourseFilterChips
-            courseType={courseType}
+            courseTypes={courseTypes}
             ageGroup={ageGroup}
             minPrice={minPrice}
             maxPrice={maxPrice}

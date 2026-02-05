@@ -19,22 +19,23 @@ const parseNumber = (value: string | null) => {
   return Number.isFinite(parsed) ? parsed : undefined
 }
 
-const pickFirstAllowed = <T extends string>(
+const pickAllowedList = <T extends string>(
   values: string[],
   allowed: readonly T[],
-): T | undefined => {
+): T[] => {
+  const picked: T[] = []
   for (const raw of values) {
     const normalizedValues = raw
       .split(',')
       .map((entry) => entry.trim())
       .filter(Boolean)
     for (const value of normalizedValues) {
-      if (allowed.includes(value as T)) {
-        return value as T
+      if (allowed.includes(value as T) && !picked.includes(value as T)) {
+        picked.push(value as T)
       }
     }
   }
-  return undefined
+  return picked
 }
 
 const parsePage = (value: string | null) => {
@@ -54,15 +55,14 @@ const parseSort = (value: string | null): CourseSortKey | undefined => {
 export const useCourseFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const courseType = useMemo(
-    () =>
-      pickFirstAllowed(searchParams.getAll('courseTypes'), COURSE_TYPES),
+  const courseTypes = useMemo(
+    () => pickAllowedList(searchParams.getAll('courseTypes'), COURSE_TYPES),
     [searchParams],
   )
 
   const ageGroup = useMemo(
     () =>
-      pickFirstAllowed(searchParams.getAll('ageGroups'), COURSE_AGE_GROUPS),
+      pickAllowedList(searchParams.getAll('ageGroups'), COURSE_AGE_GROUPS)[0],
     [searchParams],
   )
 
@@ -83,47 +83,55 @@ export const useCourseFilters = () => {
 
   const state = useMemo<CourseFilterState>(
     () => ({
-      courseType,
+      courseTypes: courseTypes.length > 0 ? courseTypes : undefined,
       ageGroup,
       minPrice,
       maxPrice,
       sort,
       page,
     }),
-    [courseType, ageGroup, minPrice, maxPrice, sort, page],
+    [courseTypes, ageGroup, minPrice, maxPrice, sort, page],
   )
 
   const formDefaults = useMemo<CourseFilterFormValues>(
     () => ({
-      courseType: courseType ?? '',
+      courseTypes,
       ageGroup: ageGroup ?? '',
       minPrice: minPrice != null ? minPriceRaw : '',
       maxPrice: maxPrice != null ? maxPriceRaw : '',
       sort: sort ?? '',
     }),
-    [courseType, ageGroup, minPrice, maxPrice, sort, minPriceRaw, maxPriceRaw],
+    [
+      courseTypes,
+      ageGroup,
+      minPrice,
+      maxPrice,
+      sort,
+      minPriceRaw,
+      maxPriceRaw,
+    ],
   )
 
   const query = useMemo<CourseFilterQuery>(
     () => ({
       page: Math.max(0, page - 1),
       size: COURSE_PAGE_SIZE,
-      courseTypes: courseType ? [courseType] : undefined,
+      courseTypes: courseTypes.length > 0 ? courseTypes : undefined,
       ageGroups: ageGroup ? [ageGroup] : undefined,
       minPrice,
       maxPrice,
       sort,
     }),
-    [page, courseType, ageGroup, minPrice, maxPrice, sort],
+    [page, courseTypes, ageGroup, minPrice, maxPrice, sort],
   )
 
   const applyFilters = useCallback(
     (values: CourseFilterFormValues) => {
       const nextParams = new URLSearchParams()
 
-      if (values.courseType) {
-        nextParams.set('courseTypes', values.courseType)
-      }
+      values.courseTypes.forEach((type) => {
+        nextParams.append('courseTypes', type)
+      })
 
       if (values.ageGroup) {
         nextParams.set('ageGroups', values.ageGroup)

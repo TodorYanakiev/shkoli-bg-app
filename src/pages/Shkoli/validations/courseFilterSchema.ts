@@ -21,10 +21,9 @@ const getOptionalNumberField = (t: TFunction) =>
 export const getCourseFilterSchema = (t: TFunction) =>
   z
     .object({
-      courseType: z
-        .string()
-        .trim()
-        .refine((value) => value === '' || isCourseType(value), {
+      courseTypes: z
+        .array(z.string().trim())
+        .refine((values) => values.every(isCourseType), {
           message: t('validation.invalidOption'),
         }),
       ageGroup: z

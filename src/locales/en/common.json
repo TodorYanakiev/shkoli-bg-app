@@ -452,6 +452,8 @@
         "filters": {
           "typeLabel": "Course type",
           "typePlaceholder": "Type...",
+          "typeMore": "+{{count}} more",
+          "typeNoResults": "No matching types.",
           "ageLabel": "Age",
           "ageShort": {
             "toddler": "0-6y",

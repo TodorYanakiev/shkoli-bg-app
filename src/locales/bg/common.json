@@ -452,6 +452,8 @@
         "filters": {
           "typeLabel": "Тип",
           "typePlaceholder": "Тип...",
+          "typeMore": "+още {{count}}",
+          "typeNoResults": "Няма резултати.",
           "ageLabel": "Възраст",
           "ageShort": {
             "toddler": "0-6 г.",
