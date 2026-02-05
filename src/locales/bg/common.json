@@ -506,7 +506,8 @@
           "descriptionFallback": "Няма описание.",
           "untitled": "Школа без име",
           "ratingLabel": "Оценка {{rating}} от {{max}}",
-          "openCourse": "Отвори школа {{name}}"
+          "openCourse": "Отвори школа {{name}}",
+          "locationLoading": "Зареждане на локацията..."
         },
         "pagination": {
           "more": "Показване още",

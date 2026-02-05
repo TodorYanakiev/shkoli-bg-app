@@ -506,7 +506,8 @@
           "descriptionFallback": "No description provided yet.",
           "untitled": "Untitled course",
           "ratingLabel": "Rating {{rating}} of {{max}}",
-          "openCourse": "Open course {{name}}"
+          "openCourse": "Open course {{name}}",
+          "locationLoading": "Loading location..."
         },
         "pagination": {
           "more": "Show more",
