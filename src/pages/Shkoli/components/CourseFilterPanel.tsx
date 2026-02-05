@@ -611,23 +611,23 @@ const CourseFilterPanel = ({
                   )
                 }}
               />
-              <div className="mt-2 grid grid-cols-2 gap-2">
-                <label className="text-[11px] font-semibold text-slate-600">
+              <div className="mt-2 flex flex-nowrap items-center gap-1 text-[11px] font-semibold text-slate-600">
+                <span className="shrink-0 whitespace-nowrap">
                   {t('pages.shkoli.list.filters.timeFrom')}
-                  <input
-                    type="time"
-                    {...register('startTimeFrom')}
-                    className="mt-1 w-full rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200"
-                  />
-                </label>
-                <label className="text-[11px] font-semibold text-slate-600">
+                </span>
+                <input
+                  type="time"
+                  {...register('startTimeFrom')}
+                  className="w-[90px] shrink-0 rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200"
+                />
+                <span className="shrink-0 whitespace-nowrap">
                   {t('pages.shkoli.list.filters.timeTo')}
-                  <input
-                    type="time"
-                    {...register('startTimeTo')}
-                    className="mt-1 w-full rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200"
-                  />
-                </label>
+                </span>
+                <input
+                  type="time"
+                  {...register('startTimeTo')}
+                  className="w-[90px] shrink-0 rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200"
+                />
               </div>
               {errors.startTimeFrom ? (
                 <p className="mt-2 text-xs text-rose-600">
