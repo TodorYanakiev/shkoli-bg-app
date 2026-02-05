@@ -88,6 +88,9 @@ const CourseFilterPanel = ({
   const [typeQuery, setTypeQuery] = useState('')
   const typeInputRef = useRef<HTMLInputElement | null>(null)
   const typeMenuRef = useRef<HTMLDivElement | null>(null)
+  const [isSortMenuOpen, setIsSortMenuOpen] = useState(false)
+  const sortInputRef = useRef<HTMLInputElement | null>(null)
+  const sortMenuRef = useRef<HTMLDivElement | null>(null)
   const [isDayMenuOpen, setIsDayMenuOpen] = useState(false)
   const [dayQuery, setDayQuery] = useState('')
   const dayInputRef = useRef<HTMLInputElement | null>(null)
@@ -95,18 +98,25 @@ const CourseFilterPanel = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     setIsTypeMenuOpen(false)
+    setIsSortMenuOpen(false)
     setIsDayMenuOpen(false)
     onSubmit(event)
   }
 
   useEffect(() => {
-    if (!isTypeMenuOpen && !isDayMenuOpen) return
+    if (!isTypeMenuOpen && !isSortMenuOpen && !isDayMenuOpen) return
     const handleOutsideClick = (event: MouseEvent) => {
       if (
         typeMenuRef.current &&
         !typeMenuRef.current.contains(event.target as Node)
       ) {
         setIsTypeMenuOpen(false)
+      }
+      if (
+        sortMenuRef.current &&
+        !sortMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsSortMenuOpen(false)
       }
       if (
         dayMenuRef.current &&
@@ -119,7 +129,7 @@ const CourseFilterPanel = ({
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick)
     }
-  }, [isTypeMenuOpen, isDayMenuOpen])
+  }, [isTypeMenuOpen, isSortMenuOpen, isDayMenuOpen])
 
   useEffect(() => {
     if (isTypeMenuOpen) return
@@ -390,32 +400,93 @@ const CourseFilterPanel = ({
               <label className="text-xs font-semibold text-slate-600">
                 {t('pages.shkoli.list.filters.sortLabel')}
               </label>
-              <div className="mt-2 flex items-center gap-2">
-                <select
-                  {...register('sort')}
-                  className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none"
-                  aria-label={t('pages.shkoli.list.filters.sortLabel')}
-                >
-                  {sortOptions.map((option) => (
-                    <option key={option.key} value={option.value}>
-                      {t(`pages.shkoli.list.filters.sort.${option.key}`)}
-                    </option>
-                  ))}
-                </select>
-                <svg
-                  viewBox="0 0 20 20"
-                  className="h-4 w-4 text-slate-400"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                >
-                  <path
-                    d="M5 7l5 5 5-5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
+              <Controller
+                control={control}
+                name="sort"
+                render={({ field }) => {
+                  const currentOption =
+                    sortOptions.find(
+                      (option) => option.value === field.value,
+                    ) ?? sortOptions[0]
+                  const currentLabel = t(
+                    `pages.shkoli.list.filters.sort.${currentOption.key}`,
+                  )
+
+                  return (
+                    <div
+                      className="relative mt-2 flex items-center gap-2"
+                      ref={sortMenuRef}
+                    >
+                      <input
+                        type="text"
+                        readOnly
+                        value={currentLabel}
+                        onFocus={() => setIsSortMenuOpen(true)}
+                        className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none"
+                        aria-label={t('pages.shkoli.list.filters.sortLabel')}
+                        aria-expanded={isSortMenuOpen}
+                        ref={sortInputRef}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsSortMenuOpen((prev) => !prev)
+                          if (!isSortMenuOpen) {
+                            sortInputRef.current?.focus()
+                          }
+                        }}
+                        className="flex h-5 w-5 items-center justify-center"
+                        aria-label={t('pages.shkoli.list.filters.sortLabel')}
+                      >
+                        <svg
+                          viewBox="0 0 20 20"
+                          className={`h-4 w-4 text-slate-400 transition-transform ${
+                            isSortMenuOpen ? 'rotate-180' : ''
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        >
+                          <path
+                            d="M5 7l5 5 5-5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                      {isSortMenuOpen ? (
+                        <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-56 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
+                          {sortOptions.map((option) => {
+                            const isSelected =
+                              option.value === field.value
+                            return (
+                              <button
+                                key={option.key}
+                                type="button"
+                                onClick={() => {
+                                  field.onChange(option.value)
+                                  setIsSortMenuOpen(false)
+                                }}
+                                className={`flex w-full items-center justify-between rounded-lg px-2 py-1 text-left text-sm transition ${
+                                  isSelected
+                                    ? 'bg-emerald-50 text-emerald-800'
+                                    : 'text-slate-700 hover:bg-emerald-50/80'
+                                }`}
+                              >
+                                <span>
+                                  {t(
+                                    `pages.shkoli.list.filters.sort.${option.key}`,
+                                  )}
+                                </span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      ) : null}
+                    </div>
+                  )
+                }}
+              />
             </div>
             <div className="rounded-2xl border border-slate-200/70 bg-white/80 px-4 py-3 shadow-sm">
               <label className="text-xs font-semibold text-slate-600">
