@@ -6,6 +6,7 @@ import {
   COURSE_DAYS_OF_WEEK,
   COURSE_TYPES,
 } from '../../../constants/courses'
+import { LYCEUM_TOWNS } from '../../../constants/lyceums'
 import type { CourseFilterFormValues } from '../validations/courseFilterSchema'
 import {
   COURSE_SORT_OPTIONS,
@@ -61,6 +62,15 @@ const parseSort = (value: string | null): CourseSortKey | undefined => {
     : undefined
 }
 
+const parseTown = (value: string | null) => {
+  if (!value) return ''
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+  return LYCEUM_TOWNS.includes(trimmed as (typeof LYCEUM_TOWNS)[number])
+    ? trimmed
+    : ''
+}
+
 export const useCourseFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -77,6 +87,11 @@ export const useCourseFilters = () => {
   const dayOfWeek = useMemo(
     () =>
       pickAllowedList(searchParams.getAll('dayOfWeek'), COURSE_DAYS_OF_WEEK),
+    [searchParams],
+  )
+
+  const town = useMemo(
+    () => parseTown(searchParams.get('town')),
     [searchParams],
   )
 
@@ -103,6 +118,7 @@ export const useCourseFilters = () => {
       courseTypes: courseTypes.length > 0 ? courseTypes : undefined,
       ageGroups: ageGroups.length > 0 ? ageGroups : undefined,
       dayOfWeek: dayOfWeek.length > 0 ? dayOfWeek : undefined,
+      town: town || undefined,
       startTimeFrom: startTimeFrom || undefined,
       startTimeTo: startTimeTo || undefined,
       minPrice,
@@ -114,6 +130,7 @@ export const useCourseFilters = () => {
       courseTypes,
       ageGroups,
       dayOfWeek,
+      town,
       startTimeFrom,
       startTimeTo,
       minPrice,
@@ -128,6 +145,7 @@ export const useCourseFilters = () => {
       courseTypes,
       ageGroups,
       dayOfWeek,
+      town,
       startTimeFrom,
       startTimeTo,
       minPrice: minPrice != null ? minPriceRaw : '',
@@ -138,6 +156,7 @@ export const useCourseFilters = () => {
       courseTypes,
       ageGroups,
       dayOfWeek,
+      town,
       startTimeFrom,
       startTimeTo,
       minPrice,
@@ -155,6 +174,7 @@ export const useCourseFilters = () => {
       courseTypes: courseTypes.length > 0 ? courseTypes : undefined,
       ageGroups: ageGroups.length > 0 ? ageGroups : undefined,
       dayOfWeek: dayOfWeek.length > 0 ? dayOfWeek : undefined,
+      town: town || undefined,
       startTimeFrom: startTimeFrom || undefined,
       startTimeTo: startTimeTo || undefined,
       minPrice,
@@ -166,6 +186,7 @@ export const useCourseFilters = () => {
       courseTypes,
       ageGroups,
       dayOfWeek,
+      town,
       startTimeFrom,
       startTimeTo,
       minPrice,
@@ -189,6 +210,10 @@ export const useCourseFilters = () => {
       values.dayOfWeek.forEach((day) => {
         nextParams.append('dayOfWeek', day)
       })
+
+      if (values.town.trim() !== '') {
+        nextParams.set('town', values.town.trim())
+      }
 
       if (values.startTimeFrom) {
         nextParams.set('startTimeFrom', values.startTimeFrom)

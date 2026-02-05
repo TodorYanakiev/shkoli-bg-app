@@ -11,6 +11,7 @@ type CourseFilterChipsProps = {
   courseTypes?: CourseType[]
   ageGroups?: CourseAgeGroup[]
   dayOfWeek?: CourseScheduleDayOfWeek[]
+  town?: string
   startTimeFrom?: string
   startTimeTo?: string
   minPrice?: number
@@ -24,6 +25,7 @@ export const CourseFilterChips = ({
   courseTypes,
   ageGroups,
   dayOfWeek,
+  town,
   startTimeFrom,
   startTimeTo,
   minPrice,
@@ -59,6 +61,15 @@ export const CourseFilterChips = ({
       label: t(`courses.daysOfWeek.${day}`),
     })
   })
+
+  const normalizedTown = town?.trim()
+
+  if (normalizedTown) {
+    chips.push({
+      key: 'town',
+      label: normalizedTown,
+    })
+  }
 
   if (startTimeFrom || startTimeTo) {
     if (startTimeFrom && startTimeTo) {

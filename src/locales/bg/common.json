@@ -486,7 +486,9 @@
           "timeFromChip": "От {{value}}",
           "timeToChip": "До {{value}}",
           "dayMore": "+{{count}} още",
-          "dayNoResults": "Няма съвпадения."
+          "dayNoResults": "Няма съвпадения.",
+          "townLabel": "Населено място",
+          "townPlaceholder": "Всички градове"
         },
         "results": {
           "title": "Резултати",

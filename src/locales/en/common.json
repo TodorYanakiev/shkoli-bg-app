@@ -486,7 +486,9 @@
           "timeFromChip": "From {{value}}",
           "timeToChip": "To {{value}}",
           "dayMore": "+{{count}} more",
-          "dayNoResults": "No matching days."
+          "dayNoResults": "No matching days.",
+          "townLabel": "Town",
+          "townPlaceholder": "All towns"
         },
         "results": {
           "title": "Results",

@@ -22,6 +22,10 @@ export const filterCourses = async (query: CourseFilterQuery) => {
     params.append('dayOfWeek', day)
   })
 
+  if (query.town) {
+    params.set('town', query.town)
+  }
+
   if (query.startTimeFrom) {
     params.set('startTimeFrom', query.startTimeFrom)
   }

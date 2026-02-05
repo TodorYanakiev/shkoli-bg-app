@@ -6,6 +6,7 @@ import {
   COURSE_DAYS_OF_WEEK,
   COURSE_TYPES,
 } from '../../../constants/courses'
+import { LYCEUM_TOWNS } from '../../../constants/lyceums'
 import { COURSE_SORT_OPTIONS } from '../types'
 
 const isCourseType = (value: string) =>
@@ -18,6 +19,9 @@ const isCourseDayOfWeek = (value: string) =>
   COURSE_DAYS_OF_WEEK.includes(
     value as (typeof COURSE_DAYS_OF_WEEK)[number],
   )
+
+const isLyceumTown = (value: string) =>
+  LYCEUM_TOWNS.includes(value as (typeof LYCEUM_TOWNS)[number])
 
 const isTimeValue = (value: string) =>
   /^([01]\d|2[0-3]):[0-5]\d$/.test(value)
@@ -51,6 +55,12 @@ export const getCourseFilterSchema = (t: TFunction) =>
       dayOfWeek: z
         .array(z.string().trim())
         .refine((values) => values.every(isCourseDayOfWeek), {
+          message: t('validation.invalidOption'),
+        }),
+      town: z
+        .string()
+        .trim()
+        .refine((value) => value === '' || isLyceumTown(value), {
           message: t('validation.invalidOption'),
         }),
       startTimeFrom: z

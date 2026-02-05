@@ -19,6 +19,7 @@ export type CourseFilterState = {
   courseTypes?: CourseType[]
   ageGroups?: CourseAgeGroup[]
   dayOfWeek?: CourseScheduleDayOfWeek[]
+  town?: string
   startTimeFrom?: string
   startTimeTo?: string
   minPrice?: number
@@ -33,6 +34,7 @@ export type CourseFilterQuery = {
   courseTypes?: CourseType[]
   ageGroups?: CourseAgeGroup[]
   dayOfWeek?: CourseScheduleDayOfWeek[]
+  town?: string
   startTimeFrom?: string
   startTimeTo?: string
   minPrice?: number

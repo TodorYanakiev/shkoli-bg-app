@@ -29,6 +29,7 @@ const ShkoliPage = () => {
       state.sort ||
         state.minPrice != null ||
         state.maxPrice != null ||
+        state.town ||
         (state.dayOfWeek?.length ?? 0) > 0 ||
         state.startTimeFrom ||
         state.startTimeTo,
@@ -42,6 +43,7 @@ const ShkoliPage = () => {
       state.sort ||
       state.minPrice != null ||
       state.maxPrice != null ||
+      state.town ||
       (state.dayOfWeek?.length ?? 0) > 0 ||
       state.startTimeFrom ||
       state.startTimeTo
@@ -52,6 +54,7 @@ const ShkoliPage = () => {
     state.sort,
     state.minPrice,
     state.maxPrice,
+    state.town,
     state.dayOfWeek?.length,
     state.startTimeFrom,
     state.startTimeTo,
@@ -89,6 +92,7 @@ const ShkoliPage = () => {
           courseTypes={state.courseTypes}
           ageGroups={state.ageGroups}
           dayOfWeek={state.dayOfWeek}
+          town={state.town}
           startTimeFrom={state.startTimeFrom}
           startTimeTo={state.startTimeTo}
           minPrice={state.minPrice}

@@ -14,6 +14,7 @@ import type {
   CourseType,
 } from '../../../types/courses'
 import { COURSE_DAYS_OF_WEEK } from '../../../constants/courses'
+import { LYCEUM_TOWNS } from '../../../constants/lyceums'
 import { getSortedCourseTypes } from '../../../utils/courseTypes'
 import type { CourseFilterFormValues } from '../validations/courseFilterSchema'
 import { CourseFilterChips } from './CourseFilterChips'
@@ -29,6 +30,7 @@ type CourseFilterPanelProps = {
   courseTypes?: CourseType[]
   ageGroups?: CourseAgeGroup[]
   dayOfWeek?: CourseScheduleDayOfWeek[]
+  town?: string
   startTimeFrom?: string
   startTimeTo?: string
   minPrice?: number
@@ -68,6 +70,7 @@ const CourseFilterPanel = ({
   courseTypes,
   ageGroups,
   dayOfWeek,
+  town,
   startTimeFrom,
   startTimeTo,
   minPrice,
@@ -95,16 +98,26 @@ const CourseFilterPanel = ({
   const [dayQuery, setDayQuery] = useState('')
   const dayInputRef = useRef<HTMLInputElement | null>(null)
   const dayMenuRef = useRef<HTMLDivElement | null>(null)
+  const [isTownMenuOpen, setIsTownMenuOpen] = useState(false)
+  const townInputRef = useRef<HTMLInputElement | null>(null)
+  const townMenuRef = useRef<HTMLDivElement | null>(null)
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     setIsTypeMenuOpen(false)
     setIsSortMenuOpen(false)
     setIsDayMenuOpen(false)
+    setIsTownMenuOpen(false)
     onSubmit(event)
   }
 
   useEffect(() => {
-    if (!isTypeMenuOpen && !isSortMenuOpen && !isDayMenuOpen) return
+    if (
+      !isTypeMenuOpen &&
+      !isSortMenuOpen &&
+      !isDayMenuOpen &&
+      !isTownMenuOpen
+    )
+      return
     const handleOutsideClick = (event: MouseEvent) => {
       if (
         typeMenuRef.current &&
@@ -124,12 +137,18 @@ const CourseFilterPanel = ({
       ) {
         setIsDayMenuOpen(false)
       }
+      if (
+        townMenuRef.current &&
+        !townMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsTownMenuOpen(false)
+      }
     }
     document.addEventListener('mousedown', handleOutsideClick)
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick)
     }
-  }, [isTypeMenuOpen, isSortMenuOpen, isDayMenuOpen])
+  }, [isTypeMenuOpen, isSortMenuOpen, isDayMenuOpen, isTownMenuOpen])
 
   useEffect(() => {
     if (isTypeMenuOpen) return
@@ -490,6 +509,107 @@ const CourseFilterPanel = ({
             </div>
             <div className="rounded-2xl border border-slate-200/70 bg-white/80 px-4 py-3 shadow-sm">
               <label className="text-xs font-semibold text-slate-600">
+                {t('pages.shkoli.list.filters.townLabel')}
+              </label>
+              <Controller
+                control={control}
+                name="town"
+                render={({ field }) => {
+                  const selectedTown = field.value?.trim() ?? ''
+                  return (
+                    <div
+                      className="relative mt-2 flex items-center gap-2"
+                      ref={townMenuRef}
+                    >
+                      <input
+                        type="text"
+                        readOnly
+                        value={selectedTown}
+                        onFocus={() => setIsTownMenuOpen(true)}
+                        placeholder={t(
+                          'pages.shkoli.list.filters.townPlaceholder',
+                        )}
+                        className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none placeholder:text-slate-500"
+                        aria-label={t('pages.shkoli.list.filters.townLabel')}
+                        aria-expanded={isTownMenuOpen}
+                        ref={townInputRef}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsTownMenuOpen((prev) => !prev)
+                          if (!isTownMenuOpen) {
+                            townInputRef.current?.focus()
+                          }
+                        }}
+                        className="flex h-5 w-5 items-center justify-center"
+                        aria-label={t('pages.shkoli.list.filters.townLabel')}
+                      >
+                        <svg
+                          viewBox="0 0 20 20"
+                          className={`h-4 w-4 text-slate-400 transition-transform ${
+                            isTownMenuOpen ? 'rotate-180' : ''
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        >
+                          <path
+                            d="M5 7l5 5 5-5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                      {isTownMenuOpen ? (
+                        <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-56 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              field.onChange('')
+                              setIsTownMenuOpen(false)
+                            }}
+                            className={`flex w-full items-center justify-between rounded-lg px-2 py-1 text-left text-sm transition ${
+                              selectedTown === ''
+                                ? 'bg-emerald-50 text-emerald-800'
+                                : 'text-slate-700 hover:bg-emerald-50/80'
+                            }`}
+                          >
+                            <span>
+                              {t(
+                                'pages.shkoli.list.filters.townPlaceholder',
+                              )}
+                            </span>
+                          </button>
+                          {LYCEUM_TOWNS.map((option) => {
+                            const isSelected = option === selectedTown
+                            return (
+                              <button
+                                key={option}
+                                type="button"
+                                onClick={() => {
+                                  field.onChange(option)
+                                  setIsTownMenuOpen(false)
+                                }}
+                                className={`flex w-full items-center justify-between rounded-lg px-2 py-1 text-left text-sm transition ${
+                                  isSelected
+                                    ? 'bg-emerald-50 text-emerald-800'
+                                    : 'text-slate-700 hover:bg-emerald-50/80'
+                                }`}
+                              >
+                                <span>{option}</span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      ) : null}
+                    </div>
+                  )
+                }}
+              />
+            </div>
+            <div className="rounded-2xl border border-slate-200/70 bg-white/80 px-4 py-3 shadow-sm">
+              <label className="text-xs font-semibold text-slate-600">
                 {t('pages.shkoli.list.filters.dayLabel')}
               </label>
               <Controller
@@ -654,6 +774,7 @@ const CourseFilterPanel = ({
             courseTypes={courseTypes}
             ageGroups={ageGroups}
             dayOfWeek={dayOfWeek}
+            town={town}
             startTimeFrom={startTimeFrom}
             startTimeTo={startTimeTo}
             minPrice={minPrice}
