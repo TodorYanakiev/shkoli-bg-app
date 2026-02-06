@@ -8,7 +8,7 @@ const AppLayout = () => {
     <div className="relative min-h-screen bg-transparent text-slate-900">
       <div className="relative z-10 flex min-h-screen flex-col">
         <TopNav />
-        <main className="relative w-full flex-1 overflow-x-hidden overflow-y-visible py-8 sm:py-10 pr-4 sm:pr-6 lg:pr-12 pl-[calc(1rem+var(--page-sidebar-offset,0px))] sm:pl-[calc(1.5rem+var(--page-sidebar-offset,0px))] lg:pl-[calc(3rem+var(--page-sidebar-offset,0px))]">
+        <main className="relative w-full flex-1 overflow-visible py-8 sm:py-10 pr-4 sm:pr-6 lg:pr-12 pl-[calc(1rem+var(--page-sidebar-offset,0px))] sm:pl-[calc(1.5rem+var(--page-sidebar-offset,0px))] lg:pl-[calc(3rem+var(--page-sidebar-offset,0px))]">
           <Outlet />
         </main>
         <AppFooter />
