@@ -86,28 +86,23 @@ const CourseCard = ({ course }: CourseCardProps) => {
           </h3>
         </div>
       </div>
-      <div className="flex items-center justify-between gap-4 px-4 py-3">
+      <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <div className="flex min-h-[24px] flex-wrap items-center gap-2 text-[11px] font-semibold text-slate-700">
+          <div className="flex min-h-[24px] flex-nowrap items-center gap-2 text-[11px] font-semibold text-slate-700">
             {priceLabel ? (
               <p className="text-sm font-semibold text-emerald-700">
                 {priceLabel}
               </p>
             ) : null}
-            {ageGroups.length > 0
-              ? ageGroups.slice(0, 2).map((group) => (
-                  <span
-                    key={group}
-                    className="rounded-full bg-slate-100 px-3 py-1"
-                  >
-                    {t(`courses.ageGroups.${group}`)}
-                  </span>
-                ))
-              : null}
-            {ageGroups.length > 2 ? (
-              <span className="rounded-full bg-slate-100 px-3 py-1">
+            {ageGroups.length > 0 ? (
+              <span className="max-w-[150px] truncate rounded-full bg-slate-100 px-3 py-1">
+                {t(`courses.ageGroups.${ageGroups[0]}`)}
+              </span>
+            ) : null}
+            {ageGroups.length > 1 ? (
+              <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1">
                 {t('pages.shkoli.list.card.ageMore', {
-                  count: ageGroups.length - 2,
+                  count: ageGroups.length - 1,
                 })}
               </span>
             ) : null}
@@ -130,7 +125,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
             <span className="truncate">{addressLabel}</span>
           </div>
         </div>
-        <div className="rounded-full bg-amber-50 px-3 py-1 shadow-sm">
+        <div className="self-start rounded-full bg-amber-50 px-3 py-1 shadow-sm sm:self-auto">
           <RatingStars
             rating={5}
             max={5}

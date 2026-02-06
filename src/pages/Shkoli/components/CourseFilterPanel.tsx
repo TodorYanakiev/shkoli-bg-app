@@ -283,9 +283,9 @@ const CourseFilterPanel = ({
 
   return (
     <form onSubmit={handleSubmit} className="mt-8">
-      <div className="relative z-30 rounded-[32px] border border-white/80 bg-white/90 p-4 shadow-[0_45px_90px_-65px_rgba(15,23,42,0.5)] backdrop-blur-md sm:p-6">
+      <div className="relative z-30 rounded-[32px] border border-white/80 bg-white/90 p-3 shadow-[0_45px_90px_-65px_rgba(15,23,42,0.5)] backdrop-blur-md sm:p-6">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-          <div className="flex min-w-[220px] flex-1 items-center gap-3 rounded-full border border-slate-200/80 bg-white/80 px-4 py-2 shadow-sm transition focus-within:border-emerald-200">
+          <div className="flex w-full min-w-0 flex-1 items-center gap-3 rounded-full border border-slate-200/80 bg-white/80 px-4 py-2 shadow-sm transition focus-within:border-emerald-200 sm:min-w-[220px]">
             <svg
               viewBox="0 0 20 20"
               className="h-4 w-4 text-emerald-700"
@@ -427,7 +427,7 @@ const CourseFilterPanel = ({
               }}
             />
           </div>
-          <div className="flex min-w-[240px] flex-[1.2] items-center gap-2 rounded-full border border-emerald-100/80 bg-emerald-50/70 px-3 py-1.5">
+          <div className="flex w-full min-w-0 flex-[1.2] flex-wrap items-center gap-2 rounded-full border border-emerald-100/80 bg-emerald-50/70 px-3 py-1.5 sm:min-w-[240px] sm:flex-nowrap">
             <svg
               viewBox="0 0 24 24"
               className="h-5 w-5 text-emerald-700"
@@ -494,7 +494,7 @@ const CourseFilterPanel = ({
           <button
             type="button"
             onClick={onToggleExpanded}
-            className="flex min-w-[180px] items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-emerald-200"
+            className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-emerald-200 sm:w-auto sm:min-w-[180px]"
           >
             <svg
               viewBox="0 0 20 20"
@@ -528,7 +528,7 @@ const CourseFilterPanel = ({
           <button
             type="submit"
             disabled={isFetching}
-            className="flex min-w-[150px] items-center justify-center rounded-full bg-emerald-800 px-6 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-70"
+            className="flex w-full items-center justify-center rounded-full bg-emerald-800 px-6 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:min-w-[150px]"
           >
             {t('pages.shkoli.list.filters.apply')}
           </button>
@@ -906,14 +906,14 @@ const CourseFilterPanel = ({
                   )
                 }}
               />
-              <div className="mt-2 flex flex-nowrap items-center gap-1 text-[11px] font-semibold text-slate-600">
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] font-semibold text-slate-600 sm:flex-nowrap">
                 <span className="shrink-0 whitespace-nowrap">
                   {t('pages.shkoli.list.filters.timeFrom')}
                 </span>
                 <input
                   type="time"
                   {...register('startTimeFrom')}
-                  className="w-[90px] shrink-0 rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200"
+                  className="w-[84px] shrink-0 rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200 sm:w-[90px]"
                 />
                 <span className="shrink-0 whitespace-nowrap">
                   {t('pages.shkoli.list.filters.timeTo')}
@@ -921,7 +921,7 @@ const CourseFilterPanel = ({
                 <input
                   type="time"
                   {...register('startTimeTo')}
-                  className="w-[90px] shrink-0 rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200"
+                  className="w-[84px] shrink-0 rounded-lg border border-slate-200/80 bg-white px-2 py-1 text-xs text-slate-700 outline-none focus:border-emerald-200 sm:w-[90px]"
                 />
               </div>
               {errors.startTimeFrom ? (

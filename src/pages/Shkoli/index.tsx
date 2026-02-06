@@ -67,21 +67,21 @@ const ShkoliPage = () => {
   )
 
   return (
-    <section className="space-y-12">
+    <section className="space-y-10 sm:space-y-12">
       <Helmet>
         <title>{`${t('pages.shkoli.title')} | ${t('app.title')}`}</title>
       </Helmet>
 
-      <div className="mx-auto max-w-6xl text-center shkoli-fade-up shkoli-hero-glow">
-        <h1 className="shkoli-hero-title text-3xl font-semibold text-emerald-950 sm:text-4xl lg:text-5xl">
+      <div className="mx-auto max-w-6xl px-4 text-center shkoli-fade-up shkoli-hero-glow sm:px-6">
+        <h1 className="shkoli-hero-title text-2xl font-semibold text-emerald-950 sm:text-4xl lg:text-5xl">
           {t('pages.shkoli.list.heroTitle')}
         </h1>
-        <p className="shkoli-hero-subtitle mx-auto mt-4 max-w-2xl text-sm text-emerald-900/80 sm:text-base">
+        <p className="shkoli-hero-subtitle mx-auto mt-3 max-w-2xl text-sm text-slate-600 sm:mt-4 sm:text-base">
           {t('pages.shkoli.list.heroSubtitle')}
         </p>
       </div>
 
-      <div className="mx-auto mt-8 max-w-6xl shkoli-fade-up">
+      <div className="mx-auto mt-6 max-w-6xl px-4 shkoli-fade-up sm:mt-8 sm:px-6">
         <CourseFilterPanel
           form={form}
           onSubmit={onSubmit}
@@ -102,7 +102,7 @@ const ShkoliPage = () => {
         />
       </div>
 
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <CourseResultsSection
           data={data}
           isLoading={isLoading}
