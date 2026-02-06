@@ -1,10 +1,15 @@
 import {
+  type Dispatch,
   type FormEvent,
+  type RefObject,
+  type SetStateAction,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react'
+import { createPortal } from 'react-dom'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import type { TFunction } from 'i18next'
 
@@ -91,16 +96,44 @@ const CourseFilterPanel = ({
   const [typeQuery, setTypeQuery] = useState('')
   const typeInputRef = useRef<HTMLInputElement | null>(null)
   const typeMenuRef = useRef<HTMLDivElement | null>(null)
+  const typePanelRef = useRef<HTMLDivElement | null>(null)
+  const [typePanelStyles, setTypePanelStyles] = useState<{
+    top: number
+    left: number
+    width: number
+    maxHeight: number
+  } | null>(null)
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false)
   const sortInputRef = useRef<HTMLInputElement | null>(null)
   const sortMenuRef = useRef<HTMLDivElement | null>(null)
+  const sortPanelRef = useRef<HTMLDivElement | null>(null)
+  const [sortPanelStyles, setSortPanelStyles] = useState<{
+    top: number
+    left: number
+    width: number
+    maxHeight: number
+  } | null>(null)
   const [isDayMenuOpen, setIsDayMenuOpen] = useState(false)
   const [dayQuery, setDayQuery] = useState('')
   const dayInputRef = useRef<HTMLInputElement | null>(null)
   const dayMenuRef = useRef<HTMLDivElement | null>(null)
+  const dayPanelRef = useRef<HTMLDivElement | null>(null)
+  const [dayPanelStyles, setDayPanelStyles] = useState<{
+    top: number
+    left: number
+    width: number
+    maxHeight: number
+  } | null>(null)
   const [isTownMenuOpen, setIsTownMenuOpen] = useState(false)
   const townInputRef = useRef<HTMLInputElement | null>(null)
   const townMenuRef = useRef<HTMLDivElement | null>(null)
+  const townPanelRef = useRef<HTMLDivElement | null>(null)
+  const [townPanelStyles, setTownPanelStyles] = useState<{
+    top: number
+    left: number
+    width: number
+    maxHeight: number
+  } | null>(null)
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     setIsTypeMenuOpen(false)
@@ -121,25 +154,29 @@ const CourseFilterPanel = ({
     const handleOutsideClick = (event: MouseEvent) => {
       if (
         typeMenuRef.current &&
-        !typeMenuRef.current.contains(event.target as Node)
+        !typeMenuRef.current.contains(event.target as Node) &&
+        !typePanelRef.current?.contains(event.target as Node)
       ) {
         setIsTypeMenuOpen(false)
       }
       if (
         sortMenuRef.current &&
-        !sortMenuRef.current.contains(event.target as Node)
+        !sortMenuRef.current.contains(event.target as Node) &&
+        !sortPanelRef.current?.contains(event.target as Node)
       ) {
         setIsSortMenuOpen(false)
       }
       if (
         dayMenuRef.current &&
-        !dayMenuRef.current.contains(event.target as Node)
+        !dayMenuRef.current.contains(event.target as Node) &&
+        !dayPanelRef.current?.contains(event.target as Node)
       ) {
         setIsDayMenuOpen(false)
       }
       if (
         townMenuRef.current &&
-        !townMenuRef.current.contains(event.target as Node)
+        !townMenuRef.current.contains(event.target as Node) &&
+        !townPanelRef.current?.contains(event.target as Node)
       ) {
         setIsTownMenuOpen(false)
       }
@@ -159,6 +196,72 @@ const CourseFilterPanel = ({
     if (isDayMenuOpen) return
     setDayQuery('')
   }, [isDayMenuOpen])
+
+  const getPanelPosition = (target: HTMLElement | null) => {
+    if (!target) return null
+    const rect = target.getBoundingClientRect()
+    const gap = 8
+    const viewportPadding = 16
+    const maxHeight = 288
+    const minHeight = 140
+    const spaceBelow = window.innerHeight - rect.bottom - viewportPadding
+    const spaceAbove = rect.top - viewportPadding
+    const openDown = spaceBelow >= minHeight || spaceBelow >= spaceAbove
+    const availableSpace = openDown ? spaceBelow : spaceAbove
+    const panelMaxHeight = Math.min(
+      maxHeight,
+      Math.max(availableSpace, minHeight),
+    )
+    const maxLeft = Math.max(
+      viewportPadding,
+      window.innerWidth - viewportPadding - rect.width,
+    )
+    const left = Math.min(Math.max(rect.left, viewportPadding), maxLeft)
+    const top = openDown
+      ? rect.bottom + gap
+      : Math.max(viewportPadding, rect.top - gap - panelMaxHeight)
+    return {
+      top,
+      left,
+      width: rect.width,
+      maxHeight: panelMaxHeight,
+    }
+  }
+
+  const usePanelPosition = (
+    isOpen: boolean,
+    targetRef: RefObject<HTMLElement>,
+    setStyles: Dispatch<
+      SetStateAction<{
+        top: number
+        left: number
+        width: number
+        maxHeight: number
+      } | null>
+    >,
+  ) => {
+    useLayoutEffect(() => {
+      if (!isOpen) {
+        setStyles(null)
+        return
+      }
+      const update = () => {
+        setStyles(getPanelPosition(targetRef.current))
+      }
+      update()
+      window.addEventListener('resize', update)
+      window.addEventListener('scroll', update, true)
+      return () => {
+        window.removeEventListener('resize', update)
+        window.removeEventListener('scroll', update, true)
+      }
+    }, [isOpen, targetRef, setStyles])
+  }
+
+  usePanelPosition(isTypeMenuOpen, typeMenuRef, setTypePanelStyles)
+  usePanelPosition(isSortMenuOpen, sortMenuRef, setSortPanelStyles)
+  usePanelPosition(isDayMenuOpen, dayMenuRef, setDayPanelStyles)
+  usePanelPosition(isTownMenuOpen, townMenuRef, setTownPanelStyles)
 
   const filteredCourseTypes = useMemo(() => {
     const normalizedQuery = typeQuery.trim().toLocaleLowerCase(locale)
@@ -180,7 +283,7 @@ const CourseFilterPanel = ({
 
   return (
     <form onSubmit={handleSubmit} className="mt-8">
-      <div className="rounded-[32px] border border-white/80 bg-white/90 p-4 shadow-[0_45px_90px_-65px_rgba(15,23,42,0.5)] backdrop-blur-md sm:p-6">
+      <div className="relative z-30 rounded-[32px] border border-white/80 bg-white/90 p-4 shadow-[0_45px_90px_-65px_rgba(15,23,42,0.5)] backdrop-blur-md sm:p-6">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <div className="flex min-w-[220px] flex-1 items-center gap-3 rounded-full border border-slate-200/80 bg-white/80 px-4 py-2 shadow-sm transition focus-within:border-emerald-200">
             <svg
@@ -271,36 +374,54 @@ const CourseFilterPanel = ({
                         />
                       </svg>
                     </button>
-                    {isTypeMenuOpen ? (
-                      <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-64 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
-                {filteredCourseTypes.length === 0 ? (
-                  <p className="px-3 py-2 text-xs text-slate-500">
-                    {t(
-                      'pages.shkoli.list.filters.typeNoResults',
-                    )}
-                          </p>
-                        ) : (
-                          filteredCourseTypes.map((type) => {
-                            const isSelected =
-                              selectedTypes.includes(type)
-                            return (
-                              <label
-                                key={type}
-                                className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-emerald-50/80"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={isSelected}
-                                  onChange={() => toggleType(type)}
-                                  className="h-4 w-4 rounded border-slate-300 text-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-                                />
-                                <span>{t(`courses.types.${type}`)}</span>
-                              </label>
-                            )
-                          })
-                        )}
-                      </div>
-                    ) : null}
+                    {isTypeMenuOpen && typePanelStyles
+                      ? createPortal(
+                          <div
+                            ref={typePanelRef}
+                            className="fixed z-50 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+                            style={{
+                              top: typePanelStyles.top,
+                              left: typePanelStyles.left,
+                              width: typePanelStyles.width,
+                            }}
+                          >
+                            <div
+                              className="max-h-64 overflow-y-auto p-2"
+                              style={{ maxHeight: typePanelStyles.maxHeight }}
+                            >
+                              {filteredCourseTypes.length === 0 ? (
+                                <p className="px-3 py-2 text-xs text-slate-500">
+                                  {t(
+                                    'pages.shkoli.list.filters.typeNoResults',
+                                  )}
+                                </p>
+                              ) : (
+                                filteredCourseTypes.map((type) => {
+                                  const isSelected =
+                                    selectedTypes.includes(type)
+                                  return (
+                                    <label
+                                      key={type}
+                                      className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-emerald-50/80"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={isSelected}
+                                        onChange={() => toggleType(type)}
+                                        className="h-4 w-4 rounded border-slate-300 text-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                                      />
+                                      <span>
+                                        {t(`courses.types.${type}`)}
+                                      </span>
+                                    </label>
+                                  )
+                                })
+                              )}
+                            </div>
+                          </div>,
+                          document.body,
+                        )
+                      : null}
                   </div>
                 )
               }}
@@ -473,35 +594,53 @@ const CourseFilterPanel = ({
                           />
                         </svg>
                       </button>
-                      {isSortMenuOpen ? (
-                        <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-56 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
-                          {sortOptions.map((option) => {
-                            const isSelected =
-                              option.value === field.value
-                            return (
-                              <button
-                                key={option.key}
-                                type="button"
-                                onClick={() => {
-                                  field.onChange(option.value)
-                                  setIsSortMenuOpen(false)
+                      {isSortMenuOpen && sortPanelStyles
+                        ? createPortal(
+                            <div
+                              ref={sortPanelRef}
+                              className="fixed z-50 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+                              style={{
+                                top: sortPanelStyles.top,
+                                left: sortPanelStyles.left,
+                                width: sortPanelStyles.width,
+                              }}
+                            >
+                              <div
+                                className="max-h-56 overflow-y-auto p-2"
+                                style={{
+                                  maxHeight: sortPanelStyles.maxHeight,
                                 }}
-                                className={`flex w-full items-center justify-between rounded-lg px-2 py-1 text-left text-sm transition ${
-                                  isSelected
-                                    ? 'bg-emerald-50 text-emerald-800'
-                                    : 'text-slate-700 hover:bg-emerald-50/80'
-                                }`}
                               >
-                                <span>
-                                  {t(
-                                    `pages.shkoli.list.filters.sort.${option.key}`,
-                                  )}
-                                </span>
-                              </button>
-                            )
-                          })}
-                        </div>
-                      ) : null}
+                                {sortOptions.map((option) => {
+                                  const isSelected =
+                                    option.value === field.value
+                                  return (
+                                    <button
+                                      key={option.key}
+                                      type="button"
+                                      onClick={() => {
+                                        field.onChange(option.value)
+                                        setIsSortMenuOpen(false)
+                                      }}
+                                      className={`flex w-full items-center justify-between rounded-lg px-2 py-1 text-left text-sm transition ${
+                                        isSelected
+                                          ? 'bg-emerald-50 text-emerald-800'
+                                          : 'text-slate-700 hover:bg-emerald-50/80'
+                                      }`}
+                                    >
+                                      <span>
+                                        {t(
+                                          `pages.shkoli.list.filters.sort.${option.key}`,
+                                        )}
+                                      </span>
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            </div>,
+                            document.body,
+                          )
+                        : null}
                     </div>
                   )
                 }}
@@ -561,48 +700,67 @@ const CourseFilterPanel = ({
                           />
                         </svg>
                       </button>
-                      {isTownMenuOpen ? (
-                        <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-56 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              field.onChange('')
-                              setIsTownMenuOpen(false)
-                            }}
-                            className={`flex w-full items-center justify-between rounded-lg px-2 py-1 text-left text-sm transition ${
-                              selectedTown === ''
-                                ? 'bg-emerald-50 text-emerald-800'
-                                : 'text-slate-700 hover:bg-emerald-50/80'
-                            }`}
-                          >
-                            <span>
-                              {t(
-                                'pages.shkoli.list.filters.townPlaceholder',
-                              )}
-                            </span>
-                          </button>
-                          {LYCEUM_TOWNS.map((option) => {
-                            const isSelected = option === selectedTown
-                            return (
-                              <button
-                                key={option}
-                                type="button"
-                                onClick={() => {
-                                  field.onChange(option)
-                                  setIsTownMenuOpen(false)
+                      {isTownMenuOpen && townPanelStyles
+                        ? createPortal(
+                            <div
+                              ref={townPanelRef}
+                              className="fixed z-50 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+                              style={{
+                                top: townPanelStyles.top,
+                                left: townPanelStyles.left,
+                                width: townPanelStyles.width,
+                              }}
+                            >
+                              <div
+                                className="max-h-56 overflow-y-auto p-2"
+                                style={{
+                                  maxHeight: townPanelStyles.maxHeight,
                                 }}
-                                className={`flex w-full items-center justify-between rounded-lg px-2 py-1 text-left text-sm transition ${
-                                  isSelected
-                                    ? 'bg-emerald-50 text-emerald-800'
-                                    : 'text-slate-700 hover:bg-emerald-50/80'
-                                }`}
                               >
-                                <span>{option}</span>
-                              </button>
-                            )
-                          })}
-                        </div>
-                      ) : null}
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    field.onChange('')
+                                    setIsTownMenuOpen(false)
+                                  }}
+                                  className={`flex w-full items-center justify-between rounded-lg px-2 py-1 text-left text-sm transition ${
+                                    selectedTown === ''
+                                      ? 'bg-emerald-50 text-emerald-800'
+                                      : 'text-slate-700 hover:bg-emerald-50/80'
+                                  }`}
+                                >
+                                  <span>
+                                    {t(
+                                      'pages.shkoli.list.filters.townPlaceholder',
+                                    )}
+                                  </span>
+                                </button>
+                                {LYCEUM_TOWNS.map((option) => {
+                                  const isSelected =
+                                    option === selectedTown
+                                  return (
+                                    <button
+                                      key={option}
+                                      type="button"
+                                      onClick={() => {
+                                        field.onChange(option)
+                                        setIsTownMenuOpen(false)
+                                      }}
+                                      className={`flex w-full items-center justify-between rounded-lg px-2 py-1 text-left text-sm transition ${
+                                        isSelected
+                                          ? 'bg-emerald-50 text-emerald-800'
+                                          : 'text-slate-700 hover:bg-emerald-50/80'
+                                      }`}
+                                    >
+                                      <span>{option}</span>
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            </div>,
+                            document.body,
+                          )
+                        : null}
                     </div>
                   )
                 }}
@@ -694,39 +852,56 @@ const CourseFilterPanel = ({
                           />
                         </svg>
                       </button>
-                      {isDayMenuOpen ? (
-                        <div className="absolute left-0 right-0 top-full z-20 mt-2 max-h-56 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-lg">
-                          {filteredDayOptions.length === 0 ? (
-                            <p className="px-3 py-2 text-xs text-slate-500">
-                              {t(
-                                'pages.shkoli.list.filters.dayNoResults',
-                              )}
-                            </p>
-                          ) : (
-                            filteredDayOptions.map((option) => {
-                              const isSelected = selectedDays.includes(
-                                option.value,
-                              )
-                              return (
-                                <label
-                                  key={option.value}
-                                  className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-emerald-50/80"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={isSelected}
-                                    onChange={() =>
-                                      toggleDay(option.value)
-                                    }
-                                    className="h-4 w-4 rounded border-slate-300 text-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-                                  />
-                                  <span>{t(option.labelKey)}</span>
-                                </label>
-                              )
-                            })
-                          )}
-                        </div>
-                      ) : null}
+                      {isDayMenuOpen && dayPanelStyles
+                        ? createPortal(
+                            <div
+                              ref={dayPanelRef}
+                              className="fixed z-50 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+                              style={{
+                                top: dayPanelStyles.top,
+                                left: dayPanelStyles.left,
+                                width: dayPanelStyles.width,
+                              }}
+                            >
+                              <div
+                                className="max-h-56 overflow-y-auto p-2"
+                                style={{
+                                  maxHeight: dayPanelStyles.maxHeight,
+                                }}
+                              >
+                                {filteredDayOptions.length === 0 ? (
+                                  <p className="px-3 py-2 text-xs text-slate-500">
+                                    {t(
+                                      'pages.shkoli.list.filters.dayNoResults',
+                                    )}
+                                  </p>
+                                ) : (
+                                  filteredDayOptions.map((option) => {
+                                    const isSelected =
+                                      selectedDays.includes(option.value)
+                                    return (
+                                      <label
+                                        key={option.value}
+                                        className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-emerald-50/80"
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={isSelected}
+                                          onChange={() =>
+                                            toggleDay(option.value)
+                                          }
+                                          className="h-4 w-4 rounded border-slate-300 text-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                                        />
+                                        <span>{t(option.labelKey)}</span>
+                                      </label>
+                                    )
+                                  })
+                                )}
+                              </div>
+                            </div>,
+                            document.body,
+                          )
+                        : null}
                     </div>
                   )
                 }}
