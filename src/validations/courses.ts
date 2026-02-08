@@ -4,6 +4,8 @@ import { z } from 'zod'
 import {
   COURSE_AGE_GROUPS,
   COURSE_DAYS_OF_WEEK,
+  COURSE_EXECUTION_TYPES,
+  COURSE_ACTIVE_MONTHS,
   COURSE_SCHEDULE_RECURRENCES,
   COURSE_TYPES,
 } from '../constants/courses'
@@ -13,6 +15,16 @@ const isCourseType = (value: string) =>
 
 const isCourseAgeGroup = (value: string) =>
   COURSE_AGE_GROUPS.includes(value as (typeof COURSE_AGE_GROUPS)[number])
+
+const isCourseExecutionType = (value: string) =>
+  COURSE_EXECUTION_TYPES.includes(
+    value as (typeof COURSE_EXECUTION_TYPES)[number],
+  )
+
+const isCourseActiveMonth = (value: string) =>
+  COURSE_ACTIVE_MONTHS.includes(
+    value as (typeof COURSE_ACTIVE_MONTHS)[number],
+  )
 
 const isCourseRecurrence = (value: string) =>
   COURSE_SCHEDULE_RECURRENCES.includes(
@@ -101,6 +113,13 @@ export const getCourseCreateSchema = (t: TFunction) =>
         .refine(isCourseType, {
           message: t('validation.invalidOption'),
         }),
+      executionType: z
+        .string()
+        .trim()
+        .refine(
+          (value) => value === '' || isCourseExecutionType(value),
+          { message: t('validation.invalidOption') },
+        ),
       ageGroupList: z
         .array(z.string().trim())
         .min(1, t('validation.required'))
@@ -113,6 +132,18 @@ export const getCourseCreateSchema = (t: TFunction) =>
       achievements: optionalTextField,
       facebookLink: optionalTextField,
       websiteLink: optionalTextField,
+      activeStartMonth: z
+        .string()
+        .trim()
+        .refine((value) => value === '' || isCourseActiveMonth(value), {
+          message: t('validation.invalidOption'),
+        }),
+      activeEndMonth: z
+        .string()
+        .trim()
+        .refine((value) => value === '' || isCourseActiveMonth(value), {
+          message: t('validation.invalidOption'),
+        }),
       lecturerIds: z.array(z.string().trim()).optional(),
       scheduleSlots: z.array(getCourseScheduleSlotSchema(t)),
       scheduleSpecialCases: z.array(getCourseSpecialCaseSchema(t)),
@@ -124,6 +155,27 @@ export const getCourseCreateSchema = (t: TFunction) =>
           code: z.ZodIssueCode.custom,
           message: t('validation.required'),
           path: ['address'],
+        })
+      }
+
+      const activeStartMonth = values.activeStartMonth.trim()
+      const activeEndMonth = values.activeEndMonth.trim()
+      const hasActiveStartMonth = activeStartMonth !== ''
+      const hasActiveEndMonth = activeEndMonth !== ''
+
+      if (hasActiveStartMonth && !hasActiveEndMonth) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('validation.required'),
+          path: ['activeEndMonth'],
+        })
+      }
+
+      if (!hasActiveStartMonth && hasActiveEndMonth) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('validation.required'),
+          path: ['activeStartMonth'],
         })
       }
     })

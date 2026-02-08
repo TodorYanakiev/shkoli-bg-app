@@ -1,5 +1,7 @@
 import type {
   CourseAgeGroup,
+  CourseActiveMonth,
+  CourseExecutionType,
   CourseSchedule,
   CourseScheduleDayOfWeek,
   CourseScheduleRecurrence,
@@ -105,11 +107,27 @@ export const buildCourseCreatePayload = (
       .filter(Number.isFinite) ?? []
   const schedule = buildCourseSchedule(values)
   const isInLyceumValue = values.isInLyceum ?? true
+  const executionTypeValue = normalizeOptionalText(values.executionType)
+  const executionType = executionTypeValue
+    ? (executionTypeValue as CourseExecutionType)
+    : undefined
+  const activeStartMonthValue = normalizeOptionalText(
+    values.activeStartMonth,
+  )
+  const activeEndMonthValue = normalizeOptionalText(values.activeEndMonth)
+  const activeStartMonth = activeStartMonthValue
+    ? (activeStartMonthValue as CourseActiveMonth)
+    : undefined
+  const activeEndMonth = activeEndMonthValue
+    ? (activeEndMonthValue as CourseActiveMonth)
+    : undefined
+  const hasActiveMonths = Boolean(activeStartMonth && activeEndMonth)
 
   const payload: CourseRequest = {
     name: values.name.trim(),
     description: values.description.trim(),
     type: values.type as CourseType,
+    executionType,
     ageGroupList: uniqueAgeGroups,
     schedule,
     lyceumId: lyceumId ?? undefined,
@@ -120,6 +138,8 @@ export const buildCourseCreatePayload = (
     achievements: normalizeOptionalText(values.achievements),
     facebookLink: normalizeOptionalText(values.facebookLink),
     websiteLink: normalizeOptionalText(values.websiteLink),
+    activeStartMonth: hasActiveMonths ? activeStartMonth : undefined,
+    activeEndMonth: hasActiveMonths ? activeEndMonth : undefined,
     lecturerIds: lecturerIds.length > 0 ? lecturerIds : undefined,
   }
 

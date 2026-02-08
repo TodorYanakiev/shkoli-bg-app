@@ -1,6 +1,7 @@
 import type { TFunction } from 'i18next'
 import type { FieldErrors, UseFormRegister } from 'react-hook-form'
 
+import { COURSE_ACTIVE_MONTHS } from '../../../../constants/courses'
 import { courseCreateStyles } from './courseCreateStyles'
 import { RequiredIndicator } from './RequiredIndicator'
 import type { CourseCreateFormValues } from '../validations/courseCreateSchema'
@@ -22,7 +23,7 @@ export const CourseCreateDetailsSection = ({
     <legend className={courseCreateStyles.legendClassName}>
       {t('pages.shkoli.create.form.sections.details')}
     </legend>
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-4 md:grid-cols-3">
       <label className="text-sm font-medium text-slate-700">
         {t('pages.shkoli.create.form.fields.price')}
         <input
@@ -44,7 +45,56 @@ export const CourseCreateDetailsSection = ({
           {t('pages.shkoli.create.form.fields.priceHintEuro')}
         </p>
       </label>
-      <div className="space-y-2 md:col-span-2">
+      <label className="text-sm font-medium text-slate-700">
+        {t('pages.shkoli.create.form.fields.activeStartMonth')}
+        <select
+          {...register('activeStartMonth')}
+          className={courseCreateStyles.inputClassName(
+            Boolean(errors.activeStartMonth),
+          )}
+        >
+          <option value="">
+            {t('pages.shkoli.create.form.fields.activeMonthPlaceholder')}
+          </option>
+          {COURSE_ACTIVE_MONTHS.map((value) => (
+            <option key={value} value={value}>
+              {t(`courses.months.${value}`)}
+            </option>
+          ))}
+        </select>
+        {errors.activeStartMonth ? (
+          <span className={courseCreateStyles.errorTextClassName}>
+            {errors.activeStartMonth.message}
+          </span>
+        ) : null}
+      </label>
+      <label className="text-sm font-medium text-slate-700">
+        {t('pages.shkoli.create.form.fields.activeEndMonth')}
+        <select
+          {...register('activeEndMonth')}
+          className={courseCreateStyles.inputClassName(
+            Boolean(errors.activeEndMonth),
+          )}
+        >
+          <option value="">
+            {t('pages.shkoli.create.form.fields.activeMonthPlaceholder')}
+          </option>
+          {COURSE_ACTIVE_MONTHS.map((value) => (
+            <option key={value} value={value}>
+              {t(`courses.months.${value}`)}
+            </option>
+          ))}
+        </select>
+        {errors.activeEndMonth ? (
+          <span className={courseCreateStyles.errorTextClassName}>
+            {errors.activeEndMonth.message}
+          </span>
+        ) : null}
+      </label>
+      <p className="text-xs text-slate-500 md:col-span-3">
+        {t('pages.shkoli.create.form.fields.activeMonthsHint')}
+      </p>
+      <div className="space-y-2 md:col-span-3">
         <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
           <input
             type="checkbox"
@@ -58,7 +108,7 @@ export const CourseCreateDetailsSection = ({
         </p>
       </div>
       {!isInLyceum ? (
-        <label className="text-sm font-medium text-slate-700 md:col-span-2">
+        <label className="text-sm font-medium text-slate-700 md:col-span-3">
           {t('pages.shkoli.create.form.fields.address')}
           <RequiredIndicator />
           <input
