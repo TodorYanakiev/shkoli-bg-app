@@ -256,6 +256,39 @@ describe('LyceumRightsPage (request flow)', () => {
     )
   })
 
+  it('expands and collapses lyceums per town in the manual picker', async () => {
+    useLyceumSuggestionsMock.mockReturnValue({
+      data: [
+        { id: 1, name: 'Community Center', town: 'Sofia' },
+        { id: 2, name: 'Readers Club', town: 'Plovdiv' },
+      ],
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    })
+
+    renderPage()
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Pick lyceum name manually' }),
+    )
+
+    const townToggle = await screen.findByRole('button', { name: /^Sofia$/i })
+    expect(
+      screen.queryByRole('button', { name: /Community Center/i }),
+    ).toBeDefined()
+
+    fireEvent.click(townToggle)
+    expect(
+      screen.queryByRole('button', { name: /Community Center/i }),
+    ).toBeNull()
+
+    fireEvent.click(townToggle)
+    expect(
+      await screen.findByRole('button', { name: /Community Center/i }),
+    ).toBeDefined()
+  })
+
   it('submits a request and renders the email sent state', async () => {
     const mutateMock: RequestMutationResult['mutate'] = (_, options) => {
       requestMutationState.error = null

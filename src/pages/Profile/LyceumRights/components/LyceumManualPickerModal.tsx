@@ -1,10 +1,11 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type {
   ManualLyceumOption,
   ManualLyceumTownGroup,
 } from '../services/lyceumManualPicker'
+import LyceumManualPickerTownGroup from './LyceumManualPickerTownGroup'
 
 type LyceumManualPickerModalProps = {
   isOpen: boolean
@@ -28,11 +29,17 @@ const LyceumManualPickerModal = ({
   onSelect,
 }: LyceumManualPickerModalProps) => {
   const { t } = useTranslation()
+  const [expandedTowns, setExpandedTowns] = useState<Set<string>>(new Set())
 
   const handleClose = useCallback(() => {
     if (isSubmitting) return
     onClose()
   }, [isSubmitting, onClose])
+
+  useEffect(() => {
+    if (!isOpen) return
+    setExpandedTowns(new Set(lyceumTownGroups.map((group) => group.town)))
+  }, [isOpen, lyceumTownGroups])
 
   useEffect(() => {
     if (!isOpen) return undefined
@@ -58,6 +65,10 @@ const LyceumManualPickerModal = ({
   const titleId = 'lyceum-manual-picker-title'
   const descriptionId = 'lyceum-manual-picker-description'
   const hasLyceums = lyceumTownGroups.length > 0
+  const getTownPanelId = (town: string, index: number) =>
+    `lyceum-manual-picker-town-${index}-${town
+      .toLowerCase()
+      .replace(/\s+/g, '-')}`
 
   return (
     <div
@@ -128,35 +139,31 @@ const LyceumManualPickerModal = ({
               </p>
             ) : (
               <div className="space-y-4">
-                {lyceumTownGroups.map((group) => (
-                  <section key={group.town} className="space-y-2">
-                    <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                      {group.town}
-                    </h4>
-                    <ul className="grid gap-2 sm:grid-cols-2">
-                      {group.lyceums.map((lyceum) => {
-                        const key = `${lyceum.town}-${lyceum.name}`
-                        return (
-                          <li key={key}>
-                            <button
-                              type="button"
-                              onClick={() => onSelect(lyceum)}
-                              disabled={isSubmitting}
-                              className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 text-left transition hover:border-brand/40 hover:bg-brand/5 disabled:cursor-not-allowed disabled:opacity-60"
-                            >
-                              <span className="text-sm font-semibold text-slate-900">
-                                {lyceum.name}
-                              </span>
-                              <span className="ml-3 text-xs font-medium text-slate-500">
-                                {lyceum.town}
-                              </span>
-                            </button>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  </section>
-                ))}
+                {lyceumTownGroups.map((group, index) => {
+                  const isExpanded = expandedTowns.has(group.town)
+                  const panelId = getTownPanelId(group.town, index)
+                  return (
+                    <LyceumManualPickerTownGroup
+                      key={group.town}
+                      group={group}
+                      panelId={panelId}
+                      isExpanded={isExpanded}
+                      isSubmitting={isSubmitting}
+                      onToggle={() => {
+                        setExpandedTowns((prev) => {
+                          const next = new Set(prev)
+                          if (next.has(group.town)) {
+                            next.delete(group.town)
+                          } else {
+                            next.add(group.town)
+                          }
+                          return next
+                        })
+                      }}
+                      onSelect={onSelect}
+                    />
+                  )
+                })}
               </div>
             )}
           </div>
