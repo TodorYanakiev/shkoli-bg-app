@@ -41,6 +41,12 @@ vi.mock('../../Profile/hooks/useUserProfile', () => ({
   useUserProfile: useUserProfileMock,
 }))
 
+vi.mock('../../Reviews/components/LyceumReviewsSection', () => ({
+  LyceumReviewsSection: () => (
+    <div data-testid="lyceum-reviews-section" />
+  ),
+}))
+
 const renderPage = (path = '/lyceums/1') =>
   render(
     <HelmetProvider>

@@ -136,6 +136,25 @@
       "logoutFailed": "We couldn't log you out. Try again.",
       "registerFailed": "We couldn't create your account. Try again.",
       "userExists": "An account with these details already exists."
+    },
+    "reviews": {
+      "generic": "Something went wrong while processing the review.",
+      "loadFailed": "We couldn't load reviews right now.",
+      "createFailed": "We couldn't submit your review. Try again.",
+      "updateFailed": "We couldn't update your review. Try again.",
+      "deleteFailed": "We couldn't delete your review. Try again.",
+      "invalidIdentifier": "Missing or invalid review target.",
+      "validationInvalid": "Please provide a valid rating and comment.",
+      "validationInvalidUpdate": "Please provide at least one valid field to update.",
+      "authRequired": "You need to sign in to review.",
+      "forbidden": "You do not have permission to change this review.",
+      "courseNotFound": "The selected course was not found.",
+      "lyceumNotFound": "The selected lyceum was not found.",
+      "userNotFound": "The selected lecturer was not found.",
+      "reviewNotFound": "Review not found.",
+      "alreadyReviewed": "You have already submitted a review.",
+      "alreadyDeleted": "This review is already deleted.",
+      "server": "A server error occurred. Please try again."
     }
   },
   "feedback": {
@@ -161,6 +180,11 @@
       "passwordChanged": "Password updated successfully.",
       "lyceumRightsRequested": "Verification email sent.",
       "lyceumRightsVerified": "You are now a lyceum administrator."
+    },
+    "reviews": {
+      "createSuccess": "Review submitted successfully.",
+      "updateSuccess": "Review updated successfully.",
+      "deleteSuccess": "Review deleted successfully."
     }
   },
   "components": {
@@ -528,7 +552,8 @@
           "ratingLabel": "Rating {{rating}} of {{max}}",
           "openCourse": "Open course {{name}}",
           "locationLoading": "Loading location...",
-          "ageMore": "+{{count}} more"
+          "ageMore": "+{{count}} more",
+          "ratingEmpty": "No ratings yet"
         },
         "pagination": {
           "more": "Show more",
@@ -561,7 +586,8 @@
           "gallery": "Gallery",
           "editCourse": "Update course",
           "expand": "Expand menu",
-          "collapse": "Collapse menu"
+          "collapse": "Collapse menu",
+          "reviews": "Reviews"
         },
         "sections": {
           "overview": "Overview",
@@ -619,7 +645,9 @@
         },
         "actions": {
           "openLyceum": "Open lyceum"
-        }
+        },
+        "averageRatingLabel": "Average rating {{rating}} of {{max}}",
+        "noRating": "No ratings yet."
       },
       "create": {
         "title": "Add new course",
@@ -770,7 +798,8 @@
           "addCourse": "Add new course",
           "addLecturer": "Add lecturer",
           "expand": "Expand menu",
-          "collapse": "Collapse menu"
+          "collapse": "Collapse menu",
+          "reviews": "Reviews"
         },
         "editCta": "Update lyceum",
         "labels": {
@@ -815,7 +844,9 @@
           "logoAlt": "Course logo for {{name}}",
           "lecturerLabel": "Lecturer",
           "additionalLecturers": "plus {{count}} more",
-          "openCourse": "Open course {{name}}"
+          "openCourse": "Open course {{name}}",
+          "ratingLabel": "Course rating {{rating}} of {{max}}",
+          "noRating": "No ratings"
         },
         "coursesCarousel": {
           "previous": "Previous courses",
@@ -824,7 +855,10 @@
         "lecturerCard": {
           "avatarAlt": "Avatar for {{name}}",
           "badge": "Lecturer",
-          "subtitle": "Lyceum lecturer"
+          "subtitle": "Lyceum lecturer",
+          "ratingLabel": "Lecturer rating {{rating}} of {{max}}",
+          "noRating": "No ratings",
+          "openReviews": "Open reviews for {{name}}"
         },
         "lecturersCarousel": {
           "previous": "Previous lecturers",
@@ -835,7 +869,13 @@
         "lecturersLoading": "Loading lecturers...",
         "lecturersError": "Unable to load lecturers right now.",
         "coursesPlaceholder": "Courses for this lyceum will appear here.",
-        "lecturersPlaceholder": "Lecturers for this lyceum will appear here."
+        "lecturersPlaceholder": "Lecturers for this lyceum will appear here.",
+        "averageRatingLabel": "Average rating {{rating}} of {{max}}",
+        "noRating": "No ratings yet.",
+        "lecturerReviews": {
+          "title": "{{name}} reviews",
+          "subtitle": "Read feedback and add your review for this lecturer."
+        }
       },
       "edit": {
         "title": "Update lyceum",
@@ -995,6 +1035,48 @@
       "title": "Page not found",
       "message": "The page you are looking for does not exist.",
       "action": "Go to courses"
+    },
+    "reviews": {
+      "sections": {
+        "course": {
+          "title": "Course reviews"
+        },
+        "lyceum": {
+          "title": "Lyceum reviews"
+        },
+        "user": {
+          "title": "Lecturer reviews"
+        }
+      },
+      "summary": {
+        "noRatings": "No ratings yet."
+      },
+      "list": {
+        "loading": "Loading reviews...",
+        "empty": "No reviews yet.",
+        "reviewerFallback": "Community member",
+        "yourReview": "Your review",
+        "commentEmpty": "No comment provided."
+      },
+      "form": {
+        "authHint": "Sign in to leave a review.",
+        "authAction": "Log in",
+        "createTitle": "Write a review",
+        "editTitle": "Update your review",
+        "commentPlaceholder": "Share your experience (optional).",
+        "submit": "Submit review",
+        "submitting": "Submitting...",
+        "update": "Update review",
+        "updating": "Updating...",
+        "delete": "Delete review",
+        "deleting": "Deleting...",
+        "deleteConfirm": "Delete your review?",
+        "validation": {
+          "ratingRange": "Choose a rating between 1 and 5."
+        },
+        "openCreate": "Add review",
+        "openEdit": "Edit your review"
+      }
     }
   }
 }
