@@ -8,11 +8,13 @@ describe('App', () => {
     await i18n.changeLanguage('en')
   })
 
-  it('renders the courses page heading', async () => {
+  it('renders the courses navigation link', async () => {
     render(<App />)
 
+    const courseLinks = await screen.findAllByRole('link', { name: 'Courses' })
+
     expect(
-      await screen.findByRole('heading', { name: 'Courses', level: 1 })
-    ).toBeDefined()
+      courseLinks.some((link) => link.getAttribute('aria-current') === 'page')
+    ).toBe(true)
   })
 })

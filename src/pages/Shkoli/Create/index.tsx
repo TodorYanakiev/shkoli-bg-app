@@ -152,6 +152,7 @@ const CourseCreatePage = () => {
           <CourseCreateOverviewSection
             register={register}
             errors={errors}
+            locale={i18n.language}
             t={t}
           />
           <CourseCreateDetailsSection
