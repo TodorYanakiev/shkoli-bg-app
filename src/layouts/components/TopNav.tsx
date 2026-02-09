@@ -97,7 +97,7 @@ const TopNav = () => {
   }, [isMenuOpen, logoutErrorMessage])
 
   return (
-    <header className="sticky top-0 z-20 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="fixed left-0 right-0 top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
       <div
         ref={topBarRef}
         className="flex w-full items-center justify-between px-4 py-4 sm:px-6 lg:px-12"
