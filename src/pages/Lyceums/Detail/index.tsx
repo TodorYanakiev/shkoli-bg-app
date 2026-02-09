@@ -9,12 +9,15 @@ import { LyceumDetailInfoSection } from './components/LyceumDetailInfoSection'
 import { LyceumDetailLecturersSection } from './components/LyceumDetailLecturersSection'
 import { LyceumDetailSideNav } from './components/LyceumDetailSideNav'
 import LyceumLecturerInviteModal from './components/LyceumLecturerInviteModal'
+import LyceumLecturerReviewsModal from './components/LyceumLecturerReviewsModal'
 import { getLyceumDetailSideNavItems } from './components/lyceumDetailSideNavItems'
 import { useLyceumDetailCarousels } from './hooks/useLyceumDetailCarousels'
 import { useLyceumDetailData } from './hooks/useLyceumDetailData'
 import { useLyceumDetailLayout } from './hooks/useLyceumDetailLayout'
+import { useLyceumLecturerReviewsModal } from './hooks/useLyceumLecturerReviewsModal'
 import { useLyceumDetailView } from './hooks/useLyceumDetailView'
 import { useLyceumInviteModal } from './hooks/useLyceumInviteModal'
+import { LyceumReviewsSection } from '../../Reviews/components/LyceumReviewsSection'
 
 const LyceumDetailPage = () => {
   const { t } = useTranslation()
@@ -52,6 +55,12 @@ const LyceumDetailPage = () => {
     openInviteModal,
     closeInviteModal,
   } = useLyceumInviteModal({ canInviteLecturer })
+  const {
+    selectedLecturer,
+    isOpen: isLecturerReviewsModalOpen,
+    openModal: openLecturerReviewsModal,
+    closeModal: closeLecturerReviewsModal,
+  } = useLyceumLecturerReviewsModal()
 
   const {
     isDesktop,
@@ -105,7 +114,12 @@ const LyceumDetailPage = () => {
       <Helmet>
         <title>{pageTitle}</title>
       </Helmet>
-      <LyceumDetailHeader title={title} subtitle={subtitle} t={t} />
+      <LyceumDetailHeader
+        title={title}
+        subtitle={subtitle}
+        averageRating={lyceum?.averageRating ?? null}
+        t={t}
+      />
       {!isValidId ? (
         <div
           className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
@@ -153,6 +167,7 @@ const LyceumDetailPage = () => {
               title={title}
               heroLocation={heroLocation}
               fallbackValue={fallbackValue}
+              averageRating={lyceum.averageRating ?? null}
               coursesCount={coursesCount}
               lecturersCount={lecturersCount}
               overviewDetails={overviewDetails}
@@ -168,6 +183,10 @@ const LyceumDetailPage = () => {
               carousel={coursesCarousel}
               t={t}
             />
+            <LyceumReviewsSection
+              lyceumId={lyceumId}
+              averageRating={lyceum.averageRating ?? null}
+            />
             <LyceumDetailLecturersSection
               lecturers={lecturers}
               lecturersCount={lecturersCount}
@@ -175,6 +194,7 @@ const LyceumDetailPage = () => {
               lecturersErrorMessage={lecturersErrorMessage}
               fallbackValue={fallbackValue}
               carousel={lecturersCarousel}
+              onOpenLecturerReviews={openLecturerReviewsModal}
               t={t}
             />
           </div>
@@ -185,6 +205,15 @@ const LyceumDetailPage = () => {
           lyceumId={lyceumId}
           modalId={inviteModalId}
           onClose={closeInviteModal}
+        />
+      ) : null}
+      {isLecturerReviewsModalOpen &&
+      selectedLecturer &&
+      isValidId ? (
+        <LyceumLecturerReviewsModal
+          lecturer={selectedLecturer}
+          lyceumId={lyceumId}
+          onClose={closeLecturerReviewsModal}
         />
       ) : null}
     </section>
