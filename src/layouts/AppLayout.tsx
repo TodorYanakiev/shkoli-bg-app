@@ -1,9 +1,12 @@
 import { Outlet } from 'react-router-dom'
 
+import { useContentsquareTracking } from '../hooks/useContentsquareTracking'
 import AppFooter from './components/AppFooter'
 import TopNav from './components/TopNav'
 
 const AppLayout = () => {
+  useContentsquareTracking()
+
   return (
     <div className="relative min-h-screen bg-transparent text-slate-900">
       <div className="relative z-10 flex min-h-screen flex-col">
