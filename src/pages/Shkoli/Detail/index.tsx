@@ -14,6 +14,7 @@ import { getCourseDetailSideNavItems } from './components/courseDetailSideNavIte
 import { useCourseDetailData } from './hooks/useCourseDetailData'
 import { useCourseDetailLayout } from './hooks/useCourseDetailLayout'
 import { useCourseDetailView } from './hooks/useCourseDetailView'
+import { CourseReviewsSection } from '../../Reviews/components/CourseReviewsSection'
 
 const CourseDetailPage = () => {
   const { t, i18n } = useTranslation()
@@ -96,7 +97,12 @@ const CourseDetailPage = () => {
       <Helmet>
         <title>{pageTitle}</title>
       </Helmet>
-      <CourseDetailHeader title={courseName} subtitle={subtitle} t={t} />
+      <CourseDetailHeader
+        title={courseName}
+        subtitle={subtitle}
+        averageRating={course?.averageRating ?? null}
+        t={t}
+      />
       {!isValidId ? (
         <div
           className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
@@ -173,6 +179,10 @@ const CourseDetailPage = () => {
                 lecturersErrorMessage={lecturersErrorMessage}
                 fallbackValue={fallbackValue}
                 t={t}
+              />
+              <CourseReviewsSection
+                courseId={course.id}
+                averageRating={course.averageRating ?? null}
               />
             </div>
             <div className="space-y-6">

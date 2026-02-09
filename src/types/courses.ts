@@ -181,6 +181,7 @@ export type CourseResponse = {
   activeStartMonth?: CourseActiveMonth
   activeEndMonth?: CourseActiveMonth
   lecturerIds?: number[]
+  averageRating?: number
 }
 
 export type CourseRequest = {
