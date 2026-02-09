@@ -182,6 +182,38 @@ describe('LyceumRightsPage (request flow)', () => {
     expect(requestMutationState.mutate).not.toHaveBeenCalled()
   })
 
+  it('applies a lyceum suggestion from the dropdown', async () => {
+    useLyceumSuggestionsMock.mockReturnValue({
+      data: [
+        { id: 1, name: 'Community Center', town: 'Sofia' },
+        { id: 2, name: 'Youth Center', town: 'Sofia' },
+      ],
+      isLoading: false,
+      isError: false,
+    })
+
+    renderPage()
+
+    fireEvent.change(screen.getByLabelText('Town'), {
+      target: { value: 'Sofia' },
+    })
+    const lyceumNameInput = screen.getByLabelText(
+      'Lyceum name',
+    ) as HTMLInputElement
+    fireEvent.focus(lyceumNameInput)
+
+    const suggestionOption = await screen.findByRole('option', {
+      name: 'Community Center',
+    })
+    const suggestionButton = suggestionOption.querySelector('button')
+    if (!suggestionButton) {
+      throw new Error('Expected suggestion option button to exist')
+    }
+    fireEvent.click(suggestionButton)
+
+    expect(lyceumNameInput.value).toBe('Community Center')
+  })
+
   it('submits a request and renders the email sent state', async () => {
     const mutateMock: RequestMutationResult['mutate'] = (_, options) => {
       requestMutationState.error = null

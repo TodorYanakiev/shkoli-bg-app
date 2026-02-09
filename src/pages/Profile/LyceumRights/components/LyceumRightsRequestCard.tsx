@@ -8,8 +8,8 @@ import {
   getRequestOutcomeMessageKey,
 } from '../services/lyceumRightsOutcome'
 import type { LyceumRightsRequestFormValues } from '../validations/lyceumRightsSchemas'
+import LyceumNameSelect from './LyceumNameSelect'
 import TownSelect from './TownSelect'
-import { getInputClassName } from './lyceumRightsFormStyles'
 
 type LyceumRightsRequestCardProps = {
   form: UseFormReturn<LyceumRightsRequestFormValues>
@@ -45,7 +45,11 @@ const LyceumRightsRequestCard = ({
   onStartOver,
 }: LyceumRightsRequestCardProps) => {
   const { t } = useTranslation()
-  const { register, handleSubmit, control, formState: { errors } } = form
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = form
   const requestOutcomeMessageKey = requestOutcome
     ? getRequestOutcomeMessageKey(requestOutcome)
     : null
@@ -123,27 +127,27 @@ const LyceumRightsRequestCard = ({
             >
               {t('pages.profile.lyceumRights.request.form.lyceumNameLabel')}
             </label>
-            <input
-              id="lyceum-rights-name"
-              type="text"
-              autoComplete="organization"
-              list="lyceum-rights-suggestions"
-              placeholder={t(
-                'pages.profile.lyceumRights.request.form.lyceumNamePlaceholder',
+            <Controller
+              control={control}
+              name="lyceumName"
+              render={({ field }) => (
+                <LyceumNameSelect
+                  id="lyceum-rights-name"
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  options={suggestionNames}
+                  placeholder={t(
+                    'pages.profile.lyceumRights.request.form.lyceumNamePlaceholder',
+                  )}
+                  disabled={isSubmitting || isRequestLocked}
+                  hasError={Boolean(errors.lyceumName)}
+                  describedById={
+                    errors.lyceumName ? 'lyceum-rights-name-error' : undefined
+                  }
+                />
               )}
-              aria-invalid={Boolean(errors.lyceumName)}
-              aria-describedby={
-                errors.lyceumName ? 'lyceum-rights-name-error' : undefined
-              }
-              disabled={isSubmitting || isRequestLocked}
-              className={getInputClassName(Boolean(errors.lyceumName))}
-              {...register('lyceumName')}
             />
-            <datalist id="lyceum-rights-suggestions">
-              {suggestionNames.map((name) => (
-                <option key={name} value={name} />
-              ))}
-            </datalist>
             {errors.lyceumName ? (
               <p
                 id="lyceum-rights-name-error"
