@@ -83,7 +83,12 @@ const CourseFilterTypeSelect = ({
         control={control}
         name="courseTypes"
         render={({ field }) => {
-          const selectedTypes = Array.isArray(field.value) ? field.value : []
+          const selectedTypes = Array.isArray(field.value)
+            ? field.value.filter(
+                (value): value is CourseType =>
+                  sortedCourseTypes.includes(value as CourseType),
+              )
+            : []
           const selectedLabels = sortedCourseTypes
             .filter((type) => selectedTypes.includes(type))
             .map((type) => t(`courses.types.${type}`))

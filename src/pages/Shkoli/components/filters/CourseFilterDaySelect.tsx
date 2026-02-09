@@ -84,7 +84,12 @@ const CourseFilterDaySelect = ({
         control={control}
         name="dayOfWeek"
         render={({ field }) => {
-          const selectedDays = Array.isArray(field.value) ? field.value : []
+          const selectedDays = Array.isArray(field.value)
+            ? field.value.filter(
+                (value): value is CourseScheduleDayOfWeek =>
+                  dayOptions.some((option) => option.value === value),
+              )
+            : []
           const selectedLabels = dayOptions
             .filter((option) => selectedDays.includes(option.value))
             .map((option) => t(option.labelKey))
