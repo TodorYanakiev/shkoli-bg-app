@@ -449,6 +449,15 @@
             "empty": "No lyceums found for the current selection.",
             "hint": "Start typing to see suggestions."
           },
+          "manualPicker": {
+            "trigger": "Pick lyceum name manually",
+            "title": "Pick a lyceum from the full list",
+            "description": "Select your lyceum and we will auto-fill the form and send the verification request.",
+            "loading": "Loading all lyceums...",
+            "error": "Unable to load the lyceum list right now.",
+            "empty": "No lyceums are available yet.",
+            "retry": "Try again"
+          },
           "outcomes": {
             "emailSent": "We have sent you an email at {{email}} with a verification code.",
             "emailFallback": "the official address",

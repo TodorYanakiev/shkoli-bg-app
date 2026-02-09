@@ -150,6 +150,7 @@ beforeEach(() => {
     data: [],
     isLoading: false,
     isError: false,
+    refetch: vi.fn(),
   })
 
   requestMutationState = {
@@ -190,6 +191,7 @@ describe('LyceumRightsPage (request flow)', () => {
       ],
       isLoading: false,
       isError: false,
+      refetch: vi.fn(),
     })
 
     renderPage()
@@ -212,6 +214,46 @@ describe('LyceumRightsPage (request flow)', () => {
     fireEvent.click(suggestionButton)
 
     expect(lyceumNameInput.value).toBe('Community Center')
+  })
+
+  it('fills and submits when selecting a lyceum from the manual picker modal', async () => {
+    useLyceumSuggestionsMock.mockReturnValue({
+      data: [
+        { id: 1, name: 'Community Center', town: 'Sofia' },
+        { id: 2, name: 'Readers Club', town: 'Plovdiv' },
+      ],
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    })
+
+    renderPage()
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Pick lyceum name manually' }),
+    )
+
+    const selectedLyceumButton = await screen.findByRole('button', {
+      name: /Community Center/i,
+    })
+    fireEvent.click(selectedLyceumButton)
+
+    await waitFor(() => {
+      expect(requestMutationState.mutate).toHaveBeenCalledWith(
+        { lyceumName: 'Community Center', town: 'Sofia' },
+        expect.objectContaining({
+          onSuccess: expect.any(Function),
+          onError: expect.any(Function),
+        }),
+      )
+    })
+
+    expect((screen.getByLabelText('Lyceum name') as HTMLInputElement).value).toBe(
+      'Community Center',
+    )
+    expect((screen.getByLabelText('Town') as HTMLSelectElement).value).toBe(
+      'Sofia',
+    )
   })
 
   it('submits a request and renders the email sent state', async () => {
