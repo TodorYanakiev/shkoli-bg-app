@@ -91,6 +91,27 @@ export const getLyceumDetailSideNavItems = ({
         </svg>
       ),
     },
+    {
+      key: 'lyceum-reviews',
+      label: t('pages.lyceums.detail.sideNav.reviews'),
+      href: '#lyceum-reviews',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 5.5h16v10H8l-4 4v-14z" />
+          <path d="M9 9.5h6" />
+          <path d="M9 12.5h4" />
+        </svg>
+      ),
+    },
   ]
 
   return [

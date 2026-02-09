@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
+import { RatingStars } from '../../../../components/ui/RatingStars'
 import UserAvatar from '../../../../components/ui/UserAvatar'
 import type { UserResponse } from '../../../../types/users'
 
@@ -7,22 +8,26 @@ type LyceumLecturerCardProps = {
   lecturer: UserResponse
   displayName: string
   fallbackValue: string
+  onOpenReviews?: () => void
 }
 
 const LyceumLecturerCard = ({
   lecturer,
   displayName,
   fallbackValue,
+  onOpenReviews,
 }: LyceumLecturerCardProps) => {
   const { t } = useTranslation()
   const name = displayName || fallbackValue
   const email = lecturer.email ?? fallbackValue
+  const averageRating =
+    typeof lecturer.averageRating === 'number' &&
+    Number.isFinite(lecturer.averageRating)
+      ? lecturer.averageRating
+      : null
 
-  return (
-    <article
-      className="group relative flex aspect-square w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-slate-200/70 bg-white/70 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30"
-      tabIndex={0}
-    >
+  const content = (
+    <>
       <UserAvatar
         alt={t('pages.lyceums.detail.lecturerCard.avatarAlt', { name })}
         size="full"
@@ -33,7 +38,47 @@ const LyceumLecturerCard = ({
         <span className="truncate font-semibold">{name}</span>
         <span className="truncate text-[10px] text-slate-100">{email}</span>
       </div>
-    </article>
+      <div className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-1 shadow-sm">
+        {averageRating != null ? (
+          <RatingStars
+            rating={averageRating}
+            ariaLabel={t('pages.lyceums.detail.lecturerCard.ratingLabel', {
+              rating: averageRating.toFixed(1),
+              max: 5,
+            })}
+            showValue={false}
+          />
+        ) : (
+          <span className="text-[10px] font-semibold text-slate-500">
+            {t('pages.lyceums.detail.lecturerCard.noRating')}
+          </span>
+        )}
+      </div>
+    </>
+  )
+
+  if (!onOpenReviews) {
+    return (
+      <article className="group relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border border-slate-200/70 bg-white/70 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-md">
+        {content}
+      </article>
+    )
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onOpenReviews}
+      className="group relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border border-slate-200/70 bg-white/70 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30"
+      aria-label={t('pages.lyceums.detail.lecturerCard.openReviews', {
+        name,
+      })}
+      title={t('pages.lyceums.detail.lecturerCard.openReviews', {
+        name,
+      })}
+    >
+      {content}
+    </button>
   )
 }
 

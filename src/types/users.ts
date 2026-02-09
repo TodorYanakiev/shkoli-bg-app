@@ -14,6 +14,7 @@ export type CurrentUser = UserIdentity & {
   lecturedCourseIds?: number[]
   lecturedLyceumIds?: number[]
   enabled?: boolean
+  averageRating?: number
 }
 
 export type UserResponse = UserIdentity & {
@@ -22,6 +23,7 @@ export type UserResponse = UserIdentity & {
   lecturedCourseIds?: number[]
   lecturedLyceumIds?: number[]
   enabled?: boolean
+  averageRating?: number
 }
 
 export type ChangePasswordRequest = {

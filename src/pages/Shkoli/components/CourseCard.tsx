@@ -19,6 +19,11 @@ const CourseCard = ({ course }: CourseCardProps) => {
   const { t, i18n } = useTranslation()
   const courseName = course.name ?? t('pages.shkoli.list.card.untitled')
   const courseType = course.type
+  const averageRating =
+    typeof course.averageRating === 'number' &&
+    Number.isFinite(course.averageRating)
+      ? course.averageRating
+      : null
   const ageGroups = (course.ageGroupList ?? []).filter(
     Boolean,
   ) as CourseAgeGroup[]
@@ -126,14 +131,20 @@ const CourseCard = ({ course }: CourseCardProps) => {
           </div>
         </div>
         <div className="self-start rounded-full bg-amber-50 px-3 py-1 shadow-sm sm:self-auto">
-          <RatingStars
-            rating={5}
-            max={5}
-            ariaLabel={t('pages.shkoli.list.card.ratingLabel', {
-              rating: 5,
-              max: 5,
-            })}
-          />
+          {averageRating != null ? (
+            <RatingStars
+              rating={averageRating}
+              max={5}
+              ariaLabel={t('pages.shkoli.list.card.ratingLabel', {
+                rating: averageRating.toFixed(1),
+                max: 5,
+              })}
+            />
+          ) : (
+            <span className="text-xs font-semibold text-slate-500">
+              {t('pages.shkoli.list.card.ratingEmpty')}
+            </span>
+          )}
         </div>
       </div>
     </article>

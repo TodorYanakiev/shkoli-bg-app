@@ -136,6 +136,25 @@
       "logoutFailed": "Неуспешен изход от профила. Опитайте отново.",
       "registerFailed": "Неуспешна регистрация. Опитайте отново.",
       "userExists": "Вече има профил с тези данни."
+    },
+    "reviews": {
+      "generic": "Нещо се обърка при обработката на отзивите.",
+      "loadFailed": "Не успяхме да заредим отзивите за тази школа.",
+      "createFailed": "Не успяхме да създадем отзива. Опитайте отново.",
+      "updateFailed": "Не успяхме да обновим отзива. Опитайте отново.",
+      "deleteFailed": "Не успяхме да изтрием отзива. Опитайте отново.",
+      "invalidIdentifier": "Невалиден идентификатор на школа или читалище.",
+      "validationInvalid": "Въведете валидни данни за отзива.",
+      "validationInvalidUpdate": "Въведете валидни данни за обновяването на отзива.",
+      "authRequired": "Трябва да сте влезли, за да редактирате отзив.",
+      "forbidden": "Нямате достъп до този отзив.",
+      "courseNotFound": "Не открихме тази школа.",
+      "lyceumNotFound": "Не открихме това читалище.",
+      "userNotFound": "Не открихме потребителя.",
+      "reviewNotFound": "Не открихме този отзив.",
+      "alreadyReviewed": "Вече сте оценили тази школа.",
+      "alreadyDeleted": "Отзивът вече е изтрит.",
+      "server": "Вътрешна грешка в сървъра. Опитайте отново."
     }
   },
   "feedback": {
@@ -161,6 +180,11 @@
       "passwordChanged": "Паролата е обновена успешно.",
       "lyceumRightsRequested": "Имейлът за потвърждение е изпратен.",
       "lyceumRightsVerified": "Вече сте администратор на читалище."
+    },
+    "reviews": {
+      "createSuccess": "Отзивът е създаден успешно.",
+      "updateSuccess": "Отзивът е обновен успешно.",
+      "deleteSuccess": "Отзивът е изтрит успешно."
     }
   },
   "components": {
@@ -510,7 +534,8 @@
           "ratingLabel": "Оценка {{rating}} от {{max}}",
           "openCourse": "Отвори школа {{name}}",
           "locationLoading": "Зареждане на локацията...",
-          "ageMore": "+{{count}} още"
+          "ageMore": "+{{count}} още",
+          "ratingEmpty": "Все още няма отзиви."
         },
         "pagination": {
           "more": "Показване още",
@@ -543,7 +568,8 @@
           "gallery": "Галерия",
           "editCourse": "Редактиране на школа",
           "expand": "Разшири менюто",
-          "collapse": "Свий менюто"
+          "collapse": "Свий менюто",
+          "reviews": "Отзиви"
         },
         "sections": {
           "overview": "Преглед",
@@ -601,6 +627,17 @@
         },
         "actions": {
           "openLyceum": "Към читалището"
+        },
+        "averageRatingLabel": "Средна оценка {{rating}} от {{max}}",
+        "noRating": "Няма отзиви за тази школа.",
+        "lecturerCard": {
+          "ratingLabel": "Оценка на преподавателя {{rating}} от {{max}}",
+          "noRating": "Няма оценка"
+        },
+        "lecturerReviews": {
+          "title": "Отзиви за {{name}}",
+          "subtitle": "Прегледайте отзивите и добавете своя отзив за този преподавател.",
+          "openReviews": "Отзиви за {{name}}"
         }
       },
       "create": {
@@ -752,7 +789,8 @@
           "addCourse": "Добави нова школа",
           "addLecturer": "Добави преподавател",
           "expand": "Разгъни менюто",
-          "collapse": "Свий менюто"
+          "collapse": "Свий менюто",
+          "reviews": "Отзиви"
         },
         "editCta": "Редактиране на читалище",
         "labels": {
@@ -797,7 +835,9 @@
           "logoAlt": "Лого на школа по{{name}}",
           "lecturerLabel": "Преподавател",
           "additionalLecturers": "плюс още {{count}}",
-          "openCourse": "Отвори школа {{name}}"
+          "openCourse": "Отвори школа {{name}}",
+          "ratingLabel": "Оценка на школата {{rating}} от {{max}}",
+          "noRating": "Няма оценка"
         },
         "coursesCarousel": {
           "previous": "Предишна школа",
@@ -806,7 +846,10 @@
         "lecturerCard": {
           "avatarAlt": "Аватар на {{name}}",
           "badge": "Преподавател",
-          "subtitle": "Преподавател към читалище"
+          "subtitle": "Преподавател към читалище",
+          "ratingLabel": "Оценка на преподавателя {{rating}} от {{max}}",
+          "noRating": "Няма оценка",
+          "openReviews": "Отзиви за {{name}}"
         },
         "lecturersCarousel": {
           "previous": "Предишни преподаватели",
@@ -817,7 +860,13 @@
         "lecturersLoading": "Зареждане на преподаватели...",
         "lecturersError": "Не можем да заредим преподавателите в момента.",
         "coursesPlaceholder": "Школите за това читалище ще се показват тук.",
-        "lecturersPlaceholder": "Преподавателите за това читалище ще се показват тук."
+        "lecturersPlaceholder": "Преподавателите за това читалище ще се показват тук.",
+        "averageRatingLabel": "Средна оценка {{rating}} от {{max}}",
+        "noRating": "Няма отзиви за тази школа.",
+        "lecturerReviews": {
+          "title": "Отзиви за {{name}}",
+          "subtitle": "Показване на всички отзиви за преподавателя."
+        }
       },
       "edit": {
         "title": "Обновяване на читалище",
@@ -977,6 +1026,48 @@
       "title": "Страницата не е намерена",
       "message": "Страницата, която търсите, не съществува.",
       "action": "Към Школи"
+    },
+    "reviews": {
+      "sections": {
+        "course": {
+          "title": "Оценка на школите"
+        },
+        "lyceum": {
+          "title": "Оценка на читалищата"
+        },
+        "user": {
+          "title": "Оценка на потребителите"
+        }
+      },
+      "summary": {
+        "noRatings": "Няма налични отзиви."
+      },
+      "list": {
+        "loading": "Зареждане на отзиви...",
+        "empty": "Няма налични отзиви.",
+        "reviewerFallback": "Неизвестен потребител",
+        "yourReview": "Вашият отзив",
+        "commentEmpty": "Коментарът е празен."
+      },
+      "form": {
+        "authHint": "Моля, влезте в профила си, за да оцените.",
+        "authAction": "Вход",
+        "createTitle": "Добавяне на отзив",
+        "editTitle": "Редакция на отзив",
+        "commentPlaceholder": "Въведете коментар за този отзив (максимум 500 символа).",
+        "submit": "Добави отзив",
+        "submitting": "Добавяне...",
+        "update": "Обнови отзив",
+        "updating": "Обновяване...",
+        "delete": "Изтрий отзив",
+        "deleting": "Изтриване...",
+        "deleteConfirm": "Сигурни ли сте, че искате да изтриете този отзив?",
+        "validation": {
+          "ratingRange": "Оценката трябва да е между 1 и 5."
+        },
+        "openCreate": "Добавете отзив",
+        "openEdit": "Редактирайте своя отзив"
+      }
     }
   }
 }

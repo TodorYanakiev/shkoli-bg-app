@@ -57,4 +57,5 @@ export type LyceumResponse = {
   longitude?: number
   latitude?: number
   verificationStatus?: 'VERIFIED' | 'NOT_VERIFIED' | 'PENDING'
+  averageRating?: number
 }

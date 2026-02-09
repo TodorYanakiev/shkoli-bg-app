@@ -1,12 +1,14 @@
 import type { TFunction } from 'i18next'
 
 import placeholderImage from '../../../../assets/lyceum-placeholder.svg'
+import { RatingStars } from '../../../../components/ui/RatingStars'
 import type { OverviewDetail } from '../types'
 
 type LyceumDetailInfoSectionProps = {
   title: string
   heroLocation: string
   fallbackValue: string
+  averageRating?: number | null
   coursesCount: number
   lecturersCount: number
   overviewDetails: OverviewDetail[]
@@ -17,6 +19,7 @@ export const LyceumDetailInfoSection = ({
   title,
   heroLocation,
   fallbackValue,
+  averageRating,
   coursesCount,
   lecturersCount,
   overviewDetails,
@@ -37,6 +40,21 @@ export const LyceumDetailInfoSection = ({
         <p className="mt-1 text-sm text-slate-600">
           {heroLocation || fallbackValue}
         </p>
+        <div className="mt-2">
+          {typeof averageRating === 'number' && Number.isFinite(averageRating) ? (
+            <RatingStars
+              rating={averageRating}
+              ariaLabel={t('pages.lyceums.detail.averageRatingLabel', {
+                rating: averageRating.toFixed(1),
+                max: 5,
+              })}
+            />
+          ) : (
+            <span className="text-xs font-medium text-slate-500">
+              {t('pages.lyceums.detail.noRating')}
+            </span>
+          )}
+        </div>
         <div className="mt-4 flex flex-wrap gap-3">
           <a
             href="#lyceum-courses"

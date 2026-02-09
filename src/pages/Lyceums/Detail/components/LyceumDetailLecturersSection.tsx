@@ -13,6 +13,7 @@ type LyceumDetailLecturersSectionProps = {
   lecturersErrorMessage: string | null
   fallbackValue: string
   carousel: CarouselState
+  onOpenLecturerReviews?: (lecturer: UserResponse) => void
   t: TFunction
 }
 
@@ -23,6 +24,7 @@ export const LyceumDetailLecturersSection = ({
   lecturersErrorMessage,
   fallbackValue,
   carousel,
+  onOpenLecturerReviews,
   t,
 }: LyceumDetailLecturersSectionProps) => (
   <div
@@ -83,6 +85,11 @@ export const LyceumDetailLecturersSection = ({
                     lecturer={lecturer}
                     displayName={displayName}
                     fallbackValue={fallbackValue}
+                    onOpenReviews={
+                      onOpenLecturerReviews
+                        ? () => onOpenLecturerReviews(lecturer)
+                        : undefined
+                    }
                   />
                 </li>
               )

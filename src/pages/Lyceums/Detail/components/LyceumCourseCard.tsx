@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import courseLogoPlaceholder from '../../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
+import { RatingStars } from '../../../../components/ui/RatingStars'
 import type { CourseResponse } from '../../../../types/courses'
 import {
   getPreferredCourseImage,
@@ -31,6 +32,11 @@ const LyceumCourseCard = ({
     resolveCourseImageUrl(mainImage) ?? courseMainPlaceholder
   const logoImageUrl =
     resolveCourseImageUrl(logoImage) ?? courseLogoPlaceholder
+  const averageRating =
+    typeof course.averageRating === 'number' &&
+    Number.isFinite(course.averageRating)
+      ? course.averageRating
+      : null
   const courseLink =
     course.id != null ? `/shkoli/${course.id}` : null
   const cardClassName =
@@ -85,6 +91,21 @@ const LyceumCourseCard = ({
             </span>
           ) : null}
         </p>
+        <div className="mt-3">
+          {averageRating != null ? (
+            <RatingStars
+              rating={averageRating}
+              ariaLabel={t('pages.lyceums.detail.courseCard.ratingLabel', {
+                rating: averageRating.toFixed(1),
+                max: 5,
+              })}
+            />
+          ) : (
+            <p className="text-xs font-medium text-slate-500">
+              {t('pages.lyceums.detail.courseCard.noRating')}
+            </p>
+          )}
+        </div>
       </div>
     </article>
   )
