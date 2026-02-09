@@ -1,20 +1,25 @@
+import { useCallback, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useToast } from '../../../components/feedback/ToastContext'
 import LyceumRightsHeader from './components/LyceumRightsHeader'
+import LyceumManualPickerModal from './components/LyceumManualPickerModal'
 import LyceumRightsRequestCard from './components/LyceumRightsRequestCard'
 import LyceumRightsVerifyCard from './components/LyceumRightsVerifyCard'
 import { useLyceumRightsActions } from './hooks/useLyceumRightsActions'
 import { useLyceumRightsForms } from './hooks/useLyceumRightsForms'
+import { useLyceumRightsManualPicker } from './hooks/useLyceumRightsManualPicker'
 import { useLyceumRightsSuggestions } from './hooks/useLyceumRightsSuggestions'
 import { useLyceumRightsView } from './hooks/useLyceumRightsView'
+import type { ManualLyceumOption } from './services/lyceumManualPicker'
 
 const LyceumRightsPage = () => {
   const { t } = useTranslation()
   const { showToast } = useToast()
   const navigate = useNavigate()
+  const [isManualPickerOpen, setIsManualPickerOpen] = useState(false)
   const {
     requestForm,
     verifyForm,
@@ -57,6 +62,48 @@ const LyceumRightsPage = () => {
       isRequestLocked,
       shouldFetchSuggestions,
     })
+  const {
+    lyceumTownGroups,
+    isLoading: isManualPickerLoading,
+    isError: isManualPickerError,
+    refetch: refetchManualLyceums,
+  } = useLyceumRightsManualPicker({
+    enabled: isManualPickerOpen,
+  })
+  const isManualPickerDisabled =
+    isRequestLocked || requestMutation.isPending || verifyMutation.isPending
+
+  const handleOpenManualPicker = useCallback(() => {
+    if (isManualPickerDisabled) {
+      return
+    }
+    setIsManualPickerOpen(true)
+  }, [isManualPickerDisabled])
+
+  const handleCloseManualPicker = useCallback(() => {
+    setIsManualPickerOpen(false)
+  }, [])
+
+  const handleManualLyceumSelect = useCallback(
+    (option: ManualLyceumOption) => {
+      requestForm.setValue('lyceumName', option.name, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      })
+      requestForm.setValue('town', option.town, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      })
+      setIsManualPickerOpen(false)
+      handleRequestSubmit({
+        lyceumName: option.name,
+        town: option.town,
+      })
+    },
+    [handleRequestSubmit, requestForm],
+  )
 
   return (
     <section className="space-y-4">
@@ -81,6 +128,8 @@ const LyceumRightsPage = () => {
           suggestionNames={suggestionNames}
           suggestionMessageKey={suggestionMessageKey}
           suggestionMessageTone={suggestionMessageTone}
+          onOpenManualPicker={handleOpenManualPicker}
+          isManualPickerDisabled={isManualPickerDisabled}
           onStartOver={handleStartOver}
         />
         <LyceumRightsVerifyCard
@@ -91,6 +140,18 @@ const LyceumRightsPage = () => {
           verifyErrorKey={verifyErrorKey}
         />
       </div>
+      <LyceumManualPickerModal
+        isOpen={isManualPickerOpen}
+        isLoading={isManualPickerLoading}
+        isError={isManualPickerError}
+        isSubmitting={requestMutation.isPending}
+        lyceumTownGroups={lyceumTownGroups}
+        onClose={handleCloseManualPicker}
+        onRetry={() => {
+          refetchManualLyceums()
+        }}
+        onSelect={handleManualLyceumSelect}
+      />
     </section>
   )
 }
