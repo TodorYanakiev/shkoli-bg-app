@@ -647,7 +647,16 @@
           "openLyceum": "Open lyceum"
         },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
-        "noRating": "No ratings yet."
+        "noRating": "No ratings yet.",
+        "lecturerCard": {
+          "ratingLabel": "Lecturer rating {{rating}} of {{max}}",
+          "noRating": "No ratings"
+        },
+        "lecturerReviews": {
+          "title": "{{name}} reviews",
+          "subtitle": "Read feedback and add your review for this lecturer.",
+          "openReviews": "Open reviews for {{name}}"
+        }
       },
       "create": {
         "title": "Add new course",

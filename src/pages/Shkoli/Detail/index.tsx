@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import { CourseDetailGallerySection } from './components/CourseDetailGallerySection'
 import { CourseDetailHeader } from './components/CourseDetailHeader'
 import { CourseDetailLecturersSection } from './components/CourseDetailLecturersSection'
+import CourseLecturerReviewsModal from './components/CourseLecturerReviewsModal'
 import { CourseDetailLyceumSection } from './components/CourseDetailLyceumSection'
 import { CourseDetailOverviewSection } from './components/CourseDetailOverviewSection'
 import { CourseDetailScheduleSection } from './components/CourseDetailScheduleSection'
@@ -13,6 +14,7 @@ import { CourseDetailSideNav } from './components/CourseDetailSideNav'
 import { getCourseDetailSideNavItems } from './components/courseDetailSideNavItems'
 import { useCourseDetailData } from './hooks/useCourseDetailData'
 import { useCourseDetailLayout } from './hooks/useCourseDetailLayout'
+import { useCourseLecturerReviewsModal } from './hooks/useCourseLecturerReviewsModal'
 import { useCourseDetailView } from './hooks/useCourseDetailView'
 import { CourseReviewsSection } from '../../Reviews/components/CourseReviewsSection'
 
@@ -68,6 +70,12 @@ const CourseDetailPage = () => {
     sideNavContainerClassName,
     sideNavListClassName,
   } = useCourseDetailLayout({ hasCourse: Boolean(course) })
+  const {
+    selectedLecturer,
+    isOpen: isLecturerReviewsModalOpen,
+    openModal: openLecturerReviewsModal,
+    closeModal: closeLecturerReviewsModal,
+  } = useCourseLecturerReviewsModal()
 
   const sideNavItems = useMemo(
     () =>
@@ -178,6 +186,7 @@ const CourseDetailPage = () => {
                 isLecturersLoading={isLecturersLoading}
                 lecturersErrorMessage={lecturersErrorMessage}
                 fallbackValue={fallbackValue}
+                onOpenLecturerReviews={openLecturerReviewsModal}
                 t={t}
               />
               <CourseReviewsSection
@@ -203,6 +212,15 @@ const CourseDetailPage = () => {
           </div>
         </div>
       )}
+      {isLecturerReviewsModalOpen &&
+      selectedLecturer &&
+      isValidId ? (
+        <CourseLecturerReviewsModal
+          lecturer={selectedLecturer}
+          lyceumId={lyceumId}
+          onClose={closeLecturerReviewsModal}
+        />
+      ) : null}
     </section>
   )
 }

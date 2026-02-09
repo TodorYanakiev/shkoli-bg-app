@@ -629,7 +629,16 @@
           "openLyceum": "Към читалището"
         },
         "averageRatingLabel": "Средна оценка {{rating}} от {{max}}",
-        "noRating": "Няма отзиви за тази школа."
+        "noRating": "Няма отзиви за тази школа.",
+        "lecturerCard": {
+          "ratingLabel": "Оценка на преподавателя {{rating}} от {{max}}",
+          "noRating": "Няма оценка"
+        },
+        "lecturerReviews": {
+          "title": "Отзиви за {{name}}",
+          "subtitle": "Прегледайте отзивите и добавете своя отзив за този преподавател.",
+          "openReviews": "Отзиви за {{name}}"
+        }
       },
       "create": {
         "title": "Добави нова школа",
