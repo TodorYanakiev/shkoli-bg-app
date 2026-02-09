@@ -344,7 +344,6 @@ const CourseFilterPanel = ({
                       placeholder={selectedText}
                       className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none placeholder:text-slate-500"
                       aria-label={t('pages.shkoli.list.filters.typeLabel')}
-                      aria-expanded={isTypeMenuOpen}
                       ref={typeInputRef}
                     />
                     <button
@@ -357,6 +356,7 @@ const CourseFilterPanel = ({
                       }}
                       className="flex h-5 w-5 items-center justify-center"
                       aria-label={t('pages.shkoli.list.filters.typeLabel')}
+                      aria-expanded={isTypeMenuOpen}
                     >
                       <svg
                         viewBox="0 0 20 20"
@@ -564,7 +564,6 @@ const CourseFilterPanel = ({
                         onFocus={() => setIsSortMenuOpen(true)}
                         className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none"
                         aria-label={t('pages.shkoli.list.filters.sortLabel')}
-                        aria-expanded={isSortMenuOpen}
                         ref={sortInputRef}
                       />
                       <button
@@ -577,6 +576,7 @@ const CourseFilterPanel = ({
                         }}
                         className="flex h-5 w-5 items-center justify-center"
                         aria-label={t('pages.shkoli.list.filters.sortLabel')}
+                        aria-expanded={isSortMenuOpen}
                       >
                         <svg
                           viewBox="0 0 20 20"
@@ -670,7 +670,6 @@ const CourseFilterPanel = ({
                         )}
                         className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none placeholder:text-slate-500"
                         aria-label={t('pages.shkoli.list.filters.townLabel')}
-                        aria-expanded={isTownMenuOpen}
                         ref={townInputRef}
                       />
                       <button
@@ -683,6 +682,7 @@ const CourseFilterPanel = ({
                         }}
                         className="flex h-5 w-5 items-center justify-center"
                         aria-label={t('pages.shkoli.list.filters.townLabel')}
+                        aria-expanded={isTownMenuOpen}
                       >
                         <svg
                           viewBox="0 0 20 20"
@@ -822,7 +822,6 @@ const CourseFilterPanel = ({
                         placeholder={selectedText}
                         className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none placeholder:text-slate-500"
                         aria-label={t('pages.shkoli.list.filters.dayLabel')}
-                        aria-expanded={isDayMenuOpen}
                         ref={dayInputRef}
                       />
                       <button
@@ -835,6 +834,7 @@ const CourseFilterPanel = ({
                         }}
                         className="flex h-5 w-5 items-center justify-center"
                         aria-label={t('pages.shkoli.list.filters.dayLabel')}
+                        aria-expanded={isDayMenuOpen}
                       >
                         <svg
                           viewBox="0 0 20 20"
