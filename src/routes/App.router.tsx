@@ -7,6 +7,7 @@ import AdminPage from '../pages/Admin'
 import AdminCoursesPage from '../pages/Admin/Courses'
 import AdminLyceumsPage from '../pages/Admin/Lyceums'
 import AdminUsersPage from '../pages/Admin/Users'
+import CookiesPage from '../pages/Cookies'
 import LoginPage from '../pages/Login'
 import LyceumsPage from '../pages/Lyceums'
 import LyceumDetailPage from '../pages/Lyceums/Detail'
@@ -70,6 +71,7 @@ const router = createBrowserRouter([
       },
       { path: 'lyceums', element: <LyceumsPage /> },
       { path: 'lyceums/:id', element: <LyceumDetailPage /> },
+      { path: 'cookies', element: <CookiesPage /> },
       { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
       { path: 'terms-and-conditions', element: <TermsAndConditionsPage /> },
       {

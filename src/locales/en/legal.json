@@ -217,5 +217,90 @@
         ]
       }
     ]
+  },
+  "cookiesPolicy": {
+    "title": "Cookies Policy",
+    "lastUpdated": "Last updated: 11.02.2026",
+    "sections": [
+      {
+        "title": "1. What cookies and similar technologies are",
+        "paragraphs": [
+          "Cookies and similar technologies (including local storage and session storage) are small files or records stored in the user's browser that enable the proper functioning, security, and analysis of the shkoli.bg website."
+        ]
+      },
+      {
+        "title": "2. What technologies we use",
+        "paragraphs": [
+          "The website uses the following technology categories:"
+        ]
+      },
+      {
+        "title": "2.1 Necessary",
+        "paragraphs": [
+          "These technologies are required for the proper operation of the website and cannot be disabled.",
+          "They are used for:"
+        ],
+        "bullets": [
+          "management of user sessions",
+          "authentication and security",
+          "protection against abuse"
+        ],
+        "closingParagraphs": [
+          "Without them, the website cannot function correctly."
+        ]
+      },
+      {
+        "title": "2.2 Analytics",
+        "paragraphs": [
+          "These technologies help us understand how the website is used and improve it.",
+          "Services used:"
+        ],
+        "bullets": [
+          "Google Analytics - for anonymized visit statistics",
+          "Hotjar - for analysis of interaction with the interface"
+        ],
+        "closingParagraphs": [
+          "These technologies are activated only after explicit user consent."
+        ]
+      },
+      {
+        "title": "2.3 Technical and diagnostic",
+        "paragraphs": [
+          "We use tools to identify and resolve technical issues.",
+          "Service used:"
+        ],
+        "bullets": [
+          "Sentry - for error monitoring and application stability"
+        ],
+        "closingParagraphs": [
+          "These technologies may process limited technical information in order to provide a reliable and secure service."
+        ]
+      },
+      {
+        "title": "3. Third parties",
+        "paragraphs": [
+          "Some of the services we use are provided by third parties (e.g. Google, Hotjar), which may store information outside the European Union.",
+          "In such cases, appropriate data protection safeguards are applied in accordance with applicable legislation."
+        ]
+      },
+      {
+        "title": "4. Consent management",
+        "paragraphs": [
+          "The user can:"
+        ],
+        "bullets": [
+          "give or refuse consent through the cookie banner on first visit",
+          "change or withdraw consent at any time through browser settings",
+          "delete stored cookies through browser settings"
+        ]
+      },
+      {
+        "title": "5. Policy changes",
+        "paragraphs": [
+          "This policy may be updated when there are changes in the technologies used or in the legislation.",
+          "The latest version will always be published on this page."
+        ]
+      }
+    ]
   }
 }

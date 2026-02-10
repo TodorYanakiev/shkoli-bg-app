@@ -48,6 +48,12 @@ const AppFooter = () => {
             {t('layouts.app.footer.privacyPolicy')}
           </Link>
           <Link
+            to="/cookies"
+            className="font-medium text-slate-600 transition-colors hover:text-brand-dark"
+          >
+            {t('layouts.app.footer.cookiesPolicy')}
+          </Link>
+          <Link
             to="/terms-and-conditions"
             className="font-medium text-slate-600 transition-colors hover:text-brand-dark"
           >
