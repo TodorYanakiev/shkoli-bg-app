@@ -5,6 +5,8 @@ const s3BucketName = import.meta.env.VITE_S3_BUCKET_NAME ?? ''
 const s3PublicBaseUrl = import.meta.env.VITE_S3_PUBLIC_BASE_URL ?? ''
 const awsRegion = import.meta.env.VITE_AWS_REGION ?? ''
 const awsIdentityPoolId = import.meta.env.VITE_AWS_IDENTITY_POOL_ID ?? ''
+const sentryDsn = import.meta.env.VITE_SENTRY_DSN ?? ''
+const appEnvironment = import.meta.env.MODE
 
 export const env = {
   apiBaseUrl,
@@ -13,4 +15,6 @@ export const env = {
   s3PublicBaseUrl,
   awsRegion,
   awsIdentityPoolId,
+  sentryDsn,
+  appEnvironment,
 }

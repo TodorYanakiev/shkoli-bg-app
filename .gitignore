@@ -33,3 +33,4 @@ AGENTS.md
 .env.example
 
 coverage/
+SENTRY-RULES.md
