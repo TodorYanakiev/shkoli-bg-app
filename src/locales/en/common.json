@@ -48,7 +48,9 @@
         "description": "EducationNearby helps citizens find the right course faster.",
         "contact": "Contact: {{email}}",
         "linksLabel": "Quick links",
-        "notice": "All rights reserved."
+        "notice": "All rights reserved.",
+        "privacyPolicy": "Privacy policy",
+        "termsAndConditions": "Terms & conditions"
       }
     }
   },
