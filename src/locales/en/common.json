@@ -84,6 +84,7 @@
     "usernameMax": "Username must be at most 50 characters.",
     "passwordMin": "Password must be at least 8 characters.",
     "passwordMatch": "Passwords do not match.",
+    "acceptLegalDocuments": "You must accept the Privacy Policy and Terms & Conditions.",
     "invalidOption": "Select a valid option.",
     "number": "Enter a valid number.",
     "imageType": "Only {{formats}} images are allowed.",
@@ -365,6 +366,12 @@
         "passwordPlaceholder": "Create a password",
         "repeatedPasswordLabel": "Confirm password",
         "repeatedPasswordPlaceholder": "Repeat your password",
+        "acceptLegalDocuments": {
+          "prefix": "I have read and accept the",
+          "privacyPolicy": "Privacy Policy",
+          "connector": "and",
+          "termsAndConditions": "Terms & Conditions"
+        },
         "submit": "Create account",
         "submitting": "Creating account...",
         "loginPrompt": "Already have an account?",

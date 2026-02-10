@@ -8,6 +8,7 @@ import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilit
 import { useToast } from '../../../components/feedback/ToastContext'
 import { useRegisterMutation } from '../hooks/useRegisterMutation'
 import type { ApiError } from '../../../types/api'
+import type { RegisterRequest } from '../../../types/auth'
 import { setTokens } from '../../../utils/authStorage'
 import {
   getRegisterSchema,
@@ -53,11 +54,18 @@ const RegisterForm = () => {
       email: '',
       password: '',
       repeatedPassword: '',
+      acceptLegalDocuments: false,
     },
   })
 
   const onSubmit = (values: RegisterFormValues) => {
-    mutation.mutate(values, {
+    const { acceptLegalDocuments, ...payload } = values
+    if (!acceptLegalDocuments) {
+      return
+    }
+    const registerPayload: RegisterRequest = payload
+
+    mutation.mutate(registerPayload, {
       onSuccess: (data) => {
         setTokens({
           accessToken: data.access_token,
@@ -287,6 +295,52 @@ const RegisterForm = () => {
             role="alert"
           >
             {errors.repeatedPassword.message}
+          </p>
+        ) : null}
+      </div>
+      <div>
+        <div className="flex items-start gap-3">
+          <input
+            data-testid="register-accept-legal-documents"
+            id="register-accept-legal-documents"
+            type="checkbox"
+            aria-invalid={Boolean(errors.acceptLegalDocuments)}
+            aria-describedby={
+              errors.acceptLegalDocuments
+                ? 'register-accept-legal-documents-error'
+                : undefined
+            }
+            className="mt-1 h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand"
+            {...register('acceptLegalDocuments')}
+          />
+          <label
+            htmlFor="register-accept-legal-documents"
+            className="text-sm text-slate-700"
+          >
+            {t('pages.register.form.acceptLegalDocuments.prefix')}{' '}
+            <Link
+              to="/privacy-policy"
+              className="font-medium text-brand underline-offset-2 hover:underline"
+            >
+              {t('pages.register.form.acceptLegalDocuments.privacyPolicy')}
+            </Link>{' '}
+            {t('pages.register.form.acceptLegalDocuments.connector')}{' '}
+            <Link
+              to="/terms-and-conditions"
+              className="font-medium text-brand underline-offset-2 hover:underline"
+            >
+              {t('pages.register.form.acceptLegalDocuments.termsAndConditions')}
+            </Link>
+            .
+          </label>
+        </div>
+        {errors.acceptLegalDocuments ? (
+          <p
+            id="register-accept-legal-documents-error"
+            className="mt-1 text-xs text-rose-600"
+            role="alert"
+          >
+            {errors.acceptLegalDocuments.message}
           </p>
         ) : null}
       </div>

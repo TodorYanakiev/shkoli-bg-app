@@ -84,6 +84,7 @@
     "usernameMax": "Потребителското име може да е най-много 50 символа.",
     "passwordMin": "Паролата трябва да е поне 8 символа.",
     "passwordMatch": "Паролите не съвпадат.",
+    "acceptLegalDocuments": "Трябва да приемете Политиката за поверителност и Общите условия.",
     "invalidOption": "Изберете валидна опция.",
     "number": "Въведете валидно число.",
     "imageType": "Позволени са само изображения във формат {{formats}}.",
@@ -347,6 +348,12 @@
         "passwordPlaceholder": "Създайте парола",
         "repeatedPasswordLabel": "Потвърди паролата",
         "repeatedPasswordPlaceholder": "Повторете паролата",
+        "acceptLegalDocuments": {
+          "prefix": "Прочетох и приемам",
+          "privacyPolicy": "Политиката за поверителност",
+          "connector": "и",
+          "termsAndConditions": "Общите условия"
+        },
         "submit": "Създай профил",
         "submitting": "Създаване...",
         "loginPrompt": "Имате профил?",
