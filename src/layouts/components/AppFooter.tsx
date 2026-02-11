@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+
+import CookieConsentBanner from '../../components/feedback/CookieConsentBanner'
 import { CONTACT_EMAIL } from '../../constants/contact'
 
 const AppFooter = () => {
@@ -59,6 +61,7 @@ const AppFooter = () => {
           >
             {t('layouts.app.footer.termsAndConditions')}
           </Link>
+          <CookieConsentBanner />
         </nav>
       </div>
     </footer>
