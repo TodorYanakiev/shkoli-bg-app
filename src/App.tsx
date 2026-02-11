@@ -3,6 +3,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { QueryClientProvider } from '@tanstack/react-query'
 
 import appRouter from './routes/App.router'
+import CookieConsentBanner from './components/feedback/CookieConsentBanner'
 import ToastProvider from './components/feedback/ToastProvider'
 import { useAuthQueryReset } from './hooks/useAuthQueryReset'
 import { queryClient } from './utils/queryClient'
@@ -18,6 +19,7 @@ const App = () => (
     <HelmetProvider>
       <ToastProvider>
         <RouterProvider router={appRouter} />
+        <CookieConsentBanner />
       </ToastProvider>
     </HelmetProvider>
   </QueryClientProvider>

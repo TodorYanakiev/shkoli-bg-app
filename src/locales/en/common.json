@@ -55,6 +55,32 @@
       }
     }
   },
+  "cookiesConsent": {
+    "title": "Cookie settings",
+    "description": "We use necessary browser storage for site functionality. Analytics and diagnostics are optional and require your consent.",
+    "learnMore": "Read the cookies policy",
+    "categories": {
+      "necessary": {
+        "title": "Necessary",
+        "description": "Required for sign-in, security, and core website behavior."
+      },
+      "analytics": {
+        "title": "Analytics (Google Analytics, Hotjar, Contentsquare)",
+        "description": "Helps us understand usage and improve the interface."
+      },
+      "diagnostics": {
+        "title": "Diagnostics (Sentry)",
+        "description": "Helps us detect and resolve technical issues."
+      }
+    },
+    "actions": {
+      "acceptAll": "Accept all",
+      "rejectOptional": "Reject optional",
+      "savePreferences": "Save preferences",
+      "manage": "Cookie settings",
+      "close": "Close"
+    }
+  },
   "nav": {
     "shkoli": "Courses",
     "lyceums": "Lyceums",

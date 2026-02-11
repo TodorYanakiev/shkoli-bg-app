@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom'
 
-import { useContentsquareTracking } from '../hooks/useContentsquareTracking'
+import { useConsentManagedTracking } from '../hooks/useConsentManagedTracking'
 import AppFooter from './components/AppFooter'
 import TopNav from './components/TopNav'
 
 const AppLayout = () => {
-  useContentsquareTracking()
+  useConsentManagedTracking()
 
   return (
     <div className="relative min-h-screen bg-transparent text-slate-900">
