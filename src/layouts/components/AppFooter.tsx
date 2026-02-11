@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+
+import CookieConsentBanner from '../../components/feedback/CookieConsentBanner'
 import { CONTACT_EMAIL } from '../../constants/contact'
 
 const AppFooter = () => {
@@ -27,7 +29,7 @@ const AppFooter = () => {
         </div>
         <nav
           aria-label={t('layouts.app.footer.linksLabel')}
-          className="flex items-center justify-center gap-3 text-sm md:justify-end"
+          className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm md:justify-end"
         >
           <Link
             to="/shkoli"
@@ -41,6 +43,25 @@ const AppFooter = () => {
           >
             {t('nav.map')}
           </Link>
+          <Link
+            to="/privacy-policy"
+            className="font-medium text-slate-600 transition-colors hover:text-brand-dark"
+          >
+            {t('layouts.app.footer.privacyPolicy')}
+          </Link>
+          <Link
+            to="/cookies"
+            className="font-medium text-slate-600 transition-colors hover:text-brand-dark"
+          >
+            {t('layouts.app.footer.cookiesPolicy')}
+          </Link>
+          <Link
+            to="/terms-and-conditions"
+            className="font-medium text-slate-600 transition-colors hover:text-brand-dark"
+          >
+            {t('layouts.app.footer.termsAndConditions')}
+          </Link>
+          <CookieConsentBanner />
         </nav>
       </div>
     </footer>

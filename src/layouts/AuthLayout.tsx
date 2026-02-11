@@ -1,12 +1,12 @@
 import { Outlet } from 'react-router-dom'
 
-import { useContentsquareTracking } from '../hooks/useContentsquareTracking'
+import { useConsentManagedTracking } from '../hooks/useConsentManagedTracking'
 import AppFooter from './components/AppFooter'
 import AuthBenefits from './components/AuthBenefits'
 import TopNav from './components/TopNav'
 
 const AuthLayout = () => {
-  useContentsquareTracking()
+  useConsentManagedTracking()
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">

@@ -7,12 +7,14 @@ import AdminPage from '../pages/Admin'
 import AdminCoursesPage from '../pages/Admin/Courses'
 import AdminLyceumsPage from '../pages/Admin/Lyceums'
 import AdminUsersPage from '../pages/Admin/Users'
+import CookiesPage from '../pages/Cookies'
 import LoginPage from '../pages/Login'
 import LyceumsPage from '../pages/Lyceums'
 import LyceumDetailPage from '../pages/Lyceums/Detail'
 import LyceumEditPage from '../pages/Lyceums/Edit'
 import MapPage from '../pages/Map'
 import NotFoundPage from '../pages/NotFound'
+import PrivacyPolicyPage from '../pages/PrivacyPolicy'
 import ChangePasswordPage from '../pages/Profile/ChangePassword'
 import LyceumRightsPage from '../pages/Profile/LyceumRights'
 import ProfilePage from '../pages/Profile'
@@ -21,6 +23,7 @@ import ShkoliPage from '../pages/Shkoli'
 import CourseCreatePage from '../pages/Shkoli/Create'
 import CourseDetailPage from '../pages/Shkoli/Detail'
 import CourseEditPage from '../pages/Shkoli/Edit'
+import TermsAndConditionsPage from '../pages/TermsAndConditions'
 import AdminRoute from './AdminRoute'
 import ProtectedRoute from './ProtectedRoute'
 
@@ -68,6 +71,9 @@ const router = createBrowserRouter([
       },
       { path: 'lyceums', element: <LyceumsPage /> },
       { path: 'lyceums/:id', element: <LyceumDetailPage /> },
+      { path: 'cookies', element: <CookiesPage /> },
+      { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+      { path: 'terms-and-conditions', element: <TermsAndConditionsPage /> },
       {
         path: 'lyceums/:id/edit',
         element: (

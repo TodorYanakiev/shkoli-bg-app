@@ -2,7 +2,9 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 import enCommon from './en/common.json'
+import enLegal from './en/legal.json'
 import bgCommon from './bg/common.json'
+import bgLegal from './bg/legal.json'
 import {
   defaultLanguage,
   getInitialLanguage,
@@ -11,8 +13,8 @@ import {
 } from '../utils/language'
 
 const resources = {
-  en: { common: enCommon },
-  bg: { common: bgCommon },
+  en: { common: enCommon, legal: enLegal },
+  bg: { common: bgCommon, legal: bgLegal },
 } as const
 
 i18n.use(initReactI18next).init({

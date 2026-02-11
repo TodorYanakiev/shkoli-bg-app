@@ -93,10 +93,54 @@ describe('RegisterForm', () => {
     fireEvent.change(screen.getByLabelText('Confirm password'), {
       target: { value: 'password456' },
     })
+    fireEvent.click(screen.getByTestId('register-accept-legal-documents'))
     fireEvent.click(screen.getByRole('button', { name: 'Create account' }))
 
     const mismatch = await screen.findByText('Passwords do not match.')
     expect(mismatch).toBeDefined()
+  })
+
+  it('prevents submit until legal documents are accepted', async () => {
+    const mutateMock: MutationResult['mutate'] = vi.fn()
+    useRegisterMutationMock.mockReturnValue({
+      mutate: mutateMock,
+      isPending: false,
+      error: null,
+    } satisfies MutationResult)
+
+    renderForm()
+
+    fireEvent.change(screen.getByLabelText('First name'), {
+      target: { value: 'Jamie' },
+    })
+    fireEvent.change(screen.getByLabelText('Last name'), {
+      target: { value: 'Nguyen' },
+    })
+    fireEvent.change(screen.getByLabelText('Username'), {
+      target: { value: 'jnguyen' },
+    })
+    fireEvent.change(screen.getByLabelText('Email address'), {
+      target: { value: 'jamie@example.com' },
+    })
+    fireEvent.change(screen.getByLabelText('Password'), {
+      target: { value: 'password123' },
+    })
+    fireEvent.change(screen.getByLabelText('Confirm password'), {
+      target: { value: 'password123' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Create account' }))
+
+    const acceptanceError = await screen.findByText(
+      'You must accept the Privacy Policy and Terms & Conditions.',
+    )
+    expect(acceptanceError).toBeDefined()
+    expect(mutateMock).not.toHaveBeenCalled()
+
+    const privacyLink = screen.getByRole('link', { name: 'Privacy Policy' })
+    const termsLink = screen.getByRole('link', { name: 'Terms & Conditions' })
+
+    expect(privacyLink.getAttribute('href')).toBe('/privacy-policy')
+    expect(termsLink.getAttribute('href')).toBe('/terms-and-conditions')
   })
 
   it('renders a duplicate account error', () => {
@@ -149,6 +193,7 @@ describe('RegisterForm', () => {
     fireEvent.change(screen.getByLabelText('Confirm password'), {
       target: { value: 'password123' },
     })
+    fireEvent.click(screen.getByTestId('register-accept-legal-documents'))
     fireEvent.click(screen.getByRole('button', { name: 'Create account' }))
 
     await waitFor(() => {

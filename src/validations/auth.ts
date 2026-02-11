@@ -30,6 +30,9 @@ export const getRegisterSchema = (t: TFunction) =>
         .email(t('validation.email')),
       password: z.string().min(8, t('validation.passwordMin')),
       repeatedPassword: z.string().min(1, t('validation.required')),
+      acceptLegalDocuments: z.boolean().refine((isAccepted) => isAccepted, {
+        message: t('validation.acceptLegalDocuments'),
+      }),
     })
     .refine((values) => values.password === values.repeatedPassword, {
       message: t('validation.passwordMatch'),

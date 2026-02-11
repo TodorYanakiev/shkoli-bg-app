@@ -48,8 +48,37 @@
         "description": "EducationNearby helps citizens find the right course faster.",
         "contact": "Contact: {{email}}",
         "linksLabel": "Quick links",
-        "notice": "All rights reserved."
+        "notice": "All rights reserved.",
+        "privacyPolicy": "Privacy policy",
+        "cookiesPolicy": "Cookies policy",
+        "termsAndConditions": "Terms & conditions"
       }
+    }
+  },
+  "cookiesConsent": {
+    "title": "Cookie settings",
+    "description": "We use necessary browser storage for site functionality. Analytics and diagnostics are optional and require your consent.",
+    "learnMore": "Read the cookies policy",
+    "categories": {
+      "necessary": {
+        "title": "Necessary",
+        "description": "Required for sign-in, security, and core website behavior."
+      },
+      "analytics": {
+        "title": "Analytics (Google Analytics, Hotjar, Contentsquare)",
+        "description": "Helps us understand usage and improve the interface."
+      },
+      "diagnostics": {
+        "title": "Diagnostics (Sentry)",
+        "description": "Helps us detect and resolve technical issues."
+      }
+    },
+    "actions": {
+      "acceptAll": "Accept all",
+      "rejectOptional": "Reject optional",
+      "savePreferences": "Save preferences",
+      "manage": "Cookie settings",
+      "close": "Close"
     }
   },
   "nav": {
@@ -82,6 +111,7 @@
     "usernameMax": "Username must be at most 50 characters.",
     "passwordMin": "Password must be at least 8 characters.",
     "passwordMatch": "Passwords do not match.",
+    "acceptLegalDocuments": "You must accept the Privacy Policy and Terms & Conditions.",
     "invalidOption": "Select a valid option.",
     "number": "Enter a valid number.",
     "imageType": "Only {{formats}} images are allowed.",
@@ -363,6 +393,12 @@
         "passwordPlaceholder": "Create a password",
         "repeatedPasswordLabel": "Confirm password",
         "repeatedPasswordPlaceholder": "Repeat your password",
+        "acceptLegalDocuments": {
+          "prefix": "I have read and accept the",
+          "privacyPolicy": "Privacy Policy",
+          "connector": "and",
+          "termsAndConditions": "Terms & Conditions"
+        },
         "submit": "Create account",
         "submitting": "Creating account...",
         "loginPrompt": "Already have an account?",

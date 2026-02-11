@@ -1,0 +1,306 @@
+﻿{
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: 11.02.2026",
+    "sections": [
+      {
+        "title": "1. Personal data controller",
+        "paragraphs": [
+          "The controller of personal data is a natural person, owner and administrator of the shkoli.bg website, established in the Republic of Bulgaria.",
+          "For questions related to personal data processing, you can contact us at: info@shkoli.bg"
+        ]
+      },
+      {
+        "title": "2. What personal data we process",
+        "paragraphs": [
+          "When using the website, we may process the following personal data:"
+        ],
+        "bullets": [
+          "email address",
+          "name",
+          "username",
+          "profile picture (avatar), if voluntarily provided by the user",
+          "technical data (IP address, device and browser information, security logs)"
+        ]
+      },
+      {
+        "title": "3. Purposes of processing",
+        "paragraphs": [
+          "We process personal data for the following purposes:"
+        ],
+        "bullets": [
+          "creating and managing user accounts",
+          "identity verification and account security",
+          "sending service-related system emails (e.g. account confirmation, password change, or password recovery)",
+          "improving the functionality, security, and quality of the website",
+          "analyzing website usage and detecting technical issues"
+        ]
+      },
+      {
+        "title": "4. Legal basis for processing",
+        "paragraphs": [
+          "Personal data is processed on the following legal bases:"
+        ],
+        "bullets": [
+          "performance of a contract - to provide the service and manage the user account",
+          "legitimate interest - for security, prevention of abuse, and improvement of the service",
+          "consent - when the user voluntarily provides additional data (e.g. profile picture)"
+        ]
+      },
+      {
+        "title": "5. Email communication",
+        "paragraphs": [
+          "The website does not send marketing or promotional emails.",
+          "Email messages are sent only when technically necessary for the service, such as:"
+        ],
+        "bullets": [
+          "account confirmation",
+          "password recovery or password change"
+        ],
+        "closingParagraphs": [
+          "These emails are an integral part of the service and cannot be opted out of."
+        ]
+      },
+      {
+        "title": "6. Recipients and third parties",
+        "paragraphs": [
+          "To provide the service, we use external providers that may process personal data on our behalf, including:"
+        ],
+        "bullets": [
+          "service analytics and improvement tools (Google Analytics, Hotjar)",
+          "error monitoring and diagnostics (Sentry)"
+        ],
+        "closingParagraphs": [
+          "Some of these providers may be established outside the European Union. In such cases, appropriate safeguards are applied in accordance with applicable data protection laws."
+        ]
+      },
+      {
+        "title": "7. Cookies and similar technologies",
+        "paragraphs": [
+          "The website uses technologies for storing information in the browser (including cookies, local storage, and session storage), which are necessary for the proper operation of the service, security, and usage analytics.",
+          "Additional information about the cookies and technologies used will be provided on the cookies page."
+        ]
+      },
+      {
+        "title": "8. Retention period",
+        "paragraphs": [
+          "Personal data is stored:"
+        ],
+        "bullets": [
+          "for as long as the user account exists",
+          "or as long as necessary to fulfill the purposes for which the data was collected",
+          "or until a valid deletion request is submitted, unless the law requires a longer retention period"
+        ]
+      },
+      {
+        "title": "9. User rights",
+        "paragraphs": [
+          "Each user has the right:"
+        ],
+        "bullets": [
+          "to access their personal data",
+          "to correct inaccurate data",
+          "to erase their personal data",
+          "to restrict or object to processing",
+          "to submit a complaint to the Commission for Personal Data Protection"
+        ],
+        "closingParagraphs": [
+          "Requests may be submitted to: info@shkoli.bg"
+        ]
+      },
+      {
+        "title": "10. Policy changes",
+        "paragraphs": [
+          "This policy may be updated. All changes will be published on this page with an updated date."
+        ]
+      }
+    ]
+  },
+  "termsAndConditions": {
+    "title": "Terms & Conditions",
+    "lastUpdated": "Last updated: 11.02.2026",
+    "sections": [
+      {
+        "title": "1. General provisions",
+        "paragraphs": [
+          "These Terms & Conditions govern the rules for using the shkoli.bg website (the \"Site\").",
+          "By accessing and using the Site, the user declares that they have read, understood, and agreed to these Terms & Conditions.",
+          "If the user does not agree with them, they should stop using the Site."
+        ]
+      },
+      {
+        "title": "2. Site administrator",
+        "paragraphs": [
+          "The shkoli.bg Site is administered by a natural person established in the Republic of Bulgaria.",
+          "Contact for questions and reports: info@shkoli.bg"
+        ]
+      },
+      {
+        "title": "3. Registration and user account",
+        "paragraphs": [
+          "3.1. Access to certain Site functionalities requires registration and creation of a user account.",
+          "3.2. The user undertakes to provide accurate and up-to-date information during registration.",
+          "3.3. The user is responsible for:",
+          "3.4. The Administrator is not responsible for unauthorized access resulting from negligent storage of login credentials by the user."
+        ],
+        "bullets": [
+          "keeping their access credentials confidential",
+          "all actions performed through their account"
+        ]
+      },
+      {
+        "title": "4. Acceptable use",
+        "paragraphs": [
+          "The user undertakes to use the Site in good faith and in compliance with the law.",
+          "The following is prohibited:"
+        ],
+        "bullets": [
+          "using the Site for unlawful purposes",
+          "attempts to gain unauthorized access to systems or data",
+          "disrupting the security or normal operation of the Site",
+          "using content without explicit permission, where applicable"
+        ]
+      },
+      {
+        "title": "5. Content and intellectual property",
+        "paragraphs": [
+          "5.1. All rights to the Site content (including, but not limited to, texts, design, structure, and software) belong to the Administrator or the respective rights holders.",
+          "5.2. Users are not allowed to copy, distribute, or use content beyond normal use of the Site without prior permission."
+        ]
+      },
+      {
+        "title": "6. Termination and restriction of access",
+        "paragraphs": [
+          "6.1. The Administrator reserves the right to restrict or terminate access to a user account in cases of:",
+          "6.2. Termination may be carried out without prior notice when necessary to protect the Site or other users."
+        ],
+        "bullets": [
+          "violation of these Terms & Conditions",
+          "abuse of the Site",
+          "actions that threaten the security or functionality of the service"
+        ]
+      },
+      {
+        "title": "7. Liability",
+        "paragraphs": [
+          "7.1. The Site is provided \"as is\".",
+          "7.2. The Administrator does not guarantee that:",
+          "7.3. The Administrator is not liable for:"
+        ],
+        "bullets": [
+          "the Site will be continuously available",
+          "the Site will be free of errors or technical interruptions",
+          "direct or indirect damages arising from the use of, or inability to use, the Site",
+          "data loss caused by technical issues or third-party actions"
+        ]
+      },
+      {
+        "title": "8. External services and third-party content",
+        "paragraphs": [
+          "The Site may use third-party services or contain links to external websites.",
+          "The Administrator is not responsible for the content, policies, or practices of such third parties.",
+          "The Administrator is not responsible for content uploaded by users."
+        ]
+      },
+      {
+        "title": "9. Changes to the terms",
+        "paragraphs": [
+          "The Administrator reserves the right to change these Terms & Conditions.",
+          "The current version will always be published on this page. Continuing to use the Site after changes means acceptance of them."
+        ]
+      },
+      {
+        "title": "10. Governing law",
+        "paragraphs": [
+          "These Terms & Conditions are governed by and interpreted in accordance with the laws of the Republic of Bulgaria.",
+          "All disputes shall be resolved by the competent Bulgarian court."
+        ]
+      }
+    ]
+  },
+  "cookiesPolicy": {
+    "title": "Cookies Policy",
+    "lastUpdated": "Last updated: 11.02.2026",
+    "sections": [
+      {
+        "title": "1. What cookies and similar technologies are",
+        "paragraphs": [
+          "Cookies and similar technologies (including local storage and session storage) are small files or records stored in the user's browser that enable the proper functioning, security, and analysis of the shkoli.bg website."
+        ]
+      },
+      {
+        "title": "2. What technologies we use",
+        "paragraphs": [
+          "The website uses the following technology categories:"
+        ]
+      },
+      {
+        "title": "2.1 Necessary",
+        "paragraphs": [
+          "These technologies are required for the proper operation of the website and cannot be disabled.",
+          "They are used for:"
+        ],
+        "bullets": [
+          "management of user sessions",
+          "authentication and security",
+          "protection against abuse"
+        ],
+        "closingParagraphs": [
+          "Without them, the website cannot function correctly."
+        ]
+      },
+      {
+        "title": "2.2 Analytics",
+        "paragraphs": [
+          "These technologies help us understand how the website is used and improve it.",
+          "Services used:"
+        ],
+        "bullets": [
+          "Google Analytics - for anonymized visit statistics",
+          "Hotjar - for analysis of interaction with the interface"
+        ],
+        "closingParagraphs": [
+          "These technologies are activated only after explicit user consent."
+        ]
+      },
+      {
+        "title": "2.3 Technical and diagnostic",
+        "paragraphs": [
+          "We use tools to identify and resolve technical issues.",
+          "Service used:"
+        ],
+        "bullets": [
+          "Sentry - for error monitoring and application stability"
+        ],
+        "closingParagraphs": [
+          "These technologies may process limited technical information in order to provide a reliable and secure service."
+        ]
+      },
+      {
+        "title": "3. Third parties",
+        "paragraphs": [
+          "Some of the services we use are provided by third parties (e.g. Google, Hotjar), which may store information outside the European Union.",
+          "In such cases, appropriate data protection safeguards are applied in accordance with applicable legislation."
+        ]
+      },
+      {
+        "title": "4. Consent management",
+        "paragraphs": [
+          "The user can:"
+        ],
+        "bullets": [
+          "give or refuse consent through the cookie banner on first visit",
+          "change or withdraw consent at any time through the cookie settings button in the app",
+          "delete stored cookies through browser settings"
+        ]
+      },
+      {
+        "title": "5. Policy changes",
+        "paragraphs": [
+          "This policy may be updated when there are changes in the technologies used or in the legislation.",
+          "The latest version will always be published on this page."
+        ]
+      }
+    ]
+  }
+}
