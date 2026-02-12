@@ -1,8 +1,14 @@
 import { env } from '../constants/env'
 import type { CourseImageResponse, CourseImageRole } from '../types/courses'
 
+const normalizeSource = (value?: string) => {
+  if (typeof value !== 'string') return null
+  const normalized = value.trim()
+  return normalized.length > 0 ? normalized : null
+}
+
 const hasImageSource = (image?: CourseImageResponse) =>
-  Boolean(image?.url || image?.s3Key)
+  Boolean(normalizeSource(image?.url) || normalizeSource(image?.s3Key))
 
 export const getCourseImageByRole = (
   images: CourseImageResponse[] | undefined,
@@ -17,7 +23,7 @@ export const getPreferredCourseImage = (
   images?.find((image) => hasImageSource(image))
 
 export const resolveCourseImageUrl = (image?: CourseImageResponse | null) => {
-  const source = image?.url || image?.s3Key
+  const source = normalizeSource(image?.url) ?? normalizeSource(image?.s3Key)
   if (!source) return null
 
   if (/^https?:\/\//i.test(source)) {
