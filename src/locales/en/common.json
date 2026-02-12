@@ -131,6 +131,11 @@
     "lyceums": {
       "updateFailed": "We couldn't update this lyceum. Try again.",
       "deleteFailed": "We couldn't delete this lyceum. Try again.",
+      "imageUploadFailed": "We couldn't upload this image. Try again.",
+      "imagesUploadFailed": "Some images could not be uploaded.",
+      "imageDuplicate": "This image has already been uploaded.",
+      "imageAccessDenied": "S3 upload was denied. Allow uploads to the lyceums/ prefix in your S3 IAM policy.",
+      "imageConfigMissing": "Image upload is not configured.",
       "admins": {
         "loadFailed": "We couldn't load the admins for this lyceum.",
         "addFailed": "We couldn't add this admin. Try again.",
@@ -976,6 +981,36 @@
           "submit": "Save changes",
           "submitting": "Saving...",
           "cancel": "Cancel"
+        },
+        "images": {
+          "title": "Images",
+          "helper": "Upload JPG, PNG, or WEBP images up to {{size}} MB each ({{formats}}).",
+          "loading": "Loading images...",
+          "error": "Unable to load images.",
+          "empty": "No images added yet.",
+          "currentMain": "Current main image",
+          "currentGallery": "Current gallery images",
+          "none": "No images for this section.",
+          "remove": "Remove",
+          "unavailable": "No image",
+          "order": "Position {{index}}",
+          "altFallback": "Lyceum image",
+          "mainLabel": "Main image",
+          "galleryLabel": "Gallery images",
+          "galleryHint": "Add as many images as you want.",
+          "addGallery": "Add gallery images",
+          "galleryEmpty": "No gallery images selected.",
+          "galleryItem": "Image {{index}}",
+          "previewAlt": "Selected image preview",
+          "altTextLabel": "Alt text",
+          "altTextPlaceholder": "Describe this image",
+          "loadError": "We couldn't read that image file.",
+          "status": {
+            "pending": "Pending upload",
+            "uploaded": "Uploaded",
+            "error": "Upload failed",
+            "progress": "Uploading {{progress}}%"
+          }
         },
         "lecturers": {
           "title": "Lecturers",
