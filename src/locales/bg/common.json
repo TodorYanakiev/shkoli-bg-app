@@ -824,12 +824,14 @@
         "countLabel": "{{count}}",
         "overviewLinks": {
           "courses": "Школи ({{count}})",
-          "lecturers": "Преподаватели ({{count}})"
+          "lecturers": "Преподаватели ({{count}})",
+          "gallery": "Галерия ({{count}})"
         },
         "sideNav": {
           "label": "Навигация в страницата",
           "info": "Информация",
           "courses": "Школи",
+          "gallery": "Галерия",
           "lecturers": "Преподаватели",
           "addCourse": "Добави нова школа",
           "addLecturer": "Добави преподавател",
@@ -854,6 +856,7 @@
           "people": "Екип",
           "courses": "Школи",
           "coursesSubtitle": "Програми и дейности, предлагани от читалището.",
+          "gallery": "Галерия",
           "lecturers": "Преподаватели",
           "lecturersSubtitle": "Преподаватели, свързани с читалището."
         },
@@ -902,10 +905,17 @@
         },
         "coursesLoading": "Зареждане на школи...",
         "coursesError": "Не можем да заредим школите в момента.",
+        "imagesError": "Не можем да заредим снимките на читалището в момента.",
         "lecturersLoading": "Зареждане на преподаватели...",
         "lecturersError": "Не можем да заредим преподавателите в момента.",
         "coursesPlaceholder": "Школите за това читалище ще се показват тук.",
+        "galleryEmpty": "Снимките от галерията за това читалище ще се показват тук.",
         "lecturersPlaceholder": "Преподавателите за това читалище ще се показват тук.",
+        "images": {
+          "loading": "Зареждане на снимки...",
+          "mainAlt": "Основна снимка на {{name}}",
+          "galleryAlt": "Снимка {{index}} от галерията на {{name}}"
+        },
         "averageRatingLabel": "Средна оценка {{rating}} от {{max}}",
         "noRating": "Няма отзиви за тази школа.",
         "lecturerReviews": {

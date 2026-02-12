@@ -842,12 +842,14 @@
         "countLabel": "{{count}}",
         "overviewLinks": {
           "courses": "Courses ({{count}})",
-          "lecturers": "Lecturers ({{count}})"
+          "lecturers": "Lecturers ({{count}})",
+          "gallery": "Gallery ({{count}})"
         },
         "sideNav": {
           "label": "Lyceum page sections",
           "info": "Lyceum info",
           "courses": "Courses",
+          "gallery": "Gallery",
           "lecturers": "Lecturers",
           "addCourse": "Add new course",
           "addLecturer": "Add lecturer",
@@ -872,6 +874,7 @@
           "people": "People",
           "courses": "Courses",
           "coursesSubtitle": "Programs and activities offered by this lyceum.",
+          "gallery": "Gallery",
           "lecturers": "Lecturers",
           "lecturersSubtitle": "Educators associated with this lyceum."
         },
@@ -920,10 +923,17 @@
         },
         "coursesLoading": "Loading courses...",
         "coursesError": "Unable to load courses right now.",
+        "imagesError": "Unable to load lyceum images right now.",
         "lecturersLoading": "Loading lecturers...",
         "lecturersError": "Unable to load lecturers right now.",
         "coursesPlaceholder": "Courses for this lyceum will appear here.",
+        "galleryEmpty": "Gallery images for this lyceum will appear here.",
         "lecturersPlaceholder": "Lecturers for this lyceum will appear here.",
+        "images": {
+          "loading": "Loading images...",
+          "mainAlt": "Main image for {{name}}",
+          "galleryAlt": "Gallery image {{index}} for {{name}}"
+        },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
         "lecturerReviews": {

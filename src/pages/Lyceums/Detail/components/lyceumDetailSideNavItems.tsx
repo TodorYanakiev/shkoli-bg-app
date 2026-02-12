@@ -1,17 +1,17 @@
-import type { TFunction } from 'i18next'
+import type { TFunction } from "i18next";
 
-import type { SideNavItem } from '../types'
+import type { SideNavItem } from "../types";
 
 type LyceumDetailSideNavItemsOptions = {
-  t: TFunction
-  lyceumId: number
-  canAddCourse: boolean
-  canInviteLecturer: boolean
-  canEditLyceum: boolean
-  navIconClassName: string
-  inviteModalId: string
-  onInviteLecturer: () => void
-}
+  t: TFunction;
+  lyceumId: number;
+  canAddCourse: boolean;
+  canInviteLecturer: boolean;
+  canEditLyceum: boolean;
+  navIconClassName: string;
+  inviteModalId: string;
+  onInviteLecturer: () => void;
+};
 
 export const getLyceumDetailSideNavItems = ({
   t,
@@ -25,9 +25,9 @@ export const getLyceumDetailSideNavItems = ({
 }: LyceumDetailSideNavItemsOptions): SideNavItem[] => {
   const baseSideNavItems: SideNavItem[] = [
     {
-      key: 'lyceum-info',
-      label: t('pages.lyceums.detail.sideNav.info'),
-      href: '#lyceum-info',
+      key: "lyceum-info",
+      label: t("pages.lyceums.detail.sideNav.info"),
+      href: "#lyceum-info",
       icon: (
         <svg
           viewBox="0 0 24 24"
@@ -46,9 +46,9 @@ export const getLyceumDetailSideNavItems = ({
       ),
     },
     {
-      key: 'lyceum-courses',
-      label: t('pages.lyceums.detail.sideNav.courses'),
-      href: '#lyceum-courses',
+      key: "lyceum-courses",
+      label: t("pages.lyceums.detail.sideNav.courses"),
+      href: "#lyceum-courses",
       icon: (
         <svg
           viewBox="0 0 24 24"
@@ -70,9 +70,30 @@ export const getLyceumDetailSideNavItems = ({
       ),
     },
     {
-      key: 'lyceum-lecturers',
-      label: t('pages.lyceums.detail.sideNav.lecturers'),
-      href: '#lyceum-lecturers',
+      key: "lyceum-gallery",
+      label: t("pages.lyceums.detail.sideNav.gallery"),
+      href: "#lyceum-gallery",
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          className={navIconClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3.5" y="5" width="17" height="14" rx="2.5" />
+          <circle cx="9" cy="10" r="1.5" />
+          <path d="M7 16l4-4 2.5 2.5 3-3L20 15" />
+        </svg>
+      ),
+    },
+    {
+      key: "lyceum-lecturers",
+      label: t("pages.lyceums.detail.sideNav.lecturers"),
+      href: "#lyceum-lecturers",
       icon: (
         <svg
           viewBox="0 0 24 24"
@@ -92,9 +113,9 @@ export const getLyceumDetailSideNavItems = ({
       ),
     },
     {
-      key: 'lyceum-reviews',
-      label: t('pages.lyceums.detail.sideNav.reviews'),
-      href: '#lyceum-reviews',
+      key: "lyceum-reviews",
+      label: t("pages.lyceums.detail.sideNav.reviews"),
+      href: "#lyceum-reviews",
       icon: (
         <svg
           viewBox="0 0 24 24"
@@ -112,15 +133,15 @@ export const getLyceumDetailSideNavItems = ({
         </svg>
       ),
     },
-  ]
+  ];
 
   return [
     ...baseSideNavItems,
     ...(canAddCourse
       ? [
           {
-            key: 'lyceum-add-course',
-            label: t('pages.lyceums.detail.sideNav.addCourse'),
+            key: "lyceum-add-course",
+            label: t("pages.lyceums.detail.sideNav.addCourse"),
             to: `/shkoli/new?lyceumId=${lyceumId}`,
             icon: (
               <svg
@@ -144,8 +165,8 @@ export const getLyceumDetailSideNavItems = ({
     ...(canInviteLecturer
       ? [
           {
-            key: 'lyceum-add-lecturer',
-            label: t('pages.lyceums.detail.sideNav.addLecturer'),
+            key: "lyceum-add-lecturer",
+            label: t("pages.lyceums.detail.sideNav.addLecturer"),
             onClick: onInviteLecturer,
             controlsId: inviteModalId,
             icon: (
@@ -171,8 +192,8 @@ export const getLyceumDetailSideNavItems = ({
     ...(canEditLyceum
       ? [
           {
-            key: 'lyceum-edit',
-            label: t('pages.lyceums.detail.editCta'),
+            key: "lyceum-edit",
+            label: t("pages.lyceums.detail.editCta"),
             to: `/lyceums/${lyceumId}/edit`,
             icon: (
               <svg
@@ -192,5 +213,5 @@ export const getLyceumDetailSideNavItems = ({
           },
         ]
       : []),
-  ]
-}
+  ];
+};
