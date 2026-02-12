@@ -1,17 +1,17 @@
-import type { LyceumRequest } from '../../../../types/lyceums'
-import type { LyceumUpdateFormValues } from '../validations/lyceumUpdateSchema'
+import type { LyceumRequest } from "../../../../types/lyceums";
+import type { LyceumUpdateFormValues } from "../validations/lyceumUpdateSchema";
 
-const normalizeOptionalText = (value: string) => {
-  const trimmed = value.trim()
-  return trimmed.length > 0 ? trimmed : undefined
-}
+export const normalizeOptionalText = (value: string) => {
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+};
 
 const normalizeOptionalNumber = (value: string) => {
-  const trimmed = value.trim()
-  if (!trimmed) return undefined
-  const parsed = Number(trimmed)
-  return Number.isFinite(parsed) ? parsed : undefined
-}
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  const parsed = Number(trimmed);
+  return Number.isFinite(parsed) ? parsed : undefined;
+};
 
 export const buildLyceumUpdatePayload = (
   values: LyceumUpdateFormValues,
@@ -32,4 +32,4 @@ export const buildLyceumUpdatePayload = (
   chitalishtaUrl: normalizeOptionalText(values.chitalishtaUrl),
   chairman: normalizeOptionalText(values.chairman),
   secretary: normalizeOptionalText(values.secretary),
-})
+});
