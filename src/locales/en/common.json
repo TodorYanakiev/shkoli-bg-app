@@ -115,7 +115,8 @@
     "invalidOption": "Select a valid option.",
     "number": "Enter a valid number.",
     "imageType": "Only {{formats}} images are allowed.",
-    "imageSize": "Image must be smaller than {{size}} MB."
+    "imageSize": "Image must be smaller than {{size}} MB.",
+    "descriptionMax": "Description must be at most 500 characters."
   },
   "errors": {
     "network": "We couldn't reach the server. Try again.",
@@ -164,13 +165,17 @@
       "lyceumRightsInvalid": "Provide the lyceum name and town.",
       "lyceumRightsServer": "Internal server error. Please try again.",
       "lyceumRightsRequestFailed": "We couldn't send the verification email. Try again.",
-      "lyceumRightsVerifyFailed": "We couldn't verify the code. Try again."
+      "lyceumRightsVerifyFailed": "We couldn't verify the code. Try again.",
+      "imageSaveFailed": "We couldn't save your profile image. Try again.",
+      "imageDeleteFailed": "We couldn't delete your profile image. Try again.",
+      "imageConfigMissing": "Profile image upload is not configured."
     },
     "auth": {
       "forbidden": "You do not have access to this account.",
       "logoutFailed": "We couldn't log you out. Try again.",
       "registerFailed": "We couldn't create your account. Try again.",
-      "userExists": "An account with these details already exists."
+      "userExists": "An account with these details already exists.",
+      "registerImageFailed": "Account created, but we couldn't upload your profile image."
     },
     "reviews": {
       "generic": "Something went wrong while processing the review.",
@@ -214,7 +219,9 @@
     "profile": {
       "passwordChanged": "Password updated successfully.",
       "lyceumRightsRequested": "Verification email sent.",
-      "lyceumRightsVerified": "You are now a lyceum administrator."
+      "lyceumRightsVerified": "You are now a lyceum administrator.",
+      "imageSaved": "Profile image updated successfully.",
+      "imageDeleted": "Profile image removed successfully."
     },
     "reviews": {
       "createSuccess": "Review submitted successfully.",
@@ -407,7 +414,20 @@
         "submit": "Create account",
         "submitting": "Creating account...",
         "loginPrompt": "Already have an account?",
-        "loginLink": "Log in"
+        "loginLink": "Log in",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Tell others a bit about yourself (optional)",
+        "profileImageLabel": "Profile image (optional)",
+        "profileImageHelper": "Accepted formats: {{formats}}. Max size: {{size}} MB.",
+        "profileImageSelect": "Choose image",
+        "profileImageChange": "Change image",
+        "profileImageSelected": "Selected image",
+        "profileImagePreviewAlt": "Selected profile image preview",
+        "profileImageAltTextLabel": "Alt text",
+        "profileImageAltTextPlaceholder": "Describe the image (optional)",
+        "profileImageRemove": "Remove selected image",
+        "profileImageUploading": "Uploading {{progress}}%",
+        "finalizing": "Finalizing account..."
       }
     },
     "profile": {
@@ -532,7 +552,28 @@
         "administratedLyceum": "Administrated lyceum",
         "administratedLyceumLoading": "Loading lyceum...",
         "administratedLyceumUnavailable": "Unable to load lyceum.",
-        "administratedLyceumUnknown": "Lyceum not found."
+        "administratedLyceumUnknown": "Lyceum not found.",
+        "description": "Description"
+      },
+      "image": {
+        "title": "Profile image",
+        "helper": "Accepted formats: {{formats}}. Max size: {{size}} MB.",
+        "currentAlt": "Profile image",
+        "empty": "No profile image yet.",
+        "selected": "Selected image",
+        "select": "Add image",
+        "change": "Change image",
+        "clearSelection": "Clear selection",
+        "altTextLabel": "Alt text",
+        "altTextPlaceholder": "Describe this image",
+        "progress": "Uploading {{progress}}%",
+        "actions": {
+          "add": "Save image",
+          "update": "Update image",
+          "saving": "Saving...",
+          "delete": "Delete image",
+          "deleting": "Deleting..."
+        }
       }
     },
     "shkoli": {

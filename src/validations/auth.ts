@@ -23,6 +23,10 @@ export const getRegisterSchema = (t: TFunction) =>
         .trim()
         .min(3, t('validation.usernameMin'))
         .max(50, t('validation.usernameMax')),
+      description: z
+        .string()
+        .trim()
+        .max(500, t('validation.descriptionMax')),
       email: z
         .string()
         .trim()

@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -6,14 +7,22 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
 import { useToast } from '../../../components/feedback/ToastContext'
+import { useUpsertUserProfileImageMutation } from '../../../hooks/useUpsertUserProfileImageMutation'
+import { getCurrentUser } from '../../../services/users'
 import { useRegisterMutation } from '../hooks/useRegisterMutation'
 import type { ApiError } from '../../../types/api'
 import type { RegisterRequest } from '../../../types/auth'
+import type { CurrentUser } from '../../../types/users'
 import { setTokens } from '../../../utils/authStorage'
+import { getDefaultUserProfileImageAltText } from '../../../utils/userImages'
 import {
   getRegisterSchema,
   type RegisterFormValues,
 } from '../../../validations/auth'
+import RegisterProfileImageField from './RegisterProfileImageField'
+import { useRegisterProfileImage } from '../hooks/useRegisterProfileImage'
+import { getProfileImageSaveErrorKey } from '../../Profile/services/profileErrors'
+import { userProfileQueryKey } from '../../Profile/hooks/useUserProfile'
 
 const getRegisterErrorMessage = (
   error: ApiError | null,
@@ -32,17 +41,54 @@ const getRegisterErrorMessage = (
   return t('errors.auth.registerFailed')
 }
 
+const getRegisterProfileImageErrorMessage = (
+  error: unknown,
+  t: (key: string) => string,
+) => {
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'status' in error &&
+    'kind' in error
+  ) {
+    const mappedErrorKey = getProfileImageSaveErrorKey(error as ApiError)
+    return mappedErrorKey
+      ? t(mappedErrorKey)
+      : t('errors.auth.registerImageFailed')
+  }
+
+  if (!error) {
+    return t('errors.auth.registerImageFailed')
+  }
+
+  return t('errors.auth.registerImageFailed')
+}
+
 const RegisterForm = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { showToast } = useToast()
   const schema = useMemo(() => getRegisterSchema(t), [t])
   const mutation = useRegisterMutation()
+  const profileImageMutation = useUpsertUserProfileImageMutation()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [isRepeatVisible, setIsRepeatVisible] = useState(false)
+  const [isFinalizingRegistration, setIsFinalizingRegistration] = useState(false)
+  const {
+    selectedProfileImageFile,
+    selectedProfileImagePreviewUrl,
+    profileImageValidationError,
+    uploadProgress,
+    handleProfileImageFileChange,
+    clearProfileImageSelection,
+    setUploadProgress,
+    resetProfileImageUploadState,
+  } = useRegisterProfileImage(t)
 
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormValues>({
@@ -51,6 +97,7 @@ const RegisterForm = () => {
       firstname: '',
       lastname: '',
       username: '',
+      description: '',
       email: '',
       password: '',
       repeatedPassword: '',
@@ -59,28 +106,89 @@ const RegisterForm = () => {
   })
 
   const onSubmit = (values: RegisterFormValues) => {
-    const { acceptLegalDocuments, ...payload } = values
+    const { acceptLegalDocuments, description, ...payload } = values
     if (!acceptLegalDocuments) {
       return
     }
-    const registerPayload: RegisterRequest = payload
+
+    const normalizedDescription = description.trim()
+    const registerPayload: RegisterRequest = normalizedDescription
+      ? { ...payload, description: normalizedDescription }
+      : payload
 
     mutation.mutate(registerPayload, {
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
+        resetProfileImageUploadState()
         setTokens({
           accessToken: data.access_token,
           refreshToken: data.refresh_token,
         })
-        showToast({
-          message: t('feedback.auth.registerSuccess'),
-          tone: 'success',
-        })
-        navigate('/profile', { replace: true })
+
+        setIsFinalizingRegistration(true)
+
+        try {
+          let nextUserSnapshot: CurrentUser | null = null
+
+          if (selectedProfileImageFile) {
+            const currentUser = await getCurrentUser()
+            const userId =
+              typeof currentUser.id === 'number' ? currentUser.id : null
+
+            if (!userId) {
+              throw new Error('missing_user_id')
+            }
+
+            const profileImageAltText = getDefaultUserProfileImageAltText(
+              currentUser.username ?? registerPayload.username,
+            )
+
+            const profileImage = await profileImageMutation.mutateAsync({
+              userId,
+              file: selectedProfileImageFile,
+              altText: profileImageAltText,
+              mode: 'add',
+              onProgress: (progress) => setUploadProgress(progress),
+            })
+
+            nextUserSnapshot = {
+              ...currentUser,
+              profileImage,
+            }
+          }
+
+          if (nextUserSnapshot) {
+            queryClient.setQueryData(userProfileQueryKey, nextUserSnapshot)
+          }
+
+          showToast({
+            message: t('feedback.auth.registerSuccess'),
+            tone: 'success',
+          })
+        } catch (error) {
+          showToast({
+            message: t('feedback.auth.registerSuccess'),
+            tone: 'success',
+          })
+          showToast({
+            message: getRegisterProfileImageErrorMessage(
+              error,
+              t,
+            ),
+            tone: 'error',
+          })
+        } finally {
+          void queryClient.invalidateQueries({ queryKey: userProfileQueryKey })
+          setUploadProgress(null)
+          setIsFinalizingRegistration(false)
+          navigate('/profile', { replace: true })
+        }
       },
     })
   }
 
   const errorMessage = getRegisterErrorMessage(mutation.error ?? null, t)
+  const isSubmitting = mutation.isPending || isFinalizingRegistration
+  const currentUsername = watch('username')
 
   const inputClassName = (hasError: boolean, extraClasses?: string) =>
     [
@@ -99,7 +207,7 @@ const RegisterForm = () => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="mt-6 w-full max-w-2xl space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-      aria-busy={mutation.isPending}
+      aria-busy={isSubmitting}
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
@@ -192,16 +300,45 @@ const RegisterForm = () => {
         ) : null}
       </div>
       <div>
-          <label
-            htmlFor="register-email"
-            className="text-sm font-semibold text-slate-800"
+        <label
+          htmlFor="register-description"
+          className="text-sm font-semibold text-slate-800"
+        >
+          {t('pages.register.form.descriptionLabel')}
+        </label>
+        <textarea
+          data-testid="register-description"
+          id="register-description"
+          rows={4}
+          placeholder={t('pages.register.form.descriptionPlaceholder')}
+          aria-invalid={Boolean(errors.description)}
+          aria-describedby={
+            errors.description ? 'register-description-error' : undefined
+          }
+          className={inputClassName(Boolean(errors.description), 'min-h-28')}
+          {...register('description')}
+        />
+        {errors.description ? (
+          <p
+            id="register-description-error"
+            className="mt-1 text-xs text-rose-600"
+            role="alert"
           >
-            {t('pages.register.form.emailLabel')}
-          </label>
-          <input
-            data-testid="register-email"
-            id="register-email"
-            type="email"
+            {errors.description.message}
+          </p>
+        ) : null}
+      </div>
+      <div>
+        <label
+          htmlFor="register-email"
+          className="text-sm font-semibold text-slate-800"
+        >
+          {t('pages.register.form.emailLabel')}
+        </label>
+        <input
+          data-testid="register-email"
+          id="register-email"
+          type="email"
           autoComplete="email"
           placeholder={t('pages.register.form.emailPlaceholder')}
           aria-invalid={Boolean(errors.email)}
@@ -298,6 +435,16 @@ const RegisterForm = () => {
           </p>
         ) : null}
       </div>
+      <RegisterProfileImageField
+        username={currentUsername}
+        selectedFile={selectedProfileImageFile}
+        previewUrl={selectedProfileImagePreviewUrl}
+        validationError={profileImageValidationError}
+        uploadProgress={uploadProgress}
+        isProcessing={isSubmitting}
+        onFileChange={handleProfileImageFileChange}
+        onClearSelection={clearProfileImageSelection}
+      />
       <div>
         <div className="flex items-start gap-3">
           <input
@@ -355,11 +502,13 @@ const RegisterForm = () => {
       <button
         data-testid="register-submit"
         type="submit"
-        disabled={mutation.isPending}
+        disabled={isSubmitting}
         className="inline-flex w-full items-center justify-center rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:bg-slate-300"
       >
         {mutation.isPending
           ? t('pages.register.form.submitting')
+          : isFinalizingRegistration
+            ? t('pages.register.form.finalizing')
           : t('pages.register.form.submit')}
       </button>
       <p className="text-sm text-slate-600">

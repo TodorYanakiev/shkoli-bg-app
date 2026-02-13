@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
+import { useToast } from '../../components/feedback/ToastContext'
 import ProfileActionsCard from './components/ProfileActionsCard'
 import ProfileDetailsCard from './components/ProfileDetailsCard'
 import ProfileHeader from './components/ProfileHeader'
@@ -10,16 +11,23 @@ import ProfileSummaryCard from './components/ProfileSummaryCard'
 import { useAdministratedLyceum } from './hooks/useAdministratedLyceum'
 import { useProfileLecturedCourses } from './hooks/useProfileLecturedCourses'
 import { useProfileLecturedLyceums } from './hooks/useProfileLecturedLyceums'
+import { useProfileImageManager } from './hooks/useProfileImageManager'
 import { useProfileUserSummary } from './hooks/useProfileUserSummary'
 import { useUserProfile } from './hooks/useUserProfile'
 import { getProfileErrorKey } from './services/profileErrors'
 
 const ProfilePage = () => {
   const { t } = useTranslation()
+  const { showToast } = useToast()
   const { data: user, isLoading, error } = useUserProfile()
   const errorKey = getProfileErrorKey(error ?? null)
   const errorMessage = errorKey ? t(errorKey) : null
   const summary = useProfileUserSummary(user, t)
+  const profileImageManager = useProfileImageManager({
+    user,
+    t,
+    showToast,
+  })
   const {
     data: administratedLyceum,
     isLoading: isAdministratedLyceumLoading,
@@ -78,12 +86,24 @@ const ProfilePage = () => {
           <div className="space-y-6">
             <ProfileSummaryCard
               displayName={summary.displayName}
+              username={summary.username}
               roleLabel={summary.roleLabel}
+              avatarUrl={summary.profileImageUrl}
+              validationError={profileImageManager.validationError}
+              actionError={profileImageManager.actionError}
+              uploadProgress={profileImageManager.uploadProgress}
+              hasExistingImage={profileImageManager.hasExistingImage}
+              isSaving={profileImageManager.isSaving}
+              isDeleting={profileImageManager.isDeleting}
+              canDelete={profileImageManager.canDelete}
+              onImageFileChange={profileImageManager.handleImageFileChange}
+              onDeleteImage={profileImageManager.handleDeleteImage}
             />
             <ProfileDetailsCard
               fullName={summary.fullName}
               username={summary.username}
               email={summary.email}
+              description={summary.description}
               administratedLyceumName={administratedLyceumName}
               showAdministratedLyceum={Boolean(summary.administratedLyceumId)}
             />

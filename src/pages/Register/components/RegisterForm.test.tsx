@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -9,6 +10,7 @@ import type { AuthenticationResponse, RegisterRequest } from '../../../types/aut
 
 const navigateMock = vi.hoisted(() => vi.fn())
 const useRegisterMutationMock = vi.hoisted(() => vi.fn())
+const useUpsertUserProfileImageMutationMock = vi.hoisted(() => vi.fn())
 const showToastMock = vi.hoisted(() => vi.fn())
 const setTokensMock = vi.hoisted(() => vi.fn())
 
@@ -24,6 +26,10 @@ vi.mock('react-router-dom', async () => {
 
 vi.mock('../hooks/useRegisterMutation', () => ({
   useRegisterMutation: useRegisterMutationMock,
+}))
+
+vi.mock('../../../hooks/useUpsertUserProfileImageMutation', () => ({
+  useUpsertUserProfileImageMutation: useUpsertUserProfileImageMutationMock,
 }))
 
 vi.mock('../../../components/feedback/ToastContext', () => ({
@@ -44,11 +50,21 @@ type MutationResult = {
   error: ApiError | null
 }
 
+const createQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  })
+
 const renderForm = () =>
   render(
-    <MemoryRouter>
-      <RegisterForm />
-    </MemoryRouter>,
+    <QueryClientProvider client={createQueryClient()}>
+      <MemoryRouter>
+        <RegisterForm />
+      </MemoryRouter>
+    </QueryClientProvider>,
   )
 
 beforeAll(async () => {
@@ -64,11 +80,16 @@ beforeEach(() => {
   showToastMock.mockReset()
   setTokensMock.mockReset()
   useRegisterMutationMock.mockReset()
+  useUpsertUserProfileImageMutationMock.mockReset()
   useRegisterMutationMock.mockReturnValue({
     mutate: vi.fn(),
     isPending: false,
     error: null,
   } satisfies MutationResult)
+  useUpsertUserProfileImageMutationMock.mockReturnValue({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  })
 })
 
 describe('RegisterForm', () => {
