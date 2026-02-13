@@ -1,8 +1,8 @@
 export const LYCEUM_TOWNS = [
-  "Р“Р РђР”В Р‘РЈР Р“РђРЎ",
-  "Р“Р РђР”В Р’РђР РќРђ",
-  "Р“Р РђР”В РџР›РћР’Р”РР’",
-  "Р“Р РђР”В РЎРћР¤РРЇ",
+  "БУРГАС",
+  "ВАРНА",
+  "ПЛОВДИВ",
+  "СОФИЯ",
 ] as const;
 
 export type LyceumTown = (typeof LYCEUM_TOWNS)[number];
