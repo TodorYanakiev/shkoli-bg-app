@@ -5,6 +5,7 @@ import UserAvatar from '../../../components/ui/UserAvatar'
 
 type TopNavMobileAuthProps = {
   isAuthenticated: boolean
+  profileAvatarUrl: string | null
   profileAvatarAlt: string
   hasAdministratedLyceum: boolean
   administratedLyceumId: number | null
@@ -16,6 +17,7 @@ type TopNavMobileAuthProps = {
 
 export const TopNavMobileAuth = ({
   isAuthenticated,
+  profileAvatarUrl,
   profileAvatarAlt,
   hasAdministratedLyceum,
   administratedLyceumId,
@@ -33,7 +35,7 @@ export const TopNavMobileAuth = ({
             aria-label={t('nav.profileLink')}
             className="flex flex-1 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
           >
-            <UserAvatar alt={profileAvatarAlt} size="sm" />
+            <UserAvatar alt={profileAvatarAlt} src={profileAvatarUrl} size="sm" />
             <span>{t('nav.profile')}</span>
           </Link>
           <button

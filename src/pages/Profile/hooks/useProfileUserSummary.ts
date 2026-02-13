@@ -3,12 +3,15 @@ import type { TFunction } from 'i18next'
 
 import type { CurrentUser } from '../../../types/users'
 import { getUserDisplayName, getUserFullName } from '../../../utils/user'
+import { resolveUserImageUrl } from '../../../utils/userImages'
 
 type ProfileUserSummary = {
   displayName: string
   fullName: string
   username: string
   email: string
+  description: string
+  profileImageUrl: string | null
   roleLabel: string
   hasLyceumAdministration: boolean
   administratedLyceumId?: number
@@ -28,6 +31,9 @@ export const useProfileUserSummary = (
   const fullName = getUserFullName(safeUser) || t('pages.profile.emptyValue')
   const username = safeUser?.username ?? t('pages.profile.emptyValue')
   const email = safeUser?.email ?? t('pages.profile.emptyValue')
+  const description =
+    safeUser?.description?.trim() || t('pages.profile.emptyValue')
+  const profileImageUrl = resolveUserImageUrl(safeUser?.profileImage)
   const hasLyceumAdministration = Boolean(user?.administratedLyceumId)
   const administratedLyceumId = user?.administratedLyceumId
   const lecturedLyceumIds = useMemo(() => {
@@ -57,6 +63,8 @@ export const useProfileUserSummary = (
     fullName,
     username,
     email,
+    description,
+    profileImageUrl,
     roleLabel,
     hasLyceumAdministration,
     administratedLyceumId,

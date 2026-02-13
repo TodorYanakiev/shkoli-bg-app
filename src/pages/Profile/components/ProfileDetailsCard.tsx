@@ -4,6 +4,7 @@ type ProfileDetailsCardProps = {
   fullName: string
   username: string
   email: string
+  description: string
   administratedLyceumName: string
   showAdministratedLyceum: boolean
 }
@@ -12,6 +13,7 @@ const ProfileDetailsCard = ({
   fullName,
   username,
   email,
+  description,
   administratedLyceumName,
   showAdministratedLyceum,
 }: ProfileDetailsCardProps) => {
@@ -40,6 +42,14 @@ const ProfileDetailsCard = ({
             {t('pages.profile.details.email')}
           </dt>
           <dd className="font-medium text-slate-900">{email}</dd>
+        </div>
+        <div className="sm:contents">
+          <dt className="text-slate-500">
+            {t('pages.profile.details.description')}
+          </dt>
+          <dd className="font-medium text-slate-900 whitespace-pre-wrap break-words">
+            {description}
+          </dd>
         </div>
         {showAdministratedLyceum ? (
           <div className="sm:contents">

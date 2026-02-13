@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { RatingStars } from '../../../../components/ui/RatingStars'
 import UserAvatar from '../../../../components/ui/UserAvatar'
 import type { UserResponse } from '../../../../types/users'
+import { resolveUserImageUrl } from '../../../../utils/userImages'
 
 type LyceumLecturerCardProps = {
   lecturer: UserResponse
@@ -20,6 +21,7 @@ const LyceumLecturerCard = ({
   const { t } = useTranslation()
   const name = displayName || fallbackValue
   const email = lecturer.email ?? fallbackValue
+  const avatarUrl = resolveUserImageUrl(lecturer.profileImage)
   const averageRating =
     typeof lecturer.averageRating === 'number' &&
     Number.isFinite(lecturer.averageRating)
@@ -30,6 +32,7 @@ const LyceumLecturerCard = ({
     <>
       <UserAvatar
         alt={t('pages.lyceums.detail.lecturerCard.avatarAlt', { name })}
+        src={avatarUrl}
         size="full"
         shape="square"
         className="relative border-0 transition-transform duration-300 group-hover:scale-[1.05]"

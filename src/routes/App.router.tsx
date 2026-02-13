@@ -16,6 +16,7 @@ import MapPage from '../pages/Map'
 import NotFoundPage from '../pages/NotFound'
 import PrivacyPolicyPage from '../pages/PrivacyPolicy'
 import ChangePasswordPage from '../pages/Profile/ChangePassword'
+import EditProfilePage from '../pages/Profile/Edit'
 import LyceumRightsPage from '../pages/Profile/LyceumRights'
 import ProfilePage from '../pages/Profile'
 import RegisterPage from '../pages/Register'
@@ -97,6 +98,14 @@ const router = createBrowserRouter([
           { path: 'lyceums', element: <AdminLyceumsPage /> },
           { path: 'users', element: <AdminUsersPage /> },
         ],
+      },
+      {
+        path: 'profile/edit',
+        element: (
+          <ProtectedRoute>
+            <EditProfilePage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'profile/change-password',

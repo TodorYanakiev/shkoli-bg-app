@@ -23,6 +23,7 @@ const TopNav = () => {
   const {
     isAuthenticated,
     profileName,
+    profileAvatarUrl,
     profileAvatarAlt,
     isGlobalAdmin,
     administratedLyceumId,
@@ -112,6 +113,7 @@ const TopNav = () => {
           <TopNavDesktopActions
             isAuthenticated={isAuthenticated}
             profileName={profileName}
+            profileAvatarUrl={profileAvatarUrl}
             profileAvatarAlt={profileAvatarAlt}
             hasAdministratedLyceum={hasAdministratedLyceum}
             administratedLyceumId={administratedLyceumId}
@@ -172,6 +174,7 @@ const TopNav = () => {
         canEditLyceum={canEditLyceum}
         canAddCourse={canAddCourse}
         canInviteLecturer={canInviteLecturer}
+        profileAvatarUrl={profileAvatarUrl}
         profileAvatarAlt={profileAvatarAlt}
         hasAdministratedLyceum={hasAdministratedLyceum}
         administratedLyceumId={administratedLyceumId}

@@ -1,3 +1,27 @@
+export type UserImageRole = 'LOGO' | 'MAIN' | 'GALLERY'
+
+export type UserImageRequest = {
+  s3Key?: string
+  url?: string
+  altText?: string
+  width?: number
+  height?: number
+  mimeType?: string
+}
+
+export type UserImageResponse = {
+  id?: number
+  s3Key?: string
+  url?: string
+  role?: UserImageRole
+  altText?: string
+  width?: number
+  height?: number
+  mimeType?: string
+  orderIndex?: number
+  userId?: number
+}
+
 export type UserIdentity = {
   id?: number
   firstname?: string
@@ -6,6 +30,8 @@ export type UserIdentity = {
   lastName?: string
   username?: string
   email?: string
+  description?: string
+  profileImage?: UserImageResponse
 }
 
 export type CurrentUser = UserIdentity & {
@@ -30,4 +56,12 @@ export type ChangePasswordRequest = {
   currentPassword: string
   newPassword: string
   confirmationPassword: string
+}
+
+export type UserUpdateRequest = {
+  firstname: string
+  lastname: string
+  email: string
+  username: string
+  description?: string
 }
