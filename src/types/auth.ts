@@ -15,6 +15,7 @@ export type RegisterRequest = {
   password: string
   repeatedPassword: string
   username: string
+  description?: string
 }
 
 export type AuthTokens = {

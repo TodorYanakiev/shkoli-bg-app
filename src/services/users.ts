@@ -2,6 +2,8 @@ import httpClient from './httpClient'
 import type {
   ChangePasswordRequest,
   CurrentUser,
+  UserImageRequest,
+  UserImageResponse,
   UserResponse,
 } from '../types/users'
 
@@ -12,6 +14,39 @@ export const getCurrentUser = async () => {
 
 export const changePassword = async (payload: ChangePasswordRequest) => {
   await httpClient.patch('/api/v1/users', payload)
+}
+
+export const getUserProfileImage = async (userId: number) => {
+  const response = await httpClient.get<UserImageResponse>(
+    `/api/v1/users/${userId}/profile-image`,
+  )
+  return response.data
+}
+
+export const addUserProfileImage = async (
+  userId: number,
+  payload: UserImageRequest,
+) => {
+  const response = await httpClient.post<UserImageResponse>(
+    `/api/v1/users/${userId}/profile-image`,
+    payload,
+  )
+  return response.data
+}
+
+export const updateUserProfileImage = async (
+  userId: number,
+  payload: UserImageRequest,
+) => {
+  const response = await httpClient.put<UserImageResponse>(
+    `/api/v1/users/${userId}/profile-image`,
+    payload,
+  )
+  return response.data
+}
+
+export const deleteUserProfileImage = async (userId: number) => {
+  await httpClient.delete(`/api/v1/users/${userId}/profile-image`)
 }
 
 export const getAllUsers = async () => {
