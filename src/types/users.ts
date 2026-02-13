@@ -57,3 +57,11 @@ export type ChangePasswordRequest = {
   newPassword: string
   confirmationPassword: string
 }
+
+export type UserUpdateRequest = {
+  firstname: string
+  lastname: string
+  email: string
+  username: string
+  description?: string
+}

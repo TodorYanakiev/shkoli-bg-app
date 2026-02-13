@@ -26,3 +26,9 @@ export const getProfileImageSaveErrorKey = (error: ApiError | null) =>
 
 export const getProfileImageDeleteErrorKey = (error: ApiError | null) =>
   getSharedErrorKey(error, 'errors.profile.imageDeleteFailed')
+
+export const getProfileUpdateErrorKey = (error: ApiError | null) =>
+  getSharedErrorKey(error, 'errors.profile.updateFailed')
+
+export const getProfileDeleteErrorKey = (error: ApiError | null) =>
+  getSharedErrorKey(error, 'errors.profile.deleteFailed')

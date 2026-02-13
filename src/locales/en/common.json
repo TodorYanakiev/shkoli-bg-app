@@ -159,6 +159,8 @@
     },
     "profile": {
       "loadFailed": "We couldn't load your profile. Try again.",
+      "updateFailed": "We couldn't update your profile. Try again.",
+      "deleteFailed": "We couldn't delete your account. Try again.",
       "changePasswordFailed": "We couldn't update your password. Try again.",
       "lyceumRightsUnauthorized": "You must be signed in to request lyceum rights.",
       "lyceumRightsAlreadyAdminOther": "You already administrate another lyceum. Requests are disabled.",
@@ -217,6 +219,8 @@
       "lecturerRemoved": "Lecturer removed successfully."
     },
     "profile": {
+      "updated": "Profile updated successfully.",
+      "deleted": "Account deleted successfully.",
       "passwordChanged": "Password updated successfully.",
       "lyceumRightsRequested": "Verification email sent.",
       "lyceumRightsVerified": "You are now a lyceum administrator.",
@@ -468,8 +472,35 @@
       },
       "actions": {
         "title": "Account actions",
+        "editProfile": "Edit profile",
         "changePassword": "Change password",
         "requestLyceumRights": "Request lyceum rights"
+      },
+      "edit": {
+        "title": "Edit profile",
+        "subtitle": "Update your account information and manage account access.",
+        "backLink": "Back to profile",
+        "form": {
+          "firstnameLabel": "First name",
+          "lastnameLabel": "Last name",
+          "usernameLabel": "Username",
+          "emailLabel": "Email address",
+          "descriptionLabel": "Description",
+          "submit": "Save changes",
+          "submitting": "Saving..."
+        },
+        "delete": {
+          "title": "Delete account",
+          "description": "This permanently deletes your account and removes your access.",
+          "action": "Delete account",
+          "modal": {
+            "title": "Delete account permanently?",
+            "description": "This action cannot be undone for {{username}}.",
+            "cancel": "Cancel",
+            "confirm": "Delete account",
+            "deleting": "Deleting..."
+          }
+        }
       },
       "changePassword": {
         "title": "Change password",
