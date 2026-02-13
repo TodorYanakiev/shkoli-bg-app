@@ -896,6 +896,44 @@
     "lyceums": {
       "title": "Читалища",
       "subtitle": "Разгледайте близките читалища и техните профили.",
+      "list": {
+        "heroTitle": "Открийте близките читалища",
+        "heroSubtitle": "Филтрирайте по град, за да намерите подходящото читалище до вас.",
+        "filters": {
+          "townLabel": "Град",
+          "townPlaceholder": "Всички градове",
+          "apply": "Приложи",
+          "clearAll": "Изчисти всички",
+          "townChip": "Град: {{value}}"
+        },
+        "results": {
+          "title": "Резултати",
+          "totalBadge": "Общо резултати: {{total}}"
+        },
+        "states": {
+          "loading": "Зареждане на читалища...",
+          "error": "Не успяхме да заредим читалищата.",
+          "empty": "Няма читалища, съвпадащи с тези филтри."
+        },
+        "card": {
+          "imageAlt": "Снимка на читалище {{name}}",
+          "untitled": "Читалище без име",
+          "locationFallback": "Локацията липсва",
+          "openLyceum": "Отвори читалище {{name}}",
+          "ratingLabel": "Оценка {{rating}} от {{max}}",
+          "ratingEmpty": "Все още няма отзиви",
+          "coursesCount": "Школи: {{count}}",
+          "coursesLoading": "Школи..."
+        },
+        "pagination": {
+          "first": "Първа",
+          "prev": "Предишна",
+          "next": "Следваща",
+          "last": "Последна",
+          "page": "Страница {{current}} от {{total}}",
+          "shown": "Показани {{shown}} от {{total}}"
+        }
+      },
       "detail": {
         "title": "Профил на читалище",
         "subtitle": "Пълна информация за това читалище.",

@@ -914,6 +914,44 @@
     "lyceums": {
       "title": "Lyceums",
       "subtitle": "Explore nearby lyceums and their profiles.",
+      "list": {
+        "heroTitle": "Discover local lyceums",
+        "heroSubtitle": "Filter by town to find the right lyceum near you.",
+        "filters": {
+          "townLabel": "Town",
+          "townPlaceholder": "All towns",
+          "apply": "Apply",
+          "clearAll": "Clear all",
+          "townChip": "Town: {{value}}"
+        },
+        "results": {
+          "title": "Results",
+          "totalBadge": "Total results: {{total}}"
+        },
+        "states": {
+          "loading": "Loading lyceums...",
+          "error": "Unable to load lyceums right now.",
+          "empty": "No lyceums match these filters."
+        },
+        "card": {
+          "imageAlt": "Lyceum image for {{name}}",
+          "untitled": "Untitled lyceum",
+          "locationFallback": "Location unavailable",
+          "openLyceum": "Open lyceum {{name}}",
+          "ratingLabel": "Rating {{rating}} of {{max}}",
+          "ratingEmpty": "No ratings yet",
+          "coursesCount": "Courses: {{count}}",
+          "coursesLoading": "Courses..."
+        },
+        "pagination": {
+          "first": "First",
+          "prev": "Prev",
+          "next": "Next",
+          "last": "Last",
+          "page": "Page {{current}} of {{total}}",
+          "shown": "Showing {{shown}} of {{total}}"
+        }
+      },
       "detail": {
         "title": "Lyceum profile",
         "subtitle": "Full information about this lyceum.",
