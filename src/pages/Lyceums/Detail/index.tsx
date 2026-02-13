@@ -1,66 +1,81 @@
-import { useMemo } from 'react'
-import { Helmet } from 'react-helmet-async'
-import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { useMemo } from "react";
+import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 
-import { LyceumDetailCoursesSection } from './components/LyceumDetailCoursesSection'
-import { LyceumDetailHeader } from './components/LyceumDetailHeader'
-import { LyceumDetailInfoSection } from './components/LyceumDetailInfoSection'
-import { LyceumDetailLecturersSection } from './components/LyceumDetailLecturersSection'
-import { LyceumDetailSideNav } from './components/LyceumDetailSideNav'
-import LyceumLecturerInviteModal from './components/LyceumLecturerInviteModal'
-import LyceumLecturerReviewsModal from './components/LyceumLecturerReviewsModal'
-import { getLyceumDetailSideNavItems } from './components/lyceumDetailSideNavItems'
-import { useLyceumDetailCarousels } from './hooks/useLyceumDetailCarousels'
-import { useLyceumDetailData } from './hooks/useLyceumDetailData'
-import { useLyceumDetailLayout } from './hooks/useLyceumDetailLayout'
-import { useLyceumLecturerReviewsModal } from './hooks/useLyceumLecturerReviewsModal'
-import { useLyceumDetailView } from './hooks/useLyceumDetailView'
-import { useLyceumInviteModal } from './hooks/useLyceumInviteModal'
-import { LyceumReviewsSection } from '../../Reviews/components/LyceumReviewsSection'
+import { LyceumDetailCoursesSection } from "./components/LyceumDetailCoursesSection";
+import { LyceumDetailGallerySection } from "./components/LyceumDetailGallerySection";
+import { LyceumDetailHeader } from "./components/LyceumDetailHeader";
+import { LyceumDetailInfoSection } from "./components/LyceumDetailInfoSection";
+import { LyceumDetailLecturersSection } from "./components/LyceumDetailLecturersSection";
+import { LyceumDetailSideNav } from "./components/LyceumDetailSideNav";
+import LyceumLecturerInviteModal from "./components/LyceumLecturerInviteModal";
+import LyceumLecturerReviewsModal from "./components/LyceumLecturerReviewsModal";
+import { getLyceumDetailSideNavItems } from "./components/lyceumDetailSideNavItems";
+import { useLyceumDetailCarousels } from "./hooks/useLyceumDetailCarousels";
+import { useLyceumDetailData } from "./hooks/useLyceumDetailData";
+import { useLyceumDetailLayout } from "./hooks/useLyceumDetailLayout";
+import { useLyceumLecturerReviewsModal } from "./hooks/useLyceumLecturerReviewsModal";
+import { useLyceumDetailView } from "./hooks/useLyceumDetailView";
+import { useLyceumInviteModal } from "./hooks/useLyceumInviteModal";
+import { LyceumReviewsSection } from "../../Reviews/components/LyceumReviewsSection";
 
 const LyceumDetailPage = () => {
-  const { t } = useTranslation()
-  const { id } = useParams<{ id: string }>()
-  const lyceumId = Number(id)
-  const isValidId = Number.isFinite(lyceumId)
+  const { t } = useTranslation();
+  const { id } = useParams<{ id: string }>();
+  const lyceumId = Number(id);
+  const isValidId = Number.isFinite(lyceumId);
 
   const {
     lyceum,
     courses,
     lecturers,
+    lyceumImages,
     courseLecturersById,
     lyceumError,
     coursesError,
     lecturersError,
+    lyceumImagesError,
     isLoading,
     isCoursesLoading,
     isLecturersLoading,
+    isLyceumImagesLoading,
     canEditLyceum,
     canAddCourse,
     canInviteLecturer,
-  } = useLyceumDetailData({ lyceumId, isValidId })
+  } = useLyceumDetailData({ lyceumId, isValidId });
 
-  const { fallbackValue, heroLocation, pageTitle, overviewDetails } =
-    useLyceumDetailView({ lyceum, t })
+  const {
+    fallbackValue,
+    lyceumName,
+    heroLocation,
+    pageTitle,
+    overviewDetails,
+    mainImage,
+    mainImageUrl,
+    galleryImages,
+  } = useLyceumDetailView({ lyceum, lyceumImages, t });
 
-  const coursesCount = courses?.length ?? 0
-  const lecturersCount = lecturers?.length ?? 0
-  const { coursesCarousel, lecturersCarousel } =
-    useLyceumDetailCarousels({ coursesCount, lecturersCount })
+  const coursesCount = courses?.length ?? 0;
+  const lecturersCount = lecturers?.length ?? 0;
+  const galleryCount = galleryImages.length;
+  const { coursesCarousel, lecturersCarousel } = useLyceumDetailCarousels({
+    coursesCount,
+    lecturersCount,
+  });
 
   const {
     inviteModalId,
     isInviteModalOpen,
     openInviteModal,
     closeInviteModal,
-  } = useLyceumInviteModal({ canInviteLecturer })
+  } = useLyceumInviteModal({ canInviteLecturer });
   const {
     selectedLecturer,
     isOpen: isLecturerReviewsModalOpen,
     openModal: openLecturerReviewsModal,
     closeModal: closeLecturerReviewsModal,
-  } = useLyceumLecturerReviewsModal()
+  } = useLyceumLecturerReviewsModal();
 
   const {
     isDesktop,
@@ -73,7 +88,7 @@ const LyceumDetailPage = () => {
     sideNavToggleClassName,
     sideNavContainerClassName,
     sideNavListClassName,
-  } = useLyceumDetailLayout({ hasLyceum: Boolean(lyceum) })
+  } = useLyceumDetailLayout({ hasLyceum: Boolean(lyceum) });
 
   const sideNavItems = useMemo(
     () =>
@@ -97,17 +112,18 @@ const LyceumDetailPage = () => {
       inviteModalId,
       openInviteModal,
     ],
-  )
+  );
 
-  const title = lyceum?.name ?? t('pages.lyceums.detail.title')
-  const subtitle = heroLocation || t('pages.lyceums.detail.subtitle')
-  const lyceumErrorMessage = lyceumError ? t(lyceumError.messageKey) : null
-  const coursesErrorMessage = coursesError
-    ? t(coursesError.messageKey)
-    : null
+  const title = lyceum?.name ?? t("pages.lyceums.detail.title");
+  const subtitle = heroLocation || t("pages.lyceums.detail.subtitle");
+  const lyceumErrorMessage = lyceumError ? t(lyceumError.messageKey) : null;
+  const coursesErrorMessage = coursesError ? t(coursesError.messageKey) : null;
   const lecturersErrorMessage = lecturersError
     ? t(lecturersError.messageKey)
-    : null
+    : null;
+  const lyceumImagesErrorMessage = lyceumImagesError
+    ? t(lyceumImagesError.messageKey)
+    : null;
 
   return (
     <section className="space-y-6 -mt-8 sm:mt-0">
@@ -125,7 +141,7 @@ const LyceumDetailPage = () => {
           className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
           role="alert"
         >
-          {t('pages.lyceums.detail.invalidId')}
+          {t("pages.lyceums.detail.invalidId")}
         </div>
       ) : isLoading ? (
         <div className="space-y-4">
@@ -144,7 +160,7 @@ const LyceumDetailPage = () => {
         </div>
       ) : !lyceum ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-700 shadow-sm">
-          {t('pages.lyceums.detail.notFound')}
+          {t("pages.lyceums.detail.notFound")}
         </div>
       ) : (
         <div className="relative">
@@ -170,7 +186,18 @@ const LyceumDetailPage = () => {
               averageRating={lyceum.averageRating ?? null}
               coursesCount={coursesCount}
               lecturersCount={lecturersCount}
+              galleryCount={galleryCount}
               overviewDetails={overviewDetails}
+              mainImage={mainImage}
+              mainImageUrl={mainImageUrl}
+              isImagesLoading={isLyceumImagesLoading}
+              t={t}
+            />
+            <LyceumDetailGallerySection
+              galleryImages={galleryImages}
+              lyceumName={lyceumName}
+              isImagesLoading={isLyceumImagesLoading}
+              imagesErrorMessage={lyceumImagesErrorMessage}
               t={t}
             />
             <LyceumDetailCoursesSection
@@ -207,9 +234,7 @@ const LyceumDetailPage = () => {
           onClose={closeInviteModal}
         />
       ) : null}
-      {isLecturerReviewsModalOpen &&
-      selectedLecturer &&
-      isValidId ? (
+      {isLecturerReviewsModalOpen && selectedLecturer && isValidId ? (
         <LyceumLecturerReviewsModal
           lecturer={selectedLecturer}
           lyceumId={lyceumId}
@@ -217,7 +242,7 @@ const LyceumDetailPage = () => {
         />
       ) : null}
     </section>
-  )
-}
+  );
+};
 
-export default LyceumDetailPage
+export default LyceumDetailPage;

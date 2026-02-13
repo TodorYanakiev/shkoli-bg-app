@@ -1,5 +1,8 @@
 import { env } from '../constants/env'
-import type { CourseImageResponse, CourseImageRole } from '../types/courses'
+import type {
+  LyceumImageResponse,
+  LyceumImageRole,
+} from '../types/lyceums'
 
 const normalizeSource = (value?: string) => {
   if (typeof value !== 'string') return null
@@ -7,22 +10,22 @@ const normalizeSource = (value?: string) => {
   return normalized.length > 0 ? normalized : null
 }
 
-const hasImageSource = (image?: CourseImageResponse) =>
+const hasImageSource = (image?: LyceumImageResponse) =>
   Boolean(normalizeSource(image?.url) || normalizeSource(image?.s3Key))
 
-export const getCourseImageByRole = (
-  images: CourseImageResponse[] | undefined,
-  role: CourseImageRole,
+export const getLyceumImageByRole = (
+  images: LyceumImageResponse[] | undefined,
+  role: LyceumImageRole,
 ) => images?.find((image) => image.role === role && hasImageSource(image))
 
-export const getPreferredCourseImage = (
-  images: CourseImageResponse[] | undefined,
-  role: CourseImageRole,
+export const getPreferredLyceumImage = (
+  images: LyceumImageResponse[] | undefined,
+  role: LyceumImageRole,
 ) =>
-  getCourseImageByRole(images, role) ??
+  getLyceumImageByRole(images, role) ??
   images?.find((image) => hasImageSource(image))
 
-export const resolveCourseImageUrl = (image?: CourseImageResponse | null) => {
+export const resolveLyceumImageUrl = (image?: LyceumImageResponse | null) => {
   const source = normalizeSource(image?.url) ?? normalizeSource(image?.s3Key)
   if (!source) return null
 

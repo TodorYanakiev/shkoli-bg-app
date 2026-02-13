@@ -1,6 +1,8 @@
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
 const s3AllowedPrefix =
   import.meta.env.VITE_S3_ALLOWED_PREFIX ?? 'courses/'
+const s3LyceumAllowedPrefix =
+  import.meta.env.VITE_S3_LYCEUM_ALLOWED_PREFIX ?? 'lyceums/'
 const s3BucketName = import.meta.env.VITE_S3_BUCKET_NAME ?? ''
 const s3PublicBaseUrl = import.meta.env.VITE_S3_PUBLIC_BASE_URL ?? ''
 const awsRegion = import.meta.env.VITE_AWS_REGION ?? ''
@@ -21,6 +23,7 @@ const appEnvironment = import.meta.env.MODE
 export const env = {
   apiBaseUrl,
   s3AllowedPrefix,
+  s3LyceumAllowedPrefix,
   s3BucketName,
   s3PublicBaseUrl,
   awsRegion,

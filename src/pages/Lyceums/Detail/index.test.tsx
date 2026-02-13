@@ -1,53 +1,64 @@
-import { cleanup, render, screen } from '@testing-library/react'
-import { HelmetProvider } from 'react-helmet-async'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { cleanup, render, screen } from "@testing-library/react";
+import { HelmetProvider } from "react-helmet-async";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 
-import LyceumDetailPage from './index'
-import i18n from '../../../locales/i18n'
-import type { ApiError } from '../../../types/api'
-import type { CourseResponse } from '../../../types/courses'
-import type { LyceumResponse } from '../../../types/lyceums'
-import type { UserResponse } from '../../../types/users'
+import LyceumDetailPage from "./index";
+import i18n from "../../../locales/i18n";
+import type { ApiError } from "../../../types/api";
+import type { CourseResponse } from "../../../types/courses";
+import type { LyceumResponse } from "../../../types/lyceums";
+import type { UserResponse } from "../../../types/users";
 
-const useLyceumMock = vi.hoisted(() => vi.fn())
-const useLyceumCoursesMock = vi.hoisted(() => vi.fn())
-const useLyceumLecturersMock = vi.hoisted(() => vi.fn())
-const useUsersByIdsMock = vi.hoisted(() => vi.fn())
-const useAuthStatusMock = vi.hoisted(() => vi.fn())
-const useUserProfileMock = vi.hoisted(() => vi.fn())
+const useLyceumMock = vi.hoisted(() => vi.fn());
+const useLyceumCoursesMock = vi.hoisted(() => vi.fn());
+const useLyceumLecturersMock = vi.hoisted(() => vi.fn());
+const useLyceumImagesMock = vi.hoisted(() => vi.fn());
+const useUsersByIdsMock = vi.hoisted(() => vi.fn());
+const useAuthStatusMock = vi.hoisted(() => vi.fn());
+const useUserProfileMock = vi.hoisted(() => vi.fn());
 
-vi.mock('../hooks/useLyceum', () => ({
+vi.mock("../hooks/useLyceum", () => ({
   useLyceum: useLyceumMock,
-}))
+}));
 
-vi.mock('../hooks/useLyceumCourses', () => ({
+vi.mock("../hooks/useLyceumCourses", () => ({
   useLyceumCourses: useLyceumCoursesMock,
-}))
+}));
 
-vi.mock('../hooks/useLyceumLecturers', () => ({
+vi.mock("../hooks/useLyceumLecturers", () => ({
   useLyceumLecturers: useLyceumLecturersMock,
-}))
+}));
 
-vi.mock('../../../hooks/useUsersByIds', () => ({
+vi.mock("../hooks/useLyceumImages", () => ({
+  useLyceumImages: useLyceumImagesMock,
+}));
+
+vi.mock("../../../hooks/useUsersByIds", () => ({
   useUsersByIds: useUsersByIdsMock,
-}))
+}));
 
-vi.mock('../../../hooks/useAuthStatus', () => ({
+vi.mock("../../../hooks/useAuthStatus", () => ({
   useAuthStatus: useAuthStatusMock,
-}))
+}));
 
-vi.mock('../../Profile/hooks/useUserProfile', () => ({
+vi.mock("../../Profile/hooks/useUserProfile", () => ({
   useUserProfile: useUserProfileMock,
-}))
+}));
 
-vi.mock('../../Reviews/components/LyceumReviewsSection', () => ({
-  LyceumReviewsSection: () => (
-    <div data-testid="lyceum-reviews-section" />
-  ),
-}))
+vi.mock("../../Reviews/components/LyceumReviewsSection", () => ({
+  LyceumReviewsSection: () => <div data-testid="lyceum-reviews-section" />,
+}));
 
-const renderPage = (path = '/lyceums/1') =>
+const renderPage = (path = "/lyceums/1") =>
   render(
     <HelmetProvider>
       <MemoryRouter initialEntries={[path]}>
@@ -56,12 +67,12 @@ const renderPage = (path = '/lyceums/1') =>
         </Routes>
       </MemoryRouter>
     </HelmetProvider>,
-  )
+  );
 
 beforeAll(async () => {
-  await i18n.changeLanguage('en')
+  await i18n.changeLanguage("en");
   if (!window.matchMedia) {
-    Object.defineProperty(window, 'matchMedia', {
+    Object.defineProperty(window, "matchMedia", {
       writable: true,
       value: (query: string) => ({
         matches: false,
@@ -73,94 +84,104 @@ beforeAll(async () => {
         removeListener: vi.fn(),
         dispatchEvent: vi.fn(),
       }),
-    })
+    });
   }
-})
+});
 
 afterEach(() => {
-  cleanup()
-})
+  cleanup();
+});
 
 beforeEach(() => {
-  useLyceumMock.mockReset()
-  useLyceumCoursesMock.mockReset()
-  useLyceumLecturersMock.mockReset()
-  useUsersByIdsMock.mockReset()
-  useAuthStatusMock.mockReset()
-  useUserProfileMock.mockReset()
+  useLyceumMock.mockReset();
+  useLyceumCoursesMock.mockReset();
+  useLyceumLecturersMock.mockReset();
+  useLyceumImagesMock.mockReset();
+  useUsersByIdsMock.mockReset();
+  useAuthStatusMock.mockReset();
+  useUserProfileMock.mockReset();
 
-  const lyceum: LyceumResponse = { id: 1, name: 'Community Center', town: 'Sofia' }
+  const lyceum: LyceumResponse = {
+    id: 1,
+    name: "Community Center",
+    town: "Sofia",
+  };
 
   useLyceumMock.mockReturnValue({
     data: lyceum,
     isLoading: false,
     error: null,
-  })
+  });
   useLyceumCoursesMock.mockReturnValue({
     data: [],
     isLoading: false,
     error: null,
-  })
+  });
   useLyceumLecturersMock.mockReturnValue({
     data: [],
     isLoading: false,
     error: null,
-  })
+  });
+  useLyceumImagesMock.mockReturnValue({
+    data: [],
+    isLoading: false,
+    error: null,
+  });
   useUsersByIdsMock.mockReturnValue({
     data: [],
     isLoading: false,
     error: null,
-  })
-  useAuthStatusMock.mockReturnValue({ isAuthenticated: false })
-  useUserProfileMock.mockReturnValue({ data: null })
-})
+  });
+  useAuthStatusMock.mockReturnValue({ isAuthenticated: false });
+  useUserProfileMock.mockReturnValue({ data: null });
+});
 
-describe('LyceumDetailPage', () => {
-  it('renders the invalid id message', async () => {
-    renderPage('/lyceums/invalid')
+describe("LyceumDetailPage", () => {
+  it("renders the invalid id message", async () => {
+    renderPage("/lyceums/invalid");
 
-    expect(await screen.findByText('Invalid lyceum id.')).toBeDefined()
-  })
+    expect(await screen.findByText("Invalid lyceum id.")).toBeDefined();
+  });
 
-  it('renders the not found message on 404', async () => {
-    const error: ApiError = { status: 404, kind: 'unknown' }
+  it("renders the not found message on 404", async () => {
+    const error: ApiError = { status: 404, kind: "unknown" };
     useLyceumMock.mockReturnValue({
       data: null,
       isLoading: false,
       error,
-    })
+    });
 
-    renderPage('/lyceums/1')
+    renderPage("/lyceums/1");
 
-    expect(await screen.findByText('Lyceum not found.')).toBeDefined()
-  })
+    expect(await screen.findByText("Lyceum not found.")).toBeDefined();
+  });
 
-  it('shows a lecturer name from course-only lecturers', async () => {
+  it("shows a lecturer name from course-only lecturers", async () => {
     const course: CourseResponse = {
       id: 12,
-      name: 'Painting 101',
+      name: "Painting 101",
       lecturerIds: [42],
-    }
+    };
     const extraLecturer: UserResponse = {
       id: 42,
-      firstname: 'Jane',
-      lastname: 'Doe',
-      email: 'jane@example.com',
-    }
+      firstname: "Jane",
+      lastname: "Doe",
+      email: "jane@example.com",
+    };
 
     useLyceumCoursesMock.mockReturnValue({
       data: [course],
       isLoading: false,
       error: null,
-    })
+    });
     useUsersByIdsMock.mockReturnValue({
       data: [extraLecturer],
       isLoading: false,
       error: null,
-    })
+    });
 
-    renderPage('/lyceums/1')
+    renderPage("/lyceums/1");
 
-    expect(await screen.findByText('Jane Doe')).toBeDefined()
-  })
-})
+    expect(await screen.findByText("Jane Doe")).toBeDefined();
+  });
+});

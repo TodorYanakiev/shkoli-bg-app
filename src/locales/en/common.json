@@ -131,6 +131,11 @@
     "lyceums": {
       "updateFailed": "We couldn't update this lyceum. Try again.",
       "deleteFailed": "We couldn't delete this lyceum. Try again.",
+      "imageUploadFailed": "We couldn't upload this image. Try again.",
+      "imagesUploadFailed": "Some images could not be uploaded.",
+      "imageDuplicate": "This image has already been uploaded.",
+      "imageAccessDenied": "S3 upload was denied. Allow uploads to the lyceums/ prefix in your S3 IAM policy.",
+      "imageConfigMissing": "Image upload is not configured.",
       "admins": {
         "loadFailed": "We couldn't load the admins for this lyceum.",
         "addFailed": "We couldn't add this admin. Try again.",
@@ -842,12 +847,14 @@
         "countLabel": "{{count}}",
         "overviewLinks": {
           "courses": "Courses ({{count}})",
-          "lecturers": "Lecturers ({{count}})"
+          "lecturers": "Lecturers ({{count}})",
+          "gallery": "Gallery ({{count}})"
         },
         "sideNav": {
           "label": "Lyceum page sections",
           "info": "Lyceum info",
           "courses": "Courses",
+          "gallery": "Gallery",
           "lecturers": "Lecturers",
           "addCourse": "Add new course",
           "addLecturer": "Add lecturer",
@@ -872,6 +879,7 @@
           "people": "People",
           "courses": "Courses",
           "coursesSubtitle": "Programs and activities offered by this lyceum.",
+          "gallery": "Gallery",
           "lecturers": "Lecturers",
           "lecturersSubtitle": "Educators associated with this lyceum."
         },
@@ -920,10 +928,17 @@
         },
         "coursesLoading": "Loading courses...",
         "coursesError": "Unable to load courses right now.",
+        "imagesError": "Unable to load lyceum images right now.",
         "lecturersLoading": "Loading lecturers...",
         "lecturersError": "Unable to load lecturers right now.",
         "coursesPlaceholder": "Courses for this lyceum will appear here.",
+        "galleryEmpty": "Gallery images for this lyceum will appear here.",
         "lecturersPlaceholder": "Lecturers for this lyceum will appear here.",
+        "images": {
+          "loading": "Loading images...",
+          "mainAlt": "Main image for {{name}}",
+          "galleryAlt": "Gallery image {{index}} for {{name}}"
+        },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
         "lecturerReviews": {
@@ -966,6 +981,36 @@
           "submit": "Save changes",
           "submitting": "Saving...",
           "cancel": "Cancel"
+        },
+        "images": {
+          "title": "Images",
+          "helper": "Upload JPG, PNG, or WEBP images up to {{size}} MB each ({{formats}}).",
+          "loading": "Loading images...",
+          "error": "Unable to load images.",
+          "empty": "No images added yet.",
+          "currentMain": "Current main image",
+          "currentGallery": "Current gallery images",
+          "none": "No images for this section.",
+          "remove": "Remove",
+          "unavailable": "No image",
+          "order": "Position {{index}}",
+          "altFallback": "Lyceum image",
+          "mainLabel": "Main image",
+          "galleryLabel": "Gallery images",
+          "galleryHint": "Add as many images as you want.",
+          "addGallery": "Add gallery images",
+          "galleryEmpty": "No gallery images selected.",
+          "galleryItem": "Image {{index}}",
+          "previewAlt": "Selected image preview",
+          "altTextLabel": "Alt text",
+          "altTextPlaceholder": "Describe this image",
+          "loadError": "We couldn't read that image file.",
+          "status": {
+            "pending": "Pending upload",
+            "uploaded": "Uploaded",
+            "error": "Upload failed",
+            "progress": "Uploading {{progress}}%"
+          }
         },
         "lecturers": {
           "title": "Lecturers",

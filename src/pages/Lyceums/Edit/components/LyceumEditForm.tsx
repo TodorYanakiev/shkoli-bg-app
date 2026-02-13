@@ -1,22 +1,45 @@
-import type { TFunction } from 'i18next'
-import type { UseFormReturn } from 'react-hook-form'
+import type { TFunction } from "i18next";
+import type { ChangeEvent } from "react";
+import type { UseFormReturn } from "react-hook-form";
 
-import type { LyceumUpdateFormValues } from '../validations/lyceumUpdateSchema'
-import { LyceumEditBasicsSection } from './LyceumEditBasicsSection'
-import { LyceumEditContactsSection } from './LyceumEditContactsSection'
-import { LyceumEditFormActions } from './LyceumEditFormActions'
-import { LyceumEditLeadershipSection } from './LyceumEditLeadershipSection'
-import { LyceumEditLinksSection } from './LyceumEditLinksSection'
-import { LyceumEditLocationSection } from './LyceumEditLocationSection'
+import type { LyceumImageResponse } from "../../../../types/lyceums";
+import type { LyceumUpdateFormValues } from "../validations/lyceumUpdateSchema";
+import { LyceumEditBasicsSection } from "./LyceumEditBasicsSection";
+import { LyceumEditContactsSection } from "./LyceumEditContactsSection";
+import { LyceumEditFormActions } from "./LyceumEditFormActions";
+import { LyceumEditImagesSection } from "./LyceumEditImagesSection";
+import { LyceumEditLeadershipSection } from "./LyceumEditLeadershipSection";
+import { LyceumEditLinksSection } from "./LyceumEditLinksSection";
+import { LyceumEditLocationSection } from "./LyceumEditLocationSection";
+import type { PendingLyceumImage } from "../types";
 
 type LyceumEditFormProps = {
-  form: UseFormReturn<LyceumUpdateFormValues>
-  onSubmit: (values: LyceumUpdateFormValues) => void
-  isSubmitting: boolean
-  updateErrorMessage: string | null
-  lyceumId: number
-  t: TFunction
-}
+  form: UseFormReturn<LyceumUpdateFormValues>;
+  onSubmit: (values: LyceumUpdateFormValues) => void;
+  isSubmitting: boolean;
+  updateErrorMessage: string | null;
+  lyceumId: number;
+  lyceumImages: LyceumImageResponse[];
+  mainImages: LyceumImageResponse[];
+  existingGalleryImages: LyceumImageResponse[];
+  isImagesLoading: boolean;
+  imagesErrorMessage: string | null;
+  imageActionErrorMessage: string | null;
+  isDeletePending: boolean;
+  onDeleteExistingImage: (image: LyceumImageResponse) => void;
+  allowedImageTypesLabel: string;
+  mainImage: PendingLyceumImage | null;
+  galleryImages: PendingLyceumImage[];
+  mainImageError: string | null;
+  galleryImageError: string | null;
+  onMainImageSelect: (event: ChangeEvent<HTMLInputElement>) => void;
+  onGallerySelect: (event: ChangeEvent<HTMLInputElement>) => void;
+  onRemoveMainImage: () => void;
+  onRemoveGalleryImage: (id: string) => void;
+  onUpdateMainAltText: (value: string) => void;
+  onUpdateGalleryAltText: (id: string, value: string) => void;
+  t: TFunction;
+};
 
 export const LyceumEditForm = ({
   form,
@@ -24,13 +47,32 @@ export const LyceumEditForm = ({
   isSubmitting,
   updateErrorMessage,
   lyceumId,
+  lyceumImages,
+  mainImages,
+  existingGalleryImages,
+  isImagesLoading,
+  imagesErrorMessage,
+  imageActionErrorMessage,
+  isDeletePending,
+  onDeleteExistingImage,
+  allowedImageTypesLabel,
+  mainImage,
+  galleryImages,
+  mainImageError,
+  galleryImageError,
+  onMainImageSelect,
+  onGallerySelect,
+  onRemoveMainImage,
+  onRemoveGalleryImage,
+  onUpdateMainAltText,
+  onUpdateGalleryAltText,
   t,
 }: LyceumEditFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = form
+  } = form;
 
   return (
     <form
@@ -43,6 +85,29 @@ export const LyceumEditForm = ({
       <LyceumEditContactsSection register={register} errors={errors} t={t} />
       <LyceumEditLinksSection register={register} errors={errors} t={t} />
       <LyceumEditLeadershipSection register={register} errors={errors} t={t} />
+      <LyceumEditImagesSection
+        lyceumImages={lyceumImages}
+        mainImages={mainImages}
+        existingGalleryImages={existingGalleryImages}
+        isImagesLoading={isImagesLoading}
+        imagesErrorMessage={imagesErrorMessage}
+        imageActionErrorMessage={imageActionErrorMessage}
+        isDeletePending={isDeletePending}
+        isSubmitting={isSubmitting}
+        onDeleteExistingImage={onDeleteExistingImage}
+        allowedImageTypesLabel={allowedImageTypesLabel}
+        mainImage={mainImage}
+        galleryImages={galleryImages}
+        mainImageError={mainImageError}
+        galleryImageError={galleryImageError}
+        onMainImageSelect={onMainImageSelect}
+        onGallerySelect={onGallerySelect}
+        onRemoveMainImage={onRemoveMainImage}
+        onRemoveGalleryImage={onRemoveGalleryImage}
+        onUpdateMainAltText={onUpdateMainAltText}
+        onUpdateGalleryAltText={onUpdateGalleryAltText}
+        t={t}
+      />
       {updateErrorMessage ? (
         <div
           className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700"
@@ -57,5 +122,5 @@ export const LyceumEditForm = ({
         t={t}
       />
     </form>
-  )
-}
+  );
+};
