@@ -27,6 +27,7 @@ import {
   getProfileErrorKey,
   getProfileUpdateErrorKey,
 } from '../services/profileErrors'
+import { applyUpdateUserServerFieldErrors } from './services/updateUserFormErrors'
 
 const EditProfilePage = () => {
   const { t } = useTranslation()
@@ -55,6 +56,8 @@ const EditProfilePage = () => {
     register,
     handleSubmit,
     reset,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<UpdateUserFormValues>({
     resolver: zodResolver(schema),
@@ -83,6 +86,9 @@ const EditProfilePage = () => {
   const onSubmit = (values: UpdateUserFormValues) => {
     if (!userId) return
 
+    clearErrors()
+    updateMutation.reset()
+
     const payload = {
       firstname: values.firstname.trim(),
       lastname: values.lastname.trim(),
@@ -98,6 +104,23 @@ const EditProfilePage = () => {
       },
       {
         onSuccess: (updatedUser) => {
+          const previousUsername = user?.username?.trim() ?? ''
+          const previousEmail = user?.email?.trim() ?? ''
+          const hasIdentityChanged =
+            previousUsername !== payload.username ||
+            previousEmail !== payload.email
+
+          if (hasIdentityChanged) {
+            clearTokens()
+            queryClient.removeQueries({ queryKey: ['users'] })
+            showToast({
+              message: t('feedback.profile.updated'),
+              tone: 'success',
+            })
+            navigate('/auth/login', { replace: true })
+            return
+          }
+
           queryClient.setQueryData<CurrentUser | undefined>(
             userProfileQueryKey,
             (previousUser) =>
@@ -114,6 +137,12 @@ const EditProfilePage = () => {
           })
           navigate('/profile', { replace: true })
         },
+        onError: (error) =>
+          applyUpdateUserServerFieldErrors({
+            error,
+            setError,
+            t,
+          }),
       },
     )
   }

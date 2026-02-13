@@ -107,7 +107,7 @@ httpClient.interceptors.response.use(
   (error: AxiosError) => {
     const status = error.response?.status
 
-    if (status === 401 || status === 403) {
+    if (status === 401) {
       clearTokens()
     }
 
