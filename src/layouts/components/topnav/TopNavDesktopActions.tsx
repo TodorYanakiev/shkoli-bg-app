@@ -7,6 +7,7 @@ import { TopNavProfileMenu } from './TopNavProfileMenu'
 type TopNavDesktopActionsProps = {
   isAuthenticated: boolean
   profileName: string
+  profileAvatarUrl: string | null
   profileAvatarAlt: string
   hasAdministratedLyceum: boolean
   administratedLyceumId: number | null
@@ -22,6 +23,7 @@ type TopNavDesktopActionsProps = {
 export const TopNavDesktopActions = ({
   isAuthenticated,
   profileName,
+  profileAvatarUrl,
   profileAvatarAlt,
   hasAdministratedLyceum,
   administratedLyceumId,
@@ -38,6 +40,7 @@ export const TopNavDesktopActions = ({
       <>
         <TopNavProfileMenu
           profileName={profileName}
+          profileAvatarUrl={profileAvatarUrl}
           profileAvatarAlt={profileAvatarAlt}
           hasAdministratedLyceum={hasAdministratedLyceum}
           administratedLyceumId={administratedLyceumId}

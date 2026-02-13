@@ -6,6 +6,7 @@ import { useUserProfile } from '../../../../pages/Profile/hooks/useUserProfile'
 import { useLyceumLecturers } from '../../../../pages/Lyceums/hooks/useLyceumLecturers'
 import { useCourse } from '../../../../pages/Shkoli/hooks/useCourse'
 import { getUserDisplayName } from '../../../../utils/user'
+import { resolveUserImageUrl } from '../../../../utils/userImages'
 
 type UseTopNavDataOptions = {
   pathname: string
@@ -15,6 +16,7 @@ type UseTopNavDataOptions = {
 type TopNavData = {
   isAuthenticated: boolean
   profileName: string
+  profileAvatarUrl: string | null
   profileAvatarAlt: string
   isGlobalAdmin: boolean
   administratedLyceumId: number | null
@@ -101,6 +103,7 @@ export const useTopNavData = ({
 
   const profileName =
     getUserDisplayName(currentUser) || t('pages.profile.unknownUser')
+  const profileAvatarUrl = resolveUserImageUrl(currentUser?.profileImage)
   const profileAvatarAlt = t('nav.profileAvatarAlt', { name: profileName })
   const administratedLyceumLabel = administratedLyceum?.name
     ? administratedLyceum.name
@@ -113,6 +116,7 @@ export const useTopNavData = ({
   return {
     isAuthenticated,
     profileName,
+    profileAvatarUrl,
     profileAvatarAlt,
     isGlobalAdmin,
     administratedLyceumId,

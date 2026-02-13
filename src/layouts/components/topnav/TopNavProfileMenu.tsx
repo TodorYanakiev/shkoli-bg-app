@@ -6,6 +6,7 @@ import UserAvatar from '../../../components/ui/UserAvatar'
 
 type TopNavProfileMenuProps = {
   profileName: string
+  profileAvatarUrl: string | null
   profileAvatarAlt: string
   hasAdministratedLyceum: boolean
   administratedLyceumId: number | null
@@ -18,6 +19,7 @@ type TopNavProfileMenuProps = {
 
 export const TopNavProfileMenu = ({
   profileName,
+  profileAvatarUrl,
   profileAvatarAlt,
   hasAdministratedLyceum,
   administratedLyceumId,
@@ -66,7 +68,7 @@ export const TopNavProfileMenu = ({
         onClick={onToggle}
         className="inline-flex items-center gap-1 rounded-full border border-transparent bg-white pr-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       >
-        <UserAvatar alt={profileAvatarAlt} size="sm" />
+        <UserAvatar alt={profileAvatarAlt} src={profileAvatarUrl} size="sm" />
         <svg
           viewBox="0 0 20 20"
           aria-hidden="true"

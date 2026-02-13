@@ -20,6 +20,7 @@ type TopNavMobileMenuProps = {
   canEditLyceum: boolean
   canAddCourse: boolean
   canInviteLecturer: boolean
+  profileAvatarUrl: string | null
   profileAvatarAlt: string
   hasAdministratedLyceum: boolean
   administratedLyceumId: number | null
@@ -52,6 +53,7 @@ export const TopNavMobileMenu = ({
   canEditLyceum,
   canAddCourse,
   canInviteLecturer,
+  profileAvatarUrl,
   profileAvatarAlt,
   hasAdministratedLyceum,
   administratedLyceumId,
@@ -102,6 +104,7 @@ export const TopNavMobileMenu = ({
       ) : null}
       <TopNavMobileAuth
         isAuthenticated={isAuthenticated}
+        profileAvatarUrl={profileAvatarUrl}
         profileAvatarAlt={profileAvatarAlt}
         hasAdministratedLyceum={hasAdministratedLyceum}
         administratedLyceumId={administratedLyceumId}
