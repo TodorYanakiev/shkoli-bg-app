@@ -191,7 +191,7 @@ const ProfileSummaryCard = ({
                     type="button"
                     onClick={handleDeleteImage}
                     disabled={!canDelete}
-                    className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+                    className="inline-flex items-center justify-center rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-semibold text-rose-700 transition hover:border-rose-300 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isDeleting
                       ? t('pages.profile.image.actions.deleting')
