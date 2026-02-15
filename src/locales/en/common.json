@@ -908,8 +908,63 @@
       }
     },
     "map": {
-      "title": "Map",
-      "subtitle": "Explore courses on the map."
+      "title": "Community map",
+      "subtitle": "Explore verified community centers and their activities across Bulgaria.",
+      "filters": {
+        "searchPlaceholder": "Search by town, center name, or activity",
+        "townPlaceholder": "Filter by town",
+        "courseTypes": "Activities",
+        "ageGroups": "Age groups",
+        "dayOfWeek": "Schedule day",
+        "apply": "Apply filters",
+        "applying": "Applying...",
+        "clearAll": "Clear all",
+        "sort": {
+          "label": "Sort",
+          "options": {
+            "activities_desc": "Most activities",
+            "activities_asc": "Least activities",
+            "name_asc": "Name A-Z",
+            "name_desc": "Name Z-A"
+          }
+        }
+      },
+      "results": {
+        "summary": "Community centers: {{lyceums}} · Activities: {{activities}}",
+        "card": {
+          "imageAlt": "Image for {{name}}",
+          "noCategories": "No categories"
+        }
+      },
+      "states": {
+        "error": "We couldn't load map data right now.",
+        "empty": "No community centers match your current filters."
+      },
+      "details": {
+        "close": "Close details",
+        "noActivities": "No matching activities in this center.",
+        "activitiesCount": "Activities: {{count}}",
+        "openLyceum": "Open center page"
+      },
+      "activity": {
+        "monthlyDay": "Day {{day}}",
+        "ageUnknown": "Age group not specified",
+        "scheduleUnknown": "Schedule not specified",
+        "untitled": "Untitled activity"
+      },
+      "controls": {
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "locate": "Find my location",
+        "reset": "Reset view",
+        "locateUnsupported": "Location is not available in this browser.",
+        "locateError": "We couldn't access your location."
+      },
+      "mobile": {
+        "openFilters": "Filters",
+        "closeFilters": "Close filters"
+      },
+      "locationFallback": "Location unavailable"
     },
     "lyceums": {
       "title": "Lyceums",
