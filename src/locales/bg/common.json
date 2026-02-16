@@ -915,7 +915,9 @@
         "summary": "Показани читалища: {{lyceums}} · Дейности: {{activities}}",
         "card": {
           "imageAlt": "Снимка за {{name}}",
-          "noCategories": "Няма категории"
+          "noCategories": "Няма категории",
+          "ratingLabel": "Рейтинг {{rating}}/5",
+          "ratingEmpty": "Все още няма рейтинг"
         }
       },
       "states": {
@@ -926,7 +928,9 @@
         "close": "Затвори детайлите",
         "noActivities": "Няма съвпадащи дейности в това читалище.",
         "activitiesCount": "Дейности: {{count}}",
-        "openLyceum": "Към страницата"
+        "openLyceum": "Към страницата",
+        "ratingLabel": "{{rating}}/5",
+        "ratingEmpty": "Няма рейтинг"
       },
       "activity": {
         "monthlyDay": "Ден {{day}}",

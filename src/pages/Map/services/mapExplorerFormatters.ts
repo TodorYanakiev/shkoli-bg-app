@@ -11,6 +11,11 @@ const normalizeOptionalText = (value?: string | null) => {
   return trimmed && trimmed.length > 0 ? trimmed : null
 }
 
+export const formatMapAverageRating = (value: number) => {
+  const rounded = Math.round(value * 10) / 10
+  return Number.isInteger(rounded) ? rounded.toString() : rounded.toFixed(1)
+}
+
 const formatTime = (value?: string) => {
   if (!value) return null
   const trimmed = value.trim()

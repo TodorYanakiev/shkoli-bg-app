@@ -84,6 +84,7 @@ export type MapExplorerItem = {
   name: string
   town: string | null
   address: string | null
+  averageRating: number | null
   latitude: number
   longitude: number
   imageUrl: string | null

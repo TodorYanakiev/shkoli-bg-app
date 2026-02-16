@@ -933,7 +933,9 @@
         "summary": "Community centers: {{lyceums}} · Activities: {{activities}}",
         "card": {
           "imageAlt": "Image for {{name}}",
-          "noCategories": "No categories"
+          "noCategories": "No categories",
+          "ratingLabel": "Rating {{rating}}/5",
+          "ratingEmpty": "No rating yet"
         }
       },
       "states": {
@@ -944,7 +946,9 @@
         "close": "Close details",
         "noActivities": "No matching activities in this center.",
         "activitiesCount": "Activities: {{count}}",
-        "openLyceum": "Open center page"
+        "openLyceum": "Open center page",
+        "ratingLabel": "{{rating}}/5",
+        "ratingEmpty": "No rating"
       },
       "activity": {
         "monthlyDay": "Day {{day}}",

@@ -34,6 +34,16 @@ type UseMapExplorerDataResult = {
 const isFiniteNumber = (value: unknown): value is number =>
   typeof value === 'number' && Number.isFinite(value)
 
+const normalizeAverageRating = (
+  value: number | null | undefined,
+): number | null => {
+  if (!isFiniteNumber(value)) {
+    return null
+  }
+
+  return Math.min(Math.max(value, 0), 5)
+}
+
 const getLyceumCoursesMap = (courses: CourseResponse[]) => {
   const byLyceumId = new Map<number, CourseResponse[]>()
 
@@ -119,6 +129,7 @@ export const useMapExplorerData = ({
           name: lyceum.name?.trim() || `#${lyceumId}`,
           town: lyceum.town?.trim() || null,
           address: lyceum.address?.trim() || null,
+          averageRating: normalizeAverageRating(lyceum.averageRating),
           latitude: lyceum.latitude as number,
           longitude: lyceum.longitude as number,
           imageUrl: resolveLyceumImageUrl(mainImage),
