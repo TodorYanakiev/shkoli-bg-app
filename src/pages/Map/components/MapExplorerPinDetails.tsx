@@ -36,7 +36,7 @@ const MapExplorerPinDetails = ({
   return (
     <article
       style={style}
-      className="absolute z-[500] w-[min(22rem,calc(100%-2rem))] rounded-3xl bg-white/95 p-4 shadow-[0_28px_50px_-25px_rgba(15,23,42,0.45)] backdrop-blur"
+      className="absolute z-[500] flex max-h-[min(520px,calc(100%-2rem))] w-[min(22rem,calc(100%-2rem))] flex-col rounded-3xl bg-white/95 p-4 shadow-[0_28px_50px_-25px_rgba(15,23,42,0.45)] backdrop-blur"
     >
       <div className="mb-3 flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -101,7 +101,7 @@ const MapExplorerPinDetails = ({
         )}
       </div>
 
-      <div className="max-h-48 space-y-2 overflow-y-auto pr-1">
+      <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
         {visibleActivities.length > 0 ? (
           visibleActivities.map((activity) => (
             <div

@@ -16,6 +16,7 @@ const BULGARIA_BOUNDS = L.latLngBounds(
   [41.2, 22.2],
   [44.3, 28.8],
 )
+const DETAILS_CARD_MAX_HEIGHT = 520
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max)
@@ -107,8 +108,16 @@ export const useMapExplorerLeaflet = ({
 
     const point = map.latLngToContainerPoint(marker.getLatLng())
     const maxWidth = Math.min(352, container.clientWidth - 32)
+    const maxHeight = Math.min(
+      DETAILS_CARD_MAX_HEIGHT,
+      container.clientHeight - 32,
+    )
     const left = clamp(point.x + 18, 16, container.clientWidth - maxWidth - 16)
-    const top = clamp(point.y - 24, 16, container.clientHeight - 260)
+    const top = clamp(
+      point.y - 24,
+      16,
+      container.clientHeight - maxHeight - 16,
+    )
 
     setDetailsStyle({ left, top })
   }, [selectedLyceumId])
