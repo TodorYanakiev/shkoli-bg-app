@@ -4,6 +4,7 @@ import type {
   CurrentUser,
   PageUserResponse,
   UsersPageQuery,
+  UserRoleUpdateRequest,
   UserImageRequest,
   UserImageResponse,
   UserResponse,
@@ -25,6 +26,17 @@ export const changePassword = async (payload: ChangePasswordRequest) => {
 
 export const updateUser = async (userId: number, payload: UserUpdateRequest) => {
   const response = await httpClient.put<UserResponse>(`/api/v1/users/${userId}`, payload)
+  return response.data
+}
+
+export const updateUserRole = async (
+  userId: number,
+  payload: UserRoleUpdateRequest,
+) => {
+  const response = await httpClient.patch<UserResponse>(
+    `/api/v1/users/${userId}/role`,
+    payload,
+  )
   return response.data
 }
 

@@ -34,8 +34,10 @@ export type UserIdentity = {
   profileImage?: UserImageResponse
 }
 
+export type UserRole = 'USER' | 'ADMIN'
+
 export type CurrentUser = UserIdentity & {
-  role?: 'USER' | 'ADMIN'
+  role?: UserRole
   administratedLyceumId?: number
   lecturedCourseIds?: number[]
   lecturedLyceumIds?: number[]
@@ -44,7 +46,7 @@ export type CurrentUser = UserIdentity & {
 }
 
 export type UserResponse = UserIdentity & {
-  role?: 'USER' | 'ADMIN'
+  role?: UserRole
   administratedLyceumId?: number
   lecturedCourseIds?: number[]
   lecturedLyceumIds?: number[]
@@ -81,4 +83,8 @@ export type UserUpdateRequest = {
   email: string
   username: string
   description?: string
+}
+
+export type UserRoleUpdateRequest = {
+  role: UserRole
 }
