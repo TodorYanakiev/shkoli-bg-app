@@ -52,7 +52,14 @@ export const AdminUsersGrid = ({
   pagination,
 }: AdminUsersGridProps) => {
   const { t } = useTranslation()
-  const { onUpdate, onDelete, isUpdating, isDeleting } = useAdminUserActions()
+  const {
+    onUpdate,
+    onDelete,
+    onDeleteProfileImage,
+    isUpdating,
+    isDeleting,
+    isDeletingProfileImage,
+  } = useAdminUserActions()
   const [editTarget, setEditTarget] = useState<UserResponse | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<{
     id: number
@@ -60,6 +67,9 @@ export const AdminUsersGrid = ({
   } | null>(null)
 
   const isEditSubmitting = editTarget ? isUpdating(editTarget.id) : false
+  const isEditImageDeleting = editTarget
+    ? isDeletingProfileImage(editTarget.id)
+    : false
   const isDeleteSubmitting = deleteTarget
     ? isDeleting(deleteTarget.id)
     : false
@@ -136,6 +146,7 @@ export const AdminUsersGrid = ({
         isOpen={Boolean(editTarget)}
         user={editTarget}
         isSubmitting={isEditSubmitting}
+        isImageDeleting={isEditImageDeleting}
         onCancel={() => setEditTarget(null)}
         onConfirm={async (payload) => {
           const result = await onUpdate(payload)
@@ -144,6 +155,7 @@ export const AdminUsersGrid = ({
           }
           return result
         }}
+        onDeleteProfileImage={onDeleteProfileImage}
       />
       <AdminUserDeleteModal
         isOpen={Boolean(deleteTarget)}

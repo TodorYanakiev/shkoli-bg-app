@@ -1,7 +1,7 @@
 import type { ApiError } from '../../../types/api'
-import type { UserUpdateRequest } from '../../../types/users'
+import type { UserRole, UserUpdateRequest } from '../../../types/users'
 
-export type AdminUserRoleFilter = '' | 'USER' | 'ADMIN'
+export type AdminUserRoleFilter = '' | UserRole
 
 export type AdminUsersFilterState = {
   search: string
@@ -38,4 +38,6 @@ export type AdminUserUpdateResult = {
 export type AdminUserUpdatePayload = {
   userId: number
   payload: UserUpdateRequest
+  role: UserRole
+  currentRole?: UserRole
 }

@@ -15,9 +15,11 @@ type AdminUserEditModalProps = {
   isOpen: boolean
   user: UserResponse | null
   isSubmitting: boolean
+  isImageDeleting: boolean
   onConfirm: (
     payload: AdminUserUpdatePayload,
   ) => Promise<AdminUserUpdateResult>
+  onDeleteProfileImage: (userId?: number) => Promise<boolean>
   onCancel: () => void
 }
 
@@ -25,11 +27,14 @@ export const AdminUserEditModal = ({
   isOpen,
   user,
   isSubmitting,
+  isImageDeleting,
   onConfirm,
+  onDeleteProfileImage,
   onCancel,
 }: AdminUserEditModalProps) => {
   const { t } = useTranslation()
   const [submitError, setSubmitError] = useState<AppError | null>(null)
+  const [isProfileImageRemoved, setIsProfileImageRemoved] = useState(false)
   const {
     register,
     handleSubmit,
@@ -43,16 +48,18 @@ export const AdminUserEditModal = ({
   })
 
   const handleCancel = useCallback(() => {
-    if (isSubmitting) return
+    if (isSubmitting || isImageDeleting) return
     setSubmitError(null)
     onCancel()
-  }, [isSubmitting, onCancel])
+  }, [isImageDeleting, isSubmitting, onCancel])
 
   useEffect(() => {
     if (!isOpen) {
       setSubmitError(null)
+      setIsProfileImageRemoved(false)
       return
     }
+    setIsProfileImageRemoved(false)
     if (typeof document === 'undefined') return
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -75,6 +82,8 @@ export const AdminUserEditModal = ({
   const titleId = 'admin-user-edit-title'
   const descriptionId = 'admin-user-edit-description'
   const userId = user.id
+  const profileImage =
+    isProfileImageRemoved ? undefined : user.profileImage
 
   const onSubmit = handleSubmit(async (values) => {
     if (!userId || isSubmitting) return
@@ -90,6 +99,8 @@ export const AdminUserEditModal = ({
         email: values.email.trim(),
         description: values.description?.trim() ?? '',
       },
+      role: values.role,
+      currentRole: user.role ?? 'USER',
     })
 
     if (result.ok) {
@@ -152,6 +163,43 @@ export const AdminUserEditModal = ({
           </p>
 
           <form onSubmit={onSubmit} className="mt-4 space-y-3">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {t('pages.admin.users.editModal.profileImage.label')}
+                </p>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!profileImage) return
+                    const deleted = await onDeleteProfileImage(userId)
+                    if (deleted) {
+                      setIsProfileImageRemoved(true)
+                    }
+                  }}
+                  disabled={!profileImage || isSubmitting || isImageDeleting}
+                  className="inline-flex items-center justify-center rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-[11px] font-semibold text-rose-700 transition hover:border-rose-300 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isImageDeleting
+                    ? t('pages.admin.users.editModal.profileImage.removing')
+                    : t('pages.admin.users.editModal.profileImage.remove')}
+                </button>
+              </div>
+              {profileImage?.url ? (
+                <img
+                  src={profileImage.url}
+                  alt={t('pages.admin.users.editModal.profileImage.alt', {
+                    name: user.username ?? t('pages.profile.unknownUser'),
+                  })}
+                  className="mt-3 h-20 w-20 rounded-xl border border-slate-200 object-cover"
+                />
+              ) : (
+                <p className="mt-3 text-xs text-slate-500">
+                  {t('pages.admin.users.editModal.profileImage.empty')}
+                </p>
+              )}
+            </div>
+
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="space-y-1 text-sm text-slate-700">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -248,6 +296,31 @@ export const AdminUserEditModal = ({
 
             <label className="space-y-1 text-sm text-slate-700">
               <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                {t('pages.admin.users.editModal.fields.role')}
+              </span>
+              <select
+                {...register('role')}
+                disabled={isSubmitting}
+                className={[
+                  'h-11 w-full rounded-xl border px-3 text-sm text-slate-900 outline-none transition',
+                  'focus:border-brand/60 focus:ring-2 focus:ring-brand/20',
+                  errors.role
+                    ? 'border-rose-300 bg-rose-50/30'
+                    : 'border-slate-300 bg-white',
+                ].join(' ')}
+              >
+                <option value="USER">{t('pages.admin.users.role.USER')}</option>
+                <option value="ADMIN">{t('pages.admin.users.role.ADMIN')}</option>
+              </select>
+              {errors.role ? (
+                <p className="text-xs text-rose-600" role="alert">
+                  {errors.role.message}
+                </p>
+              ) : null}
+            </label>
+
+            <label className="space-y-1 text-sm text-slate-700">
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 {t('pages.admin.users.editModal.fields.description')}
               </span>
               <textarea
@@ -303,4 +376,3 @@ export const AdminUserEditModal = ({
     </div>
   )
 }
-

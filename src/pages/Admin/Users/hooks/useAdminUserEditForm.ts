@@ -29,6 +29,7 @@ export const useAdminUserEditForm = ({
       lastname: '',
       username: '',
       email: '',
+      role: 'USER',
       description: '',
     },
   })
@@ -42,6 +43,7 @@ export const useAdminUserEditForm = ({
         lastname: '',
         username: '',
         email: '',
+        role: 'USER',
         description: '',
       })
       return
@@ -52,10 +54,10 @@ export const useAdminUserEditForm = ({
       lastname: user?.lastname ?? user?.lastName ?? '',
       username: user?.username ?? '',
       email: user?.email ?? '',
+      role: user?.role ?? 'USER',
       description: user?.description ?? '',
     })
   }, [isOpen, reset, user])
 
   return form
 }
-

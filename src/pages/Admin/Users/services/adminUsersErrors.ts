@@ -58,6 +58,11 @@ export const getAdminUsersLoadError = (error: ApiError | null) =>
 export const getAdminUsersDeleteError = (error: ApiError | null) =>
   error ? mapApiError(error, 'errors.users.deleteFailed') : null
 
+export const getAdminUsersImageDeleteError = (
+  error: ApiError | null,
+) =>
+  error ? mapApiError(error, 'errors.users.imageDeleteFailed') : null
+
 export const getAdminUsersUpdateError = (error: ApiError | null) => {
   if (!error) return null
   if (error.status === 409) {
@@ -74,4 +79,3 @@ export const getAdminUsersUpdateError = (error: ApiError | null) => {
   }
   return mapApiError(error, 'errors.users.updateFailed')
 }
-

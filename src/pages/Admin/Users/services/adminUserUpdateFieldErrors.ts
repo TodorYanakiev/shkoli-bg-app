@@ -13,6 +13,7 @@ const updateFormFieldByApiField: Partial<
   lastName: 'lastname',
   username: 'username',
   email: 'email',
+  role: 'role',
   description: 'description',
 }
 
@@ -57,6 +58,10 @@ const getFieldValidationMessageKey = (
 
   if (field === 'description' && normalizedMessage.includes('500')) {
     return 'validation.descriptionMax'
+  }
+
+  if (field === 'role') {
+    return 'validation.invalidOption'
   }
 
   return null
@@ -111,4 +116,3 @@ export const applyAdminUserUpdateFieldErrors = ({
 
   return hasMappedFieldError
 }
-
