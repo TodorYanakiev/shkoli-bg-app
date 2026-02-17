@@ -10,7 +10,7 @@ import type { CSSProperties } from 'react'
 import L from 'leaflet'
 import 'leaflet.markercluster'
 
-import type { MapExplorerItem } from '../types'
+import type { MapExplorerItem, MapUserLocation } from '../types'
 
 const BULGARIA_BOUNDS = L.latLngBounds(
   [41.2, 22.2],
@@ -50,20 +50,36 @@ const createClusterIcon = (count: number) =>
     iconAnchor: [26, 26],
   })
 
+const createUserLocationIcon = () =>
+  L.divIcon({
+    className: 'map-explorer-user-location-wrapper',
+    html: `
+      <span class="map-explorer-user-location">
+        <span class="map-explorer-user-location-dot"></span>
+      </span>
+    `,
+    iconSize: [26, 26],
+    iconAnchor: [13, 13],
+  })
+
 type UseMapExplorerLeafletOptions = {
   items: MapExplorerItem[]
   selectedLyceumId: number | null
   hoveredLyceumId: number | null
   onSelectLyceum: (lyceumId: number | null) => void
   onHoverLyceum: (lyceumId: number | null) => void
+  initialViewLocation: MapUserLocation | null
+  userLocation: MapUserLocation | null
+  disableAutoFit: boolean
+  requestUserLocation: () => Promise<MapUserLocation | null>
+  isPickingLocation: boolean
+  onPickLocation: (location: MapUserLocation) => void
 }
 
 type UseMapExplorerLeafletResult = {
   mapContainerRef: MutableRefObject<HTMLDivElement | null>
   selectedItem: MapExplorerItem | null
   detailsStyle: CSSProperties | null
-  isLocating: boolean
-  locateErrorKey: string | null
   onZoomIn: () => void
   onZoomOut: () => void
   onLocateMe: () => void
@@ -76,15 +92,25 @@ export const useMapExplorerLeaflet = ({
   hoveredLyceumId,
   onSelectLyceum,
   onHoverLyceum,
+  initialViewLocation,
+  userLocation,
+  disableAutoFit,
+  requestUserLocation,
+  isPickingLocation,
+  onPickLocation,
 }: UseMapExplorerLeafletOptions): UseMapExplorerLeafletResult => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<L.Map | null>(null)
   const clusterRef = useRef<L.MarkerClusterGroup | null>(null)
   const markersRef = useRef(new Map<number, L.Marker>())
+  const userLocationMarkerRef = useRef<L.Marker | null>(null)
   const markerCountRef = useRef(new WeakMap<L.Marker, number>())
   const selectedLyceumIdRef = useRef<number | null>(selectedLyceumId)
-  const [isLocating, setIsLocating] = useState(false)
-  const [locateErrorKey, setLocateErrorKey] = useState<string | null>(null)
+  const isPickingLocationRef = useRef(isPickingLocation)
+  const onPickLocationRef = useRef(onPickLocation)
+  const onSelectLyceumRef = useRef(onSelectLyceum)
+  const initialViewLocationRef = useRef(initialViewLocation)
+  const preserveViewportRef = useRef(false)
   const [detailsStyle, setDetailsStyle] = useState<CSSProperties | null>(null)
 
   const selectedItem = useMemo(
@@ -128,6 +154,18 @@ export const useMapExplorerLeaflet = ({
   }, [selectedLyceumId])
 
   useEffect(() => {
+    isPickingLocationRef.current = isPickingLocation
+  }, [isPickingLocation])
+
+  useEffect(() => {
+    onPickLocationRef.current = onPickLocation
+  }, [onPickLocation])
+
+  useEffect(() => {
+    onSelectLyceumRef.current = onSelectLyceum
+  }, [onSelectLyceum])
+
+  useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) {
       return
     }
@@ -161,7 +199,29 @@ export const useMapExplorerLeaflet = ({
 
     map.addLayer(clusterGroup)
     map.fitBounds(BULGARIA_BOUNDS, { padding: [24, 24] })
-    map.on('click', () => onSelectLyceum(null))
+    if (initialViewLocationRef.current) {
+      preserveViewportRef.current = true
+      map.setView(
+        [
+          initialViewLocationRef.current.latitude,
+          initialViewLocationRef.current.longitude,
+        ],
+        11,
+      )
+    }
+    map.on('click', (event: L.LeafletMouseEvent) => {
+      onSelectLyceumRef.current(null)
+
+      if (!isPickingLocationRef.current) {
+        return
+      }
+
+      preserveViewportRef.current = true
+      onPickLocationRef.current({
+        latitude: event.latlng.lat,
+        longitude: event.latlng.lng,
+      })
+    })
 
     mapRef.current = map
     clusterRef.current = clusterGroup
@@ -170,8 +230,9 @@ export const useMapExplorerLeaflet = ({
       map.remove()
       mapRef.current = null
       clusterRef.current = null
+      userLocationMarkerRef.current = null
     }
-  }, [onSelectLyceum])
+  }, [])
 
   useEffect(() => {
     const map = mapRef.current
@@ -192,21 +253,61 @@ export const useMapExplorerLeaflet = ({
 
       marker.on('mouseover', () => onHoverLyceum(item.lyceumId))
       marker.on('mouseout', () => onHoverLyceum(null))
-      marker.on('click', () => onSelectLyceum(item.lyceumId))
+      marker.on('click', (event) => {
+        L.DomEvent.stopPropagation(event)
+        onSelectLyceum(item.lyceumId)
+      })
 
       cluster.addLayer(marker)
     })
+
+  }, [items, onHoverLyceum, onSelectLyceum])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+
+    if (!userLocation) {
+      const existingMarker = userLocationMarkerRef.current
+      if (existingMarker) {
+        map.removeLayer(existingMarker)
+        userLocationMarkerRef.current = null
+      }
+      return
+    }
+
+    const latLng = L.latLng(userLocation.latitude, userLocation.longitude)
+
+    if (!userLocationMarkerRef.current) {
+      userLocationMarkerRef.current = L.marker(latLng, {
+        icon: createUserLocationIcon(),
+        interactive: false,
+        keyboard: false,
+        zIndexOffset: 20_000,
+      }).addTo(map)
+      return
+    }
+
+    userLocationMarkerRef.current.setLatLng(latLng)
+  }, [userLocation])
+
+  useEffect(() => {
+    const map = mapRef.current
+    const cluster = clusterRef.current
+    if (!map || !cluster) return
+
+    if (disableAutoFit) {
+      return
+    }
+
+    if (preserveViewportRef.current) {
+      return
+    }
 
     if (items.length === 0) {
       map.fitBounds(BULGARIA_BOUNDS, { padding: [24, 24] })
       return
     }
-  }, [items, onHoverLyceum, onSelectLyceum])
-
-  useEffect(() => {
-    const map = mapRef.current
-    const cluster = clusterRef.current
-    if (!map || !cluster || items.length === 0) return
 
     if (selectedLyceumIdRef.current != null) {
       return
@@ -216,7 +317,7 @@ export const useMapExplorerLeaflet = ({
       padding: [36, 36],
       maxZoom: 10,
     })
-  }, [items])
+  }, [disableAutoFit, items])
 
   useEffect(() => {
     markersRef.current.forEach((marker, lyceumId) => {
@@ -261,42 +362,33 @@ export const useMapExplorerLeaflet = ({
 
   const onZoomIn = () => mapRef.current?.zoomIn()
   const onZoomOut = () => mapRef.current?.zoomOut()
-  const onResetView = () => mapRef.current?.fitBounds(BULGARIA_BOUNDS)
+  const onResetView = () => {
+    preserveViewportRef.current = false
+    mapRef.current?.fitBounds(BULGARIA_BOUNDS)
+  }
 
   const onLocateMe = () => {
     const map = mapRef.current
-    if (!map || !navigator.geolocation) {
-      setLocateErrorKey('pages.map.controls.locateUnsupported')
+    if (!map) {
       return
     }
 
-    setLocateErrorKey(null)
-    setIsLocating(true)
+    void requestUserLocation().then((location) => {
+      if (!location) {
+        return
+      }
 
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        setIsLocating(false)
-        map.flyTo([coords.latitude, coords.longitude], 12, {
-          duration: 0.5,
-        })
-      },
-      () => {
-        setIsLocating(false)
-        setLocateErrorKey('pages.map.controls.locateError')
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 8000,
-      },
-    )
+      preserveViewportRef.current = true
+      map.flyTo([location.latitude, location.longitude], 12, {
+        duration: 0.5,
+      })
+    })
   }
 
   return {
     mapContainerRef,
     selectedItem,
     detailsStyle,
-    isLocating,
-    locateErrorKey,
     onZoomIn,
     onZoomOut,
     onLocateMe,

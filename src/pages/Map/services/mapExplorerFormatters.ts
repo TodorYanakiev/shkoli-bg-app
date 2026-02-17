@@ -16,6 +16,27 @@ export const formatMapAverageRating = (value: number) => {
   return Number.isInteger(rounded) ? rounded.toString() : rounded.toFixed(1)
 }
 
+export const formatMapDistance = (
+  valueKm: number,
+  locale: string,
+) => {
+  if (!Number.isFinite(valueKm) || valueKm < 0) {
+    return null
+  }
+
+  if (valueKm < 1) {
+    const meters = Math.max(1, Math.round(valueKm * 1000))
+    return `${meters} m`
+  }
+
+  const formatted = new Intl.NumberFormat(locale, {
+    minimumFractionDigits: valueKm < 10 ? 1 : 0,
+    maximumFractionDigits: valueKm < 10 ? 1 : 0,
+  }).format(valueKm)
+
+  return `${formatted} km`
+}
+
 const formatTime = (value?: string) => {
   if (!value) return null
   const trimmed = value.trim()

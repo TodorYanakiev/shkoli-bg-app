@@ -929,6 +929,29 @@
           }
         }
       },
+      "locationSort": {
+        "default": "Top activities",
+        "closest": "Closest to me",
+        "active": "Showing nearest community centers.",
+        "activeArea": "Showing nearest results to the current map area.",
+        "needsLocation": "Allow location or pick a point on the map.",
+        "locating": "Getting your location...",
+        "pickOnMap": "Pick on map",
+        "pickOnMapHint": "Click on the map to set your location.",
+        "sortedByNearest": "Sorted by nearest",
+        "useMyLocation": "My location",
+        "searchArea": "Search this area",
+        "radiusLabel": "Radius",
+        "radiusAny": "Any",
+        "radiusChip": "{{radius}} km",
+        "changeLocation": "Change location",
+        "source": {
+          "gps": "GPS",
+          "manual": "Picked point",
+          "mapCenter": "Map area",
+          "unknown": "No source"
+        }
+      },
       "results": {
         "summary": "Community centers: {{lyceums}} · Activities: {{activities}}",
         "card": {
@@ -969,6 +992,11 @@
         "reset": "Reset view",
         "locateUnsupported": "Location is not available in this browser.",
         "locateError": "We couldn't access your location."
+      },
+      "locationPicker": {
+        "active": "Click on the map to set your location.",
+        "cancel": "Cancel",
+        "pickFallback": "Location denied. Pick a point on the map."
       },
       "mobile": {
         "openFilters": "Filters",

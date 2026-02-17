@@ -4,8 +4,11 @@ import type { UseFormReturn } from 'react-hook-form'
 
 import type { CourseAgeGroup, CourseScheduleDayOfWeek, CourseType } from '../../../types/courses'
 import type { CourseFilterFormValues } from '../../Shkoli/validations/courseFilterSchema'
+import { CoursePriceRangeSlider } from '../../Shkoli/components/CoursePriceRangeSlider'
 import CourseFilterAgeGroupToggle from '../../Shkoli/components/filters/CourseFilterAgeGroupToggle'
-import CourseFilterExpandedSection from '../../Shkoli/components/filters/CourseFilterExpandedSection'
+import CourseFilterDaySelect from '../../Shkoli/components/filters/CourseFilterDaySelect'
+import CourseFilterSortSelect from '../../Shkoli/components/filters/CourseFilterSortSelect'
+import CourseFilterTownSelect from '../../Shkoli/components/filters/CourseFilterTownSelect'
 import CourseFilterTypeSelect from '../../Shkoli/components/filters/CourseFilterTypeSelect'
 import { CourseFilterChips } from '../../Shkoli/components/CourseFilterChips'
 
@@ -46,7 +49,11 @@ const MapExplorerAdvancedFiltersModal = ({
   locale,
   t,
 }: MapExplorerAdvancedFiltersModalProps) => {
-  const { control } = form
+  const {
+    control,
+    register,
+    formState: { errors },
+  } = form
   const [closeSignal, setCloseSignal] = useState(0)
 
   if (!isOpen) {
@@ -109,12 +116,35 @@ const MapExplorerAdvancedFiltersModal = ({
             <CourseFilterAgeGroupToggle control={control} t={t} />
           </div>
 
-          <CourseFilterExpandedSection
-            form={form}
-            locale={locale}
-            t={t}
-            closeSignal={closeSignal}
-          />
+          <div className="mt-4 grid gap-3 lg:grid-cols-[0.9fr_1.25fr_0.85fr]">
+            <CourseFilterTownSelect
+              control={control}
+              t={t}
+              closeSignal={closeSignal}
+            />
+            <CourseFilterDaySelect
+              control={control}
+              register={register}
+              errors={errors}
+              locale={locale}
+              t={t}
+              closeSignal={closeSignal}
+            />
+            <CourseFilterSortSelect
+              control={control}
+              t={t}
+              closeSignal={closeSignal}
+            />
+          </div>
+
+          <div className="mt-3 max-w-[360px]">
+            <CoursePriceRangeSlider
+              control={control}
+              errors={errors}
+              locale={locale}
+              t={t}
+            />
+          </div>
 
           <div className="mt-4">
             <CourseFilterChips

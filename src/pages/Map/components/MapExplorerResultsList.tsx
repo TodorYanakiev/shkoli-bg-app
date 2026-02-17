@@ -13,6 +13,7 @@ type MapExplorerResultsListProps = {
   hoveredLyceumId: number | null
   onHoverLyceum: (lyceumId: number | null) => void
   onSelectLyceum: (lyceumId: number) => void
+  locale: string
   t: TFunction
 }
 
@@ -37,6 +38,7 @@ const MapExplorerResultsList = ({
   hoveredLyceumId,
   onHoverLyceum,
   onSelectLyceum,
+  locale,
   t,
 }: MapExplorerResultsListProps) => {
   const [currentPage, setCurrentPage] = useState(1)
@@ -65,10 +67,10 @@ const MapExplorerResultsList = ({
     }
 
     const selectedPage = Math.floor(selectedIndex / MAP_RESULTS_PAGE_SIZE) + 1
-    if (selectedPage !== currentPage) {
-      setCurrentPage(selectedPage)
-    }
-  }, [selectedLyceumId, items, currentPage])
+    setCurrentPage((previousPage) =>
+      previousPage === selectedPage ? previousPage : selectedPage,
+    )
+  }, [selectedLyceumId, items])
 
   if (isLoading) {
     return <MapExplorerListSkeleton />
@@ -109,6 +111,7 @@ const MapExplorerResultsList = ({
             isSelected={item.lyceumId === selectedLyceumId}
             onHoverChange={onHoverLyceum}
             onSelect={onSelectLyceum}
+            locale={locale}
             t={t}
           />
         ))}

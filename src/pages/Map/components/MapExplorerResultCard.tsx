@@ -1,6 +1,7 @@
 import type { MapExplorerItem } from '../types'
 import {
   formatMapAverageRating,
+  formatMapDistance,
   getMapLyceumLocation,
 } from '../services/mapExplorerFormatters'
 import type { TFunction } from 'i18next'
@@ -11,6 +12,7 @@ type MapExplorerResultCardProps = {
   isSelected: boolean
   onHoverChange: (lyceumId: number | null) => void
   onSelect: (lyceumId: number) => void
+  locale: string
   t: TFunction
 }
 
@@ -20,9 +22,14 @@ const MapExplorerResultCard = ({
   isSelected,
   onHoverChange,
   onSelect,
+  locale,
   t,
 }: MapExplorerResultCardProps) => {
   const locationLabel = getMapLyceumLocation(item, t)
+  const distanceLabel =
+    item.distanceKm != null
+      ? formatMapDistance(item.distanceKm, locale)
+      : null
   const visibleCategories = item.categories.slice(0, 2)
   const hiddenCategoriesCount = Math.max(item.categories.length - 2, 0)
   const averageRatingLabel =
@@ -80,6 +87,11 @@ const MapExplorerResultCard = ({
             </svg>
             <span>{averageRatingLabel}</span>
           </span>
+          {distanceLabel ? (
+            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+              {distanceLabel}
+            </span>
+          ) : null}
 
           {item.categories.length > 0 ? (
             visibleCategories.map((category) => (

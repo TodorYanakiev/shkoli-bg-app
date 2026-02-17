@@ -30,6 +30,10 @@ type MapExplorerPanelProps = {
   onSearchValueChange: (value: string) => void
   onApplySearch: () => void
   filtersState: MapFilterState
+  showUseCurrentLocation: boolean
+  isLocating: boolean
+  onUseCurrentLocation: () => void
+  onPickLocationOnMap: () => void
   t: TFunction
 }
 
@@ -51,6 +55,10 @@ const MapExplorerPanel = ({
   onSearchValueChange,
   onApplySearch,
   filtersState,
+  showUseCurrentLocation,
+  isLocating,
+  onUseCurrentLocation,
+  onPickLocationOnMap,
   t,
 }: MapExplorerPanelProps) => {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false)
@@ -68,6 +76,10 @@ const MapExplorerPanel = ({
     if (filtersState.courseSort) count += 1
     return count
   }, [filtersState])
+
+  const hasPickedLocation =
+    filtersState.referenceLatitude != null &&
+    filtersState.referenceLongitude != null
 
   return (
     <aside className="relative flex h-full min-h-0 w-full flex-col bg-gradient-to-b from-[#edf4ef] via-[#f3f6f3] to-[#eef3ef] px-3 pb-4 pt-4 sm:px-4 lg:w-[min(420px,34vw)] lg:min-w-[360px]">
@@ -129,6 +141,36 @@ const MapExplorerPanel = ({
           </button>
         </div>
 
+        <div
+          className={`mt-2 grid gap-2 ${
+            showUseCurrentLocation ? 'grid-cols-2' : 'grid-cols-1'
+          }`}
+        >
+          {showUseCurrentLocation ? (
+            <button
+              type="button"
+              onClick={onUseCurrentLocation}
+              disabled={isLocating}
+              className="rounded-xl border border-emerald-600 bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_-16px_rgba(6,95,70,0.85)] transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {isLocating
+                ? t('pages.map.locationSort.locating')
+                : t('pages.map.locationSort.useMyLocation')}
+            </button>
+          ) : null}
+          <button
+            type="button"
+            onClick={onPickLocationOnMap}
+            className="rounded-xl border border-emerald-200 bg-white px-3 py-2 text-sm font-semibold text-emerald-800 transition hover:border-emerald-300"
+          >
+            {t(
+              hasPickedLocation
+                ? 'pages.map.locationSort.changeLocation'
+                : 'pages.map.locationSort.pickOnMap',
+            )}
+          </button>
+        </div>
+
         {activeFiltersCount > 0 ? (
           <div className="mt-2 flex justify-end">
             <button
@@ -158,6 +200,7 @@ const MapExplorerPanel = ({
           hoveredLyceumId={hoveredLyceumId}
           onHoverLyceum={onHoverLyceum}
           onSelectLyceum={onSelectLyceum}
+          locale={locale}
           t={t}
         />
       </div>

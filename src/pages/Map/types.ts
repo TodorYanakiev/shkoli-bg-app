@@ -7,9 +7,18 @@ import type {
 import type { LyceumResponse } from '../../types/lyceums'
 import type { CourseSortKey } from '../Shkoli/types'
 
+export type MapLyceumSortKey = 'default' | 'closest'
+export type MapLocationSource = 'gps' | 'manual' | 'mapCenter'
+export type MapDistanceRadiusKm = 1 | 3 | 5 | 10
+
 export type MapFilterState = {
   search: string
   town: string
+  lyceumSort: MapLyceumSortKey
+  locationSource?: MapLocationSource
+  referenceLatitude?: number
+  referenceLongitude?: number
+  distanceRadiusKm?: MapDistanceRadiusKm
   courseTypes?: CourseType[]
   ageGroups?: CourseAgeGroup[]
   dayOfWeek?: CourseScheduleDayOfWeek[]
@@ -22,6 +31,8 @@ export type MapFilterState = {
 
 export type MapLyceumFilterQuery = {
   town?: string
+  latitude?: number
+  longitude?: number
 }
 
 export type MapCourseFilterQuery = {
@@ -89,10 +100,16 @@ export type MapExplorerItem = {
   longitude: number
   imageUrl: string | null
   imageAlt: string | null
+  distanceKm: number | null
   activityCount: number
   categories: CourseType[]
   activities: CourseResponse[]
   lyceum: LyceumResponse
+}
+
+export type MapUserLocation = {
+  latitude: number
+  longitude: number
 }
 
 export type MapExplorerSummary = {

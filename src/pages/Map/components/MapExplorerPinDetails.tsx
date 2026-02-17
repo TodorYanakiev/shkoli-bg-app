@@ -6,6 +6,7 @@ import {
   getActivityAgeGroupLabel,
   getCourseName,
   formatMapAverageRating,
+  formatMapDistance,
   getMapLyceumLocation,
 } from '../services/mapExplorerFormatters'
 import type { MapExplorerItem } from '../types'
@@ -13,6 +14,7 @@ import type { MapExplorerItem } from '../types'
 type MapExplorerPinDetailsProps = {
   item: MapExplorerItem
   style: CSSProperties
+  locale: string
   t: TFunction
   onClose: () => void
 }
@@ -25,12 +27,17 @@ const hasImage = (value: string | null) => {
 const MapExplorerPinDetails = ({
   item,
   style,
+  locale,
   t,
   onClose,
 }: MapExplorerPinDetailsProps) => {
   const [isImageVisible, setIsImageVisible] = useState(hasImage(item.imageUrl))
   const locationLabel = getMapLyceumLocation(item, t)
   const visibleActivities = item.activities
+  const distanceLabel =
+    item.distanceKm != null
+      ? formatMapDistance(item.distanceKm, locale)
+      : null
 
   const averageRatingLabel =
     item.averageRating != null
@@ -38,6 +45,34 @@ const MapExplorerPinDetails = ({
           rating: formatMapAverageRating(item.averageRating),
         })
       : t('pages.map.details.ratingEmpty')
+
+  const ratingBadge = (
+    <span
+      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-semibold shadow-sm backdrop-blur ${
+        item.averageRating != null
+          ? 'bg-amber-50/95 text-amber-700'
+          : 'bg-white/90 text-slate-600'
+      }`}
+    >
+      <svg
+        viewBox="0 0 20 20"
+        className={`h-3.5 w-3.5 ${
+          item.averageRating != null ? 'text-amber-500' : 'text-slate-400'
+        }`}
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M10 1.6l2.46 4.96 5.48.8-3.97 3.86.94 5.46L10 14.86l-4.9 2.57.93-5.46L2.06 7.36l5.48-.8L10 1.6z" />
+      </svg>
+      <span>{averageRatingLabel}</span>
+    </span>
+  )
+
+  const distanceBadge = distanceLabel ? (
+    <span className="inline-flex items-center rounded-full bg-emerald-50/95 px-2 py-1 text-[11px] font-semibold text-emerald-700 shadow-sm backdrop-blur">
+      {distanceLabel}
+    </span>
+  ) : null
 
   useEffect(() => {
     setIsImageVisible(hasImage(item.imageUrl))
@@ -48,46 +83,30 @@ const MapExplorerPinDetails = ({
       style={style}
       className="absolute z-[500] flex max-h-[min(520px,calc(100%-2rem))] w-[min(22rem,calc(100%-2rem))] flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/95 shadow-[0_28px_50px_-25px_rgba(15,23,42,0.45)] backdrop-blur"
     >
-      <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
-        <span
-          className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-semibold shadow-sm backdrop-blur ${
-            item.averageRating != null
-              ? 'bg-amber-50/95 text-amber-700'
-              : 'bg-white/90 text-slate-600'
-          }`}
-        >
-          <svg
-            viewBox="0 0 20 20"
-            className={`h-3.5 w-3.5 ${
-              item.averageRating != null ? 'text-amber-500' : 'text-slate-400'
-            }`}
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M10 1.6l2.46 4.96 5.48.8-3.97 3.86.94 5.46L10 14.86l-4.9 2.57.93-5.46L2.06 7.36l5.48-.8L10 1.6z" />
-          </svg>
-          <span>{averageRatingLabel}</span>
-        </span>
-        <button
-          type="button"
-          onClick={onClose}
-          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/90 text-slate-500 shadow-sm transition hover:bg-white hover:text-slate-700"
-          aria-label={t('pages.map.details.close')}
-        >
-          <svg
-            viewBox="0 0 20 20"
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-          >
-            <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
-          </svg>
-        </button>
-      </div>
-
       {isImageVisible && item.imageUrl ? (
         <div className="relative h-36 shrink-0">
+          <div className="absolute right-3 top-3 z-10 flex items-start gap-2">
+            <div className="flex flex-col items-end gap-1.5">
+              {ratingBadge}
+              {distanceBadge}
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/90 text-slate-500 shadow-sm transition hover:bg-white hover:text-slate-700"
+              aria-label={t('pages.map.details.close')}
+            >
+              <svg
+                viewBox="0 0 20 20"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
           <img
             src={item.imageUrl}
             alt={
@@ -104,8 +123,30 @@ const MapExplorerPinDetails = ({
           </h3>
         </div>
       ) : (
-        <div className="px-4 pb-2 pt-4">
-          <h3 className="line-clamp-2 pr-28 text-[1.35rem] font-semibold leading-tight text-slate-900">
+        <div className="px-4 pb-2 pt-3">
+          <div className="mb-2 flex items-start justify-between gap-2">
+            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+              {ratingBadge}
+              {distanceBadge}
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700"
+              aria-label={t('pages.map.details.close')}
+            >
+              <svg
+                viewBox="0 0 20 20"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+          <h3 className="line-clamp-2 text-[1.35rem] font-semibold leading-tight text-slate-900">
             {item.name}
           </h3>
         </div>

@@ -13,6 +13,9 @@ const normalizeOptionalText = (value?: string) => {
   return trimmed && trimmed.length > 0 ? trimmed : undefined
 }
 
+const normalizeOptionalNumber = (value?: number) =>
+  typeof value === 'number' && Number.isFinite(value) ? value : undefined
+
 const appendArrayParam = <T extends string>(
   params: URLSearchParams,
   key: string,
@@ -39,6 +42,16 @@ const getLyceumsPage = async (
   const town = normalizeOptionalText(query.town)
   if (town) {
     params.set('town', town)
+  }
+
+  const latitude = normalizeOptionalNumber(query.latitude)
+  if (latitude != null) {
+    params.set('latitude', latitude.toString())
+  }
+
+  const longitude = normalizeOptionalNumber(query.longitude)
+  if (longitude != null) {
+    params.set('longitude', longitude.toString())
   }
 
   const response = await httpClient.get<PageLyceumResponse>(
