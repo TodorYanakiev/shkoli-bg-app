@@ -228,6 +228,7 @@ const CourseEditPage = () => {
           <CourseEditLecturersSection
             register={register}
             lecturers={lecturers}
+            courseLecturerIds={course.lecturerIds}
             isLecturersLoading={isLecturersLoading}
             lecturersError={lecturersError}
             t={t}
