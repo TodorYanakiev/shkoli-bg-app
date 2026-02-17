@@ -19,6 +19,7 @@ type CourseFilterChipsProps = {
   onClear: () => void
   locale: string
   t: TFunction
+  className?: string
 }
 
 export const CourseFilterChips = ({
@@ -33,6 +34,7 @@ export const CourseFilterChips = ({
   onClear,
   locale,
   t,
+  className,
 }: CourseFilterChipsProps) => {
   const formatter = useMemo(
     () => new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }),
@@ -132,8 +134,15 @@ export const CourseFilterChips = ({
     return null
   }
 
+  const containerClassName = [
+    'flex flex-wrap items-center gap-2',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className={containerClassName}>
       {chips.map((chip) => (
         <span
           key={chip.key}
