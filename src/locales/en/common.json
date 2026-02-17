@@ -125,6 +125,7 @@
     "courses": {
       "createFailed": "We couldn't create this course. Try again.",
       "updateFailed": "We couldn't update this course. Try again.",
+      "deleteFailed": "We couldn't delete this course. Try again.",
       "imageUploadFailed": "We couldn't upload this image. Try again.",
       "imagesUploadFailed": "Some images could not be uploaded.",
       "imageDuplicate": "This image has already been uploaded.",
@@ -214,7 +215,8 @@
     },
     "courses": {
       "createSuccess": "Course created successfully.",
-      "updateSuccess": "Course updated successfully."
+      "updateSuccess": "Course updated successfully.",
+      "deleteSuccess": "Course deleted successfully."
     },
     "lyceums": {
       "updateSuccess": "Lyceum updated successfully.",
@@ -1273,7 +1275,29 @@
       "courses": {
         "title": "Courses",
         "subtitle": "Review and manage course content.",
-        "placeholder": "Course management tools will appear here."
+        "loading": "Loading courses...",
+        "empty": "No courses available yet.",
+        "emptyFiltered": "No courses match the current filters.",
+        "loadFailed": "We couldn't load the courses right now.",
+        "countLabel": "{{count}} courses",
+        "rangeLabel": "Showing {{start}}-{{end}} of {{total}}",
+        "pagination": {
+          "previous": "Previous page",
+          "next": "Next page",
+          "page": "Page {{current}} of {{total}}"
+        },
+        "actions": {
+          "update": "Update",
+          "delete": "Delete",
+          "deleting": "Deleting...",
+          "view": "Open course page"
+        },
+        "deleteConfirm": {
+          "title": "Delete course",
+          "description": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+          "confirm": "Delete course",
+          "cancel": "Cancel"
+        }
       },
       "lyceums": {
         "title": "Lyceums",
