@@ -159,6 +159,16 @@
         "emailNotFound": "We couldn't find a user with that email."
       }
     },
+    "users": {
+      "loadFailed": "We couldn't load users right now.",
+      "updateFailed": "We couldn't update this user. Try again.",
+      "deleteFailed": "We couldn't delete this user. Try again.",
+      "notFound": "We couldn't find that user.",
+      "server": "A server error occurred. Please try again.",
+      "conflict": "This user couldn't be updated because of a conflict.",
+      "emailExists": "A user with this email already exists.",
+      "usernameExists": "A user with this username already exists."
+    },
     "profile": {
       "loadFailed": "We couldn't load your profile. Try again.",
       "updateFailed": "We couldn't update your profile. Try again.",
@@ -225,6 +235,10 @@
       "adminRemoved": "Administrator removed successfully.",
       "lecturerAdded": "Invitation sent. If the user already exists, they are now a lecturer.",
       "lecturerRemoved": "Lecturer removed successfully."
+    },
+    "users": {
+      "updateSuccess": "User updated successfully.",
+      "deleteSuccess": "User deleted successfully."
     },
     "profile": {
       "updated": "Profile updated successfully.",
@@ -1368,8 +1382,71 @@
       },
       "users": {
         "title": "Users",
-        "subtitle": "Manage user access and roles.",
-        "placeholder": "User administration tools will appear here."
+        "subtitle": "Review, edit, and remove platform users.",
+        "loading": "Loading users...",
+        "empty": "No users available yet.",
+        "emptyFiltered": "No users match the current filters.",
+        "loadFailed": "We couldn't load users right now.",
+        "countLabel": "{{count}} users ({{admins}} admins)",
+        "badgeCountLabel": "{{count}} users",
+        "rangeLabel": "Showing {{start}}-{{end}} of {{total}}",
+        "filters": {
+          "searchLabel": "Search",
+          "searchPlaceholder": "Search by email",
+          "roleLabel": "Role",
+          "roleAll": "All roles",
+          "roleUser": "Users",
+          "roleAdmin": "Admins",
+          "statusLabel": "Status",
+          "enabled": "Enabled",
+          "disabled": "Disabled",
+          "clear": "Clear filters"
+        },
+        "pagination": {
+          "previous": "Previous page",
+          "next": "Next page",
+          "page": "Page {{current}} of {{total}}"
+        },
+        "role": {
+          "USER": "User",
+          "ADMIN": "Admin"
+        },
+        "status": {
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "fields": {
+          "username": "Username",
+          "administratedLyceum": "Administrated lyceum",
+          "administratedLyceumValue": "Lyceum #{{id}}",
+          "averageRating": "Average rating"
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete",
+          "saving": "Saving...",
+          "deleting": "Deleting..."
+        },
+        "editModal": {
+          "title": "Edit user",
+          "description": "Update user profile fields.",
+          "fields": {
+            "firstname": "First name",
+            "lastname": "Last name",
+            "username": "Username",
+            "email": "Email",
+            "description": "Description"
+          },
+          "submit": "Save changes",
+          "submitting": "Saving...",
+          "cancel": "Cancel"
+        },
+        "deleteConfirm": {
+          "title": "Delete user",
+          "description": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+          "confirm": "Delete user",
+          "cancel": "Cancel"
+        }
       },
       "loading": "Loading admin access...",
       "empty": "Admin details are not available yet."
