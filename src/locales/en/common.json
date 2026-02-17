@@ -163,6 +163,7 @@
       "loadFailed": "We couldn't load users right now.",
       "updateFailed": "We couldn't update this user. Try again.",
       "deleteFailed": "We couldn't delete this user. Try again.",
+      "imageDeleteFailed": "We couldn't delete this user's profile image. Try again.",
       "notFound": "We couldn't find that user.",
       "server": "A server error occurred. Please try again.",
       "conflict": "This user couldn't be updated because of a conflict.",
@@ -238,7 +239,8 @@
     },
     "users": {
       "updateSuccess": "User updated successfully.",
-      "deleteSuccess": "User deleted successfully."
+      "deleteSuccess": "User deleted successfully.",
+      "imageDeleted": "User profile image removed successfully."
     },
     "profile": {
       "updated": "Profile updated successfully.",
@@ -1430,11 +1432,19 @@
         "editModal": {
           "title": "Edit user",
           "description": "Update user profile fields.",
+          "profileImage": {
+            "label": "Profile image",
+            "alt": "Profile image for {{name}}",
+            "empty": "No profile image.",
+            "remove": "Remove image",
+            "removing": "Removing..."
+          },
           "fields": {
             "firstname": "First name",
             "lastname": "Last name",
             "username": "Username",
             "email": "Email",
+            "role": "Role",
             "description": "Description"
           },
           "submit": "Save changes",
