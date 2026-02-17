@@ -82,6 +82,7 @@ export const useMapExplorerLeaflet = ({
   const clusterRef = useRef<L.MarkerClusterGroup | null>(null)
   const markersRef = useRef(new Map<number, L.Marker>())
   const markerCountRef = useRef(new WeakMap<L.Marker, number>())
+  const selectedLyceumIdRef = useRef<number | null>(selectedLyceumId)
   const [isLocating, setIsLocating] = useState(false)
   const [locateErrorKey, setLocateErrorKey] = useState<string | null>(null)
   const [detailsStyle, setDetailsStyle] = useState<CSSProperties | null>(null)
@@ -120,6 +121,10 @@ export const useMapExplorerLeaflet = ({
     )
 
     setDetailsStyle({ left, top })
+  }, [selectedLyceumId])
+
+  useEffect(() => {
+    selectedLyceumIdRef.current = selectedLyceumId
   }, [selectedLyceumId])
 
   useEffect(() => {
@@ -196,14 +201,22 @@ export const useMapExplorerLeaflet = ({
       map.fitBounds(BULGARIA_BOUNDS, { padding: [24, 24] })
       return
     }
+  }, [items, onHoverLyceum, onSelectLyceum])
 
-    if (!selectedLyceumId) {
-      map.fitBounds(cluster.getBounds(), {
-        padding: [36, 36],
-        maxZoom: 10,
-      })
+  useEffect(() => {
+    const map = mapRef.current
+    const cluster = clusterRef.current
+    if (!map || !cluster || items.length === 0) return
+
+    if (selectedLyceumIdRef.current != null) {
+      return
     }
-  }, [items, selectedLyceumId, onHoverLyceum, onSelectLyceum])
+
+    map.fitBounds(cluster.getBounds(), {
+      padding: [36, 36],
+      maxZoom: 10,
+    })
+  }, [items])
 
   useEffect(() => {
     markersRef.current.forEach((marker, lyceumId) => {

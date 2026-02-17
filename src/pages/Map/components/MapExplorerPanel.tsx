@@ -9,7 +9,6 @@ import type {
   MapExplorerItem,
   MapExplorerSummary,
 } from '../types'
-import MapExplorerActiveFilters from './MapExplorerActiveFilters'
 import MapExplorerAdvancedFiltersModal from './MapExplorerAdvancedFiltersModal'
 import MapExplorerResultsList from './MapExplorerResultsList'
 
@@ -81,70 +80,69 @@ const MapExplorerPanel = ({
         </p>
       </div>
 
-      <div className="mb-3 rounded-2xl border border-emerald-100/80 bg-white/70 p-2 backdrop-blur-sm">
-        <div className="flex items-center gap-2">
-          <div className="relative min-w-0 flex-1">
-            <svg
-              viewBox="0 0 20 20"
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-            >
-              <circle cx="9" cy="9" r="6" />
-              <path d="M13.5 13.5L18 18" strokeLinecap="round" />
-            </svg>
-            <input
-              type="search"
-              value={searchValue}
-              onChange={(event) => onSearchValueChange(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault()
-                  onApplySearch()
-                }
-              }}
-              placeholder={t('pages.map.filters.searchPlaceholder')}
-              className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
-            />
-          </div>
+      <div className="mb-3 border-b border-emerald-100/80 px-1 pb-3">
+        <div className="relative">
+          <svg
+            viewBox="0 0 20 20"
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          >
+            <circle cx="9" cy="9" r="6" />
+            <path d="M13.5 13.5L18 18" strokeLinecap="round" />
+          </svg>
+          <input
+            type="search"
+            value={searchValue}
+            onChange={(event) => onSearchValueChange(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault()
+                onApplySearch()
+              }
+            }}
+            placeholder={t('pages.map.filters.searchPlaceholder')}
+            className="w-full rounded-2xl border border-white/90 bg-white/95 py-2.5 pl-9 pr-3 text-sm text-slate-700 shadow-[0_8px_18px_-14px_rgba(15,23,42,0.55)] outline-none transition focus:border-emerald-300 focus:ring-2 focus:ring-emerald-100"
+          />
+        </div>
+
+        <div className="mt-2 grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={onApplySearch}
-            className="rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800"
+            className="rounded-xl bg-emerald-700 px-3 py-2.5 text-sm font-semibold text-white shadow-[0_10px_24px_-16px_rgba(6,95,70,0.85)] transition hover:bg-emerald-800"
           >
             {t('pages.map.filters.apply')}
           </button>
-        </div>
-      </div>
-
-      <div className="mb-2 flex items-center gap-2 px-1">
-        <button
-          type="button"
-          onClick={() => setIsFiltersOpen(true)}
-          className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-3 py-1.5 text-xs font-semibold text-emerald-800 transition hover:border-emerald-300 hover:bg-emerald-100/80"
-        >
-          <span>{t('pages.shkoli.list.filters.moreFilters')}</span>
-          {activeFiltersCount > 0 ? (
-            <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-700 px-1 text-[11px] font-bold text-white">
-              {activeFiltersCount}
-            </span>
-          ) : null}
-        </button>
-        {activeFiltersCount > 0 ? (
           <button
             type="button"
-            onClick={onClearFilters}
-            className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-white"
+            onClick={() => setIsFiltersOpen(true)}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-white/90 px-3 py-2.5 text-sm font-semibold text-emerald-800 transition hover:border-emerald-300 hover:bg-white"
           >
-            {t('pages.map.filters.clearAll')}
+            <span>{t('pages.shkoli.list.filters.moreFilters')}</span>
+            {activeFiltersCount > 0 ? (
+              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-700 px-1 text-[11px] font-bold text-white">
+                {activeFiltersCount}
+              </span>
+            ) : null}
           </button>
+        </div>
+
+        {activeFiltersCount > 0 ? (
+          <div className="mt-2 flex justify-end">
+            <button
+              type="button"
+              onClick={onClearFilters}
+              className="rounded-full px-2 py-1 text-xs font-semibold text-slate-500 transition hover:text-slate-700"
+            >
+              {t('pages.map.filters.clearAll')}
+            </button>
+          </div>
         ) : null}
       </div>
 
-      <MapExplorerActiveFilters state={filtersState} locale={locale} t={t} />
-
-      <p className="mb-3 mt-3 px-1 text-sm font-semibold text-slate-700">
+      <p className="mb-3 mt-2 px-1 text-sm font-semibold text-slate-700">
         {t('pages.map.results.summary', {
           lyceums: summary.lyceumsCount,
           activities: summary.totalActivities,

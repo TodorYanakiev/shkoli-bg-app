@@ -29,13 +29,6 @@ const MapExplorerActiveFilters = ({
 
   const chips: Array<{ key: string; label: string }> = []
 
-  state.courseTypes?.forEach((type) => {
-    chips.push({
-      key: `type-${type}`,
-      label: t(`courses.types.${type}`),
-    })
-  })
-
   state.ageGroups?.forEach((group) => {
     chips.push({
       key: `age-${group}`,

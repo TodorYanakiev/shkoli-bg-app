@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react'
 import type { TFunction } from 'i18next'
 
 import type { AppError } from '../../../types/appError'
@@ -14,6 +15,8 @@ type MapExplorerResultsListProps = {
   onSelectLyceum: (lyceumId: number) => void
   t: TFunction
 }
+
+const MAP_RESULTS_PAGE_SIZE = 8
 
 const MapExplorerListSkeleton = () => (
   <div className="space-y-3">
@@ -36,6 +39,37 @@ const MapExplorerResultsList = ({
   onSelectLyceum,
   t,
 }: MapExplorerResultsListProps) => {
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil(items.length / MAP_RESULTS_PAGE_SIZE)),
+    [items.length],
+  )
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages)
+    }
+  }, [currentPage, totalPages])
+
+  useEffect(() => {
+    if (selectedLyceumId == null) {
+      return
+    }
+
+    const selectedIndex = items.findIndex(
+      (item) => item.lyceumId === selectedLyceumId,
+    )
+    if (selectedIndex < 0) {
+      return
+    }
+
+    const selectedPage = Math.floor(selectedIndex / MAP_RESULTS_PAGE_SIZE) + 1
+    if (selectedPage !== currentPage) {
+      setCurrentPage(selectedPage)
+    }
+  }, [selectedLyceumId, items, currentPage])
+
   if (isLoading) {
     return <MapExplorerListSkeleton />
   }
@@ -59,19 +93,64 @@ const MapExplorerResultsList = ({
     )
   }
 
+  const startIndex = (currentPage - 1) * MAP_RESULTS_PAGE_SIZE
+  const pagedItems = items.slice(startIndex, startIndex + MAP_RESULTS_PAGE_SIZE)
+  const rangeStart = startIndex + 1
+  const rangeEnd = startIndex + pagedItems.length
+
   return (
-    <div className="space-y-3">
-      {items.map((item) => (
-        <MapExplorerResultCard
-          key={item.lyceumId}
-          item={item}
-          isHovered={item.lyceumId === hoveredLyceumId}
-          isSelected={item.lyceumId === selectedLyceumId}
-          onHoverChange={onHoverLyceum}
-          onSelect={onSelectLyceum}
-          t={t}
-        />
-      ))}
+    <div>
+      <div className="space-y-3">
+        {pagedItems.map((item) => (
+          <MapExplorerResultCard
+            key={item.lyceumId}
+            item={item}
+            isHovered={item.lyceumId === hoveredLyceumId}
+            isSelected={item.lyceumId === selectedLyceumId}
+            onHoverChange={onHoverLyceum}
+            onSelect={onSelectLyceum}
+            t={t}
+          />
+        ))}
+      </div>
+
+      {totalPages > 1 ? (
+        <div className="mt-3 rounded-2xl border border-white/80 bg-white/70 px-3 py-2">
+          <p className="text-[11px] font-medium text-slate-500">
+            {t('pages.map.results.pagination.range', {
+              from: rangeStart,
+              to: rangeEnd,
+              total: items.length,
+            })}
+          </p>
+          <div className="mt-1 flex items-center justify-between gap-2">
+            <button
+              type="button"
+              disabled={currentPage <= 1}
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {t('pages.map.results.pagination.prev')}
+            </button>
+            <span className="text-xs font-semibold text-slate-700">
+              {t('pages.map.results.pagination.page', {
+                current: currentPage,
+                total: totalPages,
+              })}
+            </span>
+            <button
+              type="button"
+              disabled={currentPage >= totalPages}
+              onClick={() =>
+                setCurrentPage((page) => Math.min(totalPages, page + 1))
+              }
+              className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {t('pages.map.results.pagination.next')}
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -936,6 +936,12 @@
           "noCategories": "No categories",
           "ratingLabel": "Rating {{rating}}/5",
           "ratingEmpty": "No rating yet"
+        },
+        "pagination": {
+          "range": "Showing {{from}}-{{to}} of {{total}}",
+          "prev": "Prev",
+          "next": "Next",
+          "page": "Page {{current}} of {{total}}"
         }
       },
       "states": {

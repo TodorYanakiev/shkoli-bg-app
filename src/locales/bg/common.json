@@ -316,7 +316,7 @@
       "DECOUPAGE": "ДЕКОПАЖ",
       "QUILLING": "КВИЛИНГ",
       "WEAVING": "ПЛЕТЕНЕ",
-      "POTTERY": "КЕРАМИКА",
+      "POTTERY": "ГРЪНЧАРСТВО",
       "JEWELRY_MAKING": "БИЖУТЕРИЯ",
       "WOOD_CARVING": "ДЪРВОРЕЗБА",
       "HANDICRAFTS": "СРЪЧНИ РЪЦЕ",
@@ -918,6 +918,12 @@
           "noCategories": "Няма категории",
           "ratingLabel": "Рейтинг {{rating}}/5",
           "ratingEmpty": "Все още няма рейтинг"
+        },
+        "pagination": {
+          "range": "Показани {{from}}-{{to}} от {{total}}",
+          "prev": "Предишна",
+          "next": "Следваща",
+          "page": "Страница {{current}} от {{total}}"
         }
       },
       "states": {
