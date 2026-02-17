@@ -43,11 +43,31 @@ const TopNav = () => {
   })
 
   useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const mobileNav = document.getElementById('mobile-nav')
+      const activeElement = document.activeElement as HTMLElement | null
+      if (mobileNav && activeElement && mobileNav.contains(activeElement)) {
+        activeElement.blur()
+      }
+    }
+
     setIsMenuOpen(false)
     setIsProfileMenuOpen(false)
     setIsCourseActionsOpen(false)
     setIsLyceumActionsOpen(false)
-  }, [location.pathname, location.search])
+  }, [location.pathname])
+
+  useEffect(() => {
+    if (isMenuOpen || typeof document === 'undefined') {
+      return
+    }
+
+    const mobileNav = document.getElementById('mobile-nav')
+    const activeElement = document.activeElement as HTMLElement | null
+    if (mobileNav && activeElement && mobileNav.contains(activeElement)) {
+      activeElement.blur()
+    }
+  }, [isMenuOpen])
 
   useEffect(() => {
     if (!hasCourseActions) {
