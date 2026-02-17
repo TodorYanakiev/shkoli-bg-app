@@ -316,7 +316,7 @@
       "DECOUPAGE": "ДЕКОПАЖ",
       "QUILLING": "КВИЛИНГ",
       "WEAVING": "ПЛЕТЕНЕ",
-      "POTTERY": "КЕРАМИКА",
+      "POTTERY": "ГРЪНЧАРСТВО",
       "JEWELRY_MAKING": "БИЖУТЕРИЯ",
       "WOOD_CARVING": "ДЪРВОРЕЗБА",
       "HANDICRAFTS": "СРЪЧНИ РЪЦЕ",
@@ -890,8 +890,101 @@
       }
     },
     "map": {
-      "title": "Карта",
-      "subtitle": "Разгледайте школите на картата."
+      "title": "Карта на школи и читалища",
+      "subtitle": "Разгледайте читалища и техните дейности.",
+      "filters": {
+        "searchPlaceholder": "Търсене по град, читалище или дейност",
+        "townPlaceholder": "Филтър по град",
+        "courseTypes": "Дейности",
+        "ageGroups": "Възрастови групи",
+        "dayOfWeek": "Ден от седмицата",
+        "apply": "Приложи филтрите",
+        "applying": "Прилага се...",
+        "clearAll": "Изчисти всички",
+        "sort": {
+          "label": "Подреждане",
+          "options": {
+            "activities_desc": "Най-много дейности",
+            "activities_asc": "Най-малко дейности",
+            "name_asc": "Име А-Я",
+            "name_desc": "Име Я-А"
+          }
+        }
+      },
+      "locationSort": {
+        "default": "По дейности",
+        "closest": "Най-близки до мен",
+        "active": "Показваме най-близките читалища.",
+        "activeArea": "Показваме най-близките резултати за текущата зона на картата.",
+        "needsLocation": "Разрешете локация или изберете точка от картата.",
+        "locating": "Извличаме местоположението...",
+        "pickOnMap": "Избери локация",
+        "pickOnMapHint": "Изберете точка от картата.",
+        "sortedByNearest": "Подредено по близост",
+        "useMyLocation": "Моята локация",
+        "searchArea": "Търси в тази зона",
+        "radiusLabel": "Радиус",
+        "radiusAny": "Без лимит",
+        "radiusChip": "{{radius}} км",
+        "changeLocation": "Смени локацията",
+        "source": {
+          "gps": "GPS",
+          "manual": "Избрана точка",
+          "mapCenter": "Зона на картата",
+          "unknown": "Без източник"
+        }
+      },
+      "results": {
+        "summary": "Показани читалища: {{lyceums}} · Дейности: {{activities}}",
+        "card": {
+          "imageAlt": "Снимка за {{name}}",
+          "noCategories": "Няма категории",
+          "ratingLabel": "Рейтинг {{rating}}/5",
+          "ratingEmpty": "Все още няма рейтинг"
+        },
+        "pagination": {
+          "range": "Показани {{from}}-{{to}} от {{total}}",
+          "prev": "Предишна",
+          "next": "Следваща",
+          "page": "Страница {{current}} от {{total}}"
+        }
+      },
+      "states": {
+        "error": "Не успяхме да заредим данните за картата.",
+        "empty": "Няма читалища, които отговарят на тези филтри."
+      },
+      "details": {
+        "close": "Затвори детайлите",
+        "noActivities": "Няма съвпадащи дейности в това читалище.",
+        "activitiesCount": "Дейности: {{count}}",
+        "openLyceum": "Към страницата",
+        "ratingLabel": "{{rating}}/5",
+        "ratingEmpty": "Няма рейтинг"
+      },
+      "activity": {
+        "monthlyDay": "Ден {{day}}",
+        "ageUnknown": "Не е посочена възрастова група",
+        "scheduleUnknown": "Няма информация за график",
+        "untitled": "Дейност без име"
+      },
+      "controls": {
+        "zoomIn": "Увеличи",
+        "zoomOut": "Намали",
+        "locate": "Моето местоположение",
+        "reset": "Нулирай изгледа",
+        "locateUnsupported": "Местоположението не се поддържа от този браузър.",
+        "locateError": "Не успяхме да достъпим местоположението ви."
+      },
+      "locationPicker": {
+        "active": "Кликнете върху картата, за да зададете местоположение.",
+        "cancel": "Отказ",
+        "pickFallback": "Достъпът до местоположение е отказан. Изберете точка от картата."
+      },
+      "mobile": {
+        "openFilters": "Филтри",
+        "closeFilters": "Затвори филтрите"
+      },
+      "locationFallback": "Локацията липсва"
     },
     "lyceums": {
       "title": "Читалища",

@@ -908,8 +908,101 @@
       }
     },
     "map": {
-      "title": "Map",
-      "subtitle": "Explore courses on the map."
+      "title": "Community map",
+      "subtitle": "Explore verified community centers and their activities across Bulgaria.",
+      "filters": {
+        "searchPlaceholder": "Search by town, center name, or activity",
+        "townPlaceholder": "Filter by town",
+        "courseTypes": "Activities",
+        "ageGroups": "Age groups",
+        "dayOfWeek": "Schedule day",
+        "apply": "Apply filters",
+        "applying": "Applying...",
+        "clearAll": "Clear all",
+        "sort": {
+          "label": "Sort",
+          "options": {
+            "activities_desc": "Most activities",
+            "activities_asc": "Least activities",
+            "name_asc": "Name A-Z",
+            "name_desc": "Name Z-A"
+          }
+        }
+      },
+      "locationSort": {
+        "default": "Top activities",
+        "closest": "Closest to me",
+        "active": "Showing nearest community centers.",
+        "activeArea": "Showing nearest results to the current map area.",
+        "needsLocation": "Allow location or pick a point on the map.",
+        "locating": "Getting your location...",
+        "pickOnMap": "Pick on map",
+        "pickOnMapHint": "Click on the map to set your location.",
+        "sortedByNearest": "Sorted by nearest",
+        "useMyLocation": "My location",
+        "searchArea": "Search this area",
+        "radiusLabel": "Radius",
+        "radiusAny": "Any",
+        "radiusChip": "{{radius}} km",
+        "changeLocation": "Change location",
+        "source": {
+          "gps": "GPS",
+          "manual": "Picked point",
+          "mapCenter": "Map area",
+          "unknown": "No source"
+        }
+      },
+      "results": {
+        "summary": "Community centers: {{lyceums}} · Activities: {{activities}}",
+        "card": {
+          "imageAlt": "Image for {{name}}",
+          "noCategories": "No categories",
+          "ratingLabel": "Rating {{rating}}/5",
+          "ratingEmpty": "No rating yet"
+        },
+        "pagination": {
+          "range": "Showing {{from}}-{{to}} of {{total}}",
+          "prev": "Prev",
+          "next": "Next",
+          "page": "Page {{current}} of {{total}}"
+        }
+      },
+      "states": {
+        "error": "We couldn't load map data right now.",
+        "empty": "No community centers match your current filters."
+      },
+      "details": {
+        "close": "Close details",
+        "noActivities": "No matching activities in this center.",
+        "activitiesCount": "Activities: {{count}}",
+        "openLyceum": "Open center page",
+        "ratingLabel": "{{rating}}/5",
+        "ratingEmpty": "No rating"
+      },
+      "activity": {
+        "monthlyDay": "Day {{day}}",
+        "ageUnknown": "Age group not specified",
+        "scheduleUnknown": "Schedule not specified",
+        "untitled": "Untitled activity"
+      },
+      "controls": {
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "locate": "Find my location",
+        "reset": "Reset view",
+        "locateUnsupported": "Location is not available in this browser.",
+        "locateError": "We couldn't access your location."
+      },
+      "locationPicker": {
+        "active": "Click on the map to set your location.",
+        "cancel": "Cancel",
+        "pickFallback": "Location denied. Pick a point on the map."
+      },
+      "mobile": {
+        "openFilters": "Filters",
+        "closeFilters": "Close filters"
+      },
+      "locationFallback": "Location unavailable"
     },
     "lyceums": {
       "title": "Lyceums",
