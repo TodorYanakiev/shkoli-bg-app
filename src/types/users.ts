@@ -52,6 +52,23 @@ export type UserResponse = UserIdentity & {
   averageRating?: number
 }
 
+export type UsersPageQuery = {
+  page?: number
+  size?: number
+}
+
+export type PageUserResponse = {
+  totalPages: number
+  totalElements: number
+  size: number
+  content: UserResponse[]
+  number: number
+  first: boolean
+  last: boolean
+  numberOfElements: number
+  empty: boolean
+}
+
 export type ChangePasswordRequest = {
   currentPassword: string
   newPassword: string

@@ -2,11 +2,17 @@ import httpClient from './httpClient'
 import type {
   ChangePasswordRequest,
   CurrentUser,
-  UserUpdateRequest,
+  PageUserResponse,
+  UsersPageQuery,
   UserImageRequest,
   UserImageResponse,
   UserResponse,
+  UserUpdateRequest,
 } from '../types/users'
+import type { ApiError } from '../types/api'
+
+const DEFAULT_USERS_PAGE_SIZE = 9
+const ALL_USERS_PAGE_SIZE = 100
 
 export const getCurrentUser = async () => {
   const response = await httpClient.get<CurrentUser>('/api/v1/users/me')
@@ -59,9 +65,79 @@ export const deleteUserProfileImage = async (userId: number) => {
   await httpClient.delete(`/api/v1/users/${userId}/profile-image`)
 }
 
-export const getAllUsers = async () => {
-  const response = await httpClient.get<UserResponse[]>('/api/v1/users')
+export const getUsersPage = async (
+  query: UsersPageQuery = {},
+) => {
+  const response = await httpClient.get<PageUserResponse>(
+    '/api/v1/users',
+    {
+      params: {
+        page: query.page ?? 0,
+        size: query.size ?? DEFAULT_USERS_PAGE_SIZE,
+      },
+    },
+  )
   return response.data
+}
+
+export const getAllUsers = async () => {
+  const firstPage = await getUsersPage({
+    page: 0,
+    size: ALL_USERS_PAGE_SIZE,
+  })
+  const totalPages = Math.max(firstPage.totalPages ?? 1, 1)
+
+  if (totalPages <= 1) {
+    return firstPage.content ?? []
+  }
+
+  const nextPageIndices = Array.from(
+    { length: totalPages - 1 },
+    (_, index) => index + 1,
+  )
+  const nextPages = await Promise.all(
+    nextPageIndices.map((page) =>
+      getUsersPage({
+        page,
+        size: firstPage.size || ALL_USERS_PAGE_SIZE,
+      }),
+    ),
+  )
+
+  return [
+    ...(firstPage.content ?? []),
+    ...nextPages.flatMap((page) => page.content ?? []),
+  ]
+}
+
+export const getUserByEmail = async (email: string) => {
+  const response = await httpClient.get<UserResponse>(
+    '/api/v1/users/by-email',
+    {
+      params: { email },
+    },
+  )
+  return response.data
+}
+
+const isNotFoundApiError = (error: unknown): error is ApiError => {
+  if (typeof error !== 'object' || error === null) return false
+  if (!('status' in error)) return false
+  return (error as { status?: unknown }).status === 404
+}
+
+export const findUserByEmail = async (email: string) => {
+  const normalizedEmail = email.trim()
+  if (!normalizedEmail) return null
+
+  try {
+    return await getUserByEmail(normalizedEmail)
+  } catch (error) {
+    if (isNotFoundApiError(error)) {
+      return null
+    }
+    throw error
+  }
 }
 
 export const getUserById = async (id: number) => {
