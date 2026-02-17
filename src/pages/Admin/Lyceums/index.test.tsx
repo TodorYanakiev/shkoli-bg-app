@@ -34,6 +34,22 @@ const buildPagination = (
   ...overrides,
 })
 
+const buildFilters = () => ({
+  state: {
+    name: '',
+    town: '',
+    includeVerified: true,
+    includeUnverified: true,
+  },
+  townOptions: [],
+  hasActiveFilters: false,
+  setNameFilter: vi.fn(),
+  setTownFilter: vi.fn(),
+  setIncludeVerifiedFilter: vi.fn(),
+  setIncludeUnverifiedFilter: vi.fn(),
+  clearFilters: vi.fn(),
+})
+
 const renderPage = () => {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -76,6 +92,7 @@ describe('AdminLyceumsPage', () => {
       error: null,
       pagination: buildPagination({ totalItems: lyceums.length, pageEnd: 2 }),
       verifiedCount: 1,
+      filters: buildFilters(),
     })
 
     renderPage()
@@ -91,6 +108,7 @@ describe('AdminLyceumsPage', () => {
       error: null,
       pagination: buildPagination(),
       verifiedCount: 0,
+      filters: buildFilters(),
     })
 
     renderPage()
@@ -106,11 +124,32 @@ describe('AdminLyceumsPage', () => {
       error: null,
       pagination: buildPagination(),
       verifiedCount: 0,
+      filters: buildFilters(),
     })
 
     renderPage()
 
     expect(await screen.findByText('No lyceums available yet.')).toBeDefined()
+  })
+
+  it('renders filtered empty state when filters are active', async () => {
+    useAdminLyceumsDataMock.mockReturnValue({
+      lyceums: [],
+      isLoading: false,
+      error: null,
+      pagination: buildPagination(),
+      verifiedCount: 0,
+      filters: {
+        ...buildFilters(),
+        hasActiveFilters: true,
+      },
+    })
+
+    renderPage()
+
+    expect(
+      await screen.findByText('No lyceums match the current filters.'),
+    ).toBeDefined()
   })
 
   it('renders error state', async () => {
@@ -126,6 +165,7 @@ describe('AdminLyceumsPage', () => {
       error,
       pagination: buildPagination(),
       verifiedCount: 0,
+      filters: buildFilters(),
     })
 
     renderPage()
