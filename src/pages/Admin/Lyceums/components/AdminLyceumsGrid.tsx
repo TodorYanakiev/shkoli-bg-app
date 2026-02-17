@@ -15,6 +15,7 @@ type AdminLyceumsGridProps = {
   isLoading: boolean
   error: AppError | null
   pagination: AdminLyceumsPagination
+  hasActiveFilters?: boolean
 }
 
 const AdminLyceumsSkeleton = () => (
@@ -49,6 +50,7 @@ export const AdminLyceumsGrid = ({
   isLoading,
   error,
   pagination,
+  hasActiveFilters = false,
 }: AdminLyceumsGridProps) => {
   const { t } = useTranslation()
   const { onDelete, isDeleting } = useAdminLyceumActions()
@@ -88,7 +90,9 @@ export const AdminLyceumsGrid = ({
           </div>
         ) : pagination.totalItems === 0 ? (
           <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-4 text-sm text-slate-600">
-            {t('pages.admin.lyceums.empty')}
+            {hasActiveFilters
+              ? t('pages.admin.lyceums.emptyFiltered')
+              : t('pages.admin.lyceums.empty')}
           </div>
         ) : (
           <div className="space-y-5">

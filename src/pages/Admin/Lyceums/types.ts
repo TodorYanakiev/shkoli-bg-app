@@ -1,5 +1,12 @@
 import type { LyceumResponse } from '../../../types/lyceums'
 
+export type AdminLyceumsFilterState = {
+  name: string
+  town: string
+  includeVerified: boolean
+  includeUnverified: boolean
+}
+
 export type AdminLyceumsPagination = {
   currentPage: number
   totalPages: number

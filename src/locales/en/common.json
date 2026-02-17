@@ -1281,10 +1281,21 @@
         "placeholder": "Lyceum administration tools will appear here.",
         "loading": "Loading lyceums...",
         "empty": "No lyceums available yet.",
+        "emptyFiltered": "No lyceums match the current filters.",
         "loadFailed": "We couldn't load the lyceums right now.",
         "countLabel": "{{count}} lyceums",
         "verifiedCountLabel": "{{count}} verified",
         "rangeLabel": "Showing {{start}}-{{end}} of {{total}}",
+        "filters": {
+          "nameLabel": "Name",
+          "namePlaceholder": "Search by lyceum name",
+          "townLabel": "Town",
+          "townAll": "All towns",
+          "verificationLabel": "Verification status",
+          "verified": "Verified",
+          "unverified": "Unverified",
+          "clear": "Clear filters"
+        },
         "pagination": {
           "previous": "Previous page",
           "next": "Next page",
