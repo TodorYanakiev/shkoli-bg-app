@@ -33,6 +33,8 @@ type CourseDetailView = {
   courseDescription: string
   ageGroups: string[]
   priceValue: string
+  executionTypeLabel: string | null
+  locationValue: string
   normalizedAchievements: string | null
   normalizedWebsiteLink: string | null
   normalizedFacebookLink: string | null
@@ -81,6 +83,7 @@ export const useCourseDetailView = ({
           : `${activeStartMonthLabel} - ${activeEndMonthLabel}`
         : null
     const trimmedAddress = getTrimmedString(course?.address)
+    const locationValue = trimmedAddress ?? fallbackValue
     const normalizedAchievements = getTrimmedString(course?.achievements)
     const normalizedWebsiteLink = getTrimmedString(course?.websiteLink)
     const normalizedFacebookLink = getTrimmedString(course?.facebookLink)
@@ -131,6 +134,8 @@ export const useCourseDetailView = ({
       courseDescription,
       ageGroups,
       priceValue,
+      executionTypeLabel,
+      locationValue,
       normalizedAchievements,
       normalizedWebsiteLink,
       normalizedFacebookLink,

@@ -15,6 +15,7 @@ type ReviewsSectionProps = {
   titleKey: string
   sectionId?: string
   editorMode?: 'inline' | 'modal'
+  hideTitle?: boolean
   averageRating?: number | null
   isAuthenticated: boolean
   currentUserId?: number
@@ -25,11 +26,13 @@ type ReviewsSectionProps = {
   deleteMutation: UseMutationResult<void, AppError, void>
   onMutated?: () => void
   className?: string
+  editorTriggerButtonId?: string
 }
 export const ReviewsSection = ({
   titleKey,
   sectionId,
   editorMode = 'inline',
+  hideTitle = false,
   averageRating,
   isAuthenticated,
   currentUserId,
@@ -40,13 +43,11 @@ export const ReviewsSection = ({
   deleteMutation,
   onMutated,
   className,
+  editorTriggerButtonId,
 }: ReviewsSectionProps) => {
   const { t, i18n } = useTranslation()
   const { showToast } = useToast()
-  const reviews = useMemo(
-    () => reviewsQuery.data ?? [],
-    [reviewsQuery.data],
-  )
+  const reviews = useMemo(() => reviewsQuery.data ?? [], [reviewsQuery.data])
   const ownReview = ownReviewQuery.data ?? null
   const hasOwnReview = Boolean(ownReview?.id)
   const reviewerIds = useMemo(
@@ -63,9 +64,7 @@ export const ReviewsSection = ({
       ),
     [reviews],
   )
-  const reviewersQuery = useUsersByIds(reviewerIds, {
-    enabled: reviewerIds.length > 0,
-  })
+  const reviewersQuery = useUsersByIds(reviewerIds, { enabled: reviewerIds.length > 0 })
   const reviewerNames = useMemo(
     () =>
       !reviewersQuery.data
@@ -85,7 +84,6 @@ export const ReviewsSection = ({
     if (typeof selectedRatingRaw === 'number' && Number.isFinite(selectedRatingRaw)) {
       return selectedRatingRaw
     }
-
     const parsed = Number(selectedRatingRaw)
     return Number.isFinite(parsed) ? parsed : 5
   }, [selectedRatingRaw])
@@ -100,7 +98,6 @@ export const ReviewsSection = ({
     void ownReviewQuery.refetch()
     onMutated?.()
   }
-
   const applyFieldErrors = (error: AppError) => {
     Object.entries(error.fieldErrors ?? {}).forEach(([fieldName, key]) => {
       if (fieldName === 'rating' || fieldName === 'comment') {
@@ -108,7 +105,6 @@ export const ReviewsSection = ({
       }
     })
   }
-
   const onSubmit = form.handleSubmit((values) => {
     const mutation = hasOwnReview ? updateMutation : createMutation
     createMutation.reset()
@@ -131,7 +127,6 @@ export const ReviewsSection = ({
       },
     )
   })
-
   const onDelete = () => {
     if (!hasOwnReview || !window.confirm(t('pages.reviews.form.deleteConfirm'))) {
       return
@@ -151,13 +146,16 @@ export const ReviewsSection = ({
   return (
     <section
       id={sectionId}
-      className={
-        className ??
-        'scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'
-      }
+      className={className ?? 'scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'}
     >
       <div className="flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
-        <h3 className="text-base font-semibold text-slate-900">{t(titleKey)}</h3>
+        {!hideTitle ? (
+          <h3 className="text-base font-semibold text-slate-900">
+            {t(titleKey)}
+          </h3>
+        ) : (
+          <span className="sr-only">{t(titleKey)}</span>
+        )}
         {resolvedAverage != null ? (
           <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1.5">
             <RatingStars rating={resolvedAverage} showValue={false} />
@@ -194,6 +192,7 @@ export const ReviewsSection = ({
         onDelete={onDelete}
         ownReviewIsLoading={ownReviewQuery.isLoading}
         ownReviewError={ownReviewQuery.error ?? null}
+        triggerButtonId={editorTriggerButtonId}
       />
     </section>
   )

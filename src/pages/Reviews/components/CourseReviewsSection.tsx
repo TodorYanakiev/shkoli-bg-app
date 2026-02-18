@@ -16,12 +16,16 @@ type CourseReviewsSectionProps = {
   courseId?: number
   averageRating?: number | null
   className?: string
+  hideTitle?: boolean
+  editorTriggerButtonId?: string
 }
 
 export const CourseReviewsSection = ({
   courseId,
   averageRating,
   className,
+  hideTitle = false,
+  editorTriggerButtonId,
 }: CourseReviewsSectionProps) => {
   const queryClient = useQueryClient()
   const { isAuthenticated } = useAuthStatus()
@@ -53,6 +57,7 @@ export const CourseReviewsSection = ({
       titleKey="pages.reviews.sections.course.title"
       sectionId="course-reviews"
       editorMode="modal"
+      hideTitle={hideTitle}
       averageRating={averageRating}
       isAuthenticated={isAuthenticated}
       currentUserId={currentUserId}
@@ -63,6 +68,7 @@ export const CourseReviewsSection = ({
       deleteMutation={deleteMutation}
       onMutated={onMutated}
       className={className}
+      editorTriggerButtonId={editorTriggerButtonId}
     />
   )
 }

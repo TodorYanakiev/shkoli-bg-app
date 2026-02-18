@@ -799,18 +799,42 @@
           "galleryAlt": "Gallery image {{index}} for {{name}}"
         },
         "actions": {
-          "openLyceum": "Open lyceum"
+          "openLyceum": "Open lyceum",
+          "visitWebsite": "Visit website",
+          "leaveReview": "Leave review",
+          "writeReview": "Write a review",
+          "openMap": "Open map"
         },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
         "lecturerCard": {
           "ratingLabel": "Lecturer rating {{rating}} of {{max}}",
-          "noRating": "No ratings"
+          "noRating": "No ratings",
+          "viewReviews": "View reviews"
         },
         "lecturerReviews": {
           "title": "{{name}} reviews",
           "subtitle": "Read feedback and add your review for this lecturer.",
           "openReviews": "Open reviews for {{name}}"
+        },
+        "tabs": {
+          "label": "Course content tabs"
+        },
+        "reviewCount": "{{count}} reviews",
+        "decision": {
+          "scheduleLabel": "Schedule",
+          "durationLabel": "Duration",
+          "locationLabel": "Location"
+        },
+        "overview": {
+          "descriptionTitle": "Overview",
+          "mapTitle": "Location preview"
+        },
+        "galleryLightbox": {
+          "label": "Gallery preview",
+          "previous": "Previous image",
+          "next": "Next image",
+          "counter": "{{current}} / {{total}}"
         }
       },
       "create": {

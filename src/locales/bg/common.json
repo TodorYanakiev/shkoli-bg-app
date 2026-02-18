@@ -799,18 +799,42 @@
           "galleryAlt": "Снимка {{index}} от галерията за {{name}}"
         },
         "actions": {
-          "openLyceum": "Към читалището"
+          "openLyceum": "Към читалището",
+          "visitWebsite": "Посети уебсайт",
+          "leaveReview": "Остави отзив",
+          "writeReview": "Напиши отзив",
+          "openMap": "Отвори карта"
         },
         "averageRatingLabel": "Средна оценка {{rating}} от {{max}}",
         "noRating": "Няма отзиви за тази школа.",
         "lecturerCard": {
           "ratingLabel": "Оценка на преподавателя {{rating}} от {{max}}",
-          "noRating": "Няма оценка"
+          "noRating": "Няма оценка",
+          "viewReviews": "Виж отзиви"
         },
         "lecturerReviews": {
           "title": "Отзиви за {{name}}",
           "subtitle": "Прегледайте отзивите и добавете своя отзив за този преподавател.",
           "openReviews": "Отзиви за {{name}}"
+        },
+        "tabs": {
+          "label": "Раздели със съдържание"
+        },
+        "reviewCount": "{{count}} отзива",
+        "decision": {
+          "scheduleLabel": "График",
+          "durationLabel": "Продължителност",
+          "locationLabel": "Местоположение"
+        },
+        "overview": {
+          "descriptionTitle": "Преглед",
+          "mapTitle": "Преглед на местоположението"
+        },
+        "galleryLightbox": {
+          "label": "Преглед на галерията",
+          "previous": "Предишна снимка",
+          "next": "Следваща снимка",
+          "counter": "{{current}} / {{total}}"
         }
       },
       "create": {

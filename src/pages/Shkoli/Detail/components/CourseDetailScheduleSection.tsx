@@ -22,19 +22,16 @@ export const CourseDetailScheduleSection = ({
   locale,
   t,
 }: CourseDetailScheduleSectionProps) => (
-  <div
-    id="course-schedule"
-    className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-  >
-    <h3 className="text-sm font-semibold text-slate-900">
+  <section id="course-schedule" className="scroll-mt-24">
+    <h3 className="text-3xl font-semibold text-slate-900">
       {t('pages.shkoli.detail.sections.schedule')}
     </h3>
     {scheduleSlots.length === 0 && scheduleSpecialCases.length === 0 ? (
-      <p className="mt-3 text-sm text-slate-600">
+      <p className="mt-3 text-base text-slate-600">
         {t('pages.shkoli.detail.schedule.empty')}
       </p>
     ) : (
-      <div className="mt-4 space-y-6">
+      <div className="mt-6 space-y-5">
         <CourseDetailScheduleSlots
           scheduleSlots={scheduleSlots}
           fallbackValue={fallbackValue}
@@ -47,5 +44,5 @@ export const CourseDetailScheduleSection = ({
         />
       </div>
     )}
-  </div>
+  </section>
 )

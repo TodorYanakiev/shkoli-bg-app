@@ -90,3 +90,78 @@ export const getSpecialCaseStatus = (
   entry.cancelled
     ? t('pages.shkoli.detail.schedule.cancelled')
     : t('pages.shkoli.detail.schedule.active')
+
+const getPrimaryScheduleSlot = (
+  scheduleSlots: CourseScheduleSlot[],
+) => scheduleSlots[0]
+
+export const getScheduleSummaryValue = (
+  scheduleSlots: CourseScheduleSlot[],
+  fallbackValue: string,
+  t: TFunction,
+) => {
+  const dayOfWeekLabels = Array.from(
+    new Set(
+      scheduleSlots
+        .map((slot) =>
+          slot.dayOfWeek ? t(`courses.daysOfWeek.${slot.dayOfWeek}`) : null,
+        )
+        .filter((label): label is string => Boolean(label)),
+    ),
+  )
+
+  if (dayOfWeekLabels.length > 0) {
+    if (dayOfWeekLabels.length <= 2) {
+      return dayOfWeekLabels.join(', ')
+    }
+
+    return `${dayOfWeekLabels.slice(0, 2).join(', ')} +${
+      dayOfWeekLabels.length - 2
+    }`
+  }
+
+  const primarySlot = getPrimaryScheduleSlot(scheduleSlots)
+  if (!primarySlot) return fallbackValue
+
+  const primaryBadge = getScheduleBadge(primarySlot, fallbackValue, t)
+  if (scheduleSlots.length === 1) {
+    return primaryBadge.value
+  }
+
+  return `${primaryBadge.value} +${scheduleSlots.length - 1}`
+}
+
+export const getScheduleTimeRangeValue = (
+  scheduleSlots: CourseScheduleSlot[],
+  fallbackValue: string,
+) => {
+  const primarySlot = getPrimaryScheduleSlot(scheduleSlots)
+  if (!primarySlot) return fallbackValue
+
+  const start = primarySlot.startTime
+    ? formatScheduleTime(primarySlot.startTime)
+    : null
+  const end = primarySlot.endTime
+    ? formatScheduleTime(primarySlot.endTime)
+    : null
+
+  if (start && end) return `${start} - ${end}`
+  return start ?? end ?? fallbackValue
+}
+
+export const getScheduleDurationValue = (
+  scheduleSlots: CourseScheduleSlot[],
+  fallbackValue: string,
+  t: TFunction,
+) => {
+  const primarySlot = getPrimaryScheduleSlot(scheduleSlots)
+  if (!primarySlot) return fallbackValue
+
+  if (typeof primarySlot.singleClassDurationMinutes !== 'number') {
+    return fallbackValue
+  }
+
+  return t('pages.shkoli.detail.schedule.minutes', {
+    count: primarySlot.singleClassDurationMinutes,
+  })
+}
