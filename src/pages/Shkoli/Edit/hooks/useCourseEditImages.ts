@@ -29,10 +29,8 @@ export const useCourseEditImages = ({
     useCourseEditImageSelection({
       t,
       allowedImageTypesLabel,
-      replaceLogoImage: imageState.replaceLogoImage,
       replaceMainImage: imageState.replaceMainImage,
       addGalleryImages: imageState.addGalleryImages,
-      setLogoImageError: imageState.setLogoImageError,
       setMainImageError: imageState.setMainImageError,
       setGalleryImageError: imageState.setGalleryImageError,
     })
@@ -47,17 +45,14 @@ export const useCourseEditImages = ({
     courseId,
     isValidId,
     t,
-    logoImage: imageState.logoImage,
     mainImage: imageState.mainImage,
     galleryImages: imageState.galleryImages,
     updateImageState: imageState.updateImageState,
   })
 
   return {
-    logoImage: imageState.logoImage,
     mainImage: imageState.mainImage,
     galleryImages: imageState.galleryImages,
-    logoImageError: imageState.logoImageError,
     mainImageError: imageState.mainImageError,
     galleryImageError: imageState.galleryImageError,
     allowedImageTypesLabel,
@@ -68,7 +63,6 @@ export const useCourseEditImages = ({
     handleGallerySelect,
     removeSingleImage: imageState.removeSingleImage,
     removeGalleryImage: imageState.removeGalleryImage,
-    updateLogoAltText: imageState.updateLogoAltText,
     updateMainAltText: imageState.updateMainAltText,
     updateGalleryAltText: imageState.updateGalleryAltText,
     uploadCourseImages,

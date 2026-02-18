@@ -4,17 +4,11 @@ import type { CourseImageRole } from '../../../../types/courses'
 import type { PendingCourseImage } from '../types'
 
 export const useCourseEditImageState = () => {
-  const [logoImage, setLogoImage] = useState<PendingCourseImage | null>(
-    null,
-  )
   const [mainImage, setMainImage] = useState<PendingCourseImage | null>(
     null,
   )
   const [galleryImages, setGalleryImages] = useState<PendingCourseImage[]>(
     [],
-  )
-  const [logoImageError, setLogoImageError] = useState<string | null>(
-    null,
   )
   const [mainImageError, setMainImageError] = useState<string | null>(
     null,
@@ -24,7 +18,6 @@ export const useCourseEditImageState = () => {
   )
 
   const imageStateRef = useRef({
-    logoImage: null as PendingCourseImage | null,
     mainImage: null as PendingCourseImage | null,
     galleryImages: [] as PendingCourseImage[],
   })
@@ -32,11 +25,6 @@ export const useCourseEditImageState = () => {
   const clearImageState = (image: PendingCourseImage | null) => {
     if (!image) return
     URL.revokeObjectURL(image.previewUrl)
-  }
-
-  const replaceLogoImage = (image: PendingCourseImage | null) => {
-    clearImageState(logoImage)
-    setLogoImage(image)
   }
 
   const replaceMainImage = (image: PendingCourseImage | null) => {
@@ -49,12 +37,7 @@ export const useCourseEditImageState = () => {
   }
 
   const removeSingleImage = (role: CourseImageRole) => {
-    if (role === 'LOGO') {
-      clearImageState(logoImage)
-      setLogoImage(null)
-      setLogoImageError(null)
-      return
-    }
+    if (role !== 'MAIN') return
     clearImageState(mainImage)
     setMainImage(null)
     setMainImageError(null)
@@ -68,10 +51,6 @@ export const useCourseEditImageState = () => {
       }
       return prev.filter((image) => image.id !== id)
     })
-  }
-
-  const updateLogoAltText = (value: string) => {
-    setLogoImage((prev) => (prev ? { ...prev, altText: value } : prev))
   }
 
   const updateMainAltText = (value: string) => {
@@ -90,9 +69,6 @@ export const useCourseEditImageState = () => {
     id: string,
     updates: Partial<PendingCourseImage>,
   ) => {
-    setLogoImage((prev) =>
-      prev && prev.id === id ? { ...prev, ...updates } : prev,
-    )
     setMainImage((prev) =>
       prev && prev.id === id ? { ...prev, ...updates } : prev,
     )
@@ -109,18 +85,14 @@ export const useCourseEditImageState = () => {
 
   useEffect(() => {
     imageStateRef.current = {
-      logoImage,
       mainImage,
       galleryImages,
     }
-  }, [logoImage, mainImage, galleryImages])
+  }, [mainImage, galleryImages])
 
   useEffect(() => {
     return () => {
       const current = imageStateRef.current
-      if (current.logoImage) {
-        URL.revokeObjectURL(current.logoImage.previewUrl)
-      }
       if (current.mainImage) {
         URL.revokeObjectURL(current.mainImage.previewUrl)
       }
@@ -131,21 +103,16 @@ export const useCourseEditImageState = () => {
   }, [])
 
   return {
-    logoImage,
     mainImage,
     galleryImages,
-    logoImageError,
     mainImageError,
     galleryImageError,
-    setLogoImageError,
     setMainImageError,
     setGalleryImageError,
-    replaceLogoImage,
     replaceMainImage,
     addGalleryImages,
     removeSingleImage,
     removeGalleryImage,
-    updateLogoAltText,
     updateMainAltText,
     updateGalleryAltText,
     updateImageState,

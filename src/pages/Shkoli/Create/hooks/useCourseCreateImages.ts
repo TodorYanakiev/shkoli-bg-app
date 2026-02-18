@@ -27,18 +27,12 @@ export const useCourseCreateImages = ({
 }: UseCourseCreateImagesOptions) => {
   const registerImageMutation = useRegisterCourseImageMutation()
 
-  const [logoImage, setLogoImage] = useState<PendingCourseImage | null>(
-    null,
-  )
   const [mainImage, setMainImage] = useState<PendingCourseImage | null>(
     null,
   )
   const [galleryImages, setGalleryImages] = useState<
     PendingCourseImage[]
   >([])
-  const [logoImageError, setLogoImageError] = useState<string | null>(
-    null,
-  )
   const [mainImageError, setMainImageError] = useState<string | null>(
     null,
   )
@@ -47,7 +41,6 @@ export const useCourseCreateImages = ({
   >(null)
   const [isUploadingImages, setIsUploadingImages] = useState(false)
   const imageStateRef = useRef({
-    logoImage: null as PendingCourseImage | null,
     mainImage: null as PendingCourseImage | null,
     galleryImages: [] as PendingCourseImage[],
   })
@@ -107,9 +100,6 @@ export const useCourseCreateImages = ({
     id: string,
     updates: Partial<PendingCourseImage>,
   ) => {
-    setLogoImage((prev) =>
-      prev && prev.id === id ? { ...prev, ...updates } : prev,
-    )
     setMainImage((prev) =>
       prev && prev.id === id ? { ...prev, ...updates } : prev,
     )
@@ -129,37 +119,24 @@ export const useCourseCreateImages = ({
     event: ChangeEvent<HTMLInputElement>,
     role: CourseImageRole,
   ) => {
+    if (role !== 'MAIN') return
     const file = event.target.files?.[0]
     event.target.value = ''
     if (!file) return
 
     const errorMessage = validateImageFile(file)
     if (errorMessage) {
-      if (role === 'LOGO') {
-        setLogoImageError(errorMessage)
-      } else {
-        setMainImageError(errorMessage)
-      }
+      setMainImageError(errorMessage)
       return
     }
 
     try {
       const pendingImage = await createPendingImage(file, role)
-      if (role === 'LOGO') {
-        clearImageState(logoImage)
-        setLogoImage(pendingImage)
-        setLogoImageError(null)
-      } else {
-        clearImageState(mainImage)
-        setMainImage(pendingImage)
-        setMainImageError(null)
-      }
+      clearImageState(mainImage)
+      setMainImage(pendingImage)
+      setMainImageError(null)
     } catch {
-      if (role === 'LOGO') {
-        setLogoImageError(t('pages.shkoli.create.images.loadError'))
-      } else {
-        setMainImageError(t('pages.shkoli.create.images.loadError'))
-      }
+      setMainImageError(t('pages.shkoli.create.images.loadError'))
     }
   }
 
@@ -193,15 +170,10 @@ export const useCourseCreateImages = ({
   }
 
   const removeSingleImage = (role: CourseImageRole) => {
-    if (role === 'LOGO') {
-      clearImageState(logoImage)
-      setLogoImage(null)
-      setLogoImageError(null)
-    } else {
-      clearImageState(mainImage)
-      setMainImage(null)
-      setMainImageError(null)
-    }
+    if (role !== 'MAIN') return
+    clearImageState(mainImage)
+    setMainImage(null)
+    setMainImageError(null)
   }
 
   const removeGalleryImage = (id: string) => {
@@ -212,10 +184,6 @@ export const useCourseCreateImages = ({
       }
       return prev.filter((image) => image.id !== id)
     })
-  }
-
-  const updateLogoAltText = (value: string) => {
-    setLogoImage((prev) => (prev ? { ...prev, altText: value } : prev))
   }
 
   const updateMainAltText = (value: string) => {
@@ -268,7 +236,6 @@ export const useCourseCreateImages = ({
     courseId: number,
   ): Promise<ImageUploadResult> => {
     const images: PendingCourseImage[] = [
-      ...(logoImage ? [logoImage] : []),
       ...(mainImage ? [mainImage] : []),
       ...galleryImages,
     ]
@@ -345,18 +312,14 @@ export const useCourseCreateImages = ({
 
   useEffect(() => {
     imageStateRef.current = {
-      logoImage,
       mainImage,
       galleryImages,
     }
-  }, [logoImage, mainImage, galleryImages])
+  }, [mainImage, galleryImages])
 
   useEffect(() => {
     return () => {
       const current = imageStateRef.current
-      if (current.logoImage) {
-        URL.revokeObjectURL(current.logoImage.previewUrl)
-      }
       if (current.mainImage) {
         URL.revokeObjectURL(current.mainImage.previewUrl)
       }
@@ -367,10 +330,8 @@ export const useCourseCreateImages = ({
   }, [])
 
   return {
-    logoImage,
     mainImage,
     galleryImages,
-    logoImageError,
     mainImageError,
     galleryImageError,
     allowedImageTypesLabel,
@@ -379,7 +340,6 @@ export const useCourseCreateImages = ({
     handleGallerySelect,
     removeSingleImage,
     removeGalleryImage,
-    updateLogoAltText,
     updateMainAltText,
     updateGalleryAltText,
     uploadCourseImages,

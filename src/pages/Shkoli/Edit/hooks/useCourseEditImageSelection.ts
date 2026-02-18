@@ -16,10 +16,8 @@ import type { PendingCourseImage } from '../types'
 type UseCourseEditImageSelectionOptions = {
   t: TFunction
   allowedImageTypesLabel: string
-  replaceLogoImage: (image: PendingCourseImage | null) => void
   replaceMainImage: (image: PendingCourseImage | null) => void
   addGalleryImages: (images: PendingCourseImage[]) => void
-  setLogoImageError: (message: string | null) => void
   setMainImageError: (message: string | null) => void
   setGalleryImageError: (message: string | null) => void
 }
@@ -74,10 +72,8 @@ const createPendingImage = async (
 export const useCourseEditImageSelection = ({
   t,
   allowedImageTypesLabel,
-  replaceLogoImage,
   replaceMainImage,
   addGalleryImages,
-  setLogoImageError,
   setMainImageError,
   setGalleryImageError,
 }: UseCourseEditImageSelectionOptions) => {
@@ -85,6 +81,7 @@ export const useCourseEditImageSelection = ({
     event: ChangeEvent<HTMLInputElement>,
     role: CourseImageRole,
   ) => {
+    if (role !== 'MAIN') return
     const file = event.target.files?.[0]
     event.target.value = ''
     if (!file) return
@@ -95,29 +92,16 @@ export const useCourseEditImageSelection = ({
       allowedImageTypesLabel,
     )
     if (errorMessage) {
-      if (role === 'LOGO') {
-        setLogoImageError(errorMessage)
-      } else {
-        setMainImageError(errorMessage)
-      }
+      setMainImageError(errorMessage)
       return
     }
 
     try {
       const pendingImage = await createPendingImage(file, role)
-      if (role === 'LOGO') {
-        replaceLogoImage(pendingImage)
-        setLogoImageError(null)
-      } else {
-        replaceMainImage(pendingImage)
-        setMainImageError(null)
-      }
+      replaceMainImage(pendingImage)
+      setMainImageError(null)
     } catch {
-      if (role === 'LOGO') {
-        setLogoImageError(t('pages.shkoli.create.images.loadError'))
-      } else {
-        setMainImageError(t('pages.shkoli.create.images.loadError'))
-      }
+      setMainImageError(t('pages.shkoli.create.images.loadError'))
     }
   }
 

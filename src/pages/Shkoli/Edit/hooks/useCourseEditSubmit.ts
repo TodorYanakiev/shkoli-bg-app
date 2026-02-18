@@ -30,9 +30,7 @@ type UseCourseEditSubmitOptions = {
   course?: CourseResponse
   hasEditAccess: boolean
   lyceumId?: number
-  logoImage: PendingCourseImage | null
   mainImage: PendingCourseImage | null
-  logoImages: CourseImageResponse[]
   mainImages: CourseImageResponse[]
   uploadCourseImages: (
     courseId: number,
@@ -54,9 +52,7 @@ export const useCourseEditSubmit = ({
   course,
   hasEditAccess,
   lyceumId,
-  logoImage,
   mainImage,
-  logoImages,
   mainImages,
   uploadCourseImages,
   deleteExistingImages,
@@ -111,25 +107,6 @@ export const useCourseEditSubmit = ({
 
       const skipRoles = new Set<CourseImageRole>()
       let didDeleteImages = false
-
-      if (logoImage) {
-        const deleteResult = await deleteExistingImages(
-          courseId,
-          logoImages,
-        )
-        if (!deleteResult.ok) {
-          const errorMessage =
-            deleteResult.errorMessage ?? t('errors.generic')
-          skipRoles.add('LOGO')
-          markImageError(logoImage.id, errorMessage)
-          showToast({
-            message: errorMessage,
-            tone: 'error',
-          })
-        } else if (deleteResult.deleted > 0) {
-          didDeleteImages = true
-        }
-      }
 
       if (mainImage) {
         const deleteResult = await deleteExistingImages(

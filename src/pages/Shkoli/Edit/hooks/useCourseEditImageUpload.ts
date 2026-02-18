@@ -16,7 +16,6 @@ type UseCourseEditImageUploadOptions = {
   courseId: number
   isValidId: boolean
   t: TFunction
-  logoImage: PendingCourseImage | null
   mainImage: PendingCourseImage | null
   galleryImages: PendingCourseImage[]
   updateImageState: (
@@ -29,7 +28,6 @@ export const useCourseEditImageUpload = ({
   courseId,
   isValidId,
   t,
-  logoImage,
   mainImage,
   galleryImages,
   updateImageState,
@@ -79,7 +77,6 @@ export const useCourseEditImageUpload = ({
   ): Promise<ImageUploadResult> => {
     const { skipRoles } = options
     const images: PendingCourseImage[] = [
-      ...(logoImage ? [logoImage] : []),
       ...(mainImage ? [mainImage] : []),
       ...galleryImages,
     ].filter((image) => !skipRoles || !skipRoles.has(image.role))

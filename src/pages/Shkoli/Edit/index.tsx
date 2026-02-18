@@ -30,8 +30,6 @@ const CourseEditPage = () => {
   const {
     course,
     lecturers,
-    courseImages,
-    logoImages,
     mainImages,
     existingGalleryImages,
     isCourseLoading,
@@ -55,10 +53,8 @@ const CourseEditPage = () => {
   } = useCourseEditForm({ course, t })
 
   const {
-    logoImage,
     mainImage,
     galleryImages,
-    logoImageError,
     mainImageError,
     galleryImageError,
     allowedImageTypesLabel,
@@ -69,7 +65,6 @@ const CourseEditPage = () => {
     handleGallerySelect,
     removeSingleImage,
     removeGalleryImage,
-    updateLogoAltText,
     updateMainAltText,
     updateGalleryAltText,
     uploadCourseImages,
@@ -84,9 +79,7 @@ const CourseEditPage = () => {
     course,
     hasEditAccess,
     lyceumId,
-    logoImage,
     mainImage,
-    logoImages,
     mainImages,
     uploadCourseImages,
     deleteExistingImages,
@@ -200,8 +193,6 @@ const CourseEditPage = () => {
             t={t}
           />
           <CourseEditImagesSection
-            courseImages={courseImages}
-            logoImages={logoImages}
             mainImages={mainImages}
             existingGalleryImages={existingGalleryImages}
             isImagesLoading={isImagesLoading}
@@ -211,17 +202,14 @@ const CourseEditPage = () => {
             isSubmitting={isSubmitting}
             onDeleteExistingImage={handleDeleteExistingImage}
             allowedImageTypesLabel={allowedImageTypesLabel}
-            logoImage={logoImage}
             mainImage={mainImage}
             galleryImages={galleryImages}
-            logoImageError={logoImageError}
             mainImageError={mainImageError}
             galleryImageError={galleryImageError}
             onSingleImageSelect={handleSingleImageSelect}
             onGallerySelect={handleGallerySelect}
             onRemoveSingleImage={removeSingleImage}
             onRemoveGalleryImage={removeGalleryImage}
-            onUpdateLogoAltText={updateLogoAltText}
             onUpdateMainAltText={updateMainAltText}
             onUpdateGalleryAltText={updateGalleryAltText}
             t={t}

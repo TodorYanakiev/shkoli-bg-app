@@ -10,10 +10,8 @@ import type { PendingCourseImage } from '../types'
 
 type CourseCreateImagesSectionProps = {
   allowedImageTypesLabel: string
-  logoImage: PendingCourseImage | null
   mainImage: PendingCourseImage | null
   galleryImages: PendingCourseImage[]
-  logoImageError: string | null
   mainImageError: string | null
   galleryImageError: string | null
   isSubmitting: boolean
@@ -24,7 +22,6 @@ type CourseCreateImagesSectionProps = {
   onGallerySelect: (event: ChangeEvent<HTMLInputElement>) => void
   onRemoveSingleImage: (role: CourseImageRole) => void
   onRemoveGalleryImage: (id: string) => void
-  onUpdateLogoAltText: (value: string) => void
   onUpdateMainAltText: (value: string) => void
   onUpdateGalleryAltText: (id: string, value: string) => void
   t: TFunction
@@ -32,10 +29,8 @@ type CourseCreateImagesSectionProps = {
 
 export const CourseCreateImagesSection = ({
   allowedImageTypesLabel,
-  logoImage,
   mainImage,
   galleryImages,
-  logoImageError,
   mainImageError,
   galleryImageError,
   isSubmitting,
@@ -43,7 +38,6 @@ export const CourseCreateImagesSection = ({
   onGallerySelect,
   onRemoveSingleImage,
   onRemoveGalleryImage,
-  onUpdateLogoAltText,
   onUpdateMainAltText,
   onUpdateGalleryAltText,
   t,
@@ -59,17 +53,6 @@ export const CourseCreateImagesSection = ({
       })}
     </p>
     <div className="grid gap-4 pt-2 md:grid-cols-2">
-      <CourseCreateImageUploadCard
-        label={t('pages.shkoli.create.images.logoLabel')}
-        role="LOGO"
-        image={logoImage}
-        error={logoImageError}
-        isSubmitting={isSubmitting}
-        onSelect={onSingleImageSelect}
-        onRemove={onRemoveSingleImage}
-        onAltTextChange={onUpdateLogoAltText}
-        t={t}
-      />
       <CourseCreateImageUploadCard
         label={t('pages.shkoli.create.images.mainLabel')}
         role="MAIN"

@@ -48,10 +48,8 @@ const CourseCreatePage = () => {
   } = useCourseCreateForm({ t })
 
   const {
-    logoImage,
     mainImage,
     galleryImages,
-    logoImageError,
     mainImageError,
     galleryImageError,
     allowedImageTypesLabel,
@@ -60,7 +58,6 @@ const CourseCreatePage = () => {
     handleGallerySelect,
     removeSingleImage,
     removeGalleryImage,
-    updateLogoAltText,
     updateMainAltText,
     updateGalleryAltText,
     uploadCourseImages,
@@ -179,10 +176,8 @@ const CourseCreatePage = () => {
           />
           <CourseCreateImagesSection
             allowedImageTypesLabel={allowedImageTypesLabel}
-            logoImage={logoImage}
             mainImage={mainImage}
             galleryImages={galleryImages}
-            logoImageError={logoImageError}
             mainImageError={mainImageError}
             galleryImageError={galleryImageError}
             isSubmitting={isSubmitting}
@@ -190,7 +185,6 @@ const CourseCreatePage = () => {
             onGallerySelect={handleGallerySelect}
             onRemoveSingleImage={removeSingleImage}
             onRemoveGalleryImage={removeGalleryImage}
-            onUpdateLogoAltText={updateLogoAltText}
             onUpdateMainAltText={updateMainAltText}
             onUpdateGalleryAltText={updateGalleryAltText}
             t={t}
