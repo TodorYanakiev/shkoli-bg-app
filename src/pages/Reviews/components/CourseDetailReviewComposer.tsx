@@ -6,7 +6,10 @@ import type { AppError } from '../../../types/appError'
 import type { ReviewFormValues } from '../validations/reviewSchema'
 
 type CourseDetailReviewComposerProps = {
-  contentKeyPrefix: 'pages.reviews.courseDetail' | 'pages.reviews.lecturerDetail'
+  contentKeyPrefix:
+    | 'pages.reviews.courseDetail'
+    | 'pages.reviews.lyceumDetail'
+    | 'pages.reviews.lecturerDetail'
   isAuthenticated: boolean
   hasOwnReview: boolean
   isMutating: boolean
@@ -164,4 +167,3 @@ export const CourseDetailReviewComposer = ({
     </article>
   )
 }
-

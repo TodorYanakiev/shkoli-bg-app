@@ -11,7 +11,10 @@ import { CourseDetailReviewComposer } from './CourseDetailReviewComposer'
 import { CourseDetailReviewsList } from './CourseDetailReviewsList'
 
 type CourseDetailReviewsPanelProps = {
-  contentKeyPrefix: 'pages.reviews.courseDetail' | 'pages.reviews.lecturerDetail'
+  contentKeyPrefix:
+    | 'pages.reviews.courseDetail'
+    | 'pages.reviews.lyceumDetail'
+    | 'pages.reviews.lecturerDetail'
   sectionId: string
   className?: string
   reviews: ReviewResponse[]

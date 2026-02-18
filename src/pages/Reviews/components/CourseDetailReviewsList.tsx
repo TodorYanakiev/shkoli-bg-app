@@ -7,7 +7,10 @@ import type { ReviewResponse } from '../../../types/reviews'
 import { formatReviewDate } from '../services/reviewFormatters'
 
 type CourseDetailReviewsListProps = {
-  contentKeyPrefix: 'pages.reviews.courseDetail' | 'pages.reviews.lecturerDetail'
+  contentKeyPrefix:
+    | 'pages.reviews.courseDetail'
+    | 'pages.reviews.lyceumDetail'
+    | 'pages.reviews.lecturerDetail'
   reviews: ReviewResponse[]
   reviewerNames: Map<number, string>
   currentUserId?: number

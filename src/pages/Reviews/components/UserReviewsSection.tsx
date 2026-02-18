@@ -59,7 +59,9 @@ export const UserReviewsSection = ({
   const createMutation = useCreateUserReviewMutation(userId)
   const updateMutation = useUpdateUserReviewMutation(userId, currentUserId)
   const deleteMutation = useDeleteUserReviewMutation(userId, currentUserId)
-  const ownReview = ownReviewQuery.data ?? ownReviewFromList
+  const ownReview = hasOwnReviewInList
+    ? ownReviewQuery.data ?? ownReviewFromList
+    : null
   const hasOwnReview = Boolean(ownReview?.id)
   const reviewerIds = useMemo(
     () =>
