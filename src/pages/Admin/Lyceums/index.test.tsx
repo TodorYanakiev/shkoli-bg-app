@@ -99,6 +99,7 @@ describe('AdminLyceumsPage', () => {
 
     expect(await screen.findByText('Lyceums')).toBeDefined()
     expect(screen.getByText('1 verified')).toBeDefined()
+    expect(screen.getByRole('button', { name: 'Create lyceum' })).toBeDefined()
   })
 
   it('renders loading state', async () => {

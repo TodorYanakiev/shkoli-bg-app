@@ -1,1 +1,2 @@
-export {}
+export * from './adminLyceumAdminSchema'
+export * from './adminLyceumCreateSchema'

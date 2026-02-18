@@ -1,13 +1,18 @@
+import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
 import { AdminLyceumsFilters } from './components/AdminLyceumsFilters'
 import { AdminLyceumsGrid } from './components/AdminLyceumsGrid'
 import { AdminLyceumsHeader } from './components/AdminLyceumsHeader'
+import { AdminLyceumCreateModal } from './components/AdminLyceumCreateModal'
+import { useAdminLyceumCreateActions } from './hooks/useAdminLyceumCreateActions'
 import { useAdminLyceumsData } from './hooks/useAdminLyceumsData'
 
 const AdminLyceumsPage = () => {
   const { t } = useTranslation()
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const { isCreating, onCreate } = useAdminLyceumCreateActions()
   const {
     lyceums,
     isLoading,
@@ -28,6 +33,8 @@ const AdminLyceumsPage = () => {
       <AdminLyceumsHeader
         verifiedCount={verifiedCount}
         isLoading={isLoading}
+        isCreateSubmitting={isCreating}
+        onOpenCreateModal={() => setIsCreateModalOpen(true)}
       />
       <AdminLyceumsFilters
         state={filters.state}
@@ -46,6 +53,12 @@ const AdminLyceumsPage = () => {
         error={error}
         pagination={pagination}
         hasActiveFilters={filters.hasActiveFilters}
+      />
+      <AdminLyceumCreateModal
+        isOpen={isCreateModalOpen}
+        isSubmitting={isCreating}
+        onConfirm={onCreate}
+        onCancel={() => setIsCreateModalOpen(false)}
       />
     </section>
   )

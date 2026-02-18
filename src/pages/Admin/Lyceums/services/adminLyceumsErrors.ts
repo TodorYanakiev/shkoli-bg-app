@@ -50,6 +50,17 @@ export const getAdminLyceumsLoadError = (error: ApiError | null) =>
 export const getAdminLyceumsDeleteError = (error: ApiError | null) =>
   error ? mapApiError(error, 'errors.lyceums.deleteFailed') : null
 
+export const getAdminLyceumsCreateError = (error: ApiError | null) => {
+  if (!error) return null
+  if (error.status === 409) {
+    return mapApiError(error, 'errors.lyceums.createConflict')
+  }
+  if (error.status === 400) {
+    return mapApiError(error, 'errors.lyceums.createInvalid')
+  }
+  return mapApiError(error, 'errors.lyceums.createFailed')
+}
+
 export const getAdminLyceumsAdminsLoadError = (error: ApiError | null) =>
   error ? mapApiError(error, 'pages.admin.lyceums.admins.loadFailed') : null
 

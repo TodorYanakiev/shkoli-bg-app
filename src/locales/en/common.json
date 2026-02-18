@@ -132,6 +132,9 @@
       "imageConfigMissing": "Image upload is not configured."
     },
     "lyceums": {
+      "createFailed": "We couldn't create this lyceum. Try again.",
+      "createInvalid": "Provide a valid lyceum name, town, and email.",
+      "createConflict": "A lyceum with these details already exists.",
       "updateFailed": "We couldn't update this lyceum. Try again.",
       "deleteFailed": "We couldn't delete this lyceum. Try again.",
       "imageUploadFailed": "We couldn't upload this image. Try again.",
@@ -230,6 +233,7 @@
       "deleteSuccess": "Course deleted successfully."
     },
     "lyceums": {
+      "createSuccess": "Lyceum created successfully.",
       "updateSuccess": "Lyceum updated successfully.",
       "deleteSuccess": "Lyceum deleted successfully.",
       "adminAdded": "Administrator assigned successfully.",
@@ -1348,6 +1352,33 @@
           "deleting": "Deleting...",
           "manageAdmins": "Manage admins",
           "reviews": "Reviews"
+        },
+        "create": {
+          "open": "Create lyceum",
+          "title": "Create lyceum",
+          "description": "Add a new lyceum profile to the platform.",
+          "selectPlaceholder": "Select an option",
+          "fields": {
+            "name": "Name",
+            "town": "Town",
+            "email": "Contact email",
+            "phone": "Phone",
+            "address": "Address",
+            "region": "Region",
+            "municipality": "Municipality",
+            "status": "Status",
+            "bulstat": "Bulstat",
+            "registrationNumber": "Registration number",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "chairman": "Chairman",
+            "secretary": "Secretary",
+            "chitalishtaUrl": "Chitalishta URL",
+            "urlToLibrariesSite": "Libraries site URL"
+          },
+          "submit": "Create lyceum",
+          "submitting": "Creating...",
+          "cancel": "Cancel"
         },
         "admins": {
           "title": "Lyceum administrators",
