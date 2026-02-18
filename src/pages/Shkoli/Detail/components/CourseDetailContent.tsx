@@ -130,6 +130,19 @@ export const CourseDetailContent = ({
     scheduleDuration === fallbackValue ? null : scheduleDuration
   const { reviewEditorTriggerId, openReviewsTab, openReviewEditor } =
     useCourseDetailReviewActions({ onSelectTab })
+  const openOverviewTab = () => {
+    onSelectTab('overview')
+
+    if (typeof window === 'undefined') return
+
+    window.setTimeout(() => {
+      const overviewSection = document.getElementById('course-overview')
+      overviewSection?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }, 0)
+  }
 
   return (
     <div className="relative">
@@ -166,6 +179,7 @@ export const CourseDetailContent = ({
             mainImage={mainImage}
             mainImageUrl={mainImageUrl}
             onOpenReviewsTab={openReviewsTab}
+            onOpenOverviewTab={openOverviewTab}
             className="min-h-0 flex-1"
             t={t}
           />

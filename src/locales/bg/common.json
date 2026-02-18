@@ -817,7 +817,8 @@
           "visitWebsite": "Посети уебсайт",
           "leaveReview": "Остави отзив",
           "writeReview": "Напиши отзив",
-          "openMap": "Отвори карта"
+          "openMap": "Отвори карта",
+          "seeMore": "Виж още"
         },
         "averageRatingLabel": "Средна оценка {{rating}} от {{max}}",
         "noRating": "Няма отзиви за тази школа.",

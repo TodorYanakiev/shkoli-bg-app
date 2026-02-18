@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import type { TFunction } from 'i18next'
 
 import type { CourseImageResponse } from '../../../../types/courses'
@@ -17,6 +18,7 @@ type CourseDetailHeroBandProps = {
   mainImage?: CourseImageResponse
   mainImageUrl: string
   onOpenReviewsTab: () => void
+  onOpenOverviewTab: () => void
   className?: string
   t: TFunction
 }
@@ -34,6 +36,7 @@ export const CourseDetailHeroBand = ({
   mainImage,
   mainImageUrl,
   onOpenReviewsTab,
+  onOpenOverviewTab,
   className,
   t,
 }: CourseDetailHeroBandProps) => {
@@ -42,6 +45,40 @@ export const CourseDetailHeroBand = ({
   const hasPriceData =
     pricePrimary !== t('pages.shkoli.detail.notProvided') ||
     Boolean(priceSecondary)
+  const maxVisibleLines = hasPriceData ? 11 : 15
+  const descriptionLength = description.trim().length
+  const isLikelyLongDescription = hasPriceData
+    ? descriptionLength > 260
+    : descriptionLength > 360
+  const descriptionRef = useRef<HTMLParagraphElement | null>(null)
+  const [isDescriptionTruncated, setIsDescriptionTruncated] = useState(false)
+  const shouldShowMoreLink = isDescriptionTruncated || isLikelyLongDescription
+
+  useEffect(() => {
+    const descriptionElement = descriptionRef.current
+    if (!descriptionElement) return
+
+    const checkOverflow = () => {
+      const hasOverflow =
+        descriptionElement.scrollHeight > descriptionElement.clientHeight + 1
+      setIsDescriptionTruncated(hasOverflow)
+    }
+
+    checkOverflow()
+
+    if (typeof ResizeObserver === 'undefined') {
+      return
+    }
+
+    const observer = new ResizeObserver(() => {
+      checkOverflow()
+    })
+    observer.observe(descriptionElement)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [description, hasPriceData])
 
   return (
     <section
@@ -51,7 +88,7 @@ export const CourseDetailHeroBand = ({
     >
       <div className="grid h-full min-h-0 grid-rows-[minmax(0,1fr)] gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
         <div className="flex min-h-0 min-w-0 items-start overflow-hidden px-8 py-7 lg:px-9 lg:pb-8 lg:pt-9">
-          <div className="max-w-[32rem] overflow-hidden">
+          <div className="flex h-full min-h-0 max-w-[32rem] flex-col overflow-hidden">
             <div className="space-y-1">
               <h1 className="line-clamp-2 text-4xl font-semibold leading-[1.08] text-slate-900">
                 {courseName}
@@ -107,12 +144,29 @@ export const CourseDetailHeroBand = ({
               </div>
             ) : null}
 
-            <p className="mt-5 line-clamp-3 max-w-[30rem] text-lg leading-relaxed text-slate-700">
-              {description}
-            </p>
+            <div className="mt-5 min-h-0 flex flex-1 flex-col">
+              <p
+                ref={descriptionRef}
+                className="min-h-0 max-w-[30rem] flex-1 overflow-hidden text-ellipsis text-lg leading-relaxed text-slate-700 [display:-webkit-box] [-webkit-box-orient:vertical]"
+                style={{
+                  WebkitLineClamp: maxVisibleLines,
+                }}
+              >
+                {description}
+              </p>
+              {shouldShowMoreLink ? (
+                <button
+                  type="button"
+                  onClick={onOpenOverviewTab}
+                  className="mt-2 inline-flex shrink-0 items-center text-sm font-medium text-brand underline decoration-brand/40 underline-offset-2 hover:text-brand-dark"
+                >
+                  {t('pages.shkoli.detail.actions.seeMore')}
+                </button>
+              ) : null}
+            </div>
 
             {hasPriceData ? (
-              <p className="mt-5 inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-700">
+              <p className="mt-4 inline-flex self-start items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-700">
                 <span className="font-semibold text-slate-900">
                   {pricePrimary}
                 </span>

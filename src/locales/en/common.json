@@ -817,7 +817,8 @@
           "visitWebsite": "Visit website",
           "leaveReview": "Leave review",
           "writeReview": "Write a review",
-          "openMap": "Open map"
+          "openMap": "Open map",
+          "seeMore": "See more"
         },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
