@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { Controller, type Control } from 'react-hook-form'
 import type { TFunction } from 'i18next'
 
-import { LYCEUM_TOWNS } from '../../../../constants/lyceums'
+import { PUBLIC_LYCEUM_TOWNS } from '../../../../constants/lyceums'
 import { useDropdownPanelPosition } from '../../hooks/useDropdownPanelPosition'
 import type { LyceumFilterFormValues } from '../../validations/lyceumFilterSchema'
 
@@ -126,7 +126,7 @@ const LyceumFilterTownSelect = ({
                       >
                         <span>{t('pages.lyceums.list.filters.townPlaceholder')}</span>
                       </button>
-                      {LYCEUM_TOWNS.map((option) => {
+                      {PUBLIC_LYCEUM_TOWNS.map((option) => {
                         const isSelected = option === selectedTown
                         return (
                           <button

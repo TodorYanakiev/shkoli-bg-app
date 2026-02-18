@@ -6,7 +6,7 @@ import {
   COURSE_DAYS_OF_WEEK,
   COURSE_TYPES,
 } from '../../../constants/courses'
-import { LYCEUM_TOWNS } from '../../../constants/lyceums'
+import { PUBLIC_LYCEUM_TOWNS } from '../../../constants/lyceums'
 import type { CourseFilterFormValues } from '../validations/courseFilterSchema'
 import {
   COURSE_SORT_OPTIONS,
@@ -66,7 +66,9 @@ const parseTown = (value: string | null) => {
   if (!value) return ''
   const trimmed = value.trim()
   if (!trimmed) return ''
-  return LYCEUM_TOWNS.includes(trimmed as (typeof LYCEUM_TOWNS)[number])
+  return PUBLIC_LYCEUM_TOWNS.includes(
+    trimmed as (typeof PUBLIC_LYCEUM_TOWNS)[number],
+  )
     ? trimmed
     : ''
 }
