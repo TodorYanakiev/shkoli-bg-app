@@ -19,6 +19,7 @@ type CourseDetailReviewsPanelProps = {
   className?: string
   reviews: ReviewResponse[]
   reviewerNames: Map<number, string>
+  reviewerAvatarUrls: Map<number, string>
   currentUserId?: number
   resolvedAverage: number | null
   isAuthenticated: boolean
@@ -44,6 +45,7 @@ export const CourseDetailReviewsPanel = ({
   className,
   reviews,
   reviewerNames,
+  reviewerAvatarUrls,
   currentUserId,
   resolvedAverage,
   isAuthenticated,
@@ -167,6 +169,7 @@ export const CourseDetailReviewsPanel = ({
         contentKeyPrefix={contentKeyPrefix}
         reviews={reviews}
         reviewerNames={reviewerNames}
+        reviewerAvatarUrls={reviewerAvatarUrls}
         currentUserId={currentUserId}
         reviewsLoading={reviewsLoading}
         reviewsError={reviewsError}

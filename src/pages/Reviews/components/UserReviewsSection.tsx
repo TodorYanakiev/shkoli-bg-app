@@ -7,6 +7,7 @@ import { useAuthStatus } from '../../../hooks/useAuthStatus'
 import { useUsersByIds } from '../../../hooks/useUsersByIds'
 import type { AppError } from '../../../types/appError'
 import { getUserDisplayName } from '../../../utils/user'
+import { resolveUserImageUrl } from '../../../utils/userImages'
 import { useUserProfile } from '../../Profile/hooks/useUserProfile'
 import {
   useCreateUserReviewMutation,
@@ -94,6 +95,17 @@ export const UserReviewsSection = ({
           ),
     [reviewersQuery.data, t],
   )
+  const reviewerAvatarUrls = useMemo(() => {
+    const avatarMap = new Map<number, string>()
+    reviewersQuery.data?.forEach((user) => {
+      if (user.id == null) return
+      const avatarUrl = resolveUserImageUrl(user.profileImage)
+      if (avatarUrl) {
+        avatarMap.set(user.id, avatarUrl)
+      }
+    })
+    return avatarMap
+  }, [reviewersQuery.data])
   const resolvedAverage =
     normalizeAverageRating(averageRating) ?? calculateAverageRating(reviews)
   const form = useReviewForm({ review: ownReview, t })
@@ -198,6 +210,7 @@ export const UserReviewsSection = ({
       className={className}
       reviews={reviews}
       reviewerNames={reviewerNames}
+      reviewerAvatarUrls={reviewerAvatarUrls}
       currentUserId={currentUserId}
       resolvedAverage={resolvedAverage}
       isAuthenticated={isAuthenticated}

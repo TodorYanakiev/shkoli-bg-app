@@ -13,6 +13,7 @@ type CourseDetailReviewsListProps = {
     | 'pages.reviews.lecturerDetail'
   reviews: ReviewResponse[]
   reviewerNames: Map<number, string>
+  reviewerAvatarUrls: Map<number, string>
   currentUserId?: number
   reviewsLoading: boolean
   reviewsError: AppError | null
@@ -72,6 +73,7 @@ export const CourseDetailReviewsList = ({
   contentKeyPrefix,
   reviews,
   reviewerNames,
+  reviewerAvatarUrls,
   currentUserId,
   reviewsLoading,
   reviewsError,
@@ -126,6 +128,8 @@ export const CourseDetailReviewsList = ({
               const reviewerName =
                 (reviewerId != null ? reviewerNames.get(reviewerId) : null) ??
                 t('pages.reviews.list.reviewerFallback')
+              const reviewerAvatarUrl =
+                reviewerId != null ? reviewerAvatarUrls.get(reviewerId) : null
               const ratingValue = review.rating ?? 0
               const createdAt = formatReviewDate(review.createdAt, i18n.language)
 
@@ -136,8 +140,16 @@ export const CourseDetailReviewsList = ({
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
-                      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-xs font-semibold text-slate-600">
-                        {getInitials(reviewerName)}
+                      <span className="relative inline-flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 text-xs font-semibold text-slate-600">
+                        <span>{getInitials(reviewerName)}</span>
+                        {reviewerAvatarUrl ? (
+                          <img
+                            src={reviewerAvatarUrl}
+                            alt=""
+                            className="absolute inset-0 h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : null}
                       </span>
                       <div className="min-w-0">
                         <p className="truncate text-base font-semibold text-slate-900">
@@ -166,11 +178,6 @@ export const CourseDetailReviewsList = ({
                       {t('pages.reviews.list.commentEmpty')}
                     </p>
                   )}
-                  <div className="mt-3 flex items-center justify-end">
-                    <span className="text-sm text-slate-500">
-                      {t(`${contentKeyPrefix}.helpful`)} 0
-                    </span>
-                  </div>
                 </li>
               )
             })}
