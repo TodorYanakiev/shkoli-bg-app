@@ -68,7 +68,7 @@ const CourseResultsSection = ({
       </div>
 
       {isLoading ? (
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {Array.from({ length: pageSize }, (_, index) => (
             <CourseCardSkeleton key={`course-skeleton-${index}`} />
           ))}
@@ -85,7 +85,7 @@ const CourseResultsSection = ({
           {t('pages.shkoli.list.states.empty')}
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {courses.map((course, index) => {
             const style: CSSProperties = {
               animationDelay: `${index * 70}ms`,
