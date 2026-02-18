@@ -3,18 +3,21 @@ import { useTranslation } from 'react-i18next'
 
 import type { AppError } from '../../../../types/appError'
 import type { LyceumResponse } from '../../../../types/lyceums'
+import type { AdminReviewEntity } from '../../types'
 import type { AdminLyceumsPagination } from '../types'
 import { AdminLyceumCard } from './AdminLyceumCard'
 import { AdminLyceumDeleteModal } from './AdminLyceumDeleteModal'
 import { AdminLyceumAdminsModal } from './AdminLyceumAdminsModal'
 import { AdminLyceumsPaginationControls } from './AdminLyceumsPagination'
 import { useAdminLyceumActions } from '../hooks/useAdminLyceumActions'
+import { AdminReviewsModal } from '../../components/AdminReviewsModal'
 
 type AdminLyceumsGridProps = {
   lyceums: LyceumResponse[]
   isLoading: boolean
   error: AppError | null
   pagination: AdminLyceumsPagination
+  hasActiveFilters?: boolean
 }
 
 const AdminLyceumsSkeleton = () => (
@@ -49,6 +52,7 @@ export const AdminLyceumsGrid = ({
   isLoading,
   error,
   pagination,
+  hasActiveFilters = false,
 }: AdminLyceumsGridProps) => {
   const { t } = useTranslation()
   const { onDelete, isDeleting } = useAdminLyceumActions()
@@ -60,6 +64,9 @@ export const AdminLyceumsGrid = ({
     id: number
     name?: string
   } | null>(null)
+  const [reviewTarget, setReviewTarget] = useState<AdminReviewEntity | null>(
+    null,
+  )
 
   const isDeleteSubmitting = deleteTarget
     ? isDeleting(deleteTarget.id)
@@ -88,7 +95,9 @@ export const AdminLyceumsGrid = ({
           </div>
         ) : pagination.totalItems === 0 ? (
           <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-4 text-sm text-slate-600">
-            {t('pages.admin.lyceums.empty')}
+            {hasActiveFilters
+              ? t('pages.admin.lyceums.emptyFiltered')
+              : t('pages.admin.lyceums.empty')}
           </div>
         ) : (
           <div className="space-y-5">
@@ -118,6 +127,15 @@ export const AdminLyceumsGrid = ({
                     onManageAdmins={(id, name) => {
                       if (!id) return
                       setAdminTarget({ id, name })
+                    }}
+                    onManageReviews={(id, name, averageRating) => {
+                      if (!id) return
+                      setReviewTarget({
+                        type: 'lyceum',
+                        id,
+                        name,
+                        averageRating,
+                      })
                     }}
                     isDeleting={isDeleting(lyceum.id)}
                   />
@@ -149,6 +167,13 @@ export const AdminLyceumsGrid = ({
           lyceumName={adminTarget.name}
           isOpen={Boolean(adminTarget)}
           onClose={() => setAdminTarget(null)}
+        />
+      ) : null}
+      {reviewTarget ? (
+        <AdminReviewsModal
+          isOpen={Boolean(reviewTarget)}
+          reviewTarget={reviewTarget}
+          onClose={() => setReviewTarget(null)}
         />
       ) : null}
     </>

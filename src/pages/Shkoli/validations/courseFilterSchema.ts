@@ -6,7 +6,7 @@ import {
   COURSE_DAYS_OF_WEEK,
   COURSE_TYPES,
 } from '../../../constants/courses'
-import { LYCEUM_TOWNS } from '../../../constants/lyceums'
+import { PUBLIC_LYCEUM_TOWNS } from '../../../constants/lyceums'
 import { COURSE_SORT_OPTIONS } from '../types'
 
 const isCourseType = (value: string) =>
@@ -21,7 +21,9 @@ const isCourseDayOfWeek = (value: string) =>
   )
 
 const isLyceumTown = (value: string) =>
-  LYCEUM_TOWNS.includes(value as (typeof LYCEUM_TOWNS)[number])
+  PUBLIC_LYCEUM_TOWNS.includes(
+    value as (typeof PUBLIC_LYCEUM_TOWNS)[number],
+  )
 
 const isTimeValue = (value: string) =>
   /^([01]\d|2[0-3]):[0-5]\d$/.test(value)

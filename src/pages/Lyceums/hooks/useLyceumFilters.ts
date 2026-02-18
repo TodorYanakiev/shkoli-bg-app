@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+import { PUBLIC_LYCEUM_TOWNS } from '../../../constants/lyceums'
 import type { LyceumFilterFormValues } from '../validations/lyceumFilterSchema'
 import type { LyceumFilterQuery, LyceumFilterState } from '../types'
 
@@ -14,13 +15,24 @@ const parsePage = (value: string | null) => {
   return parsed
 }
 
+const parseTown = (value: string | null) => {
+  if (!value) return ''
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+  return PUBLIC_LYCEUM_TOWNS.includes(
+    trimmed as (typeof PUBLIC_LYCEUM_TOWNS)[number],
+  )
+    ? trimmed
+    : ''
+}
+
 export const useLyceumFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const town = useMemo(() => {
-    const value = searchParams.get('town')?.trim()
-    return value && value.length > 0 ? value : ''
-  }, [searchParams])
+  const town = useMemo(
+    () => parseTown(searchParams.get('town')),
+    [searchParams],
+  )
 
   const page = useMemo(
     () => parsePage(searchParams.get('page')),
@@ -56,7 +68,12 @@ export const useLyceumFilters = () => {
       const nextParams = new URLSearchParams()
       const normalizedTown = values.town.trim()
 
-      if (normalizedTown) {
+      if (
+        normalizedTown &&
+        PUBLIC_LYCEUM_TOWNS.includes(
+          normalizedTown as (typeof PUBLIC_LYCEUM_TOWNS)[number],
+        )
+      ) {
         nextParams.set('town', normalizedTown)
       }
 

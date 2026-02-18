@@ -7,6 +7,11 @@ type AdminLyceumCardProps = {
   lyceum: LyceumResponse
   onRequestDelete?: (id?: number, name?: string) => void
   onManageAdmins?: (id?: number, name?: string) => void
+  onManageReviews?: (
+    id?: number,
+    name?: string,
+    averageRating?: number,
+  ) => void
   isDeleting?: boolean
 }
 
@@ -29,6 +34,7 @@ export const AdminLyceumCard = ({
   lyceum,
   onRequestDelete,
   onManageAdmins,
+  onManageReviews,
   isDeleting = false,
 }: AdminLyceumCardProps) => {
   const { t } = useTranslation()
@@ -88,6 +94,22 @@ export const AdminLyceumCard = ({
             disabled={!lyceum.id}
           >
             {t('pages.admin.lyceums.actions.manageAdmins')}
+          </button>
+          <button
+            type="button"
+            className={actionClassName}
+            onClick={() =>
+              onManageReviews?.(lyceum.id, lyceum.name, lyceum.averageRating)
+            }
+            disabled={!lyceum.id || isDeleting}
+            aria-label={t('pages.admin.reviews.openReviewsFor', {
+              name: lyceum.name ?? fallback,
+            })}
+            title={t('pages.admin.reviews.openReviewsFor', {
+              name: lyceum.name ?? fallback,
+            })}
+          >
+            {t('pages.admin.lyceums.actions.reviews')}
           </button>
         </div>
         <span

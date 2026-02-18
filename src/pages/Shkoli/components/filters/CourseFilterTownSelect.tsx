@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { Controller, type Control } from 'react-hook-form'
 import type { TFunction } from 'i18next'
 
-import { LYCEUM_TOWNS } from '../../../../constants/lyceums'
+import { PUBLIC_LYCEUM_TOWNS } from '../../../../constants/lyceums'
 import type { CourseFilterFormValues } from '../../validations/courseFilterSchema'
 import { useDropdownPanelPosition } from '../../hooks/useDropdownPanelPosition'
 
@@ -126,7 +126,7 @@ const CourseFilterTownSelect = ({
                             {t('pages.shkoli.list.filters.townPlaceholder')}
                           </span>
                         </button>
-                        {LYCEUM_TOWNS.map((option) => {
+                        {PUBLIC_LYCEUM_TOWNS.map((option) => {
                           const isSelected = option === selectedTown
                           return (
                             <button

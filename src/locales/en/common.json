@@ -125,12 +125,16 @@
     "courses": {
       "createFailed": "We couldn't create this course. Try again.",
       "updateFailed": "We couldn't update this course. Try again.",
+      "deleteFailed": "We couldn't delete this course. Try again.",
       "imageUploadFailed": "We couldn't upload this image. Try again.",
       "imagesUploadFailed": "Some images could not be uploaded.",
       "imageDuplicate": "This image has already been uploaded.",
       "imageConfigMissing": "Image upload is not configured."
     },
     "lyceums": {
+      "createFailed": "We couldn't create this lyceum. Try again.",
+      "createInvalid": "Provide a valid lyceum name, town, and email.",
+      "createConflict": "A lyceum with these details already exists.",
       "updateFailed": "We couldn't update this lyceum. Try again.",
       "deleteFailed": "We couldn't delete this lyceum. Try again.",
       "imageUploadFailed": "We couldn't upload this image. Try again.",
@@ -157,6 +161,17 @@
         "alreadyAssigned": "That email is already a lecturer or has a pending invite.",
         "emailNotFound": "We couldn't find a user with that email."
       }
+    },
+    "users": {
+      "loadFailed": "We couldn't load users right now.",
+      "updateFailed": "We couldn't update this user. Try again.",
+      "deleteFailed": "We couldn't delete this user. Try again.",
+      "imageDeleteFailed": "We couldn't delete this user's profile image. Try again.",
+      "notFound": "We couldn't find that user.",
+      "server": "A server error occurred. Please try again.",
+      "conflict": "This user couldn't be updated because of a conflict.",
+      "emailExists": "A user with this email already exists.",
+      "usernameExists": "A user with this username already exists."
     },
     "profile": {
       "loadFailed": "We couldn't load your profile. Try again.",
@@ -214,15 +229,22 @@
     },
     "courses": {
       "createSuccess": "Course created successfully.",
-      "updateSuccess": "Course updated successfully."
+      "updateSuccess": "Course updated successfully.",
+      "deleteSuccess": "Course deleted successfully."
     },
     "lyceums": {
+      "createSuccess": "Lyceum created successfully.",
       "updateSuccess": "Lyceum updated successfully.",
       "deleteSuccess": "Lyceum deleted successfully.",
       "adminAdded": "Administrator assigned successfully.",
       "adminRemoved": "Administrator removed successfully.",
       "lecturerAdded": "Invitation sent. If the user already exists, they are now a lecturer.",
       "lecturerRemoved": "Lecturer removed successfully."
+    },
+    "users": {
+      "updateSuccess": "User updated successfully.",
+      "deleteSuccess": "User deleted successfully.",
+      "imageDeleted": "User profile image removed successfully."
     },
     "profile": {
       "updated": "Profile updated successfully.",
@@ -713,9 +735,14 @@
           "lyceum": "Lyceum",
           "gallery": "Gallery",
           "editCourse": "Update course",
+          "deleteCourse": "Delete course",
+          "deletingCourse": "Deleting...",
           "expand": "Expand menu",
           "collapse": "Collapse menu",
           "reviews": "Reviews"
+        },
+        "deleteConfirm": {
+          "message": "Delete {{name}}? This action cannot be undone."
         },
         "sections": {
           "overview": "Overview",
@@ -1273,17 +1300,11 @@
       "courses": {
         "title": "Courses",
         "subtitle": "Review and manage course content.",
-        "placeholder": "Course management tools will appear here."
-      },
-      "lyceums": {
-        "title": "Lyceums",
-        "subtitle": "Manage lyceum profiles and verification.",
-        "placeholder": "Lyceum administration tools will appear here.",
-        "loading": "Loading lyceums...",
-        "empty": "No lyceums available yet.",
-        "loadFailed": "We couldn't load the lyceums right now.",
-        "countLabel": "{{count}} lyceums",
-        "verifiedCountLabel": "{{count}} verified",
+        "loading": "Loading courses...",
+        "empty": "No courses available yet.",
+        "emptyFiltered": "No courses match the current filters.",
+        "loadFailed": "We couldn't load the courses right now.",
+        "countLabel": "{{count}} courses",
         "rangeLabel": "Showing {{start}}-{{end}} of {{total}}",
         "pagination": {
           "previous": "Previous page",
@@ -1294,7 +1315,75 @@
           "update": "Update",
           "delete": "Delete",
           "deleting": "Deleting...",
-          "manageAdmins": "Manage admins"
+          "view": "Open course page",
+          "reviews": "Reviews"
+        },
+        "deleteConfirm": {
+          "title": "Delete course",
+          "description": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+          "confirm": "Delete course",
+          "cancel": "Cancel"
+        }
+      },
+      "lyceums": {
+        "title": "Lyceums",
+        "subtitle": "Manage lyceum profiles and verification.",
+        "placeholder": "Lyceum administration tools will appear here.",
+        "loading": "Loading lyceums...",
+        "empty": "No lyceums available yet.",
+        "emptyFiltered": "No lyceums match the current filters.",
+        "loadFailed": "We couldn't load the lyceums right now.",
+        "countLabel": "{{count}} lyceums",
+        "verifiedCountLabel": "{{count}} verified",
+        "rangeLabel": "Showing {{start}}-{{end}} of {{total}}",
+        "filters": {
+          "nameLabel": "Name",
+          "namePlaceholder": "Search by lyceum name",
+          "townLabel": "Town",
+          "townAll": "All towns",
+          "verificationLabel": "Verification status",
+          "verified": "Verified",
+          "unverified": "Unverified",
+          "clear": "Clear filters"
+        },
+        "pagination": {
+          "previous": "Previous page",
+          "next": "Next page",
+          "page": "Page {{current}} of {{total}}"
+        },
+        "actions": {
+          "update": "Update",
+          "delete": "Delete",
+          "deleting": "Deleting...",
+          "manageAdmins": "Manage admins",
+          "reviews": "Reviews"
+        },
+        "create": {
+          "open": "Create lyceum",
+          "title": "Create lyceum",
+          "description": "Add a new lyceum profile to the platform.",
+          "selectPlaceholder": "Select an option",
+          "fields": {
+            "name": "Name",
+            "town": "Town",
+            "email": "Contact email",
+            "phone": "Phone",
+            "address": "Address",
+            "region": "Region",
+            "municipality": "Municipality",
+            "status": "Status",
+            "bulstat": "Bulstat",
+            "registrationNumber": "Registration number",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "chairman": "Chairman",
+            "secretary": "Secretary",
+            "chitalishtaUrl": "Chitalishta URL",
+            "urlToLibrariesSite": "Libraries site URL"
+          },
+          "submit": "Create lyceum",
+          "submitting": "Creating...",
+          "cancel": "Cancel"
         },
         "admins": {
           "title": "Lyceum administrators",
@@ -1333,8 +1422,106 @@
       },
       "users": {
         "title": "Users",
-        "subtitle": "Manage user access and roles.",
-        "placeholder": "User administration tools will appear here."
+        "subtitle": "Review, edit, and remove platform users.",
+        "loading": "Loading users...",
+        "empty": "No users available yet.",
+        "emptyFiltered": "No users match the current filters.",
+        "loadFailed": "We couldn't load users right now.",
+        "countLabel": "{{count}} users ({{admins}} admins)",
+        "badgeCountLabel": "{{count}} users",
+        "rangeLabel": "Showing {{start}}-{{end}} of {{total}}",
+        "filters": {
+          "searchLabel": "Search",
+          "searchPlaceholder": "Search by email",
+          "roleLabel": "Role",
+          "roleAll": "All roles",
+          "roleUser": "Users",
+          "roleAdmin": "Admins",
+          "statusLabel": "Status",
+          "enabled": "Enabled",
+          "disabled": "Disabled",
+          "clear": "Clear filters"
+        },
+        "pagination": {
+          "previous": "Previous page",
+          "next": "Next page",
+          "page": "Page {{current}} of {{total}}"
+        },
+        "role": {
+          "USER": "User",
+          "ADMIN": "Admin"
+        },
+        "status": {
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "fields": {
+          "username": "Username",
+          "administratedLyceum": "Administrated lyceum",
+          "administratedLyceumValue": "Lyceum #{{id}}",
+          "averageRating": "Average rating"
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete",
+          "saving": "Saving...",
+          "deleting": "Deleting...",
+          "reviews": "Reviews"
+        },
+        "editModal": {
+          "title": "Edit user",
+          "description": "Update user profile fields.",
+          "profileImage": {
+            "label": "Profile image",
+            "alt": "Profile image for {{name}}",
+            "empty": "No profile image.",
+            "remove": "Remove image",
+            "removing": "Removing..."
+          },
+          "fields": {
+            "firstname": "First name",
+            "lastname": "Last name",
+            "username": "Username",
+            "email": "Email",
+            "role": "Role",
+            "description": "Description"
+          },
+          "submit": "Save changes",
+          "submitting": "Saving...",
+          "cancel": "Cancel"
+        },
+        "deleteConfirm": {
+          "title": "Delete user",
+          "description": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+          "confirm": "Delete user",
+          "cancel": "Cancel"
+        }
+      },
+      "reviews": {
+        "title": "{{name}} reviews",
+        "subtitle": "Manage reviews for this {{entity}}.",
+        "entity": {
+          "course": "course",
+          "lyceum": "lyceum",
+          "user": "user"
+        },
+        "openReviewsFor": "Open reviews for {{name}}",
+        "loading": "Loading reviews...",
+        "empty": "No reviews for this item.",
+        "reviewersLoading": "Resolving reviewer details...",
+        "summary": {
+          "count": "{{count}} reviews",
+          "noRatings": "No ratings yet."
+        },
+        "reviewerFallback": "User #{{id}}",
+        "createdAt": "Created {{date}}",
+        "deletedAt": "Deleted {{date}}",
+        "deletedBadge": "Deleted",
+        "deleteConfirm": "Delete this review?",
+        "actions": {
+          "delete": "Delete",
+          "deleting": "Deleting..."
+        }
       },
       "loading": "Loading admin access...",
       "empty": "Admin details are not available yet."

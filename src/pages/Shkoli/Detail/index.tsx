@@ -13,6 +13,7 @@ import { CourseDetailScheduleSection } from './components/CourseDetailScheduleSe
 import { CourseDetailSideNav } from './components/CourseDetailSideNav'
 import { getCourseDetailSideNavItems } from './components/courseDetailSideNavItems'
 import { useCourseDetailData } from './hooks/useCourseDetailData'
+import { useCourseDetailDeleteAction } from './hooks/useCourseDetailDeleteAction'
 import { useCourseDetailLayout } from './hooks/useCourseDetailLayout'
 import { useCourseLecturerReviewsModal } from './hooks/useCourseLecturerReviewsModal'
 import { useCourseDetailView } from './hooks/useCourseDetailView'
@@ -37,6 +38,11 @@ const CourseDetailPage = () => {
     canEditCourse,
     lyceumId,
   } = useCourseDetailData({ courseId, isValidId })
+  const { isDeletingCourse, onDeleteCourse } = useCourseDetailDeleteAction({
+    courseId,
+    canDeleteCourse: canEditCourse,
+    courseName: course?.name,
+  })
 
   const {
     fallbackValue,
@@ -153,6 +159,11 @@ const CourseDetailPage = () => {
             sideNavToggleClassName={sideNavToggleClassName}
             sideNavContainerClassName={sideNavContainerClassName}
             sideNavListClassName={sideNavListClassName}
+            canDeleteCourse={canEditCourse}
+            isDeletingCourse={isDeletingCourse}
+            onDeleteCourse={() => {
+              void onDeleteCourse()
+            }}
             onToggle={() => setIsSideNavExpanded((prev) => !prev)}
             t={t}
           />

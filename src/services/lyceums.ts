@@ -35,6 +35,14 @@ export const getAllLyceums = async () => {
   return response.data;
 };
 
+export const createLyceum = async (payload: LyceumRequest) => {
+  const response = await httpClient.post<LyceumResponse>(
+    "/api/v1/lyceums",
+    payload,
+  );
+  return response.data;
+};
+
 export const getLyceumById = async (id: number) => {
   const response = await httpClient.get<LyceumResponse>(
     `/api/v1/lyceums/${id}`,

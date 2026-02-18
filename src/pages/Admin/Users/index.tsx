@@ -1,27 +1,45 @@
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
+import { AdminUsersFilters } from './components/AdminUsersFilters'
+import { AdminUsersGrid } from './components/AdminUsersGrid'
+import { AdminUsersHeader } from './components/AdminUsersHeader'
+import { useAdminUsersData } from './hooks/useAdminUsersData'
+
 const AdminUsersPage = () => {
   const { t } = useTranslation()
+  const { users, isLoading, error, pagination, adminCount, filters } =
+    useAdminUsersData()
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-6">
       <Helmet>
         <title>{`${t('pages.admin.users.title')} | ${t(
           'pages.admin.title',
         )} | ${t('app.title')}`}</title>
       </Helmet>
-      <div className="space-y-1">
-        <h2 className="text-xl font-semibold text-slate-900">
-          {t('pages.admin.users.title')}
-        </h2>
-        <p className="text-sm text-slate-600">
-          {t('pages.admin.users.subtitle')}
-        </p>
-      </div>
-      <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm text-slate-600">
-        {t('pages.admin.users.placeholder')}
-      </div>
+      <AdminUsersHeader
+        totalItems={pagination.totalItems}
+        adminCount={adminCount}
+        isLoading={isLoading}
+      />
+      <AdminUsersFilters
+        state={filters.state}
+        hasActiveFilters={filters.hasActiveFilters}
+        isLoading={isLoading}
+        onSearchChange={filters.setSearchFilter}
+        onRoleChange={filters.setRoleFilter}
+        onIncludeEnabledChange={filters.setIncludeEnabledFilter}
+        onIncludeDisabledChange={filters.setIncludeDisabledFilter}
+        onClear={filters.clearFilters}
+      />
+      <AdminUsersGrid
+        users={users}
+        isLoading={isLoading}
+        error={error}
+        pagination={pagination}
+        hasActiveFilters={filters.hasActiveFilters}
+      />
     </section>
   )
 }

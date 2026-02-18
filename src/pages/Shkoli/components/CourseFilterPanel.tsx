@@ -30,6 +30,7 @@ type CourseFilterPanelProps = {
   maxPrice?: number
   locale: string
   t: TFunction
+  compact?: boolean
 }
 
 const CourseFilterPanel = ({
@@ -49,6 +50,7 @@ const CourseFilterPanel = ({
   maxPrice,
   locale,
   t,
+  compact = false,
 }: CourseFilterPanelProps) => {
   const { control } = form
   const [closeSignal, setCloseSignal] = useState(0)
@@ -58,9 +60,14 @@ const CourseFilterPanel = ({
     onSubmit(event)
   }
 
+  const formClassName = compact ? 'mt-0' : 'mt-8'
+  const panelClassName = compact
+    ? 'relative z-30 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4'
+    : 'relative z-30 rounded-[32px] border border-white/80 bg-white/90 p-3 shadow-[0_45px_90px_-65px_rgba(15,23,42,0.5)] backdrop-blur-md sm:p-6'
+
   return (
-    <form onSubmit={handleSubmit} className="mt-8">
-      <div className="relative z-30 rounded-[32px] border border-white/80 bg-white/90 p-3 shadow-[0_45px_90px_-65px_rgba(15,23,42,0.5)] backdrop-blur-md sm:p-6">
+    <form onSubmit={handleSubmit} className={formClassName}>
+      <div className={panelClassName}>
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <CourseFilterTypeSelect
             control={control}
@@ -121,21 +128,20 @@ const CourseFilterPanel = ({
           />
         ) : null}
 
-        <div className="mt-4">
-          <CourseFilterChips
-            courseTypes={courseTypes}
-            ageGroups={ageGroups}
-            dayOfWeek={dayOfWeek}
-            town={town}
-            startTimeFrom={startTimeFrom}
-            startTimeTo={startTimeTo}
-            minPrice={minPrice}
-            maxPrice={maxPrice}
-            onClear={onClear}
-            locale={locale}
-            t={t}
-          />
-        </div>
+        <CourseFilterChips
+          courseTypes={courseTypes}
+          ageGroups={ageGroups}
+          dayOfWeek={dayOfWeek}
+          town={town}
+          startTimeFrom={startTimeFrom}
+          startTimeTo={startTimeTo}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          onClear={onClear}
+          locale={locale}
+          t={t}
+          className={compact ? 'mt-2' : 'mt-4'}
+        />
       </div>
     </form>
   )

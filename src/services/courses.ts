@@ -66,3 +66,7 @@ export const deleteCourseImage = async (
     `/api/v1/courses/${courseId}/images/${imageId}`,
   )
 }
+
+export const deleteCourse = async (courseId: number) => {
+  await httpClient.delete(`/api/v1/courses/${courseId}`)
+}

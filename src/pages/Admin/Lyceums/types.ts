@@ -1,4 +1,12 @@
-import type { LyceumResponse } from '../../../types/lyceums'
+import type { LyceumRequest, LyceumResponse } from '../../../types/lyceums'
+import type { ApiError } from '../../../types/api'
+
+export type AdminLyceumsFilterState = {
+  name: string
+  town: string
+  includeVerified: boolean
+  includeUnverified: boolean
+}
 
 export type AdminLyceumsPagination = {
   currentPage: number
@@ -17,4 +25,11 @@ export type AdminLyceumsPagination = {
 export type AdminLyceumsPaginationResult = {
   pageItems: LyceumResponse[]
   pagination: AdminLyceumsPagination
+}
+
+export type AdminLyceumCreatePayload = LyceumRequest
+
+export type AdminLyceumCreateResult = {
+  ok: boolean
+  error: ApiError | null
 }
