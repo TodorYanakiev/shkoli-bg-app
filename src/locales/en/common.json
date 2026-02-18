@@ -124,12 +124,26 @@
     "generic": "Something went wrong. Please try again.",
     "courses": {
       "createFailed": "We couldn't create this course. Try again.",
+      "createInvalid": "Please check the course data and schedule.",
+      "createNotFound": "The selected lyceum or lecturer was not found.",
+      "createConflict": "This course couldn't be created due to a data conflict.",
       "updateFailed": "We couldn't update this course. Try again.",
+      "updateInvalid": "Please check the updated course data and schedule.",
+      "updateNotFound": "This course was not found.",
+      "updateConflict": "This course couldn't be updated due to a data conflict.",
       "deleteFailed": "We couldn't delete this course. Try again.",
+      "imagesLoadFailed": "We couldn't load course images right now.",
+      "imagesInvalid": "We couldn't load images because the request is invalid.",
+      "imagesNotFound": "Course images were not found.",
       "imageUploadFailed": "We couldn't upload this image. Try again.",
+      "imageInvalid": "This image data is invalid. Check role, dimensions, and order.",
+      "imageCourseNotFound": "The selected course was not found.",
       "imagesUploadFailed": "Some images could not be uploaded.",
       "imageDuplicate": "This image has already been uploaded.",
-      "imageConfigMissing": "Image upload is not configured."
+      "imageConfigMissing": "Image upload is not configured.",
+      "imageDeleteFailed": "We couldn't delete this image. Try again.",
+      "imageDeleteInvalid": "This image cannot be removed from this course.",
+      "imageDeleteNotFound": "This image was not found for this course."
     },
     "lyceums": {
       "createFailed": "We couldn't create this lyceum. Try again.",
