@@ -11,3 +11,12 @@ export type AdminTab = {
 export type AdminNavItem = AdminTab & {
   Icon: ComponentType<{ className?: string }>
 }
+
+export type AdminReviewEntityType = 'course' | 'lyceum' | 'user'
+
+export type AdminReviewEntity = {
+  type: AdminReviewEntityType
+  id: number
+  name?: string
+  averageRating?: number | null
+}
