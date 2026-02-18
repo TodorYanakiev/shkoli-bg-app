@@ -65,3 +65,15 @@ export const getSectionError = (
   error: ApiError | null,
   fallbackKey: string,
 ) => toAppError(error, fallbackKey)
+
+export const getCourseDeleteError = (error: ApiError | null) => {
+  if (!error) return null
+  if (error.status === 404) {
+    return {
+      type: 'notFound',
+      status: error.status,
+      messageKey: 'pages.shkoli.detail.notFound',
+    } satisfies AppError
+  }
+  return mapApiError(error, 'errors.courses.deleteFailed')
+}

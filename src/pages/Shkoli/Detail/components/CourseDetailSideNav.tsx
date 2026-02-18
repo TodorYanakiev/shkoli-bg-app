@@ -14,6 +14,9 @@ type CourseDetailSideNavProps = {
   sideNavToggleClassName: string
   sideNavContainerClassName: string
   sideNavListClassName: string
+  canDeleteCourse?: boolean
+  isDeletingCourse?: boolean
+  onDeleteCourse?: () => void
   onToggle: () => void
   t: TFunction
 }
@@ -29,6 +32,9 @@ export const CourseDetailSideNav = ({
   sideNavToggleClassName,
   sideNavContainerClassName,
   sideNavListClassName,
+  canDeleteCourse = false,
+  isDeletingCourse = false,
+  onDeleteCourse,
   onToggle,
   t,
 }: CourseDetailSideNavProps) => {
@@ -82,6 +88,54 @@ export const CourseDetailSideNav = ({
             ),
           )}
         </div>
+        {canDeleteCourse && onDeleteCourse ? (
+          <button
+            type="button"
+            onClick={onDeleteCourse}
+            disabled={isDeletingCourse}
+            title={t('pages.shkoli.detail.sideNav.deleteCourse')}
+            className={[
+              'group inline-flex items-center rounded-lg text-xs font-semibold transition lg:text-sm',
+              isSideNavExpanded
+                ? 'w-full justify-start gap-3 px-3 py-1'
+                : 'h-11 w-11 justify-center',
+              'text-rose-700 hover:bg-rose-50 hover:text-rose-800',
+              'disabled:cursor-not-allowed disabled:opacity-60',
+            ].join(' ')}
+          >
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-rose-700 transition">
+              <svg
+                viewBox="0 0 24 24"
+                className={navIconClassName}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 6h18" />
+                <path d="M8 6V4h8v2" />
+                <path d="M19 6l-1 14H6L5 6" />
+                <path d="M10 11v6" />
+                <path d="M14 11v6" />
+              </svg>
+            </span>
+            {isSideNavExpanded ? (
+              <span>
+                {isDeletingCourse
+                  ? t('pages.shkoli.detail.sideNav.deletingCourse')
+                  : t('pages.shkoli.detail.sideNav.deleteCourse')}
+              </span>
+            ) : (
+              <span className="sr-only">
+                {isDeletingCourse
+                  ? t('pages.shkoli.detail.sideNav.deletingCourse')
+                  : t('pages.shkoli.detail.sideNav.deleteCourse')}
+              </span>
+            )}
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={onToggle}
