@@ -1105,7 +1105,22 @@
         "loadFailed": "We couldn't load this lyceum. Try again.",
         "notFound": "Lyceum not found.",
         "heroLabel": "Lyceum overview",
+        "heroChip": "LYCEUM",
+        "overviewIntro": "{{name}} is a community institution for arts, culture, and educational activities.",
         "countLabel": "{{count}}",
+        "tabs": {
+          "label": "Lyceum detail tabs"
+        },
+        "actions": {
+          "visitWebsite": "Visit website",
+          "openChitalishtaProfile": "Open profile",
+          "leaveReview": "Leave review",
+          "openMap": "Open map"
+        },
+        "facts": {
+          "coursesCount": "{{count}} courses",
+          "lecturersCount": "{{count}} lecturers"
+        },
         "overviewLinks": {
           "courses": "Courses ({{count}})",
           "lecturers": "Lecturers ({{count}})",
@@ -1134,6 +1149,7 @@
         },
         "notProvided": "Not provided",
         "sections": {
+          "overview": "Overview",
           "identity": "Identity",
           "location": "Location",
           "contacts": "Contacts",
@@ -1181,7 +1197,8 @@
           "subtitle": "Lyceum lecturer",
           "ratingLabel": "Lecturer rating {{rating}} of {{max}}",
           "noRating": "No ratings",
-          "openReviews": "Open reviews for {{name}}"
+          "openReviews": "Open reviews for {{name}}",
+          "viewReviews": "View reviews"
         },
         "lecturersCarousel": {
           "previous": "Previous lecturers",
@@ -1199,6 +1216,12 @@
           "loading": "Loading images...",
           "mainAlt": "Main image for {{name}}",
           "galleryAlt": "Gallery image {{index}} for {{name}}"
+        },
+        "galleryLightbox": {
+          "label": "Lyceum gallery preview",
+          "previous": "Previous image",
+          "next": "Next image",
+          "counter": "{{current}} / {{total}}"
         },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
@@ -1582,6 +1605,22 @@
         "summaryTitle": "Overall rating",
         "yourReviewTitle": "Your review",
         "yourReviewQuestion": "Did you like this course?",
+        "yourReviewHint": "Share your experience with other parents.",
+        "allReviews": "All reviews",
+        "sortLabel": "Sort by",
+        "sort": {
+          "newest": "Newest",
+          "oldest": "Oldest",
+          "highest": "Highest rating",
+          "lowest": "Lowest rating"
+        },
+        "ratingLevel": "{{rating}} stars",
+        "helpful": "Helpful?"
+      },
+      "lyceumDetail": {
+        "summaryTitle": "Overall rating",
+        "yourReviewTitle": "Your review",
+        "yourReviewQuestion": "Did you like this lyceum?",
         "yourReviewHint": "Share your experience with other parents.",
         "allReviews": "All reviews",
         "sortLabel": "Sort by",

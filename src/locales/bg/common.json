@@ -1105,7 +1105,22 @@
         "loadFailed": "Не успяхме да заредим читалището. Опитайте отново.",
         "notFound": "Читалището не е намерено.",
         "heroLabel": "Преглед на читалището",
+        "heroChip": "ЧИТАЛИЩЕ",
+        "overviewIntro": "{{name}} е културна институция за изкуство, образование и обществен живот.",
         "countLabel": "{{count}}",
+        "tabs": {
+          "label": "Раздели на читалището"
+        },
+        "actions": {
+          "visitWebsite": "Посети сайт",
+          "openChitalishtaProfile": "Отвори профил",
+          "leaveReview": "Остави отзив",
+          "openMap": "Отвори карта"
+        },
+        "facts": {
+          "coursesCount": "{{count}} школи",
+          "lecturersCount": "{{count}} преподаватели"
+        },
         "overviewLinks": {
           "courses": "Школи ({{count}})",
           "lecturers": "Преподаватели ({{count}})",
@@ -1134,6 +1149,7 @@
         },
         "notProvided": "Няма данни",
         "sections": {
+          "overview": "Преглед",
           "identity": "Идентичност",
           "location": "Локация",
           "contacts": "Контакти",
@@ -1181,7 +1197,8 @@
           "subtitle": "Преподавател към читалище",
           "ratingLabel": "Оценка на преподавателя {{rating}} от {{max}}",
           "noRating": "Няма оценка",
-          "openReviews": "Отзиви за {{name}}"
+          "openReviews": "Отзиви за {{name}}",
+          "viewReviews": "Виж отзиви"
         },
         "lecturersCarousel": {
           "previous": "Предишни преподаватели",
@@ -1199,6 +1216,12 @@
           "loading": "Зареждане на снимки...",
           "mainAlt": "Основна снимка на {{name}}",
           "galleryAlt": "Снимка {{index}} от галерията на {{name}}"
+        },
+        "galleryLightbox": {
+          "label": "Преглед на галерията",
+          "previous": "Предишна снимка",
+          "next": "Следваща снимка",
+          "counter": "{{current}} / {{total}}"
         },
         "averageRatingLabel": "Средна оценка {{rating}} от {{max}}",
         "noRating": "Няма отзиви за тази школа.",
@@ -1582,7 +1605,23 @@
       "courseDetail": {
         "summaryTitle": "Обща оценка",
         "yourReviewTitle": "Вашият отзив",
-        "yourReviewQuestion": "Харесва ли Ви този курс?",
+        "yourReviewQuestion": "Харесва ли Ви тази школа?",
+        "yourReviewHint": "Споделете опита си с други родители.",
+        "allReviews": "Всички отзиви",
+        "sortLabel": "Сортирай по",
+        "sort": {
+          "newest": "Най-нови",
+          "oldest": "Най-стари",
+          "highest": "Най-висока оценка",
+          "lowest": "Най-ниска оценка"
+        },
+        "ratingLevel": "{{rating}} звезди",
+        "helpful": "Полезно?"
+      },
+      "lyceumDetail": {
+        "summaryTitle": "Обща оценка",
+        "yourReviewTitle": "Вашият отзив",
+        "yourReviewQuestion": "Харесва ли Ви това читалище?",
         "yourReviewHint": "Споделете опита си с други родители.",
         "allReviews": "Всички отзиви",
         "sortLabel": "Сортирай по",
