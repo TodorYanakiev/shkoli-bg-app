@@ -48,6 +48,7 @@ const CourseDetailPage = () => {
     ageGroups,
     priceValue,
     executionTypeLabel,
+    activeMonthsValue,
     locationValue,
     normalizedAchievements,
     normalizedWebsiteLink,
@@ -157,6 +158,7 @@ const CourseDetailPage = () => {
           ageGroups={ageGroups}
           priceValue={priceValue}
           executionTypeLabel={executionTypeLabel}
+          activeMonthsValue={activeMonthsValue}
           locationValue={locationValue}
           normalizedAchievements={normalizedAchievements}
           normalizedWebsiteLink={normalizedWebsiteLink}

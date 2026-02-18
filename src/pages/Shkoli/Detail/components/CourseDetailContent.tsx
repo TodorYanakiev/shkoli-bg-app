@@ -41,6 +41,7 @@ type CourseDetailContentProps = {
   ageGroups: string[]
   priceValue: string
   executionTypeLabel: string | null
+  activeMonthsValue: string | null
   locationValue: string
   normalizedAchievements: string | null
   normalizedWebsiteLink: string | null
@@ -88,6 +89,7 @@ export const CourseDetailContent = ({
   ageGroups,
   priceValue,
   executionTypeLabel,
+  activeMonthsValue,
   locationValue,
   normalizedAchievements,
   normalizedWebsiteLink,
@@ -189,6 +191,7 @@ export const CourseDetailContent = ({
             scheduleValue={scheduleFactValue}
             durationValue={resolvedDurationValue}
             locationValue={resolvedLocationValue}
+            activeMonthsValue={activeMonthsValue}
             onOpenReviews={openReviewEditor}
             t={t}
           />

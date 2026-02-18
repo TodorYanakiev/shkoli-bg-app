@@ -6,6 +6,7 @@ type CourseDetailDecisionStripProps = {
   scheduleValue: string
   durationValue: string | null
   locationValue: string
+  activeMonthsValue: string | null
   onOpenReviews: () => void
   t: TFunction
 }
@@ -28,6 +29,7 @@ export const CourseDetailDecisionStrip = ({
   scheduleValue,
   durationValue,
   locationValue,
+  activeMonthsValue,
   onOpenReviews,
   t,
 }: CourseDetailDecisionStripProps) => {
@@ -93,6 +95,31 @@ export const CourseDetailDecisionStrip = ({
         </svg>
       ),
     },
+    activeMonthsValue
+      ? {
+          key: 'activeMonths',
+          value: activeMonthsValue,
+          icon: (
+            <svg
+              viewBox="0 0 20 20"
+              className="h-[18px] w-[18px]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3.5" y="4" width="13" height="12" rx="2" />
+              <path d="M6 2.5v3" />
+              <path d="M14 2.5v3" />
+              <path d="M3.5 7.5h13" />
+              <path d="M7.5 10.5h1.5" />
+              <path d="M11 10.5h1.5" />
+            </svg>
+          ),
+        }
+      : null,
   ].filter(Boolean) as Array<{
     key: string
     value: string

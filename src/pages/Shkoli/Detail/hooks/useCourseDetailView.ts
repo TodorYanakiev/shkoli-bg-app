@@ -34,6 +34,7 @@ type CourseDetailView = {
   ageGroups: string[]
   priceValue: string
   executionTypeLabel: string | null
+  activeMonthsValue: string | null
   locationValue: string
   normalizedAchievements: string | null
   normalizedWebsiteLink: string | null
@@ -135,6 +136,7 @@ export const useCourseDetailView = ({
       ageGroups,
       priceValue,
       executionTypeLabel,
+      activeMonthsValue,
       locationValue,
       normalizedAchievements,
       normalizedWebsiteLink,
