@@ -1306,7 +1306,8 @@
           "update": "Update",
           "delete": "Delete",
           "deleting": "Deleting...",
-          "view": "Open course page"
+          "view": "Open course page",
+          "reviews": "Reviews"
         },
         "deleteConfirm": {
           "title": "Delete course",
@@ -1345,7 +1346,8 @@
           "update": "Update",
           "delete": "Delete",
           "deleting": "Deleting...",
-          "manageAdmins": "Manage admins"
+          "manageAdmins": "Manage admins",
+          "reviews": "Reviews"
         },
         "admins": {
           "title": "Lyceum administrators",
@@ -1427,7 +1429,8 @@
           "edit": "Edit",
           "delete": "Delete",
           "saving": "Saving...",
-          "deleting": "Deleting..."
+          "deleting": "Deleting...",
+          "reviews": "Reviews"
         },
         "editModal": {
           "title": "Edit user",
@@ -1456,6 +1459,32 @@
           "description": "Are you sure you want to delete {{name}}? This action cannot be undone.",
           "confirm": "Delete user",
           "cancel": "Cancel"
+        }
+      },
+      "reviews": {
+        "title": "{{name}} reviews",
+        "subtitle": "Manage reviews for this {{entity}}.",
+        "entity": {
+          "course": "course",
+          "lyceum": "lyceum",
+          "user": "user"
+        },
+        "openReviewsFor": "Open reviews for {{name}}",
+        "loading": "Loading reviews...",
+        "empty": "No reviews for this item.",
+        "reviewersLoading": "Resolving reviewer details...",
+        "summary": {
+          "count": "{{count}} reviews",
+          "noRatings": "No ratings yet."
+        },
+        "reviewerFallback": "User #{{id}}",
+        "createdAt": "Created {{date}}",
+        "deletedAt": "Deleted {{date}}",
+        "deletedBadge": "Deleted",
+        "deleteConfirm": "Delete this review?",
+        "actions": {
+          "delete": "Delete",
+          "deleting": "Deleting..."
         }
       },
       "loading": "Loading admin access...",

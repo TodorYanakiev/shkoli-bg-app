@@ -8,6 +8,11 @@ type AdminUserCardProps = {
   user: UserResponse
   onRequestEdit?: (user: UserResponse) => void
   onRequestDelete?: (id?: number, name?: string) => void
+  onManageReviews?: (
+    id?: number,
+    name?: string,
+    averageRating?: number,
+  ) => void
   isUpdating?: boolean
   isDeleting?: boolean
 }
@@ -30,6 +35,7 @@ export const AdminUserCard = ({
   user,
   onRequestEdit,
   onRequestDelete,
+  onManageReviews,
   isUpdating = false,
   isDeleting = false,
 }: AdminUserCardProps) => {
@@ -95,6 +101,20 @@ export const AdminUserCard = ({
               ? t('pages.admin.users.actions.deleting')
               : t('pages.admin.users.actions.delete')}
           </button>
+          <button
+            type="button"
+            className={actionClassName}
+            onClick={() =>
+              onManageReviews?.(user.id, displayName, user.averageRating)
+            }
+            disabled={!user.id || isDeleting || isUpdating}
+            aria-label={t('pages.admin.reviews.openReviewsFor', {
+              name: displayName,
+            })}
+            title={t('pages.admin.reviews.openReviewsFor', { name: displayName })}
+          >
+            {t('pages.admin.users.actions.reviews')}
+          </button>
         </div>
         <div className="flex flex-col items-end gap-1">
           <span
@@ -150,4 +170,3 @@ export const AdminUserCard = ({
     </article>
   )
 }
-

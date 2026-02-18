@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 import type { AppError } from '../../../../types/appError'
 import type { LyceumResponse } from '../../../../types/lyceums'
+import type { AdminReviewEntity } from '../../types'
 import type { AdminLyceumsPagination } from '../types'
 import { AdminLyceumCard } from './AdminLyceumCard'
 import { AdminLyceumDeleteModal } from './AdminLyceumDeleteModal'
 import { AdminLyceumAdminsModal } from './AdminLyceumAdminsModal'
 import { AdminLyceumsPaginationControls } from './AdminLyceumsPagination'
 import { useAdminLyceumActions } from '../hooks/useAdminLyceumActions'
+import { AdminReviewsModal } from '../../components/AdminReviewsModal'
 
 type AdminLyceumsGridProps = {
   lyceums: LyceumResponse[]
@@ -62,6 +64,9 @@ export const AdminLyceumsGrid = ({
     id: number
     name?: string
   } | null>(null)
+  const [reviewTarget, setReviewTarget] = useState<AdminReviewEntity | null>(
+    null,
+  )
 
   const isDeleteSubmitting = deleteTarget
     ? isDeleting(deleteTarget.id)
@@ -123,6 +128,15 @@ export const AdminLyceumsGrid = ({
                       if (!id) return
                       setAdminTarget({ id, name })
                     }}
+                    onManageReviews={(id, name, averageRating) => {
+                      if (!id) return
+                      setReviewTarget({
+                        type: 'lyceum',
+                        id,
+                        name,
+                        averageRating,
+                      })
+                    }}
                     isDeleting={isDeleting(lyceum.id)}
                   />
                 </li>
@@ -153,6 +167,13 @@ export const AdminLyceumsGrid = ({
           lyceumName={adminTarget.name}
           isOpen={Boolean(adminTarget)}
           onClose={() => setAdminTarget(null)}
+        />
+      ) : null}
+      {reviewTarget ? (
+        <AdminReviewsModal
+          isOpen={Boolean(reviewTarget)}
+          reviewTarget={reviewTarget}
+          onClose={() => setReviewTarget(null)}
         />
       ) : null}
     </>

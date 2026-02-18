@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 import type { AppError } from '../../../../types/appError'
 import type { UserResponse } from '../../../../types/users'
+import type { AdminReviewEntity } from '../../types'
 import { useAdminUserActions } from '../hooks/useAdminUserActions'
 import type { AdminUsersPagination } from '../types'
 import { AdminUserCard } from './AdminUserCard'
 import { AdminUserDeleteModal } from './AdminUserDeleteModal'
 import { AdminUserEditModal } from './AdminUserEditModal'
 import { AdminUsersPaginationControls } from './AdminUsersPagination'
+import { AdminReviewsModal } from '../../components/AdminReviewsModal'
 
 type AdminUsersGridProps = {
   users: UserResponse[]
@@ -65,6 +67,9 @@ export const AdminUsersGrid = ({
     id: number
     name?: string
   } | null>(null)
+  const [reviewTarget, setReviewTarget] = useState<AdminReviewEntity | null>(
+    null,
+  )
 
   const isEditSubmitting = editTarget ? isUpdating(editTarget.id) : false
   const isEditImageDeleting = editTarget
@@ -130,6 +135,15 @@ export const AdminUsersGrid = ({
                       if (!id) return
                       setDeleteTarget({ id, name })
                     }}
+                    onManageReviews={(id, name, averageRating) => {
+                      if (!id) return
+                      setReviewTarget({
+                        type: 'user',
+                        id,
+                        name,
+                        averageRating,
+                      })
+                    }}
                     isUpdating={isUpdating(user.id)}
                     isDeleting={isDeleting(user.id)}
                   />
@@ -170,6 +184,13 @@ export const AdminUsersGrid = ({
         }}
         isSubmitting={isDeleteSubmitting}
       />
+      {reviewTarget ? (
+        <AdminReviewsModal
+          isOpen={Boolean(reviewTarget)}
+          reviewTarget={reviewTarget}
+          onClose={() => setReviewTarget(null)}
+        />
+      ) : null}
     </>
   )
 }

@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next'
 
 import type { AppError } from '../../../../types/appError'
 import type { CourseResponse } from '../../../../types/courses'
+import type { AdminReviewEntity } from '../../types'
 import { useAdminCourseActions } from '../hooks/useAdminCourseActions'
 import type { AdminCoursesPagination } from '../types'
 import { AdminCourseCard } from './AdminCourseCard'
 import { AdminCourseDeleteModal } from './AdminCourseDeleteModal'
 import { AdminCoursesPaginationControls } from './AdminCoursesPagination'
+import { AdminReviewsModal } from '../../components/AdminReviewsModal'
 
 type AdminCoursesGridProps = {
   courses: CourseResponse[]
@@ -59,6 +61,9 @@ export const AdminCoursesGrid = ({
     id: number
     name?: string
   } | null>(null)
+  const [reviewTarget, setReviewTarget] = useState<AdminReviewEntity | null>(
+    null,
+  )
 
   const isDeleteSubmitting = deleteTarget
     ? isDeleting(deleteTarget.id)
@@ -121,6 +126,15 @@ export const AdminCoursesGrid = ({
                       if (!id) return
                       setDeleteTarget({ id, name })
                     }}
+                    onManageReviews={(id, name, averageRating) => {
+                      if (!id) return
+                      setReviewTarget({
+                        type: 'course',
+                        id,
+                        name,
+                        averageRating,
+                      })
+                    }}
                     isDeleting={isDeleting(course.id)}
                   />
                 </li>
@@ -145,6 +159,13 @@ export const AdminCoursesGrid = ({
         }}
         isSubmitting={isDeleteSubmitting}
       />
+      {reviewTarget ? (
+        <AdminReviewsModal
+          isOpen={Boolean(reviewTarget)}
+          reviewTarget={reviewTarget}
+          onClose={() => setReviewTarget(null)}
+        />
+      ) : null}
     </>
   )
 }

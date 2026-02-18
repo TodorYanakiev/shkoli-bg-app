@@ -8,12 +8,18 @@ import { useCourseCardLocation } from '../../../Shkoli/hooks/useCourseCardLocati
 type AdminCourseCardProps = {
   course: CourseResponse
   onRequestDelete?: (id?: number, name?: string) => void
+  onManageReviews?: (
+    id?: number,
+    name?: string,
+    averageRating?: number,
+  ) => void
   isDeleting?: boolean
 }
 
 export const AdminCourseCard = ({
   course,
   onRequestDelete,
+  onManageReviews,
   isDeleting = false,
 }: AdminCourseCardProps) => {
   const { t, i18n } = useTranslation()
@@ -97,6 +103,20 @@ export const AdminCourseCard = ({
             {isDeleting
               ? t('pages.admin.courses.actions.deleting')
               : t('pages.admin.courses.actions.delete')}
+          </button>
+          <button
+            type="button"
+            className={actionClassName}
+            onClick={() =>
+              onManageReviews?.(course.id, course.name, course.averageRating)
+            }
+            disabled={!course.id || isDeleting}
+            aria-label={t('pages.admin.reviews.openReviewsFor', {
+              name: title,
+            })}
+            title={t('pages.admin.reviews.openReviewsFor', { name: title })}
+          >
+            {t('pages.admin.courses.actions.reviews')}
           </button>
         </div>
         <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
