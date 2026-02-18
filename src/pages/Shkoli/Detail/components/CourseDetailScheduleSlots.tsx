@@ -45,28 +45,28 @@ export const CourseDetailScheduleSlots = ({
         return (
           <article
             key={`${slot.recurrence}-${index}`}
-            className="rounded-xl border border-slate-200 bg-white p-4"
+            className="rounded-xl border border-slate-200 bg-white p-5"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               {badge.label}
             </p>
-            <h4 className="mt-1 text-base font-semibold text-slate-900">
+            <h4 className="mt-1.5 text-xl font-semibold text-slate-900">
               {badge.value}
             </h4>
-            <div className="mt-4 space-y-2 border-t border-slate-200 pt-3">
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <span className="text-slate-500">
+            <div className="mt-4 space-y-2.5 border-t border-slate-200 pt-3.5">
+              <div className="flex items-center justify-between gap-3 text-base">
+                <span className="font-medium text-slate-500">
                   {t('pages.shkoli.detail.schedule.time')}
                 </span>
-                <span className="font-semibold text-slate-900">
+                <span className="text-lg font-semibold text-slate-900">
                   {timeRangeValue}
                 </span>
               </div>
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <span className="text-slate-500">
+              <div className="flex items-center justify-between gap-3 text-base">
+                <span className="font-medium text-slate-500">
                   {t('pages.shkoli.detail.schedule.duration')}
                 </span>
-                <span className="font-semibold text-slate-900">
+                <span className="text-lg font-semibold text-slate-900">
                   {durationValue}
                 </span>
               </div>
