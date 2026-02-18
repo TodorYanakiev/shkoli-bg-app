@@ -735,9 +735,14 @@
           "lyceum": "Читалище",
           "gallery": "Галерия",
           "editCourse": "Редактиране на школа",
+          "deleteCourse": "Изтрий школа",
+          "deletingCourse": "Изтриване...",
           "expand": "Разшири менюто",
           "collapse": "Свий менюто",
           "reviews": "Отзиви"
+        },
+        "deleteConfirm": {
+          "message": "Да изтрием ли {{name}}? Това действие е необратимо."
         },
         "sections": {
           "overview": "Преглед",

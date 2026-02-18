@@ -735,9 +735,14 @@
           "lyceum": "Lyceum",
           "gallery": "Gallery",
           "editCourse": "Update course",
+          "deleteCourse": "Delete course",
+          "deletingCourse": "Deleting...",
           "expand": "Expand menu",
           "collapse": "Collapse menu",
           "reviews": "Reviews"
+        },
+        "deleteConfirm": {
+          "message": "Delete {{name}}? This action cannot be undone."
         },
         "sections": {
           "overview": "Overview",
