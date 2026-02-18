@@ -92,6 +92,7 @@ const CourseEditPage = () => {
     deleteExistingImages,
     markImageError,
     isUploadingImages,
+    setError: form.setError,
     t,
   })
 

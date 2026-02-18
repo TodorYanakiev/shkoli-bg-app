@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import type { TFunction } from 'i18next'
+import type { UseFormSetError } from 'react-hook-form'
 
 import { useToast } from '../../../../components/feedback/ToastContext'
 import type {
@@ -16,7 +17,9 @@ import { lyceumCoursesQueryKey } from '../../../Lyceums/hooks/useLyceumCourses'
 import { courseDetailQueryKey } from '../../hooks/useCourse'
 import { courseImagesQueryKey } from '../../hooks/useCourseImages'
 import { useUpdateCourseMutation } from '../../hooks/useUpdateCourseMutation'
+import { applyCourseEditServerFieldErrors } from '../services/courseEditFieldErrors'
 import { getCourseUpdateError } from '../services/courseEditErrors'
+import { isApiError } from '../services/courseEditErrors'
 import { buildCourseUpdatePayload } from '../services/courseEditFormUtils'
 import type { PendingCourseImage } from '../types'
 import type { CourseEditFormValues } from '../validations/courseEditSchema'
@@ -41,6 +44,7 @@ type UseCourseEditSubmitOptions = {
   ) => Promise<{ ok: boolean; deleted: number; errorMessage?: string }>
   markImageError: (id: string, message: string) => void
   isUploadingImages: boolean
+  setError: UseFormSetError<CourseEditFormValues>
   t: TFunction
 }
 
@@ -58,6 +62,7 @@ export const useCourseEditSubmit = ({
   deleteExistingImages,
   markImageError,
   isUploadingImages,
+  setError,
   t,
 }: UseCourseEditSubmitOptions) => {
   const navigate = useNavigate()
@@ -173,8 +178,13 @@ export const useCourseEditSubmit = ({
       }
 
       navigate(`/shkoli/${courseId}`, { replace: true })
-    } catch {
-      // handled by mutation state
+    } catch (error) {
+      if (
+        isApiError(error) &&
+        error.status === 400
+      ) {
+        applyCourseEditServerFieldErrors({ error, setError, t })
+      }
     }
   }
 

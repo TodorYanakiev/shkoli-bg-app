@@ -73,6 +73,7 @@ const CourseCreatePage = () => {
       hasCourseAccess,
       uploadCourseImages,
       isUploadingImages,
+      setError: form.setError,
       t,
     })
 

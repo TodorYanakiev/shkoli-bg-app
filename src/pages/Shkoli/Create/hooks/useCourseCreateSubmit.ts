@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import type { TFunction } from 'i18next'
+import type { UseFormSetError } from 'react-hook-form'
 
 import { useToast } from '../../../../components/feedback/ToastContext'
 import {
@@ -10,7 +11,11 @@ import {
 import { lyceumCoursesQueryKey } from '../../../Lyceums/hooks/useLyceumCourses'
 import { courseDetailQueryKey } from '../../hooks/useCourse'
 import { useCreateCourseMutation } from '../../hooks/useCreateCourseMutation'
-import { getCourseCreateError } from '../services/courseCreateErrors'
+import { applyCourseCreateServerFieldErrors } from '../services/courseCreateFieldErrors'
+import {
+  getCourseCreateError,
+  isApiError,
+} from '../services/courseCreateErrors'
 import { buildCourseCreatePayload } from '../services/courseCreateFormUtils'
 import type { CourseCreateFormValues } from '../validations/courseCreateSchema'
 
@@ -23,6 +28,7 @@ type UseCourseCreateSubmitOptions = {
     failedCount: number
   }>
   isUploadingImages: boolean
+  setError: UseFormSetError<CourseCreateFormValues>
   t: TFunction
 }
 
@@ -32,6 +38,7 @@ export const useCourseCreateSubmit = ({
   hasCourseAccess,
   uploadCourseImages,
   isUploadingImages,
+  setError,
   t,
 }: UseCourseCreateSubmitOptions) => {
   const navigate = useNavigate()
@@ -101,8 +108,13 @@ export const useCourseCreateSubmit = ({
       } else {
         navigate('/shkoli', { replace: true })
       }
-    } catch {
-      // handled by mutation state
+    } catch (error) {
+      if (
+        isApiError(error) &&
+        error.status === 400
+      ) {
+        applyCourseCreateServerFieldErrors({ error, setError, t })
+      }
     }
   }
 
