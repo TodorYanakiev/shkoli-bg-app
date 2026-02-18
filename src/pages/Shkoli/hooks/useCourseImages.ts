@@ -19,6 +19,7 @@ export const useCourseImages = (
     queryKey: courseImagesQueryKey(id),
     queryFn: () => getCourseImages(id as number),
     enabled: Boolean(id) && (options.enabled ?? true),
-    retry: 1,
+    retry: (failureCount, error) =>
+      error.status >= 500 && failureCount < 1,
     staleTime: 5 * 60 * 1000,
   })

@@ -50,6 +50,12 @@ export const useCourseEditImageUpload = ({
     }
 
     if (isApiError(error)) {
+      if (error.status === 400) {
+        return t('errors.courses.imageInvalid')
+      }
+      if (error.status === 404) {
+        return t('errors.courses.imageCourseNotFound')
+      }
       if (error.status === 409) {
         return t('errors.courses.imageDuplicate')
       }
@@ -58,6 +64,9 @@ export const useCourseEditImageUpload = ({
       }
       if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
         return t('errors.auth.forbidden')
+      }
+      if (error.status >= 500) {
+        return t('errors.courses.imageUploadFailed')
       }
     }
 
