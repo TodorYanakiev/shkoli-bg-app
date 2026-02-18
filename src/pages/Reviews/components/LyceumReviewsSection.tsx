@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { useAuthStatus } from '../../../hooks/useAuthStatus'
 import { useUserProfile } from '../../Profile/hooks/useUserProfile'
@@ -29,8 +29,16 @@ export const LyceumReviewsSection = ({
 
   const currentUserId = currentUser?.id
   const reviewsQuery = useLyceumReviews(lyceumId)
+  const reviews = useMemo(() => reviewsQuery.data ?? [], [reviewsQuery.data])
+  const hasOwnReviewInList = useMemo(
+    () =>
+      !isAuthenticated || currentUserId == null
+        ? false
+        : reviews.some((review) => review.userId === currentUserId),
+    [currentUserId, isAuthenticated, reviews],
+  )
   const ownReviewQuery = useLyceumReview(lyceumId, currentUserId, {
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && hasOwnReviewInList,
     allowMissing: true,
   })
   const createMutation = useCreateLyceumReviewMutation(lyceumId)

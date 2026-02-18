@@ -33,6 +33,17 @@ export const userReviewQueryKey = (
 const hasValidId = (value: number | undefined): value is number =>
   typeof value === 'number' && Number.isFinite(value)
 
+const shouldRetryReviewQuery = (
+  failureCount: number,
+  error: AppError,
+) => {
+  if (error.status != null && error.status >= 400 && error.status < 500) {
+    return false
+  }
+
+  return failureCount < 1
+}
+
 export const useUserReviews = (
   userId?: number,
   options: ReviewQueryOptions = {},
@@ -47,7 +58,7 @@ export const useUserReviews = (
       }
     },
     enabled: hasValidId(userId) && (options.enabled ?? true),
-    retry: 1,
+    retry: shouldRetryReviewQuery,
     staleTime: 60 * 1000,
   })
 
@@ -75,7 +86,7 @@ export const useUserReview = (
       hasValidId(userId) &&
       hasValidId(reviewerId) &&
       (options.enabled ?? true),
-    retry: 1,
+    retry: shouldRetryReviewQuery,
     staleTime: 60 * 1000,
   })
 

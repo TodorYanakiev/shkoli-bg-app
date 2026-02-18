@@ -43,15 +43,23 @@ export const UserReviewsSection = ({
 
   const currentUserId = currentUser?.id
   const reviewsQuery = useUserReviews(userId)
+  const reviews = useMemo(() => reviewsQuery.data ?? [], [reviewsQuery.data])
+  const ownReviewFromList = useMemo(
+    () =>
+      !isAuthenticated || currentUserId == null
+        ? null
+        : reviews.find((review) => review.userId === currentUserId) ?? null,
+    [currentUserId, isAuthenticated, reviews],
+  )
+  const hasOwnReviewInList = ownReviewFromList != null
   const ownReviewQuery = useUserReview(userId, currentUserId, {
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && hasOwnReviewInList,
     allowMissing: true,
   })
   const createMutation = useCreateUserReviewMutation(userId)
   const updateMutation = useUpdateUserReviewMutation(userId, currentUserId)
   const deleteMutation = useDeleteUserReviewMutation(userId, currentUserId)
-  const reviews = useMemo(() => reviewsQuery.data ?? [], [reviewsQuery.data])
-  const ownReview = ownReviewQuery.data ?? null
+  const ownReview = ownReviewQuery.data ?? ownReviewFromList
   const hasOwnReview = Boolean(ownReview?.id)
   const reviewerIds = useMemo(
     () =>
@@ -117,9 +125,8 @@ export const UserReviewsSection = ({
 
   const refreshAfterMutation = useCallback(() => {
     void reviewsQuery.refetch()
-    void ownReviewQuery.refetch()
     onMutated()
-  }, [onMutated, ownReviewQuery, reviewsQuery])
+  }, [onMutated, reviewsQuery])
 
   const applyFieldErrors = useCallback(
     (error: AppError) => {
@@ -197,7 +204,7 @@ export const UserReviewsSection = ({
       isDeletePending={deleteMutation.isPending}
       selectedRating={selectedRating}
       actionError={actionError}
-      ownReviewIsLoading={ownReviewQuery.isLoading}
+      ownReviewIsLoading={hasOwnReviewInList && ownReviewQuery.isLoading}
       ownReviewError={ownReviewQuery.error ?? null}
       reviewsLoading={reviewsQuery.isLoading}
       reviewsError={reviewsQuery.error ?? null}
@@ -208,4 +215,3 @@ export const UserReviewsSection = ({
     />
   )
 }
-
