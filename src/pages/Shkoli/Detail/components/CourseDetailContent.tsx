@@ -152,30 +152,33 @@ export const CourseDetailContent = ({
       />
 
       <div className="w-full overflow-hidden border border-slate-200 bg-white">
-        <CourseDetailHeroBand
-          courseName={courseName}
-          courseTypeLabel={courseTypeLabel}
-          hasCourseType={hasCourseType}
-          averageRating={course.averageRating ?? null}
-          reviewsCount={reviewsCount}
-          ageGroups={ageGroups}
-          description={courseDescription}
-          pricePrimary={priceValue}
-          priceSecondary={executionTypeLabel}
-          mainImage={mainImage}
-          mainImageUrl={mainImageUrl}
-          onOpenReviewsTab={openReviewsTab}
-          t={t}
-        />
-        <CourseDetailDecisionStrip
-          websiteLink={normalizedWebsiteLink}
-          facebookLink={normalizedFacebookLink}
-          scheduleValue={scheduleFactValue}
-          durationValue={resolvedDurationValue}
-          locationValue={resolvedLocationValue}
-          onOpenReviews={openReviewEditor}
-          t={t}
-        />
+        <div className="flex flex-col lg:h-[calc(100dvh-var(--topnav-height,76px)-2px)] lg:overflow-hidden">
+          <CourseDetailHeroBand
+            courseName={courseName}
+            courseTypeLabel={courseTypeLabel}
+            hasCourseType={hasCourseType}
+            averageRating={course.averageRating ?? null}
+            reviewsCount={reviewsCount}
+            ageGroups={ageGroups}
+            description={courseDescription}
+            pricePrimary={priceValue}
+            priceSecondary={executionTypeLabel}
+            mainImage={mainImage}
+            mainImageUrl={mainImageUrl}
+            onOpenReviewsTab={openReviewsTab}
+            className="min-h-0 flex-1"
+            t={t}
+          />
+          <CourseDetailDecisionStrip
+            websiteLink={normalizedWebsiteLink}
+            facebookLink={normalizedFacebookLink}
+            scheduleValue={scheduleFactValue}
+            durationValue={resolvedDurationValue}
+            locationValue={resolvedLocationValue}
+            onOpenReviews={openReviewEditor}
+            t={t}
+          />
+        </div>
         <CourseDetailTabs
           activeTab={activeTab}
           onSelectTab={onSelectTab}
@@ -202,7 +205,6 @@ export const CourseDetailContent = ({
             isLecturersLoading={isLecturersLoading}
             lecturersErrorMessage={lecturersErrorMessage}
             onOpenLecturerReviews={onOpenLecturerReviews}
-            onOpenReviewEditor={openReviewEditor}
             reviewEditorTriggerId={reviewEditorTriggerId}
             t={t}
           />

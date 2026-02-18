@@ -17,6 +17,7 @@ type CourseDetailHeroBandProps = {
   mainImage?: CourseImageResponse
   mainImageUrl: string
   onOpenReviewsTab: () => void
+  className?: string
   t: TFunction
 }
 
@@ -33,6 +34,7 @@ export const CourseDetailHeroBand = ({
   mainImage,
   mainImageUrl,
   onOpenReviewsTab,
+  className,
   t,
 }: CourseDetailHeroBandProps) => {
   const hasRating =
@@ -42,12 +44,16 @@ export const CourseDetailHeroBand = ({
     Boolean(priceSecondary)
 
   return (
-    <section className="bg-white">
-      <div className="grid gap-0 lg:min-h-[390px] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-        <div className="flex min-w-0 items-start px-8 py-7 lg:px-9 lg:pb-8 lg:pt-9">
-          <div className="max-w-[32rem]">
+    <section
+      className={['min-h-0 overflow-hidden bg-white', className ?? '']
+        .join(' ')
+        .trim()}
+    >
+      <div className="grid h-full min-h-0 grid-rows-[minmax(0,1fr)] gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <div className="flex min-h-0 min-w-0 items-start overflow-hidden px-8 py-7 lg:px-9 lg:pb-8 lg:pt-9">
+          <div className="max-w-[32rem] overflow-hidden">
             <div className="space-y-1">
-              <h1 className="text-4xl font-semibold leading-[1.08] text-slate-900">
+              <h1 className="line-clamp-2 text-4xl font-semibold leading-[1.08] text-slate-900">
                 {courseName}
               </h1>
               <p className="text-xl font-medium uppercase tracking-[0.01em] text-slate-500">
@@ -123,7 +129,7 @@ export const CourseDetailHeroBand = ({
           </div>
         </div>
 
-        <div className="relative min-h-[240px] lg:min-h-[390px]">
+        <div className="relative min-h-[240px] h-full">
           <img
             src={mainImageUrl}
             alt={

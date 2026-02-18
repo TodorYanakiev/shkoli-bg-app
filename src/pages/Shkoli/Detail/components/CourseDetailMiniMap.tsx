@@ -12,6 +12,21 @@ const DEFAULT_CENTER: [number, number] = [42.7339, 25.4858]
 const DEFAULT_ZOOM = 7
 const DETAIL_ZOOM = 15
 
+const createPointyPinIcon = () =>
+  L.divIcon({
+    className: 'course-detail-mini-map-pin',
+    html: `
+      <span style="display:inline-flex;align-items:flex-end;justify-content:center;width:34px;height:44px;">
+        <svg viewBox="0 0 24 32" width="34" height="44" fill="none" aria-hidden="true">
+          <path d="M12 31s9-8.2 9-14A9 9 0 1 0 3 17c0 5.8 9 14 9 14Z" fill="#1f7a49" stroke="#ffffff" stroke-width="1.25"/>
+          <circle cx="12" cy="17" r="3.2" fill="#ffffff"/>
+        </svg>
+      </span>
+    `,
+    iconSize: [34, 44],
+    iconAnchor: [17, 44],
+  })
+
 const parseCoordinates = (
   latitude?: number,
   longitude?: number,
@@ -100,23 +115,14 @@ const CourseDetailMiniMap = ({
       return
     }
 
-    const outerPin = L.circleMarker(center, {
-      radius: 16,
-      color: '#1f7a49',
-      fillColor: '#1f7a49',
-      fillOpacity: 0.94,
-      weight: 1.5,
+    const pinMarker = L.marker(center, {
+      icon: createPointyPinIcon(),
+      interactive: false,
+      keyboard: false,
+      zIndexOffset: 10_000,
     })
 
-    const innerPin = L.circleMarker(center, {
-      radius: 5,
-      color: '#ffffff',
-      fillColor: '#ffffff',
-      fillOpacity: 1,
-      weight: 0,
-    })
-
-    markerLayerRef.current = L.layerGroup([outerPin, innerPin]).addTo(map)
+    markerLayerRef.current = L.layerGroup([pinMarker]).addTo(map)
   }, [center, hasCoordinates])
 
   return (

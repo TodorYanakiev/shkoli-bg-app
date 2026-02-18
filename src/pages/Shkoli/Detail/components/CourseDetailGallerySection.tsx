@@ -47,6 +47,7 @@ export const CourseDetailGallerySection = ({
       ? 0
       : ((activeIndex % galleryItems.length) + galleryItems.length) %
         galleryItems.length
+  const lightboxTopInset = 'var(--topnav-height, 76px)'
 
   useEffect(() => {
     if (!hasLightbox || typeof document === 'undefined') return undefined
@@ -107,7 +108,8 @@ export const CourseDetailGallerySection = ({
 
       {hasLightbox ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4"
+          className="fixed inset-x-0 bottom-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/80 px-4 pb-6 pt-3"
+          style={{ top: lightboxTopInset }}
           role="dialog"
           aria-modal="true"
           aria-label={t('pages.shkoli.detail.galleryLightbox.label')}
@@ -121,6 +123,10 @@ export const CourseDetailGallerySection = ({
               src={galleryItems[safeActiveIndex].src}
               alt={galleryItems[safeActiveIndex].alt}
               className="max-h-[82vh] w-full rounded-2xl object-contain"
+              style={{
+                maxHeight:
+                  'calc(100dvh - var(--topnav-height, 76px) - 2.5rem)',
+              }}
             />
 
             <button

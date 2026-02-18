@@ -35,7 +35,6 @@ type CourseDetailTabPanelsProps = {
   isLecturersLoading: boolean
   lecturersErrorMessage: string | null
   onOpenLecturerReviews: (lecturer: UserResponse) => void
-  onOpenReviewEditor: () => void
   reviewEditorTriggerId: string
   t: TFunction
 }
@@ -60,7 +59,6 @@ export const CourseDetailTabPanels = ({
   isLecturersLoading,
   lecturersErrorMessage,
   onOpenLecturerReviews,
-  onOpenReviewEditor,
   reviewEditorTriggerId,
   t,
 }: CourseDetailTabPanelsProps) => (
@@ -105,32 +103,13 @@ export const CourseDetailTabPanels = ({
       />
     ) : null}
     {activeTab === 'reviews' ? (
-      <div className="space-y-5">
-        <div className="flex items-center justify-end">
-          <button
-            type="button"
-            onClick={onOpenReviewEditor}
-            className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:border-brand/35 hover:text-brand"
-          >
-            {t('pages.shkoli.detail.actions.writeReview')}
-          </button>
-        </div>
+      <div>
         <CourseReviewsSection
           courseId={course.id}
           averageRating={course.averageRating ?? null}
-          hideTitle
           editorTriggerButtonId={reviewEditorTriggerId}
-          className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5"
+          className="scroll-mt-24"
         />
-        <div className="flex items-center justify-center">
-          <button
-            type="button"
-            onClick={onOpenReviewEditor}
-            className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:border-brand/35 hover:text-brand"
-          >
-            {t('pages.shkoli.detail.actions.writeReview')}
-          </button>
-        </div>
       </div>
     ) : null}
   </div>
