@@ -808,6 +808,7 @@
         "averageRatingLabel": "Средна оценка {{rating}} от {{max}}",
         "noRating": "Няма отзиви за тази школа.",
         "lecturerCard": {
+          "avatarAlt": "Аватар на {{name}}",
           "ratingLabel": "Оценка на преподавателя {{rating}} от {{max}}",
           "noRating": "Няма оценка",
           "viewReviews": "Виж отзиви"
@@ -1577,6 +1578,38 @@
         "reviewerFallback": "Неизвестен потребител",
         "yourReview": "Вашият отзив",
         "commentEmpty": "Коментарът е празен."
+      },
+      "courseDetail": {
+        "summaryTitle": "Обща оценка",
+        "yourReviewTitle": "Вашият отзив",
+        "yourReviewQuestion": "Харесва ли Ви този курс?",
+        "yourReviewHint": "Споделете опита си с други родители.",
+        "allReviews": "Всички отзиви",
+        "sortLabel": "Сортирай по",
+        "sort": {
+          "newest": "Най-нови",
+          "oldest": "Най-стари",
+          "highest": "Най-висока оценка",
+          "lowest": "Най-ниска оценка"
+        },
+        "ratingLevel": "{{rating}} звезди",
+        "helpful": "Полезно?"
+      },
+      "lecturerDetail": {
+        "summaryTitle": "Обща оценка",
+        "yourReviewTitle": "Вашият отзив",
+        "yourReviewQuestion": "Харесва ли Ви този преподавател?",
+        "yourReviewHint": "Споделете опита си с други родители.",
+        "allReviews": "Всички отзиви",
+        "sortLabel": "Сортирай по",
+        "sort": {
+          "newest": "Най-нови",
+          "oldest": "Най-стари",
+          "highest": "Най-висока оценка",
+          "lowest": "Най-ниска оценка"
+        },
+        "ratingLevel": "{{rating}} звезди",
+        "helpful": "Полезно?"
       },
       "form": {
         "authHint": "Моля, влезте в профила си, за да оцените.",

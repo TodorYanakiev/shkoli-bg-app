@@ -808,6 +808,7 @@
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
         "lecturerCard": {
+          "avatarAlt": "Avatar for {{name}}",
           "ratingLabel": "Lecturer rating {{rating}} of {{max}}",
           "noRating": "No ratings",
           "viewReviews": "View reviews"
@@ -1576,6 +1577,38 @@
         "reviewerFallback": "Community member",
         "yourReview": "Your review",
         "commentEmpty": "No comment provided."
+      },
+      "courseDetail": {
+        "summaryTitle": "Overall rating",
+        "yourReviewTitle": "Your review",
+        "yourReviewQuestion": "Did you like this course?",
+        "yourReviewHint": "Share your experience with other parents.",
+        "allReviews": "All reviews",
+        "sortLabel": "Sort by",
+        "sort": {
+          "newest": "Newest",
+          "oldest": "Oldest",
+          "highest": "Highest rating",
+          "lowest": "Lowest rating"
+        },
+        "ratingLevel": "{{rating}} stars",
+        "helpful": "Helpful?"
+      },
+      "lecturerDetail": {
+        "summaryTitle": "Overall rating",
+        "yourReviewTitle": "Your review",
+        "yourReviewQuestion": "Did you like this lecturer?",
+        "yourReviewHint": "Share your experience with other parents.",
+        "allReviews": "All reviews",
+        "sortLabel": "Sort by",
+        "sort": {
+          "newest": "Newest",
+          "oldest": "Oldest",
+          "highest": "Highest rating",
+          "lowest": "Lowest rating"
+        },
+        "ratingLevel": "{{rating}} stars",
+        "helpful": "Helpful?"
       },
       "form": {
         "authHint": "Sign in to leave a review.",
