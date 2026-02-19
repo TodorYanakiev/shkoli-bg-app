@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# Shkoli.bg Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript + Vite SPA for public course and lyceum discovery.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 18
+- TypeScript
+- Vite
+- React Router v6
+- React Query
+- Axios
+- Tailwind CSS
+- react-hook-form + Zod
+- i18next
 
-## React Compiler
+## Development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm ci
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Quality Gates
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run test:e2e
 ```
+
+## SEO Build Pipeline
+
+Use the SEO production pipeline for deploy-ready artifacts:
+
+```bash
+npm run build:seo
+```
+
+This pipeline runs:
+
+1. `seo:sync-content` - pulls route content IDs from backend APIs and updates `public/seo-content-map.json`.
+2. `seo:generate` - generates:
+   - `public/robots.txt`
+   - `public/sitemap.xml` (+ split sitemap files when needed)
+   - `public/seo-route-audit.json`
+   - `public/site-map.html`
+3. `build` - Vite production build.
+4. `seo:prerender` - prerenders indexable routes to HTML in `dist/`.
+5. `seo:validate` - validates metadata, canonicals, hreflang, H1, sitemap/robots consistency and writes `SEO_VERIFICATION.md`.
+
+## Performance Budgets
+
+```bash
+npm run perf:budget
+```
+
+Checks built asset budgets (largest JS chunk, total JS/CSS/image bytes).
+
+## Environment
+
+Configure variables in `.env` (`.env.example` documents all required keys), including:
+
+- `VITE_API_BASE_URL`
+- `VITE_SITE_URL`
+- `VITE_SITE_NAME`
+- `VITE_SEO_DEFAULT_IMAGE_PATH`
+- `VITE_GOOGLE_SITE_VERIFICATION`
+
+## Routing and SEO Notes
+
+- Public indexable routes are locale-prefixed (`/bg/...`, `/en/...`).
+- Filter/pagination query variants are canonicalized to base listing routes and set to `noindex,follow`.
+- Auth/admin/profile/map/edit flows are blocked from indexation (`noindex` + robots disallow).
+- Canonical URLs, hreflang, Open Graph, Twitter, and JSON-LD are centralized in `src/components/ui/SeoHead.tsx` and `src/services/seo.ts`.
+- Nginx config normalizes trailing slashes, redirects legacy non-locale paths to locale URLs, and serves immutable asset caching.
