@@ -187,7 +187,7 @@ const LyceumLecturerInviteModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4 py-8 backdrop-blur-sm"
+      className="fixed inset-0 z-[1200] flex items-center justify-center bg-slate-900/40 px-4 py-8 backdrop-blur-sm"
       onClick={onClose}
       role="presentation"
     >
