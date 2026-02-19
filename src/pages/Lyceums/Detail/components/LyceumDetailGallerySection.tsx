@@ -83,7 +83,7 @@ export const LyceumDetailGallerySection = ({
 
   return (
     <section id="lyceum-gallery" className="scroll-mt-24">
-      <h3 className="text-3xl font-semibold text-slate-900">
+      <h3 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
         {t('pages.lyceums.detail.sections.gallery')}
       </h3>
       {isImagesLoading ? (
@@ -98,7 +98,7 @@ export const LyceumDetailGallerySection = ({
           {imagesErrorMessage}
         </div>
       ) : galleryItems.length > 0 ? (
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-2 xl:grid-cols-3">
           {galleryItems.map((image, index) => (
             <button
               key={image.key}

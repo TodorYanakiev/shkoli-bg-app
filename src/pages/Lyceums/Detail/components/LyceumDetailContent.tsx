@@ -157,7 +157,7 @@ export const LyceumDetailContent = ({
           onSelectTab={onSelectTab}
           t={t}
         />
-        <div className="px-8 py-7">
+        <div className="px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
           <LyceumDetailTabPanels
             activeTab={activeTab}
             lyceumId={lyceumId}

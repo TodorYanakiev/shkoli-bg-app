@@ -45,10 +45,24 @@ const CourseFilterTownSelect = ({
   }, [closeSignal])
 
   return (
-    <div className="rounded-2xl border border-slate-200/70 bg-white/80 px-4 py-3 shadow-sm">
-      <label className="text-xs font-semibold text-slate-600">
-        {t('pages.shkoli.list.filters.townLabel')}
-      </label>
+    <div
+      className="flex w-full min-w-0 flex-1 items-center gap-3 rounded-full border border-slate-200/80 bg-white/80 px-4 py-2 shadow-sm transition focus-within:border-emerald-200 sm:min-w-[220px]"
+      ref={menuRef}
+    >
+      <svg
+        viewBox="0 0 20 20"
+        className="h-4 w-4 text-emerald-700"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      >
+        <path
+          d="M10 2.5c-2.9 0-5.2 2.2-5.2 5 0 3.5 4.2 8.5 5.2 8.5s5.2-5 5.2-8.5c0-2.8-2.3-5-5.2-5z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx="10" cy="7.5" r="1.8" />
+      </svg>
       <Controller
         control={control}
         name="town"
@@ -56,7 +70,7 @@ const CourseFilterTownSelect = ({
           const selectedTown = field.value?.trim() ?? ''
 
           return (
-            <div className="relative mt-2 flex items-center gap-2" ref={menuRef}>
+            <div className="relative flex w-full items-center gap-2">
               <input
                 type="text"
                 readOnly

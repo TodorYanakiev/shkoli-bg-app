@@ -17,7 +17,7 @@ export const LyceumDetailCoursesSection = ({
   t,
 }: LyceumDetailCoursesSectionProps) => (
   <section id="lyceum-courses" className="scroll-mt-24">
-    <h3 className="text-3xl font-semibold text-slate-900">
+    <h3 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
       {t('pages.lyceums.detail.sections.courses')}
     </h3>
     {isCoursesLoading ? (
@@ -32,7 +32,7 @@ export const LyceumDetailCoursesSection = ({
         {coursesErrorMessage}
       </div>
     ) : courses && courses.length > 0 ? (
-      <ul className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <ul className="mt-4 grid gap-4 sm:mt-5 md:grid-cols-2 xl:grid-cols-3">
         {courses.map((course, index) => (
           <li key={course.id ?? `${course.name ?? 'course'}-${index}`}>
             <CourseCard course={course} />

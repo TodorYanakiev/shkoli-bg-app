@@ -54,16 +54,16 @@ export const LyceumDetailHeroBand = ({
         .trim()}
     >
       <div className="grid h-full min-h-0 grid-rows-[minmax(0,1fr)] gap-0 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)]">
-        <div className="flex min-h-0 min-w-0 items-start overflow-hidden px-8 py-7 lg:px-9 lg:pb-8 lg:pt-9">
+        <div className="flex min-h-0 min-w-0 items-start overflow-hidden px-4 py-5 sm:px-6 sm:py-6 lg:px-9 lg:pb-8 lg:pt-9">
           <div className="max-w-[34rem] overflow-hidden">
             <div className="space-y-1">
-              <h1 className="line-clamp-2 text-4xl font-semibold leading-[1.08] text-slate-900">
+              <h1 className="line-clamp-2 text-3xl font-semibold leading-[1.08] text-slate-900 sm:text-4xl">
                 {lyceumName}
               </h1>
-              <p className="text-xl font-medium uppercase tracking-[0.01em] text-slate-500">
+              <p className="text-lg font-medium uppercase tracking-[0.01em] text-slate-500 sm:text-xl">
                 {heroLabel}
               </p>
-              <p className="text-lg text-slate-600">
+              <p className="text-base text-slate-600 sm:text-lg">
                 {hasLocation ? heroLocation : t('pages.lyceums.detail.notProvided')}
               </p>
             </div>

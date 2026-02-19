@@ -467,6 +467,8 @@ const RegisterForm = () => {
             {t('pages.register.form.acceptLegalDocuments.prefix')}{' '}
             <Link
               to="/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-medium text-brand underline-offset-2 hover:underline"
             >
               {t('pages.register.form.acceptLegalDocuments.privacyPolicy')}
@@ -474,6 +476,8 @@ const RegisterForm = () => {
             {t('pages.register.form.acceptLegalDocuments.connector')}{' '}
             <Link
               to="/terms-and-conditions"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-medium text-brand underline-offset-2 hover:underline"
             >
               {t('pages.register.form.acceptLegalDocuments.termsAndConditions')}

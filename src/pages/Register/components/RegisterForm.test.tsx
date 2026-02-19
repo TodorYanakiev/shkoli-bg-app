@@ -161,7 +161,11 @@ describe('RegisterForm', () => {
     const termsLink = screen.getByRole('link', { name: 'Terms & Conditions' })
 
     expect(privacyLink.getAttribute('href')).toBe('/privacy-policy')
+    expect(privacyLink.getAttribute('target')).toBe('_blank')
+    expect(privacyLink.getAttribute('rel')).toBe('noopener noreferrer')
     expect(termsLink.getAttribute('href')).toBe('/terms-and-conditions')
+    expect(termsLink.getAttribute('target')).toBe('_blank')
+    expect(termsLink.getAttribute('rel')).toBe('noopener noreferrer')
   })
 
   it('renders a duplicate account error', () => {

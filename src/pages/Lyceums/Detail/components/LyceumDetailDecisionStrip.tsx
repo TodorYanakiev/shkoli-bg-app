@@ -14,7 +14,7 @@ type FactItemProps = {
 }
 
 const FactItem = ({ icon, value }: FactItemProps) => (
-  <div className="inline-flex items-center gap-2 text-base text-slate-700">
+  <div className="inline-flex items-center gap-2 text-sm text-slate-700 sm:text-base">
     <span className="text-brand">{icon}</span>
     <span className="font-medium">{value}</span>
   </div>
@@ -98,12 +98,12 @@ export const LyceumDetailDecisionStrip = ({
   ]
 
   return (
-    <div className="border-t border-slate-200 bg-white px-8 py-2.5 lg:px-9">
-      <div className="flex flex-wrap items-center gap-3 lg:gap-4">
+    <div className="border-t border-slate-200 bg-white px-4 py-3 sm:px-6 sm:py-3.5 lg:px-9">
+      <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 lg:gap-4">
         <button
           type="button"
           onClick={onOpenReviews}
-          className="inline-flex h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-6 text-lg font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+          className="inline-flex h-10 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900 sm:h-11 sm:px-5 sm:text-base lg:h-12 lg:px-6 lg:text-lg"
         >
           {t('pages.lyceums.detail.actions.leaveReview')}
         </button>

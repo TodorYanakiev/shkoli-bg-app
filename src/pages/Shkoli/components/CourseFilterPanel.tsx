@@ -9,8 +9,8 @@ import type {
 } from '../../../types/courses'
 import type { CourseFilterFormValues } from '../validations/courseFilterSchema'
 import { CourseFilterChips } from './CourseFilterChips'
-import CourseFilterAgeGroupToggle from './filters/CourseFilterAgeGroupToggle'
 import CourseFilterExpandedSection from './filters/CourseFilterExpandedSection'
+import CourseFilterTownSelect from './filters/CourseFilterTownSelect'
 import CourseFilterTypeSelect from './filters/CourseFilterTypeSelect'
 
 type CourseFilterPanelProps = {
@@ -75,7 +75,11 @@ const CourseFilterPanel = ({
             t={t}
             closeSignal={closeSignal}
           />
-          <CourseFilterAgeGroupToggle control={control} t={t} />
+          <CourseFilterTownSelect
+            control={control}
+            t={t}
+            closeSignal={closeSignal}
+          />
           <button
             type="button"
             onClick={onToggleExpanded}
