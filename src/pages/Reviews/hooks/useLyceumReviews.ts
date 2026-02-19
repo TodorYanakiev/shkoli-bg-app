@@ -33,6 +33,17 @@ export const lyceumReviewQueryKey = (
 const hasValidId = (value: number | undefined): value is number =>
   typeof value === 'number' && Number.isFinite(value)
 
+const shouldRetryReviewQuery = (
+  failureCount: number,
+  error: AppError,
+) => {
+  if (error.status != null && error.status >= 400 && error.status < 500) {
+    return false
+  }
+
+  return failureCount < 1
+}
+
 export const useLyceumReviews = (
   lyceumId?: number,
   options: ReviewQueryOptions = {},
@@ -47,7 +58,7 @@ export const useLyceumReviews = (
       }
     },
     enabled: hasValidId(lyceumId) && (options.enabled ?? true),
-    retry: 1,
+    retry: shouldRetryReviewQuery,
     staleTime: 60 * 1000,
   })
 
@@ -75,7 +86,7 @@ export const useLyceumReview = (
       hasValidId(lyceumId) &&
       hasValidId(userId) &&
       (options.enabled ?? true),
-    retry: 1,
+    retry: shouldRetryReviewQuery,
     staleTime: 60 * 1000,
   })
 

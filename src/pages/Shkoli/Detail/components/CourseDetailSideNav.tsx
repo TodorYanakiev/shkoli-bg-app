@@ -44,7 +44,7 @@ export const CourseDetailSideNav = ({
 
   return (
     <aside
-      className="fixed left-0 z-20 flex border-r border-slate-200 bg-white/95 shadow-sm backdrop-blur"
+      className="fixed left-0 z-20 flex border-r border-slate-200 bg-white"
       style={{
         width: sideNavWidth,
         top: 'var(--topnav-height, 76px)',

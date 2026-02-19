@@ -11,7 +11,7 @@ const AuthLayout = () => {
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       <TopNav />
-      <main className="relative w-full flex-1 overflow-hidden px-4 py-8 sm:px-6 sm:py-10 lg:px-12">
+      <main className="relative w-full flex-1 overflow-hidden px-4 pb-8 pt-[calc(var(--topnav-height,0px)+2rem)] sm:px-6 sm:pb-10 sm:pt-[calc(var(--topnav-height,0px)+2.5rem)] lg:px-12">
         <div aria-hidden className="page-background" />
         <div className="relative z-10 mx-auto w-full max-w-6xl">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">

@@ -1,100 +1,69 @@
 import { useTranslation } from 'react-i18next'
 
-import LyceumCard from '../../../components/ui/LyceumCard'
 import type { ApiError } from '../../../types/api'
 import type { LyceumResponse } from '../../../types/lyceums'
+import LyceumCard from '../../Lyceums/components/LyceumCard'
+import ProfileHorizontalCarousel from './ProfileHorizontalCarousel'
 
 type ProfileLyceumsPanelProps = {
-  hasLyceumAdministration: boolean
-  administratedLyceumId?: number
-  administratedLyceum?: LyceumResponse
-  isAdministratedLyceumLoading: boolean
-  administratedLyceumError: ApiError | null
-  hasLecturedLyceum: boolean
-  activeLecturedLyceum?: LyceumResponse
-  isLecturedLyceumLoading: boolean
-  lecturedLyceumError: ApiError | null
-  showLecturedControls: boolean
-  currentLecturedIndex: number
-  lecturedCount: number
-  onLecturedPrevious: () => void
-  onLecturedNext: () => void
+  title: string
+  lyceums: LyceumResponse[]
+  isLoading: boolean
+  error: ApiError | null
+  emptyMessage: string
 }
 
 const ProfileLyceumsPanel = ({
-  hasLyceumAdministration,
-  administratedLyceumId,
-  administratedLyceum,
-  isAdministratedLyceumLoading,
-  administratedLyceumError,
-  hasLecturedLyceum,
-  activeLecturedLyceum,
-  isLecturedLyceumLoading,
-  lecturedLyceumError,
-  showLecturedControls,
-  currentLecturedIndex,
-  lecturedCount,
-  onLecturedPrevious,
-  onLecturedNext,
+  title,
+  lyceums,
+  isLoading,
+  error,
+  emptyMessage,
 }: ProfileLyceumsPanelProps) => {
   const { t } = useTranslation()
 
   return (
-    <div className="space-y-4">
-      {hasLyceumAdministration ? (
-        <LyceumCard
-          lyceum={administratedLyceum}
-          isLoading={isAdministratedLyceumLoading}
-          error={administratedLyceumError ?? null}
-          linkTo={`/lyceums/${administratedLyceumId}`}
-          linkLabel={t('components.lyceumCard.manageCta')}
-        />
-      ) : null}
-      {hasLecturedLyceum ? (
-        <div className="space-y-3">
-          {showLecturedControls ? (
-            <div className="flex items-center justify-between text-xs text-slate-500">
-              <span>
-                {t('pages.profile.lecturedLyceums.count', {
-                  current: currentLecturedIndex + 1,
-                  total: lecturedCount,
-                })}
-              </span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={onLecturedPrevious}
-                  className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
-                  aria-label={t('pages.profile.lecturedLyceums.previous')}
-                >
-                  {t('pages.profile.lecturedLyceums.previous')}
-                </button>
-                <button
-                  type="button"
-                  onClick={onLecturedNext}
-                  className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
-                  aria-label={t('pages.profile.lecturedLyceums.next')}
-                >
-                  {t('pages.profile.lecturedLyceums.next')}
-                </button>
-              </div>
-            </div>
-          ) : null}
-          <LyceumCard
-            lyceum={activeLecturedLyceum}
-            isLoading={isLecturedLyceumLoading}
-            error={lecturedLyceumError}
-            linkTo={
-              activeLecturedLyceum?.id
-                ? `/lyceums/${activeLecturedLyceum.id}`
-                : undefined
+    <section className="space-y-5">
+      <div className="flex items-end justify-between gap-3">
+        <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+        {!isLoading && !error && lyceums.length > 0 ? (
+          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            ({lyceums.length})
+          </span>
+        ) : null}
+      </div>
+
+      <div className="mt-5 space-y-4">
+        {isLoading ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
+            {t('pages.profile.lyceumCards.loading')}
+          </div>
+        ) : error ? (
+          <div
+            className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
+            role="alert"
+          >
+            {t('pages.profile.lyceumCards.error')}
+          </div>
+        ) : lyceums.length === 0 ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
+            {emptyMessage}
+          </div>
+        ) : (
+          <ProfileHorizontalCarousel
+            items={lyceums}
+            previousLabel={t('pages.profile.lecturedLyceums.previous')}
+            nextLabel={t('pages.profile.lecturedLyceums.next')}
+            getItemKey={(lyceum, index) =>
+              lyceum.id ?? `${lyceum.name ?? 'lyceum'}-${index}`
             }
-            title={t('components.lyceumCard.lecturerTitle')}
-            subtitle={t('components.lyceumCard.lecturerSubtitle')}
+            renderItem={(lyceum) => (
+              <LyceumCard lyceum={lyceum} hideShadow />
+            )}
           />
-        </div>
-      ) : null}
-    </div>
+        )}
+      </div>
+    </section>
   )
 }
 

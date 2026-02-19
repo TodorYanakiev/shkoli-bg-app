@@ -13,6 +13,7 @@ type ProfileUserSummary = {
   description: string
   profileImageUrl: string | null
   roleLabel: string
+  hasLecturerRole: boolean
   hasLyceumAdministration: boolean
   administratedLyceumId?: number
   lecturedLyceumIds: number[]
@@ -49,6 +50,7 @@ export const useProfileUserSummary = (
     typeof lecturerId === 'number' &&
       ((user?.lecturedCourseIds?.length ?? 0) > 0 || hasLecturedLyceum),
   )
+  const hasLecturerRole = hasLecturedCourses || hasLecturedLyceum
   const roleLabel = hasLyceumAdministration
     ? t('pages.profile.roles.lyceumAdmin')
     : user?.role
@@ -66,6 +68,7 @@ export const useProfileUserSummary = (
     description,
     profileImageUrl,
     roleLabel,
+    hasLecturerRole,
     hasLyceumAdministration,
     administratedLyceumId,
     lecturedLyceumIds,

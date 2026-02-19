@@ -11,8 +11,6 @@ import { CourseEditUploadImages } from './CourseEditUploadImages'
 import type { PendingCourseImage } from '../types'
 
 type CourseEditImagesSectionProps = {
-  courseImages: CourseImageResponse[]
-  logoImages: CourseImageResponse[]
   mainImages: CourseImageResponse[]
   existingGalleryImages: CourseImageResponse[]
   isImagesLoading: boolean
@@ -22,10 +20,8 @@ type CourseEditImagesSectionProps = {
   isSubmitting: boolean
   onDeleteExistingImage: (image: CourseImageResponse) => void
   allowedImageTypesLabel: string
-  logoImage: PendingCourseImage | null
   mainImage: PendingCourseImage | null
   galleryImages: PendingCourseImage[]
-  logoImageError: string | null
   mainImageError: string | null
   galleryImageError: string | null
   onSingleImageSelect: (
@@ -35,15 +31,12 @@ type CourseEditImagesSectionProps = {
   onGallerySelect: (event: ChangeEvent<HTMLInputElement>) => void
   onRemoveSingleImage: (role: CourseImageRole) => void
   onRemoveGalleryImage: (id: string) => void
-  onUpdateLogoAltText: (value: string) => void
   onUpdateMainAltText: (value: string) => void
   onUpdateGalleryAltText: (id: string, value: string) => void
   t: TFunction
 }
 
 export const CourseEditImagesSection = ({
-  courseImages,
-  logoImages,
   mainImages,
   existingGalleryImages,
   isImagesLoading,
@@ -53,17 +46,14 @@ export const CourseEditImagesSection = ({
   isSubmitting,
   onDeleteExistingImage,
   allowedImageTypesLabel,
-  logoImage,
   mainImage,
   galleryImages,
-  logoImageError,
   mainImageError,
   galleryImageError,
   onSingleImageSelect,
   onGallerySelect,
   onRemoveSingleImage,
   onRemoveGalleryImage,
-  onUpdateLogoAltText,
   onUpdateMainAltText,
   onUpdateGalleryAltText,
   t,
@@ -73,8 +63,6 @@ export const CourseEditImagesSection = ({
       {t('pages.shkoli.edit.images.title')}
     </legend>
     <CourseEditExistingImages
-      courseImages={courseImages}
-      logoImages={logoImages}
       mainImages={mainImages}
       existingGalleryImages={existingGalleryImages}
       isImagesLoading={isImagesLoading}
@@ -91,17 +79,14 @@ export const CourseEditImagesSection = ({
     ) : null}
     <CourseEditUploadImages
       allowedImageTypesLabel={allowedImageTypesLabel}
-      logoImage={logoImage}
       mainImage={mainImage}
       galleryImages={galleryImages}
-      logoImageError={logoImageError}
       mainImageError={mainImageError}
       galleryImageError={galleryImageError}
       onSingleImageSelect={onSingleImageSelect}
       onGallerySelect={onGallerySelect}
       onRemoveSingleImage={onRemoveSingleImage}
       onRemoveGalleryImage={onRemoveGalleryImage}
-      onUpdateLogoAltText={onUpdateLogoAltText}
       onUpdateMainAltText={onUpdateMainAltText}
       onUpdateGalleryAltText={onUpdateGalleryAltText}
       isSubmitting={isSubmitting}

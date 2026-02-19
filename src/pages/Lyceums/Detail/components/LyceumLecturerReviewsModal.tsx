@@ -44,7 +44,7 @@ const LyceumLecturerReviewsModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4 py-8 backdrop-blur-sm"
+      className="fixed inset-0 z-40 flex items-start justify-center bg-slate-900/40 px-4 pb-8 pt-24 backdrop-blur-sm"
       onClick={onClose}
       role="presentation"
     >
@@ -55,7 +55,7 @@ const LyceumLecturerReviewsModal = ({
         className="w-full max-w-3xl"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="relative max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-xl">
+        <div className="relative max-h-[calc(100vh-8rem)] overflow-y-auto rounded-2xl border border-slate-200/70 bg-white/95 p-5 shadow-xl">
           <button
             type="button"
             onClick={onClose}

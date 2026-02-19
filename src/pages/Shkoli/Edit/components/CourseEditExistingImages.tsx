@@ -92,8 +92,6 @@ const ExistingImageGroup = ({
 )
 
 type CourseEditExistingImagesProps = {
-  courseImages: CourseImageResponse[]
-  logoImages: CourseImageResponse[]
   mainImages: CourseImageResponse[]
   existingGalleryImages: CourseImageResponse[]
   isImagesLoading: boolean
@@ -105,8 +103,6 @@ type CourseEditExistingImagesProps = {
 }
 
 export const CourseEditExistingImages = ({
-  courseImages,
-  logoImages,
   mainImages,
   existingGalleryImages,
   isImagesLoading,
@@ -128,7 +124,7 @@ export const CourseEditExistingImages = ({
     return <p className="text-sm text-rose-600">{imagesErrorMessage}</p>
   }
 
-  if (courseImages.length === 0) {
+  if (mainImages.length === 0 && existingGalleryImages.length === 0) {
     return (
       <p className="text-sm text-slate-600">
         {t('pages.shkoli.edit.images.empty')}
@@ -138,19 +134,6 @@ export const CourseEditExistingImages = ({
 
   return (
     <div className="space-y-4">
-      <ExistingImageGroup
-        title={t('pages.shkoli.edit.images.currentLogo')}
-        images={logoImages}
-        emptyLabel={t('pages.shkoli.edit.images.none')}
-        imageClassName="h-16 w-16"
-        listClassName="mt-2 flex flex-wrap gap-3"
-        showMimeType
-        showOrderIndex={false}
-        isDeletePending={isDeletePending}
-        isSubmitting={isSubmitting}
-        onDeleteExistingImage={onDeleteExistingImage}
-        t={t}
-      />
       <ExistingImageGroup
         title={t('pages.shkoli.edit.images.currentMain')}
         images={mainImages}

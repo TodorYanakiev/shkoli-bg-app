@@ -90,3 +90,54 @@ export const getSpecialCaseStatus = (
   entry.cancelled
     ? t('pages.shkoli.detail.schedule.cancelled')
     : t('pages.shkoli.detail.schedule.active')
+
+const getPrimaryScheduleSlot = (
+  scheduleSlots: CourseScheduleSlot[],
+) => scheduleSlots[0]
+
+export const getScheduleSummaryValue = (
+  scheduleSlots: CourseScheduleSlot[],
+  fallbackValue: string,
+  t: TFunction,
+) => {
+  const primarySlot = getPrimaryScheduleSlot(scheduleSlots)
+  if (!primarySlot) return fallbackValue
+
+  const primaryBadge = getScheduleBadge(primarySlot, fallbackValue, t)
+  return primaryBadge.value
+}
+
+export const getScheduleTimeRangeValue = (
+  scheduleSlots: CourseScheduleSlot[],
+  fallbackValue: string,
+) => {
+  const primarySlot = getPrimaryScheduleSlot(scheduleSlots)
+  if (!primarySlot) return fallbackValue
+
+  const start = primarySlot.startTime
+    ? formatScheduleTime(primarySlot.startTime)
+    : null
+  const end = primarySlot.endTime
+    ? formatScheduleTime(primarySlot.endTime)
+    : null
+
+  if (start && end) return `${start} - ${end}`
+  return start ?? end ?? fallbackValue
+}
+
+export const getScheduleDurationValue = (
+  scheduleSlots: CourseScheduleSlot[],
+  fallbackValue: string,
+  t: TFunction,
+) => {
+  const primarySlot = getPrimaryScheduleSlot(scheduleSlots)
+  if (!primarySlot) return fallbackValue
+
+  if (typeof primarySlot.singleClassDurationMinutes !== 'number') {
+    return fallbackValue
+  }
+
+  return t('pages.shkoli.detail.schedule.minutes', {
+    count: primarySlot.singleClassDurationMinutes,
+  })
+}

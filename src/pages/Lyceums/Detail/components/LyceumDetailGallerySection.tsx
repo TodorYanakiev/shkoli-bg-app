@@ -1,16 +1,23 @@
-import type { TFunction } from "i18next";
+import { useEffect, useMemo, useState } from 'react'
+import type { TFunction } from 'i18next'
 
-import placeholderImage from "../../../../assets/lyceum-placeholder.svg";
-import type { LyceumImageResponse } from "../../../../types/lyceums";
-import { resolveLyceumImageUrl } from "../../../../utils/lyceumImages";
+import placeholderImage from '../../../../assets/lyceum-placeholder.svg'
+import type { LyceumImageResponse } from '../../../../types/lyceums'
+import { resolveLyceumImageUrl } from '../../../../utils/lyceumImages'
 
 type LyceumDetailGallerySectionProps = {
-  galleryImages: LyceumImageResponse[];
-  lyceumName: string;
-  isImagesLoading: boolean;
-  imagesErrorMessage: string | null;
-  t: TFunction;
-};
+  galleryImages: LyceumImageResponse[]
+  lyceumName: string
+  isImagesLoading: boolean
+  imagesErrorMessage: string | null
+  t: TFunction
+}
+
+type GalleryItem = {
+  key: string
+  src: string
+  alt: string
+}
 
 export const LyceumDetailGallerySection = ({
   galleryImages,
@@ -18,64 +25,208 @@ export const LyceumDetailGallerySection = ({
   isImagesLoading,
   imagesErrorMessage,
   t,
-}: LyceumDetailGallerySectionProps) => (
-  <div
-    id="lyceum-gallery"
-    className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-  >
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <h3 className="text-sm font-semibold text-slate-900">
-        {t("pages.lyceums.detail.sections.gallery")}
+}: LyceumDetailGallerySectionProps) => {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const galleryItems = useMemo<GalleryItem[]>(
+    () =>
+      galleryImages.map((image, index) => {
+        const imageUrl = resolveLyceumImageUrl(image) ?? placeholderImage
+        return {
+          key: `${image.id ?? 'gallery'}-${index}`,
+          src: imageUrl,
+          alt:
+            image.altText ??
+            t('pages.lyceums.detail.images.galleryAlt', {
+              name: lyceumName,
+              index: index + 1,
+            }),
+        }
+      }),
+    [galleryImages, lyceumName, t],
+  )
+
+  const hasLightbox = activeIndex != null && galleryItems.length > 0
+  const safeActiveIndex =
+    activeIndex == null
+      ? 0
+      : ((activeIndex % galleryItems.length) + galleryItems.length) %
+        galleryItems.length
+  const lightboxTopInset = 'var(--topnav-height, 76px)'
+  const closeLightbox = () => setActiveIndex(null)
+  const showPreviousImage = () =>
+    setActiveIndex((prev) => (prev == null ? 0 : prev - 1))
+  const showNextImage = () =>
+    setActiveIndex((prev) => (prev == null ? 0 : prev + 1))
+
+  useEffect(() => {
+    if (!hasLightbox || typeof document === 'undefined') return undefined
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setActiveIndex(null)
+      } else if (event.key === 'ArrowRight') {
+        setActiveIndex((prev) => (prev == null ? 0 : prev + 1))
+      } else if (event.key === 'ArrowLeft') {
+        setActiveIndex((prev) => (prev == null ? 0 : prev - 1))
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [hasLightbox])
+
+  return (
+    <section id="lyceum-gallery" className="scroll-mt-24">
+      <h3 className="text-3xl font-semibold text-slate-900">
+        {t('pages.lyceums.detail.sections.gallery')}
       </h3>
-      <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
-        {t("pages.lyceums.detail.countLabel", { count: galleryImages.length })}
-      </span>
-    </div>
-    {isImagesLoading ? (
-      <div className="mt-4 animate-pulse rounded-2xl border border-dashed border-slate-200 bg-slate-100 p-4 text-sm text-slate-600">
-        {t("pages.lyceums.detail.images.loading")}
-      </div>
-    ) : imagesErrorMessage ? (
-      <div
-        className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
-        role="alert"
-      >
-        {imagesErrorMessage}
-      </div>
-    ) : galleryImages.length > 0 ? (
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {galleryImages.map((image, index) => {
-          const imageUrl = resolveLyceumImageUrl(image) ?? placeholderImage;
-          return (
-            <div
-              key={image.id ?? `${imageUrl}-${index}`}
-              className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50/70"
+      {isImagesLoading ? (
+        <div className="mt-4 animate-pulse rounded-2xl border border-dashed border-slate-200 bg-white p-4 text-base text-slate-600">
+          {t('pages.lyceums.detail.images.loading')}
+        </div>
+      ) : imagesErrorMessage ? (
+        <div
+          className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-base text-rose-700"
+          role="alert"
+        >
+          {imagesErrorMessage}
+        </div>
+      ) : galleryItems.length > 0 ? (
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {galleryItems.map((image, index) => (
+            <button
+              key={image.key}
+              type="button"
+              onClick={() => setActiveIndex(index)}
+              className="group overflow-hidden rounded-xl border border-slate-200 bg-white text-left transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <img
-                src={imageUrl}
-                alt={
-                  image.altText ??
-                  t("pages.lyceums.detail.images.galleryAlt", {
-                    name: lyceumName,
-                    index: index + 1,
-                  })
-                }
-                className="h-40 w-full object-cover"
+                src={image.src}
+                alt={image.alt}
+                className="aspect-[4/3] h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                 loading="lazy"
                 onError={(event) => {
-                  const target = event.currentTarget;
-                  target.onerror = null;
-                  target.src = placeholderImage;
+                  const target = event.currentTarget
+                  target.onerror = null
+                  target.src = placeholderImage
                 }}
               />
-            </div>
-          );
-        })}
-      </div>
-    ) : (
-      <p className="mt-3 text-sm text-slate-600">
-        {t("pages.lyceums.detail.galleryEmpty")}
-      </p>
-    )}
-  </div>
-);
+            </button>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-3 text-base text-slate-600">
+          {t('pages.lyceums.detail.galleryEmpty')}
+        </p>
+      )}
+
+      {hasLightbox ? (
+        <div
+          className="fixed inset-x-0 bottom-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/80 px-4 pb-6 pt-3"
+          style={{ top: lightboxTopInset }}
+          role="dialog"
+          aria-modal="true"
+          aria-label={t('pages.lyceums.detail.galleryLightbox.label')}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              closeLightbox()
+            }
+          }}
+        >
+          <div className="relative w-full max-w-5xl">
+            <img
+              src={galleryItems[safeActiveIndex].src}
+              alt={galleryItems[safeActiveIndex].alt}
+              className="max-h-[82vh] w-full rounded-2xl object-contain"
+              style={{
+                maxHeight:
+                  'calc(100dvh - var(--topnav-height, 76px) - 2.5rem)',
+              }}
+              draggable={false}
+            />
+
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                showPreviousImage()
+              }}
+              className="absolute left-3 top-1/2 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow-sm transition hover:bg-white"
+              aria-label={t('pages.lyceums.detail.galleryLightbox.previous')}
+            >
+              <svg
+                viewBox="0 0 20 20"
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12.5 4.5L7 10l5.5 5.5" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                showNextImage()
+              }}
+              className="absolute right-3 top-1/2 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow-sm transition hover:bg-white"
+              aria-label={t('pages.lyceums.detail.galleryLightbox.next')}
+            >
+              <svg
+                viewBox="0 0 20 20"
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M7.5 4.5L13 10l-5.5 5.5" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                closeLightbox()
+              }}
+              className="absolute right-3 top-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow-sm transition hover:bg-white"
+              aria-label={t('feedback.dismiss')}
+            >
+              <svg
+                viewBox="0 0 20 20"
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 5l10 10" />
+                <path d="M15 5L5 15" />
+              </svg>
+            </button>
+            <p className="mt-3 text-center text-xs text-slate-200">
+              {t('pages.lyceums.detail.galleryLightbox.counter', {
+                current: safeActiveIndex + 1,
+                total: galleryItems.length,
+              })}
+            </p>
+          </div>
+        </div>
+      ) : null}
+    </section>
+  )
+}

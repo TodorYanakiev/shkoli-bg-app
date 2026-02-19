@@ -2,92 +2,66 @@ import { useTranslation } from 'react-i18next'
 
 import type { ApiError } from '../../../types/api'
 import type { CourseResponse } from '../../../types/courses'
-import LecturedCourseCard from './LecturedCourseCard'
+import CourseCard from '../../Shkoli/components/CourseCard'
+import ProfileHorizontalCarousel from './ProfileHorizontalCarousel'
 
 type ProfileLecturedCoursesPanelProps = {
-  displayName: string
-  fallbackValue: string
-  activeCourse: CourseResponse | null
+  courses: CourseResponse[]
   isLoading: boolean
   error: ApiError | null
-  count: number
-  showControls: boolean
-  currentIndex: number
-  onPrevious: () => void
-  onNext: () => void
 }
 
 const ProfileLecturedCoursesPanel = ({
-  displayName,
-  fallbackValue,
-  activeCourse,
+  courses,
   isLoading,
   error,
-  count,
-  showControls,
-  currentIndex,
-  onPrevious,
-  onNext,
 }: ProfileLecturedCoursesPanelProps) => {
   const { t } = useTranslation()
 
   return (
-    <div className="space-y-3">
-      {showControls ? (
-        <div className="flex items-center justify-between text-xs text-slate-500">
-          <span>
-            {t('pages.profile.lecturedCourses.count', {
-              current: currentIndex + 1,
-              total: count,
-            })}
+    <section className="space-y-5">
+      <div className="flex items-end justify-between gap-3">
+        <h2 className="text-xl font-semibold text-slate-900">
+          {t('pages.profile.lecturedCourses.title')}
+        </h2>
+        {!isLoading && !error && courses.length > 0 ? (
+          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            ({courses.length})
           </span>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={onPrevious}
-              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
-              aria-label={t('pages.profile.lecturedCourses.previous')}
-            >
-              {t('pages.profile.lecturedCourses.previous')}
-            </button>
-            <button
-              type="button"
-              onClick={onNext}
-              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-brand/40 hover:text-brand"
-              aria-label={t('pages.profile.lecturedCourses.next')}
-            >
-              {t('pages.profile.lecturedCourses.next')}
-            </button>
+        ) : null}
+      </div>
+
+      <div className="mt-5 space-y-4">
+        {isLoading ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
+            {t('pages.profile.lecturedCourses.loading')}
           </div>
-        </div>
-      ) : null}
-      {isLoading ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
-          {t('pages.profile.lecturedCourses.loading')}
-        </div>
-      ) : error ? (
-        <div
-          className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
-          role="alert"
-        >
-          {t('pages.profile.lecturedCourses.error')}
-        </div>
-      ) : count === 0 ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
-          {t('pages.profile.lecturedCourses.empty')}
-        </div>
-      ) : activeCourse ? (
-        <LecturedCourseCard
-          course={activeCourse}
-          lecturerName={displayName}
-          additionalLecturers={Math.max(
-            0,
-            (activeCourse.lecturerIds?.length ?? 0) - 1,
-          )}
-          fallbackValue={fallbackValue}
-        />
-      ) : null}
-    </div>
+        ) : error ? (
+          <div
+            className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
+            role="alert"
+          >
+            {t('pages.profile.lecturedCourses.error')}
+          </div>
+        ) : courses.length === 0 ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
+            {t('pages.profile.lecturedCourses.empty')}
+          </div>
+        ) : (
+          <ProfileHorizontalCarousel
+            items={courses}
+            previousLabel={t('pages.profile.lecturedCourses.previous')}
+            nextLabel={t('pages.profile.lecturedCourses.next')}
+            getItemKey={(course, index) =>
+              course.id ?? `${course.name ?? 'course'}-${index}`
+            }
+            renderItem={(course) => (
+              <CourseCard course={course} hideShadow />
+            )}
+          />
+        )}
+      </div>
+    </section>
   )
 }
 

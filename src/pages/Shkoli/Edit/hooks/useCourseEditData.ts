@@ -21,7 +21,6 @@ type CourseEditData = {
   user?: CurrentUser
   lecturers?: UserResponse[]
   courseImages: CourseImageResponse[]
-  logoImages: CourseImageResponse[]
   mainImages: CourseImageResponse[]
   existingGalleryImages: CourseImageResponse[]
   isCourseLoading: boolean
@@ -81,8 +80,7 @@ export const useCourseEditData = ({
     enabled: isValidId && hasEditAccess,
   })
 
-  const { logoImages, mainImages, existingGalleryImages } = useMemo(() => {
-    const logo = courseImages.filter((image) => image.role === 'LOGO')
+  const { mainImages, existingGalleryImages } = useMemo(() => {
     const main = courseImages.filter((image) => image.role === 'MAIN')
     const gallery = [...courseImages]
       .filter((image) => image.role === 'GALLERY')
@@ -93,7 +91,6 @@ export const useCourseEditData = ({
       )
 
     return {
-      logoImages: logo,
       mainImages: main,
       existingGalleryImages: gallery,
     }
@@ -104,7 +101,6 @@ export const useCourseEditData = ({
     user,
     lecturers,
     courseImages,
-    logoImages,
     mainImages,
     existingGalleryImages,
     isCourseLoading,

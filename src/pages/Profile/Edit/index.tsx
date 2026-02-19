@@ -14,7 +14,8 @@ import {
   type UpdateUserFormValues,
 } from '../../../validations/users'
 import DeleteAccountModal from '../components/DeleteAccountModal'
-import ProfileSummaryCard from '../components/ProfileSummaryCard'
+import ProfileDashboardHeaderCard from '../components/ProfileDashboardHeaderCard'
+import type { ProfileRoleChip } from '../components/ProfileDashboardRoleInfo'
 import { useProfileImageManager } from '../hooks/useProfileImageManager'
 import { useProfileUserSummary } from '../hooks/useProfileUserSummary'
 import DeleteAccountSection from './components/DeleteAccountSection'
@@ -82,6 +83,24 @@ const EditProfilePage = () => {
   }, [reset, user])
 
   const userId = typeof user?.id === 'number' ? user.id : null
+  const fallbackValue = t('pages.profile.emptyValue')
+  const headlineName =
+    summary.fullName === fallbackValue
+      ? summary.displayName
+      : summary.fullName
+  const roleChips: ProfileRoleChip[] = []
+  if (summary.hasLecturerRole) {
+    roleChips.push({
+      key: 'lecturer',
+      label: t('pages.profile.roles.lecturer'),
+    })
+  }
+  if (summary.hasLyceumAdministration) {
+    roleChips.push({
+      key: 'admin',
+      label: t('pages.profile.roles.admin'),
+    })
+  }
 
   const onSubmit = (values: UpdateUserFormValues) => {
     if (!userId) return
@@ -202,21 +221,25 @@ const EditProfilePage = () => {
         </div>
       ) : (
         <>
-          <ProfileSummaryCard
-            displayName={summary.displayName}
-            username={summary.username}
-            roleLabel={summary.roleLabel}
-            avatarUrl={summary.profileImageUrl}
-            validationError={profileImageManager.validationError}
-            actionError={profileImageManager.actionError}
-            uploadProgress={profileImageManager.uploadProgress}
-            hasExistingImage={profileImageManager.hasExistingImage}
-            isSaving={profileImageManager.isSaving}
-            isDeleting={profileImageManager.isDeleting}
-            canDelete={profileImageManager.canDelete}
-            onImageFileChange={profileImageManager.handleImageFileChange}
-            onDeleteImage={profileImageManager.handleDeleteImage}
-          />
+          <div className="w-full max-w-2xl">
+            <ProfileDashboardHeaderCard
+              fullName={headlineName}
+              username={summary.username}
+              avatarUrl={summary.profileImageUrl}
+              roleChips={roleChips}
+              subtitleText={summary.email}
+              showAccountActions={false}
+              validationError={profileImageManager.validationError}
+              actionError={profileImageManager.actionError}
+              uploadProgress={profileImageManager.uploadProgress}
+              hasExistingImage={profileImageManager.hasExistingImage}
+              isSaving={profileImageManager.isSaving}
+              isDeleting={profileImageManager.isDeleting}
+              canDelete={profileImageManager.canDelete}
+              onImageFileChange={profileImageManager.handleImageFileChange}
+              onDeleteImage={profileImageManager.handleDeleteImage}
+            />
+          </div>
           <ProfileEditForm
             register={register}
             errors={errors}

@@ -25,9 +25,9 @@ export const getLyceumDetailSideNavItems = ({
 }: LyceumDetailSideNavItemsOptions): SideNavItem[] => {
   const baseSideNavItems: SideNavItem[] = [
     {
-      key: "lyceum-info",
+      key: "lyceum-overview",
       label: t("pages.lyceums.detail.sideNav.info"),
-      href: "#lyceum-info",
+      href: "#lyceum-overview",
       icon: (
         <svg
           viewBox="0 0 24 24"

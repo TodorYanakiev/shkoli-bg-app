@@ -13,9 +13,13 @@ import { useCourseCardLocation } from '../hooks/useCourseCardLocation'
 
 type CourseCardProps = {
   course: CourseResponse
+  hideShadow?: boolean
 }
 
-const CourseCard = ({ course }: CourseCardProps) => {
+const CourseCard = ({
+  course,
+  hideShadow = false,
+}: CourseCardProps) => {
   const { t, i18n } = useTranslation()
   const courseName = course.name ?? t('pages.shkoli.list.card.untitled')
   const courseType = course.type
@@ -57,7 +61,19 @@ const CourseCard = ({ course }: CourseCardProps) => {
       : t('pages.shkoli.list.card.locationFallback'))
 
   const cardContent = (
-    <article className="group relative overflow-hidden rounded-[28px] border border-white/70 bg-white/80 shadow-[0_32px_80px_-55px_rgba(15,23,42,0.6)] backdrop-blur transition-transform duration-300 hover:-translate-y-1">
+    <article
+      className={[
+        'group relative overflow-hidden rounded-[28px] border backdrop-blur transition-transform duration-300 hover:-translate-y-1',
+        hideShadow
+          ? 'border-slate-200/90 bg-white'
+          : 'border-white/70 bg-white/80',
+        hideShadow
+          ? ''
+          : 'shadow-[0_32px_80px_-55px_rgba(15,23,42,0.6)]',
+      ]
+        .join(' ')
+        .trim()}
+    >
       <div className="relative h-56 overflow-hidden sm:h-60">
         <img
           src={mainImageUrl}

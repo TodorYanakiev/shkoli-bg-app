@@ -26,3 +26,10 @@ export type CourseDetailValue = {
   label: string
   value: string
 }
+
+export type CourseDetailTabKey =
+  | 'overview'
+  | 'schedule'
+  | 'gallery'
+  | 'lecturers'
+  | 'reviews'

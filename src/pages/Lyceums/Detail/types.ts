@@ -53,3 +53,10 @@ export type SideNavItem =
       href?: never
       to?: never
     }
+
+export type LyceumDetailTabKey =
+  | 'overview'
+  | 'courses'
+  | 'gallery'
+  | 'lecturers'
+  | 'reviews'

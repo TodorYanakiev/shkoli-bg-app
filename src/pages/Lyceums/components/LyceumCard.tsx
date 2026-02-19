@@ -12,9 +12,17 @@ import { useLyceumCourses } from '../hooks/useLyceumCourses'
 
 type LyceumCardProps = {
   lyceum: LyceumResponse
+  compact?: boolean
+  hideShadow?: boolean
+  className?: string
 }
 
-const LyceumCard = ({ lyceum }: LyceumCardProps) => {
+const LyceumCard = ({
+  lyceum,
+  compact = false,
+  hideShadow = false,
+  className,
+}: LyceumCardProps) => {
   const { t } = useTranslation()
   const lyceumName = lyceum.name ?? t('pages.lyceums.list.card.untitled')
   const addressParts = [lyceum.town, lyceum.address].filter(
@@ -46,8 +54,33 @@ const LyceumCard = ({ lyceum }: LyceumCardProps) => {
       })
 
   const cardContent = (
-    <article className="group relative overflow-hidden rounded-[28px] border border-white/70 bg-white/80 shadow-[0_32px_80px_-55px_rgba(15,23,42,0.6)] backdrop-blur transition-transform duration-300 hover:-translate-y-1">
-      <div className="relative h-56 overflow-hidden sm:h-60">
+    <article
+      className={[
+        compact
+          ? 'group relative overflow-hidden rounded-2xl border backdrop-blur transition-transform duration-300 hover:-translate-y-0.5'
+          : 'group relative overflow-hidden rounded-[28px] border backdrop-blur transition-transform duration-300 hover:-translate-y-1',
+        hideShadow
+          ? 'border-slate-200/90 bg-white'
+          : compact
+            ? 'border-slate-200 bg-white/90'
+            : 'border-white/70 bg-white/80',
+        hideShadow
+          ? ''
+          : compact
+            ? 'shadow-[0_18px_42px_-34px_rgba(15,23,42,0.45)]'
+            : 'shadow-[0_32px_80px_-55px_rgba(15,23,42,0.6)]',
+        className ?? '',
+      ]
+        .join(' ')
+        .trim()}
+    >
+      <div
+        className={
+          compact
+            ? 'relative h-44 overflow-hidden sm:h-48'
+            : 'relative h-56 overflow-hidden sm:h-60'
+        }
+      >
         <img
           src={mainImageUrl}
           alt={
@@ -65,7 +98,11 @@ const LyceumCard = ({ lyceum }: LyceumCardProps) => {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent" />
         {lyceum.id ? (
           <span
-            className="absolute left-0 top-0 rounded-br-md px-4 py-2 pr-10 text-[11px] font-semibold uppercase tracking-[0.2em] text-white"
+            className={
+              compact
+                ? 'absolute left-0 top-0 rounded-br-md px-3 py-1.5 pr-8 text-[10px] font-semibold uppercase tracking-[0.16em] text-white'
+                : 'absolute left-0 top-0 rounded-br-md px-4 py-2 pr-10 text-[11px] font-semibold uppercase tracking-[0.2em] text-white'
+            }
             style={{
               backgroundImage:
                 'linear-gradient(to right, rgba(5,150,105,0.95) 0%, rgba(5,150,105,0.95) calc(100% - 2.5rem), rgba(5,150,105,0) 100%)',
@@ -75,13 +112,25 @@ const LyceumCard = ({ lyceum }: LyceumCardProps) => {
           </span>
         ) : null}
         <div className="absolute bottom-4 left-4 right-4">
-          <h3 className="line-clamp-2 text-lg font-semibold text-white drop-shadow-sm">
+          <h3
+            className={
+              compact
+                ? 'line-clamp-2 text-base font-semibold text-white drop-shadow-sm'
+                : 'line-clamp-2 text-lg font-semibold text-white drop-shadow-sm'
+            }
+          >
             {lyceumName}
           </h3>
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center">
+      <div
+        className={
+          compact
+            ? 'flex flex-col gap-2 px-3 py-3 sm:flex-row sm:items-center'
+            : 'flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center'
+        }
+      >
         <div className="min-w-0 flex-1">
           <div className="mt-1 flex items-center gap-1 text-xs text-slate-500">
             <svg
@@ -104,7 +153,13 @@ const LyceumCard = ({ lyceum }: LyceumCardProps) => {
           </div>
         </div>
 
-        <div className="shrink-0 self-start rounded-full bg-amber-50 px-3 py-1 shadow-sm sm:self-auto">
+        <div
+          className={
+            compact
+              ? 'shrink-0 self-start rounded-full bg-amber-50 px-2.5 py-1 shadow-sm sm:self-auto'
+              : 'shrink-0 self-start rounded-full bg-amber-50 px-3 py-1 shadow-sm sm:self-auto'
+          }
+        >
           {averageRating != null ? (
             <RatingStars
               rating={averageRating}

@@ -94,9 +94,6 @@ export const TopNavMobileMenu = ({
       <NavLink to="/map" className={mobileNavLinkClassName}>
         {t('nav.map')}
       </NavLink>
-      <NavLink to="/about" className={mobileNavLinkClassName}>
-        {t('nav.about')}
-      </NavLink>
       {isGlobalAdmin ? (
         <NavLink to="/admin" className={mobileNavLinkClassName}>
           {t('nav.admin')}

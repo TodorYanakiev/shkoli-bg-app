@@ -12,7 +12,7 @@
     "test:e2e": "npm run build && playwright test",
     "test:e2e:ci": "npm run build && playwright test",
     "perf": "lhci autorun",
-    "security": "npm audit --audit-level=high",
+    "security": "npm audit --omit=dev --audit-level=high",
     "preview": "vite preview"
   },
   "dependencies": {

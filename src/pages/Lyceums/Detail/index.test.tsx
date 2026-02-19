@@ -1,4 +1,5 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import {
@@ -59,15 +60,26 @@ vi.mock("../../Reviews/components/LyceumReviewsSection", () => ({
 }));
 
 const renderPage = (path = "/lyceums/1") =>
-  render(
-    <HelmetProvider>
-      <MemoryRouter initialEntries={[path]}>
-        <Routes>
-          <Route path="/lyceums/:id" element={<LyceumDetailPage />} />
-        </Routes>
-      </MemoryRouter>
-    </HelmetProvider>,
+{
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
+
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <HelmetProvider>
+        <MemoryRouter initialEntries={[path]}>
+          <Routes>
+            <Route path="/lyceums/:id" element={<LyceumDetailPage />} />
+          </Routes>
+        </MemoryRouter>
+      </HelmetProvider>
+    </QueryClientProvider>,
   );
+};
 
 beforeAll(async () => {
   await i18n.changeLanguage("en");
@@ -156,7 +168,7 @@ describe("LyceumDetailPage", () => {
     expect(await screen.findByText("Lyceum not found.")).toBeDefined();
   });
 
-  it("shows a lecturer name from course-only lecturers", async () => {
+  it("shows a course card in the courses tab", async () => {
     const course: CourseResponse = {
       id: 12,
       name: "Painting 101",
@@ -182,6 +194,9 @@ describe("LyceumDetailPage", () => {
 
     renderPage("/lyceums/1");
 
-    expect(await screen.findByText("Jane Doe")).toBeDefined();
+    const coursesTab = await screen.findByRole("tab", { name: "Courses" });
+    fireEvent.click(coursesTab);
+
+    expect(await screen.findByText("Painting 101")).toBeDefined();
   });
 });

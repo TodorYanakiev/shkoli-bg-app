@@ -31,9 +31,6 @@ export const TopNavDesktopNav = ({
     <NavLink to="/map" className={navLinkClassName}>
       {t('nav.map')}
     </NavLink>
-    <NavLink to="/about" className={navLinkClassName}>
-      {t('nav.about')}
-    </NavLink>
     {isGlobalAdmin ? (
       <NavLink to="/admin" className={navLinkClassName}>
         {t('nav.admin')}

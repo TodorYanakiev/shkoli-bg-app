@@ -19,6 +19,7 @@ type ReviewEditorPanelProps = {
   onDelete: () => void
   ownReviewIsLoading: boolean
   ownReviewError: AppError | null
+  triggerButtonId?: string
 }
 
 export const ReviewEditorPanel = ({
@@ -34,6 +35,7 @@ export const ReviewEditorPanel = ({
   onDelete,
   ownReviewIsLoading,
   ownReviewError,
+  triggerButtonId,
 }: ReviewEditorPanelProps) => {
   const { t } = useTranslation()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -90,6 +92,7 @@ export const ReviewEditorPanel = ({
       {editorMode === 'modal' && isAuthenticated ? (
         <>
           <button
+            id={triggerButtonId}
             type="button"
             onClick={() => setIsModalOpen(true)}
             className="inline-flex items-center rounded-full bg-brand px-4 py-2 text-xs font-semibold text-white hover:bg-brand-dark"

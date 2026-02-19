@@ -13,6 +13,7 @@
         "items": {
           "save": {
             "title": "Save your favorites",
+            "soon": "Soon",
             "description": "Bookmark courses and lyceums to compare later."
           },
           "compare": {
@@ -27,7 +28,7 @@
         "badges": {
           "secure": "Secure login",
           "noSpam": "No spam",
-          "local": "Local data"
+          "local": "Easy"
         }
       }
     },
@@ -51,7 +52,12 @@
         "notice": "All rights reserved.",
         "privacyPolicy": "Privacy policy",
         "cookiesPolicy": "Cookies policy",
-        "termsAndConditions": "Terms & conditions"
+        "termsAndConditions": "Terms & conditions",
+        "socials": {
+          "youtube": "Shkoli.bg on YouTube",
+          "instagram": "Shkoli.bg on Instagram",
+          "tiktok": "Shkoli.bg on TikTok"
+        }
       }
     }
   },
@@ -124,12 +130,26 @@
     "generic": "Something went wrong. Please try again.",
     "courses": {
       "createFailed": "We couldn't create this course. Try again.",
+      "createInvalid": "Please check the course data and schedule.",
+      "createNotFound": "The selected lyceum or lecturer was not found.",
+      "createConflict": "This course couldn't be created due to a data conflict.",
       "updateFailed": "We couldn't update this course. Try again.",
+      "updateInvalid": "Please check the updated course data and schedule.",
+      "updateNotFound": "This course was not found.",
+      "updateConflict": "This course couldn't be updated due to a data conflict.",
       "deleteFailed": "We couldn't delete this course. Try again.",
+      "imagesLoadFailed": "We couldn't load course images right now.",
+      "imagesInvalid": "We couldn't load images because the request is invalid.",
+      "imagesNotFound": "Course images were not found.",
       "imageUploadFailed": "We couldn't upload this image. Try again.",
+      "imageInvalid": "This image data is invalid. Check role, dimensions, and order.",
+      "imageCourseNotFound": "The selected course was not found.",
       "imagesUploadFailed": "Some images could not be uploaded.",
       "imageDuplicate": "This image has already been uploaded.",
-      "imageConfigMissing": "Image upload is not configured."
+      "imageConfigMissing": "Image upload is not configured.",
+      "imageDeleteFailed": "We couldn't delete this image. Try again.",
+      "imageDeleteInvalid": "This image cannot be removed from this course.",
+      "imageDeleteNotFound": "This image was not found for this course."
     },
     "lyceums": {
       "createFailed": "We couldn't create this lyceum. Try again.",
@@ -475,21 +495,27 @@
       "roles": {
         "user": "User",
         "admin": "Admin",
+        "lecturer": "Lecturer",
         "lyceumAdmin": "Lyceum administrator",
         "unknown": "Unknown"
       },
       "lecturedLyceums": {
+        "title": "Lyceums where you lecture",
         "count": "Lyceum {{current}} of {{total}}",
         "previous": "Previous",
-        "next": "Next"
+        "next": "Next",
+        "empty": "No lectured lyceums found."
       },
       "lecturedCourses": {
+        "title": "Courses you lecture",
         "count": "Course {{current}} of {{total}}",
         "previous": "Previous",
         "next": "Next",
         "loading": "Loading courses...",
         "error": "Unable to load courses right now.",
         "empty": "No courses assigned yet.",
+        "viewAll": "View all",
+        "showLess": "Show less",
         "card": {
           "imageAlt": "Course main image for {{name}}",
           "logoAlt": "Course logo for {{name}}",
@@ -497,6 +523,14 @@
           "additionalLecturers": "plus {{count}} more",
           "openCourse": "Open course {{name}}"
         }
+      },
+      "administratedLyceum": {
+        "title": "Lyceum you administrate"
+      },
+      "lyceumCards": {
+        "loading": "Loading lyceums...",
+        "error": "Unable to load lyceums right now.",
+        "openLyceum": "Go to lyceum page"
       },
       "actions": {
         "title": "Account actions",
@@ -612,10 +646,13 @@
         "administratedLyceumLoading": "Loading lyceum...",
         "administratedLyceumUnavailable": "Unable to load lyceum.",
         "administratedLyceumUnknown": "Lyceum not found.",
-        "description": "Description"
+        "description": "Description",
+        "showMore": "Show more",
+        "showLess": "Show less"
       },
       "image": {
         "title": "Profile image",
+        "avatarAlt": "Profile image for {{username}}",
         "helper": "Accepted formats: {{formats}}. Max size: {{size}} MB.",
         "currentAlt": "Profile image",
         "empty": "No profile image yet.",
@@ -799,18 +836,44 @@
           "galleryAlt": "Gallery image {{index}} for {{name}}"
         },
         "actions": {
-          "openLyceum": "Open lyceum"
+          "openLyceum": "Open lyceum",
+          "visitWebsite": "Visit website",
+          "leaveReview": "Leave review",
+          "writeReview": "Write a review",
+          "openMap": "Open map",
+          "seeMore": "See more"
         },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
         "lecturerCard": {
+          "avatarAlt": "Avatar for {{name}}",
           "ratingLabel": "Lecturer rating {{rating}} of {{max}}",
-          "noRating": "No ratings"
+          "noRating": "No ratings",
+          "viewReviews": "View reviews"
         },
         "lecturerReviews": {
           "title": "{{name}} reviews",
           "subtitle": "Read feedback and add your review for this lecturer.",
           "openReviews": "Open reviews for {{name}}"
+        },
+        "tabs": {
+          "label": "Course content tabs"
+        },
+        "reviewCount": "{{count}} reviews",
+        "decision": {
+          "scheduleLabel": "Schedule",
+          "durationLabel": "Duration",
+          "locationLabel": "Location"
+        },
+        "overview": {
+          "descriptionTitle": "Overview",
+          "mapTitle": "Location preview"
+        },
+        "galleryLightbox": {
+          "label": "Gallery preview",
+          "previous": "Previous image",
+          "next": "Next image",
+          "counter": "{{current}} / {{total}}"
         }
       },
       "create": {
@@ -1080,7 +1143,22 @@
         "loadFailed": "We couldn't load this lyceum. Try again.",
         "notFound": "Lyceum not found.",
         "heroLabel": "Lyceum overview",
+        "heroChip": "LYCEUM",
+        "overviewIntro": "{{name}} is a community institution for arts, culture, and educational activities.",
         "countLabel": "{{count}}",
+        "tabs": {
+          "label": "Lyceum detail tabs"
+        },
+        "actions": {
+          "visitWebsite": "Visit website",
+          "openChitalishtaProfile": "Open profile",
+          "leaveReview": "Leave review",
+          "openMap": "Open map"
+        },
+        "facts": {
+          "coursesCount": "{{count}} courses",
+          "lecturersCount": "{{count}} lecturers"
+        },
         "overviewLinks": {
           "courses": "Courses ({{count}})",
           "lecturers": "Lecturers ({{count}})",
@@ -1109,6 +1187,7 @@
         },
         "notProvided": "Not provided",
         "sections": {
+          "overview": "Overview",
           "identity": "Identity",
           "location": "Location",
           "contacts": "Contacts",
@@ -1156,7 +1235,8 @@
           "subtitle": "Lyceum lecturer",
           "ratingLabel": "Lecturer rating {{rating}} of {{max}}",
           "noRating": "No ratings",
-          "openReviews": "Open reviews for {{name}}"
+          "openReviews": "Open reviews for {{name}}",
+          "viewReviews": "View reviews"
         },
         "lecturersCarousel": {
           "previous": "Previous lecturers",
@@ -1174,6 +1254,12 @@
           "loading": "Loading images...",
           "mainAlt": "Main image for {{name}}",
           "galleryAlt": "Gallery image {{index}} for {{name}}"
+        },
+        "galleryLightbox": {
+          "label": "Lyceum gallery preview",
+          "previous": "Previous image",
+          "next": "Next image",
+          "counter": "{{current}} / {{total}}"
         },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
@@ -1552,6 +1638,54 @@
         "reviewerFallback": "Community member",
         "yourReview": "Your review",
         "commentEmpty": "No comment provided."
+      },
+      "courseDetail": {
+        "summaryTitle": "Overall rating",
+        "yourReviewTitle": "Your review",
+        "yourReviewQuestion": "Did you like this course?",
+        "yourReviewHint": "Share your experience with other parents.",
+        "allReviews": "All reviews",
+        "sortLabel": "Sort by",
+        "sort": {
+          "newest": "Newest",
+          "oldest": "Oldest",
+          "highest": "Highest rating",
+          "lowest": "Lowest rating"
+        },
+        "ratingLevel": "{{rating}} stars",
+        "helpful": "Helpful?"
+      },
+      "lyceumDetail": {
+        "summaryTitle": "Overall rating",
+        "yourReviewTitle": "Your review",
+        "yourReviewQuestion": "Did you like this lyceum?",
+        "yourReviewHint": "Share your experience with other parents.",
+        "allReviews": "All reviews",
+        "sortLabel": "Sort by",
+        "sort": {
+          "newest": "Newest",
+          "oldest": "Oldest",
+          "highest": "Highest rating",
+          "lowest": "Lowest rating"
+        },
+        "ratingLevel": "{{rating}} stars",
+        "helpful": "Helpful?"
+      },
+      "lecturerDetail": {
+        "summaryTitle": "Overall rating",
+        "yourReviewTitle": "Your review",
+        "yourReviewQuestion": "Did you like this lecturer?",
+        "yourReviewHint": "Share your experience with other parents.",
+        "allReviews": "All reviews",
+        "sortLabel": "Sort by",
+        "sort": {
+          "newest": "Newest",
+          "oldest": "Oldest",
+          "highest": "Highest rating",
+          "lowest": "Lowest rating"
+        },
+        "ratingLevel": "{{rating}} stars",
+        "helpful": "Helpful?"
       },
       "form": {
         "authHint": "Sign in to leave a review.",
