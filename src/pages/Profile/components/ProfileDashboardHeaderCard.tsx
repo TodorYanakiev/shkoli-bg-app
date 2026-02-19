@@ -14,9 +14,10 @@ type ProfileDashboardHeaderCardProps = {
   avatarUrl: string | null
   roleChips: ProfileRoleChip[]
   subtitleText: string
-  hasLyceumAdministration: boolean
-  deleteErrorKey: string | null
-  isDeletingAccount: boolean
+  hasLyceumAdministration?: boolean
+  deleteErrorKey?: string | null
+  isDeletingAccount?: boolean
+  showAccountActions?: boolean
   validationError: string | null
   actionError: string | null
   uploadProgress: number | null
@@ -24,7 +25,7 @@ type ProfileDashboardHeaderCardProps = {
   isSaving: boolean
   isDeleting: boolean
   canDelete: boolean
-  onDeleteAccount: () => void
+  onDeleteAccount?: () => void
   onImageFileChange: (event: ChangeEvent<HTMLInputElement>) => void
   onDeleteImage: () => void
 }
@@ -35,9 +36,10 @@ const ProfileDashboardHeaderCard = ({
   avatarUrl,
   roleChips,
   subtitleText,
-  hasLyceumAdministration,
-  deleteErrorKey,
-  isDeletingAccount,
+  hasLyceumAdministration = false,
+  deleteErrorKey = null,
+  isDeletingAccount = false,
+  showAccountActions = true,
   validationError,
   actionError,
   uploadProgress,
@@ -134,12 +136,14 @@ const ProfileDashboardHeaderCard = ({
           </div>
         </div>
       </div>
-      <ProfileDashboardHeaderActions
-        hasLyceumAdministration={hasLyceumAdministration}
-        deleteErrorKey={deleteErrorKey}
-        isDeletingAccount={isDeletingAccount}
-        onDeleteAccount={onDeleteAccount}
-      />
+      {showAccountActions ? (
+        <ProfileDashboardHeaderActions
+          hasLyceumAdministration={hasLyceumAdministration}
+          deleteErrorKey={deleteErrorKey}
+          isDeletingAccount={isDeletingAccount}
+          onDeleteAccount={onDeleteAccount ?? (() => undefined)}
+        />
+      ) : null}
       <ProfileAvatarActionsModal
         isOpen={isAvatarModalOpen}
         hasExistingImage={hasExistingImage}
