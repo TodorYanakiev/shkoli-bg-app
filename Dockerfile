@@ -5,9 +5,10 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm ci
+RUN npx playwright install --with-deps chromium
 
 COPY . .
-RUN npm run build
+RUN npm run build:seo
 
 FROM nginx:1.27-alpine AS runtime
 COPY nginx.conf /etc/nginx/conf.d/default.conf
