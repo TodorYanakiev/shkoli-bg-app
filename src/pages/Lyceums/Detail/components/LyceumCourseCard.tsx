@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import courseLogoPlaceholder from '../../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
 import { RatingStars } from '../../../../components/ui/RatingStars'
+import { useLocalizedPath } from '../../../../hooks/useLocalizedPath'
 import type { CourseResponse } from '../../../../types/courses'
 import {
   getPreferredCourseImage,
@@ -24,6 +25,7 @@ const LyceumCourseCard = ({
   fallbackValue,
 }: LyceumCourseCardProps) => {
   const { t } = useTranslation()
+  const localizedPath = useLocalizedPath()
   const courseName = course.name ?? fallbackValue
   const mainImage = getPreferredCourseImage(course.images, 'MAIN')
   const logoImage = getPreferredCourseImage(course.images, 'LOGO')
@@ -38,7 +40,7 @@ const LyceumCourseCard = ({
       ? course.averageRating
       : null
   const courseLink =
-    course.id != null ? `/shkoli/${course.id}` : null
+    course.id != null ? localizedPath(`/shkoli/${course.id}`) : null
   const cardClassName =
     'group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white/90 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-lg'
   const cardContent = (

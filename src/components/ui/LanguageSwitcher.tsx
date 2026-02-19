@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Link, useLocation } from 'react-router-dom'
 
 import {
   defaultLanguage,
@@ -6,21 +7,17 @@ import {
   supportedLanguages,
 } from '../../utils/language'
 import type { LanguageCode } from '../../utils/language'
+import { stripLocalePrefix, toLocalizedPath } from '../../utils/localizedPath'
 
 const joinClasses = (...entries: Array<string | undefined>) =>
   entries.filter(Boolean).join(' ')
 
-const languageMeta: Record<
-  LanguageCode,
-  { flag: string; abbr: string; labelKey: string }
-> = {
+const languageMeta: Record<LanguageCode, { abbr: string; labelKey: string }> = {
   bg: {
-    flag: '🇧🇬',
     abbr: 'BG',
     labelKey: 'layouts.app.nav.languageSwitch.options.bg',
   },
   en: {
-    flag: '🇬🇧',
     abbr: 'EN',
     labelKey: 'layouts.app.nav.languageSwitch.options.en',
   },
@@ -28,38 +25,43 @@ const languageMeta: Record<
 
 const LanguageSwitcher = ({ className }: { className?: string }) => {
   const { t, i18n } = useTranslation()
+  const location = useLocation()
   const currentLanguage: LanguageCode = isSupportedLanguage(i18n.language)
     ? i18n.language
     : defaultLanguage
-  const currentMetadata = languageMeta[currentLanguage]
-  const nextLanguage =
-    supportedLanguages[
-      (supportedLanguages.indexOf(currentLanguage) + 1) %
-        supportedLanguages.length
-    ]
-  const nextLabel = t(languageMeta[nextLanguage].labelKey)
-
-  const handleToggle = () => {
-    void i18n.changeLanguage(nextLanguage)
-  }
+  const pathWithoutLocale = stripLocalePrefix(location.pathname)
 
   return (
-    <button
-      type="button"
-      onClick={handleToggle}
-      aria-label={t('layouts.app.nav.languageSwitch.switchTo', {
-        language: nextLabel,
-      })}
-      title={t('layouts.app.nav.languageSwitch.switchTo', {
-        language: nextLabel,
-      })}
-      className={joinClasses(
-        'flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
-        className,
-      )}
+    <nav
+      aria-label={t('layouts.app.nav.languageSwitch.label')}
+      className={joinClasses('flex items-center gap-1', className)}
     >
-      <span>{currentMetadata.abbr}</span>
-    </button>
+      {supportedLanguages.map((language) => {
+        const metadata = languageMeta[language]
+        const isCurrent = language === currentLanguage
+        const destination = `${toLocalizedPath(pathWithoutLocale, language)}${location.search}${location.hash}`
+
+        return (
+          <Link
+            key={language}
+            to={destination}
+            hrefLang={language}
+            aria-current={isCurrent ? 'true' : undefined}
+            aria-label={t('layouts.app.nav.languageSwitch.switchTo', {
+              language: t(metadata.labelKey),
+            })}
+            className={joinClasses(
+              'rounded-full border px-3 py-1 text-xs font-semibold shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+              isCurrent
+                ? 'border-brand/30 bg-brand/10 text-brand-dark'
+                : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-900',
+            )}
+          >
+            {metadata.abbr}
+          </Link>
+        )
+      })}
+    </nav>
   )
 }
 

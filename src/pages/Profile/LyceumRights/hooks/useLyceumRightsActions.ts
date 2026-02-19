@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import type { TFunction } from 'i18next'
 import { useState } from 'react'
-import type { NavigateFunction } from 'react-router-dom'
+import type { NavigateOptions } from 'react-router-dom'
 
 import type { ToastContextValue } from '../../../../components/feedback/ToastContext'
 import { userProfileQueryKey } from '../../hooks/useUserProfile'
@@ -17,7 +17,7 @@ import { parseRequestOutcome } from '../services/lyceumRightsOutcome'
 type UseLyceumRightsActionsOptions = {
   t: TFunction
   showToast: ToastContextValue['showToast']
-  navigate: NavigateFunction
+  navigate: (to: string, options?: NavigateOptions) => void
   resetRequest: () => void
   resetVerify: () => void
 }

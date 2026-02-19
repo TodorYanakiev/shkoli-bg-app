@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import type { TFunction } from "i18next";
 
 import { useToast } from "../../../../components/feedback/ToastContext";
+import { useLocalizedNavigate } from "../../../../hooks/useLocalizedNavigate";
 import type {
   LyceumImageResponse,
   LyceumImageRole,
@@ -54,7 +54,7 @@ export const useLyceumEditSubmit = ({
 }: UseLyceumEditSubmitOptions): LyceumEditSubmitState => {
   const { showToast } = useToast();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const mutation = useUpdateLyceumMutation();
 
   const onSubmit = useCallback(

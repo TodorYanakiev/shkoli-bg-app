@@ -1,6 +1,8 @@
 import type { TFunction } from 'i18next'
 import { Link, NavLink, type NavLinkRenderProps } from 'react-router-dom'
 
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
+
 type TopNavMobileLyceumActionsProps = {
   hasLyceumActions: boolean
   isLyceumActionsOpen: boolean
@@ -24,21 +26,22 @@ export const TopNavMobileLyceumActions = ({
   getNavLinkClassName,
   t,
 }: TopNavMobileLyceumActionsProps) => {
+  const localizedPath = useLocalizedPath()
   const editLyceumLink = currentLyceumId
-    ? `/lyceums/${currentLyceumId}/edit`
-    : '/lyceums'
+    ? localizedPath(`/lyceums/${currentLyceumId}/edit`)
+    : localizedPath('/lyceums')
   const addCourseLink = currentLyceumId
-    ? `/shkoli/new?lyceumId=${currentLyceumId}`
-    : '/shkoli/new'
+    ? localizedPath(`/shkoli/new?lyceumId=${currentLyceumId}`)
+    : localizedPath('/shkoli/new')
   const inviteLecturerLink = currentLyceumId
-    ? `/lyceums/${currentLyceumId}?inviteLecturer=1`
-    : '/lyceums'
+    ? localizedPath(`/lyceums/${currentLyceumId}?inviteLecturer=1`)
+    : localizedPath('/lyceums')
 
   return (
     <>
       <div className="flex items-center gap-2">
         <NavLink
-          to="/lyceums"
+          to={localizedPath('/lyceums')}
           className={(props) => `${getNavLinkClassName(props)} flex-1`}
         >
           {t('nav.lyceums')}

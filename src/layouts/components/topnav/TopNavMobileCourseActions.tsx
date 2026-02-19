@@ -1,6 +1,8 @@
 import type { TFunction } from 'i18next'
 import { Link, NavLink, type NavLinkRenderProps } from 'react-router-dom'
 
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
+
 type TopNavMobileCourseActionsProps = {
   hasCourseActions: boolean
   isCourseActionsOpen: boolean
@@ -18,15 +20,16 @@ export const TopNavMobileCourseActions = ({
   getNavLinkClassName,
   t,
 }: TopNavMobileCourseActionsProps) => {
+  const localizedPath = useLocalizedPath()
   const editCourseLink = currentCourseId
-    ? `/shkoli/${currentCourseId}/edit`
-    : '/shkoli'
+    ? localizedPath(`/shkoli/${currentCourseId}/edit`)
+    : localizedPath('/shkoli')
 
   return (
     <>
       <div className="flex items-center gap-2">
         <NavLink
-          to="/shkoli"
+          to={localizedPath('/shkoli')}
           className={(props) => `${getNavLinkClassName(props)} flex-1`}
         >
           {t('nav.shkoli')}

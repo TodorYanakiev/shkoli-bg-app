@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import type { TFunction } from 'i18next'
 import { Link } from 'react-router-dom'
 
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import UserAvatar from '../../../components/ui/UserAvatar'
 
 type TopNavProfileMenuProps = {
@@ -30,6 +31,7 @@ export const TopNavProfileMenu = ({
   t,
 }: TopNavProfileMenuProps) => {
   const profileMenuRef = useRef<HTMLDivElement | null>(null)
+  const localizedPath = useLocalizedPath()
 
   useEffect(() => {
     if (typeof document === 'undefined' || !isOpen) return undefined
@@ -98,7 +100,7 @@ export const TopNavProfileMenu = ({
       >
         {hasAdministratedLyceum && administratedLyceumId != null ? (
           <Link
-            to={`/lyceums/${administratedLyceumId}`}
+            to={localizedPath(`/lyceums/${administratedLyceumId}`)}
             role="menuitem"
             onClick={onClose}
             className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
@@ -107,7 +109,7 @@ export const TopNavProfileMenu = ({
           </Link>
         ) : null}
         <Link
-          to="/profile"
+          to={localizedPath('/profile')}
           role="menuitem"
           onClick={onClose}
           className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"

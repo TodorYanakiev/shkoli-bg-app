@@ -1,6 +1,8 @@
 import type { TFunction } from 'i18next'
 import { NavLink, type NavLinkRenderProps } from 'react-router-dom'
 
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
+
 type TopNavDesktopNavProps = {
   t: TFunction
   isGlobalAdmin: boolean
@@ -17,24 +19,28 @@ const navLinkClassName = ({ isActive }: NavLinkRenderProps) =>
 export const TopNavDesktopNav = ({
   t,
   isGlobalAdmin,
-}: TopNavDesktopNavProps) => (
-  <nav
-    aria-label={t('layouts.app.nav.label')}
-    className="hidden items-center gap-1 md:flex"
-  >
-    <NavLink to="/shkoli" className={navLinkClassName}>
-      {t('nav.shkoli')}
-    </NavLink>
-    <NavLink to="/lyceums" className={navLinkClassName}>
-      {t('nav.lyceums')}
-    </NavLink>
-    <NavLink to="/map" className={navLinkClassName}>
-      {t('nav.map')}
-    </NavLink>
-    {isGlobalAdmin ? (
-      <NavLink to="/admin" className={navLinkClassName}>
-        {t('nav.admin')}
+}: TopNavDesktopNavProps) => {
+  const localizedPath = useLocalizedPath()
+
+  return (
+    <nav
+      aria-label={t('layouts.app.nav.label')}
+      className="hidden items-center gap-1 md:flex"
+    >
+      <NavLink to={localizedPath('/shkoli')} className={navLinkClassName}>
+        {t('nav.shkoli')}
       </NavLink>
-    ) : null}
-  </nav>
-)
+      <NavLink to={localizedPath('/lyceums')} className={navLinkClassName}>
+        {t('nav.lyceums')}
+      </NavLink>
+      <NavLink to={localizedPath('/map')} className={navLinkClassName}>
+        {t('nav.map')}
+      </NavLink>
+      {isGlobalAdmin ? (
+        <NavLink to={localizedPath('/admin')} className={navLinkClassName}>
+          {t('nav.admin')}
+        </NavLink>
+      ) : null}
+    </nav>
+  )
+}

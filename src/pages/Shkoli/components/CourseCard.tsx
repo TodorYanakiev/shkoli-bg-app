@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import courseMainPlaceholder from '../../../assets/course-main-placeholder.svg'
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import type { CourseAgeGroup, CourseResponse } from '../../../types/courses'
 import {
   getPreferredCourseImage,
@@ -21,6 +22,7 @@ const CourseCard = ({
   hideShadow = false,
 }: CourseCardProps) => {
   const { t, i18n } = useTranslation()
+  const localizedPath = useLocalizedPath()
   const courseName = course.name ?? t('pages.shkoli.list.card.untitled')
   const courseType = course.type
   const averageRating =
@@ -172,7 +174,7 @@ const CourseCard = ({
 
   return (
     <Link
-      to={`/shkoli/${course.id}`}
+      to={localizedPath(`/shkoli/${course.id}`)}
       aria-label={t('pages.shkoli.list.card.openCourse', {
         name: courseName,
       })}

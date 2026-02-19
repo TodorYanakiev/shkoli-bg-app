@@ -5,6 +5,7 @@ import { useAdministratedLyceum } from '../../../../pages/Profile/hooks/useAdmin
 import { useUserProfile } from '../../../../pages/Profile/hooks/useUserProfile'
 import { useLyceumLecturers } from '../../../../pages/Lyceums/hooks/useLyceumLecturers'
 import { useCourse } from '../../../../pages/Shkoli/hooks/useCourse'
+import { stripLocalePrefix } from '../../../../utils/localizedPath'
 import { getUserDisplayName } from '../../../../utils/user'
 import { resolveUserImageUrl } from '../../../../utils/userImages'
 
@@ -36,14 +37,15 @@ export const useTopNavData = ({
   pathname,
   t,
 }: UseTopNavDataOptions): TopNavData => {
+  const normalizedPathname = stripLocalePrefix(pathname)
   const { isAuthenticated } = useAuthStatus()
   const { data: currentUser } = useUserProfile({ enabled: isAuthenticated })
   const isGlobalAdmin = currentUser?.role === 'ADMIN'
 
-  const courseMatch = pathname.match(/^\/shkoli\/(\d+)(?:\/.*)?$/)
+  const courseMatch = normalizedPathname.match(/^\/shkoli\/(\d+)(?:\/.*)?$/)
   const currentCourseId = courseMatch ? Number(courseMatch[1]) : null
   const isCourseIdValid = Number.isFinite(currentCourseId)
-  const lyceumMatch = pathname.match(/^\/lyceums\/(\d+)(?:\/.*)?$/)
+  const lyceumMatch = normalizedPathname.match(/^\/lyceums\/(\d+)(?:\/.*)?$/)
   const currentLyceumId = lyceumMatch ? Number(lyceumMatch[1]) : null
   const isLyceumIdValid = Number.isFinite(currentLyceumId)
 

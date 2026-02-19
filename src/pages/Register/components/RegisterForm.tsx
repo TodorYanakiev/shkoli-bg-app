@@ -3,10 +3,12 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
 import { useToast } from '../../../components/feedback/ToastContext'
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate'
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import { useUpsertUserProfileImageMutation } from '../../../hooks/useUpsertUserProfileImageMutation'
 import { getCurrentUser } from '../../../services/users'
 import { useRegisterMutation } from '../hooks/useRegisterMutation'
@@ -66,7 +68,8 @@ const getRegisterProfileImageErrorMessage = (
 
 const RegisterForm = () => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
+  const navigate = useLocalizedNavigate()
+  const localizedPath = useLocalizedPath()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const schema = useMemo(() => getRegisterSchema(t), [t])
@@ -466,7 +469,7 @@ const RegisterForm = () => {
           >
             {t('pages.register.form.acceptLegalDocuments.prefix')}{' '}
             <Link
-              to="/privacy-policy"
+              to={localizedPath('/privacy-policy')}
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium text-brand underline-offset-2 hover:underline"
@@ -475,7 +478,7 @@ const RegisterForm = () => {
             </Link>{' '}
             {t('pages.register.form.acceptLegalDocuments.connector')}{' '}
             <Link
-              to="/terms-and-conditions"
+              to={localizedPath('/terms-and-conditions')}
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium text-brand underline-offset-2 hover:underline"
@@ -517,7 +520,7 @@ const RegisterForm = () => {
       </button>
       <p className="text-sm text-slate-600">
         {t('pages.register.form.loginPrompt')}{' '}
-        <Link to="/auth/login" className="font-semibold text-brand">
+        <Link to={localizedPath('/auth/login')} className="font-semibold text-brand">
           {t('pages.register.form.loginLink')}
         </Link>
       </p>

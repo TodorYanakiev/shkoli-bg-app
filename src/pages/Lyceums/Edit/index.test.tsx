@@ -240,7 +240,7 @@ describe("LyceumEditPage", () => {
         message: "Lyceum updated successfully.",
         tone: "success",
       });
-      expect(navigateMock).toHaveBeenCalledWith("/lyceums/1", {
+      expect(navigateMock).toHaveBeenCalledWith("/bg/lyceums/1", {
         replace: true,
       });
     });

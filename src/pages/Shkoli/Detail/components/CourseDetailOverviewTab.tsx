@@ -33,7 +33,7 @@ const getMapLink = ({
       locationValue,
     )}`
   }
-  return '/map'
+  return 'https://www.google.com/maps'
 }
 export const CourseDetailOverviewTab = ({
   courseDescription,
