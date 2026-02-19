@@ -489,21 +489,27 @@
       "roles": {
         "user": "User",
         "admin": "Admin",
+        "lecturer": "Lecturer",
         "lyceumAdmin": "Lyceum administrator",
         "unknown": "Unknown"
       },
       "lecturedLyceums": {
+        "title": "Lyceums where you lecture",
         "count": "Lyceum {{current}} of {{total}}",
         "previous": "Previous",
-        "next": "Next"
+        "next": "Next",
+        "empty": "No lectured lyceums found."
       },
       "lecturedCourses": {
+        "title": "Courses you lecture",
         "count": "Course {{current}} of {{total}}",
         "previous": "Previous",
         "next": "Next",
         "loading": "Loading courses...",
         "error": "Unable to load courses right now.",
         "empty": "No courses assigned yet.",
+        "viewAll": "View all",
+        "showLess": "Show less",
         "card": {
           "imageAlt": "Course main image for {{name}}",
           "logoAlt": "Course logo for {{name}}",
@@ -511,6 +517,14 @@
           "additionalLecturers": "plus {{count}} more",
           "openCourse": "Open course {{name}}"
         }
+      },
+      "administratedLyceum": {
+        "title": "Lyceum you administrate"
+      },
+      "lyceumCards": {
+        "loading": "Loading lyceums...",
+        "error": "Unable to load lyceums right now.",
+        "openLyceum": "Go to lyceum page"
       },
       "actions": {
         "title": "Account actions",
@@ -626,10 +640,13 @@
         "administratedLyceumLoading": "Loading lyceum...",
         "administratedLyceumUnavailable": "Unable to load lyceum.",
         "administratedLyceumUnknown": "Lyceum not found.",
-        "description": "Description"
+        "description": "Description",
+        "showMore": "Show more",
+        "showLess": "Show less"
       },
       "image": {
         "title": "Profile image",
+        "avatarAlt": "Profile image for {{username}}",
         "helper": "Accepted formats: {{formats}}. Max size: {{size}} MB.",
         "currentAlt": "Profile image",
         "empty": "No profile image yet.",
