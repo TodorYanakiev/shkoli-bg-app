@@ -17,18 +17,7 @@ const AuthBenefits = () => {
         </p>
         <div className="mt-5 space-y-4">
           <div className="flex gap-3">
-            <span className="mt-1 h-2.5 w-2.5 rounded-full bg-brand/80" />
-            <div>
-              <p className="text-sm font-semibold text-slate-900">
-                {t('layouts.auth.benefits.items.save.title')}
-              </p>
-              <p className="text-xs text-slate-600">
-                {t('layouts.auth.benefits.items.save.description')}
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <span className="mt-1 h-2.5 w-2.5 rounded-full bg-brand/80" />
+            <span className="mt-1.5 inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-brand/80" />
             <div>
               <p className="text-sm font-semibold text-slate-900">
                 {t('layouts.auth.benefits.items.compare.title')}
@@ -39,13 +28,29 @@ const AuthBenefits = () => {
             </div>
           </div>
           <div className="flex gap-3">
-            <span className="mt-1 h-2.5 w-2.5 rounded-full bg-brand/80" />
+            <span className="mt-1.5 inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-brand/80" />
             <div>
               <p className="text-sm font-semibold text-slate-900">
                 {t('layouts.auth.benefits.items.manage.title')}
               </p>
               <p className="text-xs text-slate-600">
                 {t('layouts.auth.benefits.items.manage.description')}
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="mt-1.5 inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-brand/80" />
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="text-sm font-semibold text-slate-900">
+                  {t('layouts.auth.benefits.items.save.title')}
+                </p>
+                <span className="inline-flex items-center rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand">
+                  {t('layouts.auth.benefits.items.save.soon')}
+                </span>
+              </div>
+              <p className="text-xs text-slate-600">
+                {t('layouts.auth.benefits.items.save.description')}
               </p>
             </div>
           </div>

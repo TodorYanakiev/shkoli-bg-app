@@ -13,6 +13,7 @@
         "items": {
           "save": {
             "title": "Save your favorites",
+            "soon": "Soon",
             "description": "Bookmark courses and lyceums to compare later."
           },
           "compare": {
@@ -27,7 +28,7 @@
         "badges": {
           "secure": "Secure login",
           "noSpam": "No spam",
-          "local": "Local data"
+          "local": "Easy"
         }
       }
     },
