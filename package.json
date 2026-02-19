@@ -6,11 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:seo": "npm run seo:sync-content && npm run seo:generate && npm run build && npm run seo:prerender && npm run seo:validate",
     "lint": "eslint .",
     "typecheck": "tsc -b",
     "test": "vitest run",
-    "test:e2e": "npm run build && playwright test",
-    "test:e2e:ci": "npm run build && playwright test",
+    "test:e2e": "npm run build:seo && playwright test",
+    "test:e2e:ci": "playwright test",
+    "seo:sync-content": "tsx seo.sync-content.ts",
+    "seo:generate": "tsx seo.generate.ts",
+    "seo:validate": "tsx seo.validate.ts",
+    "seo:prerender": "tsx seo.prerender.ts",
+    "perf:budget": "tsx perf.budget.ts",
     "perf": "lhci autorun",
     "security": "npm audit --omit=dev --audit-level=high",
     "preview": "vite preview"
@@ -60,6 +66,7 @@
     "tailwindcss": "^3.4.15",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.2",
+    "tsx": "^4.20.6",
     "vite": "^7.1.12",
     "vitest": "^4.0.16"
   },
