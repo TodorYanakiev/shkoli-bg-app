@@ -1,12 +1,13 @@
 import { Outlet, useLocation } from 'react-router-dom'
 
 import { useConsentManagedTracking } from '../hooks/useConsentManagedTracking'
+import { stripLocalePrefix } from '../utils/localizedPath'
 import AppFooter from './components/AppFooter'
 import TopNav from './components/TopNav'
 
 const AppLayout = () => {
   const location = useLocation()
-  const isMapRoute = location.pathname === '/map'
+  const isMapRoute = stripLocalePrefix(location.pathname) === '/map'
 
   useConsentManagedTracking()
 
