@@ -11,6 +11,15 @@ const footerLinkClassName =
 const AppFooter = () => {
   const { t } = useTranslation()
   const currentYear = new Date().getFullYear()
+  const scrollToPageTop = () => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    })
+  }
 
   return (
     <footer className="mt-auto border-t border-slate-200 bg-[radial-gradient(120%_80%_at_10%_0%,rgba(214,236,226,0.42),rgba(255,255,255,0)_58%),radial-gradient(120%_90%_at_90%_0%,rgba(224,241,232,0.36),rgba(255,255,255,0)_60%),linear-gradient(180deg,rgba(255,255,255,0.95)_0%,rgba(247,251,249,1)_100%)]">
@@ -21,6 +30,7 @@ const AppFooter = () => {
               to="/shkoli"
               className="inline-flex items-center gap-3"
               aria-label={t('app.title')}
+              onClick={scrollToPageTop}
             >
               <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand/10 ring-1 ring-brand/20">
                 <img
@@ -52,26 +62,50 @@ const AppFooter = () => {
           >
             <div className="border-l border-slate-200/80 pl-5 sm:pl-6">
               <div className="flex flex-col gap-2">
-                <Link to="/shkoli" className={footerLinkClassName}>
+                <Link
+                  to="/shkoli"
+                  className={footerLinkClassName}
+                  onClick={scrollToPageTop}
+                >
                   {t('nav.shkoli')}
                 </Link>
-                <Link to="/lyceums" className={footerLinkClassName}>
+                <Link
+                  to="/lyceums"
+                  className={footerLinkClassName}
+                  onClick={scrollToPageTop}
+                >
                   {t('nav.lyceums')}
                 </Link>
-                <Link to="/map" className={footerLinkClassName}>
+                <Link
+                  to="/map"
+                  className={footerLinkClassName}
+                  onClick={scrollToPageTop}
+                >
                   {t('nav.map')}
                 </Link>
               </div>
             </div>
             <div className="space-y-3 border-l border-slate-200/80 pl-5 sm:pl-6">
               <div className="flex flex-col gap-2">
-                <Link to="/privacy-policy" className={footerLinkClassName}>
+                <Link
+                  to="/privacy-policy"
+                  className={footerLinkClassName}
+                  onClick={scrollToPageTop}
+                >
                   {t('layouts.app.footer.privacyPolicy')}
                 </Link>
-                <Link to="/cookies" className={footerLinkClassName}>
+                <Link
+                  to="/cookies"
+                  className={footerLinkClassName}
+                  onClick={scrollToPageTop}
+                >
                   {t('layouts.app.footer.cookiesPolicy')}
                 </Link>
-                <Link to="/terms-and-conditions" className={footerLinkClassName}>
+                <Link
+                  to="/terms-and-conditions"
+                  className={footerLinkClassName}
+                  onClick={scrollToPageTop}
+                >
                   {t('layouts.app.footer.termsAndConditions')}
                 </Link>
                 <CookieConsentBanner triggerClassName={footerLinkClassName} />
