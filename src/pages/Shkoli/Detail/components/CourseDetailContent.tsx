@@ -6,6 +6,7 @@ import type {
   CourseScheduleSpecialCase,
   CourseImageResponse,
 } from '../../../../types/courses'
+import type { BreadcrumbItem } from '../../../../components/ui/Breadcrumbs'
 import type { LyceumResponse } from '../../../../types/lyceums'
 import type { UserResponse } from '../../../../types/users'
 import { useCourseReviews } from '../../../Reviews/hooks/useCourseReviews'
@@ -20,6 +21,7 @@ import { CourseDetailTabs } from './CourseDetailTabs'
 
 type CourseDetailContentProps = {
   course: CourseResponse
+  breadcrumbs: BreadcrumbItem[]
   sideNavItems: SideNavItem[]
   isDesktop: boolean
   isSideNavExpanded: boolean
@@ -68,6 +70,7 @@ type CourseDetailContentProps = {
 
 export const CourseDetailContent = ({
   course,
+  breadcrumbs,
   sideNavItems,
   isDesktop,
   isSideNavExpanded,
@@ -169,6 +172,7 @@ export const CourseDetailContent = ({
       <div className="w-full overflow-hidden border border-slate-200 bg-white">
         <div className="flex flex-col lg:h-[calc(100dvh-var(--topnav-height,76px)-2px)] lg:overflow-hidden">
           <CourseDetailHeroBand
+            breadcrumbs={breadcrumbs}
             courseName={courseName}
             courseTypeLabel={courseTypeLabel}
             hasCourseType={hasCourseType}

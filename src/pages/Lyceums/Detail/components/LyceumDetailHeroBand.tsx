@@ -1,10 +1,14 @@
 import type { TFunction } from 'i18next'
 
 import placeholderImage from '../../../../assets/lyceum-placeholder.svg'
+import Breadcrumbs, {
+  type BreadcrumbItem,
+} from '../../../../components/ui/Breadcrumbs'
 import { RatingStars } from '../../../../components/ui/RatingStars'
 import type { LyceumImageResponse } from '../../../../types/lyceums'
 
 type LyceumDetailHeroBandProps = {
+  breadcrumbs: BreadcrumbItem[]
   lyceumName: string
   heroLabel: string
   heroLocation: string
@@ -22,6 +26,7 @@ type LyceumDetailHeroBandProps = {
 }
 
 export const LyceumDetailHeroBand = ({
+  breadcrumbs,
   lyceumName,
   heroLabel,
   heroLocation,
@@ -56,6 +61,11 @@ export const LyceumDetailHeroBand = ({
       <div className="grid h-full min-h-0 grid-rows-[minmax(0,1fr)] gap-0 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)]">
         <div className="flex min-h-0 min-w-0 items-start overflow-hidden px-4 py-5 sm:px-6 sm:py-6 lg:px-9 lg:pb-8 lg:pt-9">
           <div className="max-w-[34rem] overflow-hidden">
+            <Breadcrumbs
+              ariaLabel={t('layouts.app.nav.label')}
+              items={breadcrumbs}
+              className="mb-3"
+            />
             <div className="space-y-1">
               <h1 className="line-clamp-2 text-3xl font-semibold leading-[1.08] text-slate-900 sm:text-4xl">
                 {lyceumName}
@@ -158,7 +168,11 @@ export const LyceumDetailHeroBand = ({
               })
             }
             className="h-full w-full object-cover"
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            width={mainImage?.width ?? 1600}
+            height={mainImage?.height ?? 900}
             onError={(event) => {
               const target = event.currentTarget
               target.onerror = null
