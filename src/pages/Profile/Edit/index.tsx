@@ -2,11 +2,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { useToast } from '../../../components/feedback/ToastContext'
+import SeoHead from '../../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../../hooks/useCurrentLocale'
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate'
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import type { CurrentUser } from '../../../types/users'
 import { clearTokens } from '../../../utils/authStorage'
 import {
@@ -32,7 +35,9 @@ import { applyUpdateUserServerFieldErrors } from './services/updateUserFormError
 
 const EditProfilePage = () => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
+  const locale = useCurrentLocale()
+  const navigate = useLocalizedNavigate()
+  const localizedPath = useLocalizedPath()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const schema = useMemo(() => getUpdateUserSchema(t), [t])
@@ -191,10 +196,14 @@ const EditProfilePage = () => {
 
   return (
     <section className="space-y-4">
-      <Helmet>
-        <title>{`${t('pages.profile.edit.title')} | ${t('app.title')}`}</title>
-      </Helmet>
-      <Link to="/profile" className="text-sm font-semibold text-brand">
+      <SeoHead
+        title={`${t('pages.profile.edit.title')} | ${t('app.title')}`}
+        description={t('pages.profile.edit.subtitle')}
+        canonicalPath="/profile/edit"
+        locale={locale}
+        forceNoindex
+      />
+      <Link to={localizedPath('/profile')} className="text-sm font-semibold text-brand">
         {t('pages.profile.edit.backLink')}
       </Link>
       <div>

@@ -1,7 +1,9 @@
-import { Helmet } from 'react-helmet-async'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 
+import SeoHead from '../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../hooks/useCurrentLocale'
 import CourseFilterPanel from './components/CourseFilterPanel'
 import CourseResultsSection from './components/CourseResultsSection'
 import { useCourseFilterForm } from './hooks/useCourseFilterForm'
@@ -12,6 +14,12 @@ import { getCourseFilterError } from './services/courseFilterErrors'
 
 const ShkoliPage = () => {
   const { t, i18n } = useTranslation()
+  const locale = useCurrentLocale()
+  const location = useLocation()
+  const searchParams = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search],
+  )
   const {
     state,
     query,
@@ -68,9 +76,19 @@ const ShkoliPage = () => {
 
   return (
     <section className="space-y-10 sm:space-y-12">
-      <Helmet>
-        <title>{`${t('pages.shkoli.title')} | ${t('app.title')}`}</title>
-      </Helmet>
+      <SeoHead
+        title={`${t('pages.shkoli.title')} | ${t('app.title')}`}
+        description={t('pages.shkoli.subtitle')}
+        canonicalPath="/shkoli"
+        locale={locale}
+        searchParams={searchParams}
+        breadcrumbs={[
+          {
+            label: t('nav.shkoli'),
+            path: '/shkoli',
+          },
+        ]}
+      />
 
       <div className="mx-auto max-w-6xl px-4 text-center shkoli-fade-up shkoli-hero-glow sm:px-6">
         <h1 className="shkoli-hero-title text-2xl font-semibold text-emerald-950 sm:text-4xl lg:text-5xl">

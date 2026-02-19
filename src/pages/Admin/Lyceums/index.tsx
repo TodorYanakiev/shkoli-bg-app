@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
+import SeoHead from '../../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../../hooks/useCurrentLocale'
 import { AdminLyceumsFilters } from './components/AdminLyceumsFilters'
 import { AdminLyceumsGrid } from './components/AdminLyceumsGrid'
 import { AdminLyceumsHeader } from './components/AdminLyceumsHeader'
@@ -11,6 +12,7 @@ import { useAdminLyceumsData } from './hooks/useAdminLyceumsData'
 
 const AdminLyceumsPage = () => {
   const { t } = useTranslation()
+  const locale = useCurrentLocale()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const { isCreating, onCreate } = useAdminLyceumCreateActions()
   const {
@@ -25,11 +27,15 @@ const AdminLyceumsPage = () => {
 
   return (
     <section className="space-y-6">
-      <Helmet>
-        <title>{`${t('pages.admin.lyceums.title')} | ${t(
+      <SeoHead
+        title={`${t('pages.admin.lyceums.title')} | ${t(
           'pages.admin.title',
-        )} | ${t('app.title')}`}</title>
-      </Helmet>
+        )} | ${t('app.title')}`}
+        description={t('pages.admin.lyceums.subtitle')}
+        canonicalPath="/admin/lyceums"
+        locale={locale}
+        forceNoindex
+      />
       <AdminLyceumsHeader
         verifiedCount={verifiedCount}
         isLoading={isLoading}

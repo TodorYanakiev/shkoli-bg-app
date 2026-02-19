@@ -1,7 +1,8 @@
-import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
+import SeoHead from "../../../components/ui/SeoHead";
+import { useCurrentLocale } from "../../../hooks/useCurrentLocale";
 import LyceumLecturerManager from "./components/LyceumLecturerManager";
 import { LyceumEditForm } from "./components/LyceumEditForm";
 import { LyceumEditHeader } from "./components/LyceumEditHeader";
@@ -14,6 +15,7 @@ import { getLyceumImagesError } from "./services/lyceumEditErrors";
 
 const LyceumEditPage = () => {
   const { t } = useTranslation();
+  const locale = useCurrentLocale();
   const { id } = useParams<{ id: string }>();
   const lyceumId = Number(id);
   const isValidId = Number.isFinite(lyceumId);
@@ -81,9 +83,13 @@ const LyceumEditPage = () => {
 
   return (
     <section className="relative space-y-6 pb-10">
-      <Helmet>
-        <title>{pageTitle}</title>
-      </Helmet>
+      <SeoHead
+        title={pageTitle}
+        description={t("pages.lyceums.edit.subtitle")}
+        canonicalPath={isValidId ? `/lyceums/${lyceumId}/edit` : "/lyceums"}
+        locale={locale}
+        forceNoindex
+      />
       <div className="pointer-events-none absolute -top-10 right-8 h-28 w-28 rounded-full bg-brand/10 blur-3xl" />
       <div className="pointer-events-none absolute left-0 top-16 h-24 w-24 rounded-full bg-emerald-200/40 blur-3xl" />
       <LyceumEditHeader

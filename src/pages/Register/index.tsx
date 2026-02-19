@@ -1,16 +1,22 @@
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
+import SeoHead from '../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../hooks/useCurrentLocale'
 import RegisterForm from './components/RegisterForm'
 
 const RegisterPage = () => {
   const { t } = useTranslation()
+  const locale = useCurrentLocale()
 
   return (
     <section className="space-y-3">
-      <Helmet>
-        <title>{`${t('pages.register.title')} | ${t('app.title')}`}</title>
-      </Helmet>
+      <SeoHead
+        title={`${t('pages.register.title')} | ${t('app.title')}`}
+        description={t('pages.register.subtitle')}
+        canonicalPath="/auth/register"
+        locale={locale}
+        forceNoindex
+      />
       <h1 className="text-2xl font-semibold text-slate-900">
         {t('pages.register.title')}
       </h1>

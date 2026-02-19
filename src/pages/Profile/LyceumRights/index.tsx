@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { useToast } from '../../../components/feedback/ToastContext'
+import SeoHead from '../../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../../hooks/useCurrentLocale'
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate'
 import LyceumRightsHeader from './components/LyceumRightsHeader'
 import LyceumManualPickerModal from './components/LyceumManualPickerModal'
 import LyceumRightsRequestCard from './components/LyceumRightsRequestCard'
@@ -17,8 +18,9 @@ import type { ManualLyceumOption } from './services/lyceumManualPicker'
 
 const LyceumRightsPage = () => {
   const { t } = useTranslation()
+  const locale = useCurrentLocale()
   const { showToast } = useToast()
-  const navigate = useNavigate()
+  const navigate = useLocalizedNavigate()
   const [isManualPickerOpen, setIsManualPickerOpen] = useState(false)
   const {
     requestForm,
@@ -107,11 +109,15 @@ const LyceumRightsPage = () => {
 
   return (
     <section className="space-y-4">
-      <Helmet>
-        <title>{`${t('pages.profile.lyceumRights.title')} | ${t(
+      <SeoHead
+        title={`${t('pages.profile.lyceumRights.title')} | ${t(
           'app.title',
-        )}`}</title>
-      </Helmet>
+        )}`}
+        description={t('pages.profile.lyceumRights.subtitle')}
+        canonicalPath="/profile/lyceum-rights"
+        locale={locale}
+        forceNoindex
+      />
       <LyceumRightsHeader />
       <div className="grid gap-4 lg:grid-cols-2">
         <LyceumRightsRequestCard
