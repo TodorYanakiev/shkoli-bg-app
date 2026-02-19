@@ -16,6 +16,10 @@ const parsedHotjarVersion = Number.parseInt(
   import.meta.env.VITE_HOTJAR_VERSION ?? '',
   10,
 )
+const contentsquareEnabled =
+  (import.meta.env.VITE_CONTENTSQUARE_ENABLED ?? '')
+    .trim()
+    .toLowerCase() === 'true'
 const hotjarVersion =
   Number.isFinite(parsedHotjarVersion) && parsedHotjarVersion > 0
     ? parsedHotjarVersion
@@ -35,5 +39,6 @@ export const env = {
   gaMeasurementId,
   hotjarSiteId,
   hotjarVersion,
+  contentsquareEnabled,
   appEnvironment,
 }

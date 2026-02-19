@@ -432,6 +432,11 @@ export const enableContentsquare = (): void => {
   if (!isBrowser()) {
     return
   }
+  if (!env.contentsquareEnabled) {
+    isContentsquareInitialized = false
+    removeManagedScript(CONTENTSQUARE_SCRIPT_ID)
+    return
+  }
 
   clearScheduledContentsquareCleanup()
   clearCookiesByPrefix([CONTENTSQUARE_OPTOUT_COOKIE_NAME])
