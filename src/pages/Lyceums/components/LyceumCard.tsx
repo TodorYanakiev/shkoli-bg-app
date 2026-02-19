@@ -13,12 +13,14 @@ import { useLyceumCourses } from '../hooks/useLyceumCourses'
 type LyceumCardProps = {
   lyceum: LyceumResponse
   compact?: boolean
+  hideShadow?: boolean
   className?: string
 }
 
 const LyceumCard = ({
   lyceum,
   compact = false,
+  hideShadow = false,
   className,
 }: LyceumCardProps) => {
   const { t } = useTranslation()
@@ -55,8 +57,18 @@ const LyceumCard = ({
     <article
       className={[
         compact
-          ? 'group relative overflow-hidden rounded-2xl border border-slate-200 bg-white/90 shadow-[0_18px_42px_-34px_rgba(15,23,42,0.45)] backdrop-blur transition-transform duration-300 hover:-translate-y-0.5'
-          : 'group relative overflow-hidden rounded-[28px] border border-white/70 bg-white/80 shadow-[0_32px_80px_-55px_rgba(15,23,42,0.6)] backdrop-blur transition-transform duration-300 hover:-translate-y-1',
+          ? 'group relative overflow-hidden rounded-2xl border backdrop-blur transition-transform duration-300 hover:-translate-y-0.5'
+          : 'group relative overflow-hidden rounded-[28px] border backdrop-blur transition-transform duration-300 hover:-translate-y-1',
+        hideShadow
+          ? 'border-slate-200/90 bg-white'
+          : compact
+            ? 'border-slate-200 bg-white/90'
+            : 'border-white/70 bg-white/80',
+        hideShadow
+          ? ''
+          : compact
+            ? 'shadow-[0_18px_42px_-34px_rgba(15,23,42,0.45)]'
+            : 'shadow-[0_32px_80px_-55px_rgba(15,23,42,0.6)]',
         className ?? '',
       ]
         .join(' ')

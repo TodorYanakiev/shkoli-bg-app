@@ -7,12 +7,12 @@ import { useNavigate } from 'react-router-dom'
 import { useToast } from '../../components/feedback/ToastContext'
 import { clearTokens } from '../../utils/authStorage'
 import DeleteAccountModal from './components/DeleteAccountModal'
-import ProfileActionsCard from './components/ProfileActionsCard'
+import ProfileDashboardHeaderCard from './components/ProfileDashboardHeaderCard'
+import type { ProfileRoleChip } from './components/ProfileDashboardRoleInfo'
 import ProfileDetailsCard from './components/ProfileDetailsCard'
 import ProfileHeader from './components/ProfileHeader'
 import ProfileLecturedCoursesPanel from './components/ProfileLecturedCoursesPanel'
 import ProfileLyceumsPanel from './components/ProfileLyceumsPanel'
-import ProfileSummaryCard from './components/ProfileSummaryCard'
 import { useAdministratedLyceum } from './hooks/useAdministratedLyceum'
 import { useDeleteUserMutation } from './hooks/useDeleteUserMutation'
 import { useProfileLecturedCourses } from './hooks/useProfileLecturedCourses'
@@ -64,17 +64,29 @@ const ProfilePage = () => {
           t('pages.profile.details.administratedLyceumUnknown')
     : t('pages.profile.emptyValue')
   const fallbackValue = t('pages.profile.emptyValue')
-  const hasRightCourses = summary.hasLecturedCourses
-  const hasRightLyceums =
-    summary.hasLyceumAdministration || summary.hasLecturedLyceum
-  const hasRightContent = hasRightCourses || hasRightLyceums
   const userId = typeof user?.id === 'number' ? user.id : null
-  const rightColumnClassName = [
-    'lg:ml-auto',
-    hasRightCourses && hasRightLyceums
-      ? 'grid gap-4 lg:grid-cols-2 lg:items-start'
-      : 'space-y-4',
-  ].join(' ')
+  const headlineName =
+    summary.fullName === fallbackValue
+      ? summary.displayName
+      : summary.fullName
+
+  const roleChips: ProfileRoleChip[] = []
+  if (summary.hasLecturerRole) {
+    roleChips.push({
+      key: 'lecturer',
+      label: t('pages.profile.roles.lecturer'),
+    })
+  }
+  if (summary.hasLyceumAdministration) {
+    roleChips.push({
+      key: 'admin',
+      label: t('pages.profile.roles.admin'),
+    })
+  }
+
+  const administratedLyceumList = administratedLyceum
+    ? [administratedLyceum]
+    : []
 
   const handleDeleteAccountConfirm = () => {
     if (!userId) return
@@ -114,83 +126,76 @@ const ProfilePage = () => {
           {errorMessage}
         </div>
       ) : user ? (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_auto] lg:items-start">
-          <div className="space-y-6">
-            <ProfileSummaryCard
-              displayName={summary.displayName}
-              username={summary.username}
-              roleLabel={summary.roleLabel}
-              avatarUrl={summary.profileImageUrl}
-              validationError={profileImageManager.validationError}
-              actionError={profileImageManager.actionError}
-              uploadProgress={profileImageManager.uploadProgress}
-              hasExistingImage={profileImageManager.hasExistingImage}
-              isSaving={profileImageManager.isSaving}
-              isDeleting={profileImageManager.isDeleting}
-              canDelete={profileImageManager.canDelete}
-              onImageFileChange={profileImageManager.handleImageFileChange}
-              onDeleteImage={profileImageManager.handleDeleteImage}
-            />
-            <ProfileDetailsCard
-              fullName={summary.fullName}
-              username={summary.username}
-              email={summary.email}
-              description={summary.description}
-              administratedLyceumName={administratedLyceumName}
-              showAdministratedLyceum={Boolean(summary.administratedLyceumId)}
-            />
-            <ProfileActionsCard
-              hasLyceumAdministration={summary.hasLyceumAdministration}
-              deleteErrorKey={deleteErrorKey}
-              isDeletingAccount={deleteUserMutation.isPending}
-              onDeleteAccount={() => setIsDeleteModalOpen(true)}
-            />
-            <DeleteAccountModal
-              isOpen={isDeleteModalOpen}
-              username={summary.username || t('pages.profile.unknownUser')}
-              onCancel={() => setIsDeleteModalOpen(false)}
-              onConfirm={handleDeleteAccountConfirm}
-              isSubmitting={deleteUserMutation.isPending}
-            />
-          </div>
-          {hasRightContent ? (
-            <div className={rightColumnClassName}>
-              {hasRightCourses ? (
-                <ProfileLecturedCoursesPanel
-                  displayName={summary.displayName}
-                  fallbackValue={fallbackValue}
-                  activeCourse={lecturedCoursesState.activeLecturedCourse}
-                  isLoading={lecturedCoursesState.isLecturedCoursesLoading}
-                  error={lecturedCoursesState.lecturedCoursesError ?? null}
-                  count={lecturedCoursesState.lecturedCoursesCount}
-                  showControls={lecturedCoursesState.showCourseControls}
-                  currentIndex={lecturedCoursesState.lecturedCourseIndex}
-                  onPrevious={lecturedCoursesState.handleLecturedCoursePrevious}
-                  onNext={lecturedCoursesState.handleLecturedCourseNext}
-                />
-              ) : null}
-              {hasRightLyceums ? (
-                <ProfileLyceumsPanel
-                  hasLyceumAdministration={summary.hasLyceumAdministration}
-                  administratedLyceumId={summary.administratedLyceumId}
-                  administratedLyceum={administratedLyceum}
-                  isAdministratedLyceumLoading={isAdministratedLyceumLoading}
-                  administratedLyceumError={administratedLyceumError ?? null}
-                  hasLecturedLyceum={summary.hasLecturedLyceum}
-                  activeLecturedLyceum={lecturedLyceumState.activeLecturedLyceum}
-                  isLecturedLyceumLoading={
-                    lecturedLyceumState.isLecturedLyceumLoading
-                  }
-                  lecturedLyceumError={lecturedLyceumState.lecturedLyceumError}
-                  showLecturedControls={lecturedLyceumState.showLecturedControls}
-                  currentLecturedIndex={lecturedLyceumState.lecturedLyceumIndex}
-                  lecturedCount={lecturedLyceumState.lecturedLyceumCount}
-                  onLecturedPrevious={lecturedLyceumState.handleLecturedPrevious}
-                  onLecturedNext={lecturedLyceumState.handleLecturedNext}
-                />
-              ) : null}
+        <div className="space-y-6">
+          <ProfileDashboardHeaderCard
+            fullName={headlineName}
+            username={summary.username}
+            avatarUrl={summary.profileImageUrl}
+            roleChips={roleChips}
+            subtitleText={summary.email}
+            hasLyceumAdministration={summary.hasLyceumAdministration}
+            deleteErrorKey={deleteErrorKey}
+            isDeletingAccount={deleteUserMutation.isPending}
+            validationError={profileImageManager.validationError}
+            actionError={profileImageManager.actionError}
+            uploadProgress={profileImageManager.uploadProgress}
+            hasExistingImage={profileImageManager.hasExistingImage}
+            isSaving={profileImageManager.isSaving}
+            isDeleting={profileImageManager.isDeleting}
+            canDelete={profileImageManager.canDelete}
+            onDeleteAccount={() => setIsDeleteModalOpen(true)}
+            onImageFileChange={profileImageManager.handleImageFileChange}
+            onDeleteImage={profileImageManager.handleDeleteImage}
+          />
+
+          <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+            <div className="order-1 lg:col-start-1">
+              <ProfileDetailsCard
+                fullName={summary.fullName}
+                username={summary.username}
+                email={summary.email}
+                description={summary.description}
+              />
             </div>
-          ) : null}
+
+            <div className="order-2 lg:col-start-2">
+              <ProfileLecturedCoursesPanel
+                courses={lecturedCoursesState.lecturedCourses}
+                isLoading={lecturedCoursesState.isLecturedCoursesLoading}
+                error={lecturedCoursesState.lecturedCoursesError ?? null}
+              />
+            </div>
+
+            <div className="order-3 lg:col-start-1">
+              <ProfileLyceumsPanel
+                title={t('pages.profile.lecturedLyceums.title')}
+                lyceums={lecturedLyceumState.lecturedLyceums}
+                isLoading={lecturedLyceumState.isLecturedLyceumsLoading}
+                error={lecturedLyceumState.lecturedLyceumsError}
+                emptyMessage={t('pages.profile.lecturedLyceums.empty')}
+              />
+            </div>
+
+            {summary.hasLyceumAdministration ? (
+              <div className="order-4 lg:col-start-2">
+                <ProfileLyceumsPanel
+                  title={t('pages.profile.administratedLyceum.title')}
+                  lyceums={administratedLyceumList}
+                  isLoading={isAdministratedLyceumLoading}
+                  error={administratedLyceumError ?? null}
+                  emptyMessage={administratedLyceumName}
+                />
+              </div>
+            ) : null}
+          </div>
+
+          <DeleteAccountModal
+            isOpen={isDeleteModalOpen}
+            username={summary.username || t('pages.profile.unknownUser')}
+            onCancel={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteAccountConfirm}
+            isSubmitting={deleteUserMutation.isPending}
+          />
         </div>
       ) : (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm">
