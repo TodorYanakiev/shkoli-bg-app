@@ -9,7 +9,12 @@ const COOKIE_ICONS = {
   analytics: '\u{1F4CA}',
   diagnostics: '\u{1F6E0}\uFE0F',
 } as const
-const CookieConsentBanner = () => {
+
+type CookieConsentBannerProps = {
+  triggerClassName?: string
+}
+
+const CookieConsentBanner = ({ triggerClassName }: CookieConsentBannerProps) => {
   const { t } = useTranslation()
   const { hasSelection, preferences, acceptAll, rejectOptional, savePreferences } = useCookieConsent()
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(() => !hasSelection)
@@ -151,7 +156,12 @@ const CookieConsentBanner = () => {
         <button
           type="button"
           onClick={openPanel}
-          className="font-medium text-slate-600 transition-colors hover:text-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-dark focus-visible:ring-offset-2 rounded-sm"
+          className={[
+            'rounded-sm font-medium text-slate-600 transition-colors hover:text-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-dark focus-visible:ring-offset-2',
+            triggerClassName,
+          ]
+            .filter(Boolean)
+            .join(' ')}
         >
           {t('cookiesConsent.actions.manage')}
         </button>

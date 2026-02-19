@@ -52,7 +52,12 @@
         "notice": "Всички права запазени.",
         "privacyPolicy": "Политика за поверителност",
         "cookiesPolicy": "Политика за бисквитки",
-        "termsAndConditions": "Общи условия"
+        "termsAndConditions": "Общи условия",
+        "socials": {
+          "youtube": "Shkoli.bg в YouTube",
+          "instagram": "Shkoli.bg в Instagram",
+          "tiktok": "Shkoli.bg в TikTok"
+        }
       }
     }
   },

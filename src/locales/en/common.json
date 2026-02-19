@@ -52,7 +52,12 @@
         "notice": "All rights reserved.",
         "privacyPolicy": "Privacy policy",
         "cookiesPolicy": "Cookies policy",
-        "termsAndConditions": "Terms & conditions"
+        "termsAndConditions": "Terms & conditions",
+        "socials": {
+          "youtube": "Shkoli.bg on YouTube",
+          "instagram": "Shkoli.bg on Instagram",
+          "tiktok": "Shkoli.bg on TikTok"
+        }
       }
     }
   },
