@@ -2,15 +2,11 @@ User-agent: *
 Allow: /
 Disallow: /bg/auth/
 Disallow: /bg/admin/
-Disallow: /bg/profile/
-Disallow: /bg/map
 Disallow: /bg/shkoli/new
 Disallow: /bg/shkoli/*/edit
 Disallow: /bg/lyceums/*/edit
 Disallow: /en/auth/
 Disallow: /en/admin/
-Disallow: /en/profile/
-Disallow: /en/map
 Disallow: /en/shkoli/new
 Disallow: /en/shkoli/*/edit
 Disallow: /en/lyceums/*/edit
