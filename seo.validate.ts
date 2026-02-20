@@ -75,6 +75,26 @@ const extractMetaDescription = (html: string) => {
   return match?.[1]?.trim() ?? ''
 }
 
+const extractMetaTagContent = (html: string, name: string) => {
+  const pattern = new RegExp(`<meta\\s+[^>]*name=["']${name}["'][^>]*>`, 'gi')
+  const tags = Array.from(html.matchAll(pattern)).map((match) => match[0])
+
+  if (tags.length === 0) {
+    return ''
+  }
+
+  const preferredTag =
+    tags.find((tag) => /data-rh=["']true["']/i.test(tag)) ??
+    tags[tags.length - 1]
+
+  const contentMatch = preferredTag.match(/content=["']([^"']+)["']/i)
+  return contentMatch?.[1]?.trim() ?? ''
+}
+
+const extractMetaRobots = (html: string) => {
+  return extractMetaTagContent(html, 'robots')
+}
+
 const extractH1Count = (html: string) => (html.match(/<h1\b/gi) ?? []).length
 
 const extractFirstH1Text = (html: string) => {
@@ -101,6 +121,13 @@ const validatePageHtml = (
   issues: ValidationIssue[],
   routePath: string,
 ) => {
+  const robots = extractMetaRobots(html)
+  const isNoindex = /\bnoindex\b/i.test(robots)
+
+  if (isNoindex) {
+    return
+  }
+
   const title = extractTitle(html)
   const description = extractMetaDescription(html)
   const h1Count = extractH1Count(html)

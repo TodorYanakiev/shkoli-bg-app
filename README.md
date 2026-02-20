@@ -50,6 +50,14 @@ This pipeline runs:
 4. `seo:prerender` - prerenders indexable routes to HTML in `dist/`.
 5. `seo:validate` - validates metadata, canonicals, hreflang, H1, sitemap/robots consistency and writes `SEO_VERIFICATION.md`.
 
+Prerender is tuned for faster CI/local runs by default:
+- `SEO_PRERENDER_WORKERS=4`
+- `SEO_PRERENDER_RETRIES=1`
+- `SEO_ROUTE_READY_TIMEOUT_MS=4000`
+- `SEO_PAGE_TIMEOUT_MS=20000`
+
+You can override these when needed for stricter runs.
+
 ## Performance Budgets
 
 ```bash

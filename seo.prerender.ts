@@ -18,24 +18,26 @@ const DEFAULT_PREVIEW_PORT = Number.parseInt(
   10,
 )
 const SERVER_READY_TIMEOUT_MS = 120_000
-const PAGE_TIMEOUT_MS = 45_000
+const PAGE_TIMEOUT_MS = Number.parseInt(
+  process.env.SEO_PAGE_TIMEOUT_MS ?? '20000',
+  10,
+)
 const RENDER_SETTLE_TIMEOUT_MS = Number.parseInt(
-  process.env.SEO_RENDER_SETTLE_MS ?? '800',
+  process.env.SEO_RENDER_SETTLE_MS ?? '300',
   10,
 )
 const ROUTE_READY_TIMEOUT_MS = Number.parseInt(
-  process.env.SEO_ROUTE_READY_TIMEOUT_MS ?? '20000',
+  process.env.SEO_ROUTE_READY_TIMEOUT_MS ?? '4000',
   10,
 )
 const MAX_RENDER_ATTEMPTS = Math.max(
   1,
-  Number.parseInt(process.env.SEO_PRERENDER_RETRIES ?? '2', 10),
+  Number.parseInt(process.env.SEO_PRERENDER_RETRIES ?? '1', 10),
 )
 const PRERENDER_WORKERS = Math.max(
   1,
-  Number.parseInt(process.env.SEO_PRERENDER_WORKERS ?? '2', 10),
+  Number.parseInt(process.env.SEO_PRERENDER_WORKERS ?? '4', 10),
 )
-const DETAIL_ROUTE_PATTERN = /^\/(bg|en)\/(shkoli|lyceums)\/\d+$/
 
 const wait = (milliseconds: number) =>
   new Promise((resolve) => {
@@ -77,7 +79,7 @@ const canBindPort = (port: number) =>
       server.close(() => resolve(true))
     })
 
-    server.listen(port)
+    server.listen(port, '127.0.0.1')
   })
 
 const findAvailablePort = async (startingPort: number) => {
@@ -109,6 +111,8 @@ const spawnPreviewServer = (previewPort: number) => {
       'preview',
       '--port',
       previewPort.toString(),
+      '--host',
+      '127.0.0.1',
       '--strictPort',
     ],
     {
@@ -169,41 +173,23 @@ const getRoutesForPrerender = () => {
   return routes.map((route) => route.path)
 }
 
-const waitForRouteReady = async (page: Page, route: string) => {
+const waitForRouteReady = async (page: Page) => {
   await page.waitForSelector('head title', {
     state: 'attached',
     timeout: ROUTE_READY_TIMEOUT_MS,
   })
 
   await page.waitForFunction(
-    (expectedPath) => {
-      const canonical = document.querySelector(
-        'link[rel="canonical"]',
-      ) as HTMLLinkElement | null
-
-      if (!canonical?.href) {
-        return false
-      }
-
-      try {
-        const canonicalPath = new URL(canonical.href).pathname
-        return canonicalPath === expectedPath
-      } catch {
-        return false
-      }
+    () => {
+      const canonical = document.head.querySelector('link[rel="canonical"]')
+      const robots = document.head.querySelector('meta[name="robots"]')
+      return Boolean(canonical) && Boolean(robots)
     },
-    route,
+    undefined,
     {
       timeout: ROUTE_READY_TIMEOUT_MS,
     },
   )
-
-  if (DETAIL_ROUTE_PATTERN.test(route)) {
-    await page.waitForSelector('h1', {
-      state: 'attached',
-      timeout: ROUTE_READY_TIMEOUT_MS,
-    })
-  }
 }
 
 const main = async () => {
@@ -220,7 +206,7 @@ const main = async () => {
   }
 
   const previewPort = await findAvailablePort(DEFAULT_PREVIEW_PORT)
-  const previewOrigin = `http://localhost:${previewPort}`
+  const previewOrigin = `http://127.0.0.1:${previewPort}`
 
   console.log(
     `[seo:prerender] Prerendering ${routes.length} routes from ${previewOrigin} with ${Math.min(PRERENDER_WORKERS, routes.length)} workers.`,
@@ -283,11 +269,11 @@ const main = async () => {
           ) {
             try {
               await page.goto(routeUrl, {
-                waitUntil: 'networkidle',
+                waitUntil: 'domcontentloaded',
                 timeout: PAGE_TIMEOUT_MS,
               })
 
-              await waitForRouteReady(page, route)
+              await waitForRouteReady(page)
               await page.waitForTimeout(RENDER_SETTLE_TIMEOUT_MS)
 
               const html = await page.evaluate(
