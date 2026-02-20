@@ -12,10 +12,20 @@ const awsIdentityPoolId = import.meta.env.VITE_AWS_IDENTITY_POOL_ID ?? ''
 const sentryDsn = import.meta.env.VITE_SENTRY_DSN ?? ''
 const gaMeasurementId = import.meta.env.VITE_GA_MEASUREMENT_ID ?? ''
 const hotjarSiteId = import.meta.env.VITE_HOTJAR_SITE_ID ?? ''
+const siteUrl = import.meta.env.VITE_SITE_URL ?? 'https://shkoli.bg'
+const siteName = import.meta.env.VITE_SITE_NAME ?? 'Shkoli.bg'
+const seoDefaultImagePath =
+  import.meta.env.VITE_SEO_DEFAULT_IMAGE_PATH ?? '/logo.png'
+const googleSiteVerification =
+  import.meta.env.VITE_GOOGLE_SITE_VERIFICATION ?? ''
 const parsedHotjarVersion = Number.parseInt(
   import.meta.env.VITE_HOTJAR_VERSION ?? '',
   10,
 )
+const contentsquareEnabled =
+  (import.meta.env.VITE_CONTENTSQUARE_ENABLED ?? '')
+    .trim()
+    .toLowerCase() === 'true'
 const hotjarVersion =
   Number.isFinite(parsedHotjarVersion) && parsedHotjarVersion > 0
     ? parsedHotjarVersion
@@ -34,6 +44,11 @@ export const env = {
   sentryDsn,
   gaMeasurementId,
   hotjarSiteId,
+  siteUrl,
+  siteName,
+  seoDefaultImagePath,
+  googleSiteVerification,
   hotjarVersion,
+  contentsquareEnabled,
   appEnvironment,
 }

@@ -3,9 +3,9 @@ import type { TFunction } from 'i18next'
 
 import type { CourseFilterFormValues } from '../../validations/courseFilterSchema'
 import { CoursePriceRangeSlider } from '../CoursePriceRangeSlider'
+import CourseFilterAgeGroupToggle from './CourseFilterAgeGroupToggle'
 import CourseFilterDaySelect from './CourseFilterDaySelect'
 import CourseFilterSortSelect from './CourseFilterSortSelect'
-import CourseFilterTownSelect from './CourseFilterTownSelect'
 
 type CourseFilterExpandedSectionProps = {
   form: UseFormReturn<CourseFilterFormValues>
@@ -33,11 +33,7 @@ const CourseFilterExpandedSection = ({
         t={t}
         closeSignal={closeSignal}
       />
-      <CourseFilterTownSelect
-        control={control}
-        t={t}
-        closeSignal={closeSignal}
-      />
+      <CourseFilterAgeGroupToggle control={control} t={t} />
       <CourseFilterDaySelect
         control={control}
         register={register}

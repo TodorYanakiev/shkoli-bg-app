@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import lyceumPlaceholder from '../../../assets/lyceum-placeholder.svg'
 import { RatingStars } from '../../../components/ui/RatingStars'
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import type { LyceumResponse } from '../../../types/lyceums'
 import {
   getPreferredLyceumImage,
@@ -24,6 +25,7 @@ const LyceumCard = ({
   className,
 }: LyceumCardProps) => {
   const { t } = useTranslation()
+  const localizedPath = useLocalizedPath()
   const lyceumName = lyceum.name ?? t('pages.lyceums.list.card.untitled')
   const addressParts = [lyceum.town, lyceum.address].filter(
     (value): value is string => Boolean(value && value.trim().length > 0),
@@ -185,7 +187,7 @@ const LyceumCard = ({
 
   return (
     <Link
-      to={`/lyceums/${lyceum.id}`}
+      to={localizedPath(`/lyceums/${lyceum.id}`)}
       aria-label={t('pages.lyceums.list.card.openLyceum', {
         name: lyceumName,
       })}

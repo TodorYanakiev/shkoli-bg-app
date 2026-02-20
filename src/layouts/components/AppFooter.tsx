@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import CookieConsentBanner from '../../components/feedback/CookieConsentBanner'
 import { CONTACT_EMAIL } from '../../constants/contact'
+import { useLocalizedPath } from '../../hooks/useLocalizedPath'
 
 const footerLinkClassName =
   'inline-flex items-center justify-start text-left text-sm font-medium leading-6 text-slate-700 transition-colors hover:text-brand-dark focus-visible:outline-none focus-visible:text-brand-dark'
 
 const AppFooter = () => {
   const { t } = useTranslation()
+  const localizedPath = useLocalizedPath()
   const currentYear = new Date().getFullYear()
   const scrollToPageTop = () => {
     if (typeof window === 'undefined') {
@@ -27,7 +29,7 @@ const AppFooter = () => {
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)]">
           <div className="space-y-4">
             <Link
-              to="/shkoli"
+              to={localizedPath('/shkoli')}
               className="inline-flex items-center gap-3"
               aria-label={t('app.title')}
               onClick={scrollToPageTop}
@@ -63,21 +65,21 @@ const AppFooter = () => {
             <div className="border-l border-slate-200/80 pl-5 sm:pl-6">
               <div className="flex flex-col gap-2">
                 <Link
-                  to="/shkoli"
+                  to={localizedPath('/shkoli')}
                   className={footerLinkClassName}
                   onClick={scrollToPageTop}
                 >
                   {t('nav.shkoli')}
                 </Link>
                 <Link
-                  to="/lyceums"
+                  to={localizedPath('/lyceums')}
                   className={footerLinkClassName}
                   onClick={scrollToPageTop}
                 >
                   {t('nav.lyceums')}
                 </Link>
                 <Link
-                  to="/map"
+                  to={localizedPath('/map')}
                   className={footerLinkClassName}
                   onClick={scrollToPageTop}
                 >
@@ -88,26 +90,32 @@ const AppFooter = () => {
             <div className="space-y-3 border-l border-slate-200/80 pl-5 sm:pl-6">
               <div className="flex flex-col gap-2">
                 <Link
-                  to="/privacy-policy"
+                  to={localizedPath('/privacy-policy')}
                   className={footerLinkClassName}
                   onClick={scrollToPageTop}
                 >
                   {t('layouts.app.footer.privacyPolicy')}
                 </Link>
                 <Link
-                  to="/cookies"
+                  to={localizedPath('/cookies')}
                   className={footerLinkClassName}
                   onClick={scrollToPageTop}
                 >
                   {t('layouts.app.footer.cookiesPolicy')}
                 </Link>
                 <Link
-                  to="/terms-and-conditions"
+                  to={localizedPath('/terms-and-conditions')}
                   className={footerLinkClassName}
                   onClick={scrollToPageTop}
                 >
                   {t('layouts.app.footer.termsAndConditions')}
                 </Link>
+                <a
+                  href="/site-map.html"
+                  className={footerLinkClassName}
+                >
+                  {t('layouts.app.footer.htmlSitemap')}
+                </a>
                 <CookieConsentBanner triggerClassName={footerLinkClassName} />
               </div>
             </div>

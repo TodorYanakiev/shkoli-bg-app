@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
+import SeoHead from '../../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../../hooks/useCurrentLocale'
+import { toAbsoluteUrl } from '../../../services/seo'
 import { LyceumDetailContent } from './components/LyceumDetailContent'
 import { getLyceumDetailSideNavItems } from './components/lyceumDetailSideNavItems'
 import LyceumLecturerInviteModal from './components/LyceumLecturerInviteModal'
@@ -17,6 +19,7 @@ import { useShkoliPageBackground } from '../../Shkoli/hooks/useShkoliPageBackgro
 
 const LyceumDetailPage = () => {
   const { t } = useTranslation()
+  const locale = useCurrentLocale()
   const { id } = useParams<{ id: string }>()
   const lyceumId = Number(id)
   const isValidId = Number.isFinite(lyceumId)
@@ -100,6 +103,9 @@ const LyceumDetailPage = () => {
     ],
   )
 
+  const pageDescription = lyceum?.address?.trim()
+    ? `${lyceumName} - ${lyceum.address}`.slice(0, 160)
+    : t('pages.lyceums.detail.subtitle')
   const lyceumErrorMessage = lyceumError ? t(lyceumError.messageKey) : null
   const coursesErrorMessage = coursesError ? t(coursesError.messageKey) : null
   const lecturersErrorMessage = lecturersError
@@ -109,11 +115,46 @@ const LyceumDetailPage = () => {
     ? t(lyceumImagesError.messageKey)
     : null
 
+  const shouldNoindex =
+    !isValidId ||
+    Boolean(lyceumErrorMessage) ||
+    !lyceum
+  const canonicalPath =
+    isValidId && lyceum ? `/lyceums/${lyceumId}` : '/lyceums'
+  const breadcrumbs = lyceum
+    ? [
+        { label: t('nav.lyceums'), path: '/lyceums' },
+        { label: lyceumName, path: canonicalPath },
+      ]
+    : [{ label: t('nav.lyceums'), path: '/lyceums' }]
+  const structuredData =
+    lyceum && isValidId
+      ? [
+          {
+            '@context': 'https://schema.org',
+            '@type': 'EducationalOrganization',
+            name: lyceumName,
+            description: pageDescription,
+            address: lyceum.address ?? undefined,
+            url: toAbsoluteUrl(`/${locale}/lyceums/${lyceumId}`),
+          },
+        ]
+      : []
+
   return (
     <section className="-mb-8 -mx-4 -mt-8 sm:-mb-10 sm:-mx-6 sm:-mt-10 lg:-mx-12 lg:-mt-10">
-      <Helmet>
-        <title>{pageTitle}</title>
-      </Helmet>
+      <SeoHead
+        title={pageTitle}
+        description={pageDescription}
+        canonicalPath={canonicalPath}
+        locale={locale}
+        imagePath={mainImageUrl ?? undefined}
+        preloadImage
+        type="article"
+        forceNoindex={shouldNoindex}
+        breadcrumbs={breadcrumbs}
+        structuredData={structuredData}
+      />
       {!isValidId ? (
         <div
           className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
@@ -145,6 +186,7 @@ const LyceumDetailPage = () => {
         <LyceumDetailContent
           lyceumId={lyceumId}
           lyceum={lyceum}
+          breadcrumbs={breadcrumbs}
           sideNavItems={sideNavItems}
           isDesktop={isDesktop}
           isSideNavExpanded={isSideNavExpanded}

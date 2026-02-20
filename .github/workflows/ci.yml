@@ -27,10 +27,12 @@ jobs:
         run: npm run typecheck
       - name: Test
         run: npm run test
-      - name: Build
-        run: npm run build
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: Build
+        run: npm run build:seo
+      - name: Performance Budget
+        run: npm run perf:budget
       - name: E2E
         run: npm run test:e2e:ci
       - name: Performance

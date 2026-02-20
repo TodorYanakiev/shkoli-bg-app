@@ -27,11 +27,11 @@ export const LyceumDetailTabs = ({
   ]
 
   return (
-    <div className="overflow-x-auto border-y border-slate-200 bg-white px-8 lg:px-9">
+    <div className="overflow-x-auto border-y border-slate-200 bg-white px-4 sm:px-6 lg:px-9">
       <div
         role="tablist"
         aria-label={t('pages.lyceums.detail.tabs.label')}
-        className="flex min-w-max items-center gap-5"
+        className="flex min-w-max items-center gap-3 sm:gap-4 lg:gap-5"
       >
         {tabs.map((tab) => {
           const isActive = tab.key === activeTab
@@ -45,7 +45,7 @@ export const LyceumDetailTabs = ({
               aria-controls={`lyceum-panel-${tab.key}`}
               onClick={() => onSelectTab(tab.key)}
               className={[
-                'relative inline-flex items-center border-b-2 pb-3 pt-4 text-xl font-medium transition',
+                'relative inline-flex items-center border-b-2 pb-2.5 pt-3 text-base font-medium transition sm:pb-3 sm:pt-4 sm:text-lg lg:text-xl',
                 isActive
                   ? 'border-brand text-slate-900'
                   : 'border-transparent text-slate-600 hover:text-slate-900',

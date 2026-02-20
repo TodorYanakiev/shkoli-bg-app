@@ -2,9 +2,11 @@ import type { TFunction } from 'i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useToast } from '../../../../components/feedback/ToastContext'
+import { useCurrentLocale } from '../../../../hooks/useCurrentLocale'
 import { useLogoutMutation } from '../../../../hooks/useLogoutMutation'
 import type { ApiError } from '../../../../types/api'
 import { clearTokens } from '../../../../utils/authStorage'
+import { toLocalizedPath } from '../../../../utils/localizedPath'
 
 type UseTopNavLogoutOptions = {
   t: TFunction
@@ -36,6 +38,8 @@ export const useTopNavLogout = ({
   const logoutMutation = useLogoutMutation()
   const { showToast } = useToast()
   const navigate = useNavigate()
+  const locale = useCurrentLocale()
+  const loginPath = toLocalizedPath('/auth/login', locale)
 
   const onLogout = () => {
     logoutMutation.mutate(undefined, {
@@ -45,12 +49,12 @@ export const useTopNavLogout = ({
           message: t('feedback.auth.logoutSuccess'),
           tone: 'success',
         })
-        navigate('/auth/login', { replace: true })
+        navigate(loginPath, { replace: true })
       },
       onError: (error) => {
         if (error.kind === 'unauthorized' || error.kind === 'forbidden') {
           clearTokens()
-          navigate('/auth/login', { replace: true })
+          navigate(loginPath, { replace: true })
         }
       },
     })

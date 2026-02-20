@@ -160,8 +160,12 @@ describe('RegisterForm', () => {
     const privacyLink = screen.getByRole('link', { name: 'Privacy Policy' })
     const termsLink = screen.getByRole('link', { name: 'Terms & Conditions' })
 
-    expect(privacyLink.getAttribute('href')).toBe('/privacy-policy')
-    expect(termsLink.getAttribute('href')).toBe('/terms-and-conditions')
+    expect(privacyLink.getAttribute('href')).toBe('/bg/privacy-policy')
+    expect(privacyLink.getAttribute('target')).toBe('_blank')
+    expect(privacyLink.getAttribute('rel')).toBe('noopener noreferrer')
+    expect(termsLink.getAttribute('href')).toBe('/bg/terms-and-conditions')
+    expect(termsLink.getAttribute('target')).toBe('_blank')
+    expect(termsLink.getAttribute('rel')).toBe('noopener noreferrer')
   })
 
   it('renders a duplicate account error', () => {
@@ -238,7 +242,7 @@ describe('RegisterForm', () => {
       message: "Account created. You're signed in.",
       tone: 'success',
     })
-    expect(navigateMock).toHaveBeenCalledWith('/profile', { replace: true })
+    expect(navigateMock).toHaveBeenCalledWith('/bg/profile', { replace: true })
   })
 
   it('shows pending state', () => {

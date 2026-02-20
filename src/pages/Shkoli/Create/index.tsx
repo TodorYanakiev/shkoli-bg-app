@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 
+import SeoHead from '../../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../../hooks/useCurrentLocale'
 import { CourseCreateActions } from './components/CourseCreateActions'
 import { CourseCreateDetailsSection } from './components/CourseCreateDetailsSection'
 import { CourseCreateHeader } from './components/CourseCreateHeader'
@@ -20,6 +21,7 @@ import { getCourseCreateLoadError } from './services/courseCreateErrors'
 
 const CourseCreatePage = () => {
   const { t, i18n } = useTranslation()
+  const locale = useCurrentLocale()
   const [searchParams] = useSearchParams()
   const timePickerLang = i18n.language === 'bg' ? 'bg' : 'en-GB'
 
@@ -97,9 +99,13 @@ const CourseCreatePage = () => {
 
   return (
     <section className="space-y-6">
-      <Helmet>
-        <title>{pageTitle}</title>
-      </Helmet>
+      <SeoHead
+        title={pageTitle}
+        description={t('pages.shkoli.create.subtitle')}
+        canonicalPath="/shkoli/new"
+        locale={locale}
+        forceNoindex
+      />
       <CourseCreateHeader
         lyceum={lyceum}
         isValidLyceumId={isValidLyceumId}

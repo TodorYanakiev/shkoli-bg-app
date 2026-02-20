@@ -133,7 +133,7 @@ describe('LoginForm', () => {
       message: 'Welcome back! You are signed in.',
       tone: 'success',
     })
-    expect(navigateMock).toHaveBeenCalledWith('/profile', { replace: true })
+    expect(navigateMock).toHaveBeenCalledWith('/bg/profile', { replace: true })
   })
 
   it('shows pending state', () => {

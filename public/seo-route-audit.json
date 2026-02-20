@@ -1,0 +1,717 @@
+{
+  "generatedAt": "2026-02-19T14:06:49.116Z",
+  "siteUrl": "https://shkoli.bg",
+  "locales": [
+    "bg",
+    "en"
+  ],
+  "summary": {
+    "total": 108,
+    "byLocale": {
+      "bg": 54,
+      "en": 54
+    },
+    "bySource": {
+      "static": 12,
+      "course": 54,
+      "lyceum": 42
+    }
+  },
+  "indexable": {
+    "staticPaths": [
+      "/shkoli",
+      "/lyceums",
+      "/about",
+      "/cookies",
+      "/privacy-policy",
+      "/terms-and-conditions"
+    ],
+    "localizedRouteCount": 108,
+    "localizedRoutes": [
+      {
+        "path": "/bg/about",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/bg/cookies",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/bg/lyceums",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/bg/lyceums/1201",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/1225",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/1237",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/1349",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/1848",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/1868",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/1884",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/1940",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/1983",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/2095",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/3163",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/3288",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/3300",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/3357",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/3619",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/743",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/744",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/773",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/809",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/857",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/lyceums/895",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/bg/privacy-policy",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/bg/shkoli",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/bg/shkoli/23",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/24",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/26",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/27",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/28",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/29",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/30",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/31",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/32",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/33",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/34",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/35",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/36",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/37",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/38",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/39",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/40",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/41",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/42",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/43",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/44",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/45",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/46",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/47",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/48",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/49",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/shkoli/50",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/bg/terms-and-conditions",
+        "locale": "bg",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/en/about",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/en/cookies",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/en/lyceums",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/en/lyceums/1201",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/1225",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/1237",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/1349",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/1848",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/1868",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/1884",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/1940",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/1983",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/2095",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/3163",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/3288",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/3300",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/3357",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/3619",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/743",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/744",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/773",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/809",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/857",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/lyceums/895",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "lyceum"
+      },
+      {
+        "path": "/en/privacy-policy",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/en/shkoli",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      },
+      {
+        "path": "/en/shkoli/23",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/24",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/26",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/27",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/28",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/29",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/30",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/31",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/32",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/33",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/34",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/35",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/36",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/37",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/38",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/39",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/40",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/41",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/42",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/43",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/44",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/45",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/46",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/47",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/48",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/49",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/shkoli/50",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "course"
+      },
+      {
+        "path": "/en/terms-and-conditions",
+        "locale": "en",
+        "lastmod": "2026-02-19",
+        "source": "static"
+      }
+    ],
+    "paginationAndFilterStrategy": {
+      "/:locale/shkoli": "Query parameter variants are noindex and canonicalize to /:locale/shkoli",
+      "/:locale/lyceums": "Query parameter variants are noindex and canonicalize to /:locale/lyceums"
+    }
+  },
+  "blocked": {
+    "patterns": [
+      "/:locale/auth/*",
+      "/:locale/admin/*",
+      "/:locale/profile/*",
+      "/:locale/map",
+      "/:locale/shkoli/new",
+      "/:locale/shkoli/:id/edit",
+      "/:locale/lyceums/:id/edit",
+      "/:locale/not-found",
+      "/:locale/login",
+      "/:locale/register"
+    ],
+    "robotsDisallowQueryPattern": "/*?*",
+    "metaRobots": "noindex,follow on blocked pages"
+  },
+  "canonicalization": {
+    "trailingSlash": "Removed via redirect at the web server layer",
+    "duplicateHosts": "www host redirects to apex host in nginx config",
+    "legacyPathRedirects": {
+      "/": "/:locale/shkoli",
+      "/shkoli": "/:locale/shkoli",
+      "/lyceums": "/:locale/lyceums",
+      "/about": "/:locale/about",
+      "/cookies": "/:locale/cookies",
+      "/privacy-policy": "/:locale/privacy-policy",
+      "/terms-and-conditions": "/:locale/terms-and-conditions",
+      "/map": "/:locale/map",
+      "/login": "/:locale/auth/login",
+      "/register": "/:locale/auth/register"
+    }
+  }
+}

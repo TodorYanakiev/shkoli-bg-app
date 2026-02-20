@@ -48,17 +48,17 @@ export const LyceumDetailOverviewTab = ({
   )
 
   return (
-    <section id="lyceum-overview" className="scroll-mt-24">
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-        <div>
-          <h3 className="text-3xl font-semibold text-slate-900">
+    <section id="lyceum-overview" className="scroll-mt-24 overflow-x-hidden">
+      <div className="grid gap-6 lg:gap-8 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+        <div className="min-w-0">
+          <h3 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
             {t('pages.lyceums.detail.sections.overview')}
           </h3>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="mt-4 grid gap-4 sm:mt-6 md:grid-cols-2">
             {overviewDetails.map((item) => (
               <article
                 key={item.label}
-                className="rounded-xl border border-slate-200 bg-white p-4"
+                className="min-w-0 rounded-xl border border-slate-200 bg-white p-4"
               >
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   {item.label}
@@ -69,7 +69,7 @@ export const LyceumDetailOverviewTab = ({
                       href={item.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="block max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-brand underline decoration-brand/40 underline-offset-2 hover:text-brand-dark"
+                      className="block max-w-full break-all text-brand underline decoration-brand/40 underline-offset-2 hover:text-brand-dark sm:overflow-hidden sm:text-ellipsis sm:whitespace-nowrap"
                       title={item.value}
                     >
                       {item.value}
@@ -83,17 +83,17 @@ export const LyceumDetailOverviewTab = ({
           </div>
         </div>
 
-        <div className="space-y-4">
-          <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="h-64 border-b border-slate-200">
+        <div className="min-w-0 space-y-4">
+          <article className="w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div className="h-64 min-w-0 border-b border-slate-200">
               <CourseDetailMiniMap
                 latitude={lyceum?.latitude}
                 longitude={lyceum?.longitude}
                 className="h-full w-full"
               />
             </div>
-            <div className="flex items-center justify-between gap-4 p-4">
-              <p className="text-base font-medium text-slate-800">
+            <div className="flex flex-col items-start gap-2 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <p className="min-w-0 break-words text-sm font-medium text-slate-800 sm:text-base">
                 {heroLocation || fallbackValue}
               </p>
               {mapLink ? (
@@ -101,7 +101,7 @@ export const LyceumDetailOverviewTab = ({
                   href={mapLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-base font-semibold text-brand underline decoration-brand/40 underline-offset-2 hover:text-brand-dark"
+                  className="shrink-0 text-sm font-semibold text-brand underline decoration-brand/40 underline-offset-2 hover:text-brand-dark sm:text-base"
                 >
                   {t('pages.lyceums.detail.actions.openMap')}
                 </a>

@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
+import SeoHead from '../../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../../hooks/useCurrentLocale'
 import { CourseEditActions } from './components/CourseEditActions'
 import { CourseEditDetailsSection } from './components/CourseEditDetailsSection'
 import { CourseEditHeader } from './components/CourseEditHeader'
@@ -22,6 +23,7 @@ import {
 
 const CourseEditPage = () => {
   const { t, i18n } = useTranslation()
+  const locale = useCurrentLocale()
   const { id } = useParams<{ id: string }>()
   const courseId = Number(id)
   const isValidId = Number.isFinite(courseId)
@@ -114,9 +116,13 @@ const CourseEditPage = () => {
 
   return (
     <section className="space-y-6">
-      <Helmet>
-        <title>{pageTitle}</title>
-      </Helmet>
+      <SeoHead
+        title={pageTitle}
+        description={t('pages.shkoli.edit.subtitle')}
+        canonicalPath={isValidId ? `/shkoli/${courseId}/edit` : '/shkoli'}
+        locale={locale}
+        forceNoindex
+      />
       <CourseEditHeader
         courseId={courseId}
         isValidId={isValidId}

@@ -2,9 +2,11 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 
+import { useCurrentLocale } from '../hooks/useCurrentLocale'
 import { useAuthStatus } from '../hooks/useAuthStatus'
 import { useUserProfile } from '../pages/Profile/hooks/useUserProfile'
 import { getProfileErrorKey } from '../pages/Profile/services/profileErrors'
+import { toLocalizedPath } from '../utils/localizedPath'
 
 type AdminRouteProps = {
   children: ReactNode
@@ -12,6 +14,7 @@ type AdminRouteProps = {
 
 const AdminRoute = ({ children }: AdminRouteProps) => {
   const { t } = useTranslation()
+  const locale = useCurrentLocale()
   const { isAuthenticated } = useAuthStatus()
   const {
     data: user,
@@ -20,7 +23,7 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
   } = useUserProfile({ enabled: isAuthenticated })
 
   if (!isAuthenticated) {
-    return <Navigate to="/auth/login" replace />
+    return <Navigate to={toLocalizedPath('/auth/login', locale)} replace />
   }
 
   if (isLoading) {
@@ -53,7 +56,7 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
   }
 
   if (user.role !== 'ADMIN') {
-    return <Navigate to="/shkoli" replace />
+    return <Navigate to={toLocalizedPath('/shkoli', locale)} replace />
   }
 
   return <>{children}</>

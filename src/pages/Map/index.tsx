@@ -2,10 +2,11 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
-import { Helmet } from 'react-helmet-async'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import SeoHead from '../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../hooks/useCurrentLocale'
 import MapExplorerLayout from './components/MapExplorerLayout'
 import MapExplorerMap from './components/MapExplorerMap'
 import MapExplorerPanel from './components/MapExplorerPanel'
@@ -32,6 +33,7 @@ const isSameLocation = (
 
 const MapPage = () => {
   const { t, i18n } = useTranslation()
+  const locale = useCurrentLocale()
   const {
     state,
     search,
@@ -325,9 +327,13 @@ const MapPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{`${t('pages.map.title')} | ${t('app.title')}`}</title>
-      </Helmet>
+      <SeoHead
+        title={`${t('pages.map.title')} | ${t('app.title')}`}
+        description={t('pages.map.subtitle')}
+        canonicalPath="/map"
+        locale={locale}
+        forceNoindex
+      />
 
       <MapExplorerLayout
         panel={panel}

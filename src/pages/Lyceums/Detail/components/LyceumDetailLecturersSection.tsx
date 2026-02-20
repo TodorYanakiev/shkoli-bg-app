@@ -22,7 +22,7 @@ export const LyceumDetailLecturersSection = ({
   t,
 }: LyceumDetailLecturersSectionProps) => (
   <section id="lyceum-lecturers" className="scroll-mt-24">
-    <h3 className="text-3xl font-semibold text-slate-900">
+    <h3 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
       {t('pages.lyceums.detail.sections.lecturers')}
     </h3>
     {isLecturersLoading ? (
@@ -37,7 +37,7 @@ export const LyceumDetailLecturersSection = ({
         {lecturersErrorMessage}
       </div>
     ) : lecturers && lecturers.length > 0 ? (
-      <ul className="mt-5 grid gap-4 xl:grid-cols-2">
+      <ul className="mt-4 grid gap-4 sm:mt-5 xl:grid-cols-2">
         {lecturers.map((lecturer, index) => {
           const displayName = getUserDisplayName(lecturer) || fallbackValue
 

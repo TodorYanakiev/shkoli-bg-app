@@ -1,15 +1,26 @@
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
+
+import SeoHead from '../../components/ui/SeoHead'
 import { CONTACT_EMAIL } from '../../constants/contact'
+import { useCurrentLocale } from '../../hooks/useCurrentLocale'
 
 const AboutPage = () => {
   const { t } = useTranslation()
+  const locale = useCurrentLocale()
+  const breadcrumbs = [
+    { label: t('nav.shkoli'), path: '/shkoli' },
+    { label: t('pages.about.title'), path: '/about' },
+  ]
 
   return (
     <section className="space-y-3">
-      <Helmet>
-        <title>{`${t('pages.about.title')} | ${t('app.title')}`}</title>
-      </Helmet>
+      <SeoHead
+        title={`${t('pages.about.title')} | ${t('app.title')}`}
+        description={t('pages.about.subtitle')}
+        canonicalPath="/about"
+        locale={locale}
+        breadcrumbs={breadcrumbs}
+      />
       <h1 className="text-2xl font-semibold text-slate-900">
         {t('pages.about.title')}
       </h1>

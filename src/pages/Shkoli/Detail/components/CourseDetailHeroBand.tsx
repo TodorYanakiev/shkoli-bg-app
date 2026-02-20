@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import type { TFunction } from 'i18next'
 
+import Breadcrumbs, {
+  type BreadcrumbItem,
+} from '../../../../components/ui/Breadcrumbs'
 import type { CourseImageResponse } from '../../../../types/courses'
 import { RatingStars } from '../../../../components/ui/RatingStars'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
 
 type CourseDetailHeroBandProps = {
+  breadcrumbs: BreadcrumbItem[]
   courseName: string
   courseTypeLabel: string
   hasCourseType: boolean
@@ -24,6 +28,7 @@ type CourseDetailHeroBandProps = {
 }
 
 export const CourseDetailHeroBand = ({
+  breadcrumbs,
   courseName,
   courseTypeLabel,
   hasCourseType,
@@ -89,6 +94,11 @@ export const CourseDetailHeroBand = ({
       <div className="grid h-full min-h-0 grid-rows-[minmax(0,1fr)] gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
         <div className="flex min-h-0 min-w-0 items-start overflow-hidden px-8 py-7 lg:px-9 lg:pb-8 lg:pt-9">
           <div className="flex h-full min-h-0 max-w-[32rem] flex-col overflow-hidden">
+            <Breadcrumbs
+              ariaLabel={t('layouts.app.nav.label')}
+              items={breadcrumbs}
+              className="mb-3"
+            />
             <div className="space-y-1">
               <h1 className="line-clamp-2 text-4xl font-semibold leading-[1.08] text-slate-900">
                 {courseName}
@@ -193,7 +203,11 @@ export const CourseDetailHeroBand = ({
               })
             }
             className="h-full w-full object-cover"
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            width={mainImage?.width ?? 1600}
+            height={mainImage?.height ?? 900}
             onError={(event) => {
               const target = event.currentTarget
               target.onerror = null

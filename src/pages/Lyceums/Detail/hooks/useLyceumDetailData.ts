@@ -20,6 +20,23 @@ import {
   getSectionError,
 } from "../services/lyceumDetailErrors";
 
+const isObjectRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const toObject = <T extends Record<string, unknown>>(
+  value: unknown,
+): T | undefined => (isObjectRecord(value) ? (value as T) : undefined);
+
+const toObjectArray = <T extends Record<string, unknown>>(
+  value: unknown,
+): T[] => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.filter(isObjectRecord) as T[];
+};
+
 type UseLyceumDetailDataOptions = {
   lyceumId: number;
   isValidId: boolean;
@@ -51,17 +68,17 @@ export const useLyceumDetailData = ({
   const { isAuthenticated } = useAuthStatus();
   const { data: user } = useUserProfile({ enabled: isAuthenticated });
   const {
-    data: lyceum,
+    data: lyceumRaw,
     isLoading,
     error: lyceumErrorRaw,
   } = useLyceum(lyceumId, { enabled: isValidId });
   const {
-    data: courses,
+    data: coursesRaw,
     isLoading: isCoursesLoading,
     error: coursesErrorRaw,
   } = useLyceumCourses(lyceumId, { enabled: isValidId });
   const {
-    data: lecturers,
+    data: lecturersRaw,
     isLoading: isLecturersLoading,
     error: lecturersErrorRaw,
   } = useLyceumLecturers(lyceumId, { enabled: isValidId });
@@ -70,6 +87,16 @@ export const useLyceumDetailData = ({
     isLoading: isLyceumImagesLoadingRaw,
     error: lyceumImagesErrorRaw,
   } = useLyceumImages(lyceumId, { enabled: isValidId });
+  const lyceum =
+    toObject<LyceumResponse>(lyceumRaw) ??
+    (lyceumRaw != null && isValidId
+      ? ({ id: lyceumId } as LyceumResponse)
+      : undefined);
+  const courses = toObjectArray<CourseResponse>(coursesRaw);
+  const lecturers = toObjectArray<UserResponse>(lecturersRaw);
+  const normalizedLyceumImages = toObjectArray<LyceumImageResponse>(
+    lyceumImagesRaw,
+  );
 
   const lecturersById = useMemo(() => {
     if (!lecturers) return new Map<number, string>();
@@ -130,8 +157,13 @@ export const useLyceumDetailData = ({
     lecturersErrorRaw ?? null,
     "pages.lyceums.detail.lecturersError",
   );
-  const fallbackLyceumImages = lyceum?.images ?? [];
-  const lyceumImages = lyceumImagesRaw ?? fallbackLyceumImages;
+  const fallbackLyceumImages = toObjectArray<LyceumImageResponse>(
+    lyceum?.images,
+  );
+  const lyceumImages =
+    normalizedLyceumImages.length > 0
+      ? normalizedLyceumImages
+      : fallbackLyceumImages;
   const lyceumImagesError =
     lyceumImages.length > 0
       ? null

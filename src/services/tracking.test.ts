@@ -126,6 +126,18 @@ describe('tracking service cookie handling', () => {
     expect(window._uxa).toEqual([['optout']])
   })
 
+  it('does not inject Contentsquare when it is disabled by env flag', async () => {
+    const { enableContentsquare, trackContentsquarePageView } = await import(
+      './tracking'
+    )
+
+    enableContentsquare()
+    trackContentsquarePageView('/shkoli')
+
+    expect(document.getElementById('contentsquare-uxa-script')).toBeNull()
+    expect(window._uxa).toBeUndefined()
+  })
+
   it('enforces Contentsquare opt-out cookie and removes Contentsquare storage', async () => {
     const { enforceContentsquareOptOut } = await import('./tracking')
 

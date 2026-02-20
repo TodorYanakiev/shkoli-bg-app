@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import type { TFunction } from 'i18next'
 import type { UseFormSetError } from 'react-hook-form'
 
 import { useToast } from '../../../../components/feedback/ToastContext'
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate'
 import type {
   CourseImageResponse,
   CourseImageRole,
@@ -61,7 +61,7 @@ export const useCourseEditSubmit = ({
   setError,
   t,
 }: UseCourseEditSubmitOptions) => {
-  const navigate = useNavigate()
+  const navigate = useLocalizedNavigate()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const mutation = useUpdateCourseMutation()

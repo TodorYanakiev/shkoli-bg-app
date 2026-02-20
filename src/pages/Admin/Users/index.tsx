@@ -1,6 +1,7 @@
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 
+import SeoHead from '../../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../../hooks/useCurrentLocale'
 import { AdminUsersFilters } from './components/AdminUsersFilters'
 import { AdminUsersGrid } from './components/AdminUsersGrid'
 import { AdminUsersHeader } from './components/AdminUsersHeader'
@@ -8,16 +9,21 @@ import { useAdminUsersData } from './hooks/useAdminUsersData'
 
 const AdminUsersPage = () => {
   const { t } = useTranslation()
+  const locale = useCurrentLocale()
   const { users, isLoading, error, pagination, adminCount, filters } =
     useAdminUsersData()
 
   return (
     <section className="space-y-6">
-      <Helmet>
-        <title>{`${t('pages.admin.users.title')} | ${t(
+      <SeoHead
+        title={`${t('pages.admin.users.title')} | ${t(
           'pages.admin.title',
-        )} | ${t('app.title')}`}</title>
-      </Helmet>
+        )} | ${t('app.title')}`}
+        description={t('pages.admin.users.subtitle')}
+        canonicalPath="/admin/users"
+        locale={locale}
+        forceNoindex
+      />
       <AdminUsersHeader
         totalItems={pagination.totalItems}
         adminCount={adminCount}

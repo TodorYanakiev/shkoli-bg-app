@@ -2,7 +2,11 @@ module.exports = {
   ci: {
     collect: {
       startServerCommand: 'npm run preview -- --port 4173 --strictPort',
-      url: ['http://localhost:4173/'],
+      url: [
+        'http://localhost:4173/bg/shkoli',
+        'http://localhost:4173/bg/lyceums',
+        'http://localhost:4173/bg/about',
+      ],
       numberOfRuns: 1,
       settings: {
         chromeFlags: '--no-sandbox --disable-dev-shm-usage',

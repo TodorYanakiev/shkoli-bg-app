@@ -1,10 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { useToast } from '../../components/feedback/ToastContext'
+import SeoHead from '../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../hooks/useCurrentLocale'
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate'
 import { clearTokens } from '../../utils/authStorage'
 import DeleteAccountModal from './components/DeleteAccountModal'
 import ProfileDashboardHeaderCard from './components/ProfileDashboardHeaderCard'
@@ -24,7 +25,8 @@ import { getProfileDeleteErrorKey, getProfileErrorKey } from './services/profile
 
 const ProfilePage = () => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
+  const locale = useCurrentLocale()
+  const navigate = useLocalizedNavigate()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -110,9 +112,13 @@ const ProfilePage = () => {
 
   return (
     <section className="space-y-6">
-      <Helmet>
-        <title>{`${t('pages.profile.title')} | ${t('app.title')}`}</title>
-      </Helmet>
+      <SeoHead
+        title={`${t('pages.profile.title')} | ${t('app.title')}`}
+        description={t('pages.profile.subtitle')}
+        canonicalPath="/profile"
+        locale={locale}
+        forceNoindex
+      />
       <ProfileHeader />
       {isLoading ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm">

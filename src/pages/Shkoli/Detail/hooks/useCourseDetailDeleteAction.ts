@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { useToast } from '../../../../components/feedback/ToastContext'
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate'
 import { deleteCourse } from '../../../../services/courses'
 import type { ApiError } from '../../../../types/api'
 import { getCourseDeleteError } from '../services/courseDetailErrors'
@@ -25,7 +25,7 @@ export const useCourseDetailDeleteAction = ({
   courseName,
 }: UseCourseDetailDeleteActionOptions): CourseDetailDeleteAction => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
+  const navigate = useLocalizedNavigate()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const mutation = useMutation<void, ApiError, number>({

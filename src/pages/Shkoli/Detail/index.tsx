@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
+import SeoHead from '../../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../../hooks/useCurrentLocale'
+import { toAbsoluteUrl } from '../../../services/seo'
 import CourseLecturerReviewsModal from './components/CourseLecturerReviewsModal'
 import { CourseDetailContent } from './components/CourseDetailContent'
 import { getCourseDetailSideNavItems } from './components/courseDetailSideNavItems'
@@ -16,6 +18,7 @@ import { useShkoliPageBackground } from '../hooks/useShkoliPageBackground'
 
 const CourseDetailPage = () => {
   const { t, i18n } = useTranslation()
+  const locale = useCurrentLocale()
   const { id } = useParams<{ id: string }>()
   const courseId = Number(id)
   const isValidId = Number.isFinite(courseId)
@@ -94,17 +97,59 @@ const CourseDetailPage = () => {
   const pageTitle = course?.name
     ? `${course.name} | ${t('app.title')}`
     : `${t('pages.shkoli.detail.title')} | ${t('app.title')}`
+  const pageDescription = course?.description?.trim()
+    ? course.description.trim().slice(0, 160)
+    : t('pages.shkoli.detail.subtitle')
   const courseErrorMessage = courseError ? t(courseError.messageKey) : null
   const lecturersErrorMessage = lecturersError
     ? t(lecturersError.messageKey)
     : null
   const lyceumErrorMessage = lyceumError ? t(lyceumError.messageKey) : null
 
+  const shouldNoindex =
+    !isValidId ||
+    Boolean(courseErrorMessage) ||
+    !course
+  const canonicalPath =
+    isValidId && course ? `/shkoli/${courseId}` : '/shkoli'
+  const breadcrumbs = course
+    ? [
+        { label: t('nav.shkoli'), path: '/shkoli' },
+        { label: courseName, path: canonicalPath },
+      ]
+    : [{ label: t('nav.shkoli'), path: '/shkoli' }]
+  const courseStructuredData =
+    course && isValidId
+      ? [
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Course',
+            name: courseName,
+            description: pageDescription,
+            provider: {
+              '@type': 'Organization',
+              name: lyceum?.name ?? t('app.title'),
+            },
+            inLanguage: locale,
+            url: toAbsoluteUrl(`/${locale}/shkoli/${courseId}`),
+          },
+        ]
+      : []
+
   return (
     <section className="-mb-8 -mx-4 -mt-8 sm:-mb-10 sm:-mx-6 sm:-mt-10 lg:-mx-12 lg:-mt-10">
-      <Helmet>
-        <title>{pageTitle}</title>
-      </Helmet>
+      <SeoHead
+        title={pageTitle}
+        description={pageDescription}
+        canonicalPath={canonicalPath}
+        locale={locale}
+        imagePath={mainImageUrl}
+        preloadImage
+        type="article"
+        forceNoindex={shouldNoindex}
+        breadcrumbs={breadcrumbs}
+        structuredData={courseStructuredData}
+      />
       {!isValidId ? (
         <div
           className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-sm"
@@ -135,6 +180,7 @@ const CourseDetailPage = () => {
       ) : (
         <CourseDetailContent
           course={course}
+          breadcrumbs={breadcrumbs}
           sideNavItems={sideNavItems}
           isDesktop={isDesktop}
           isSideNavExpanded={isSideNavExpanded}

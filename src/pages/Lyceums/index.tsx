@@ -1,7 +1,9 @@
-import { Helmet } from 'react-helmet-async'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 
+import SeoHead from '../../components/ui/SeoHead'
+import { useCurrentLocale } from '../../hooks/useCurrentLocale'
 import LyceumFilterPanel from './components/LyceumFilterPanel'
 import LyceumResultsSection from './components/LyceumResultsSection'
 import { useLyceumFilterForm } from './hooks/useLyceumFilterForm'
@@ -12,6 +14,12 @@ import { getLyceumFilterError } from './services/lyceumFilterErrors'
 
 const LyceumsPage = () => {
   const { t } = useTranslation()
+  const locale = useCurrentLocale()
+  const location = useLocation()
+  const searchParams = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search],
+  )
   const {
     state,
     query,
@@ -33,9 +41,19 @@ const LyceumsPage = () => {
 
   return (
     <section className="space-y-10 sm:space-y-12">
-      <Helmet>
-        <title>{`${t('pages.lyceums.title')} | ${t('app.title')}`}</title>
-      </Helmet>
+      <SeoHead
+        title={`${t('pages.lyceums.title')} | ${t('app.title')}`}
+        description={t('pages.lyceums.subtitle')}
+        canonicalPath="/lyceums"
+        locale={locale}
+        searchParams={searchParams}
+        breadcrumbs={[
+          {
+            label: t('nav.lyceums'),
+            path: '/lyceums',
+          },
+        ]}
+      />
 
       <div className="mx-auto max-w-6xl px-4 text-center shkoli-fade-up shkoli-hero-glow sm:px-6">
         <h1 className="shkoli-hero-title text-2xl font-semibold text-emerald-950 sm:text-4xl lg:text-5xl">

@@ -1,6 +1,7 @@
 import type { TFunction } from 'i18next'
 import { useMemo } from 'react'
 
+import type { BreadcrumbItem } from '../../../../components/ui/Breadcrumbs'
 import type { CourseResponse } from '../../../../types/courses'
 import type { LyceumImageResponse, LyceumResponse } from '../../../../types/lyceums'
 import type { UserResponse } from '../../../../types/users'
@@ -16,6 +17,7 @@ import { LyceumDetailTabs } from './LyceumDetailTabs'
 type LyceumDetailContentProps = {
   lyceumId: number
   lyceum: LyceumResponse
+  breadcrumbs: BreadcrumbItem[]
   sideNavItems: SideNavItem[]
   isDesktop: boolean
   isSideNavExpanded: boolean
@@ -51,6 +53,7 @@ type LyceumDetailContentProps = {
 export const LyceumDetailContent = ({
   lyceumId,
   lyceum,
+  breadcrumbs,
   sideNavItems,
   isDesktop,
   isSideNavExpanded,
@@ -129,6 +132,7 @@ export const LyceumDetailContent = ({
       <div className="w-full overflow-hidden border border-slate-200 bg-white">
         <div className="flex flex-col lg:h-[calc(100dvh-var(--topnav-height,76px)-2px)] lg:overflow-hidden">
           <LyceumDetailHeroBand
+            breadcrumbs={breadcrumbs}
             lyceumName={lyceumName}
             heroLabel={t('pages.lyceums.detail.heroLabel')}
             heroLocation={heroLocation}
@@ -157,7 +161,7 @@ export const LyceumDetailContent = ({
           onSelectTab={onSelectTab}
           t={t}
         />
-        <div className="px-8 py-7">
+        <div className="px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
           <LyceumDetailTabPanels
             activeTab={activeTab}
             lyceumId={lyceumId}

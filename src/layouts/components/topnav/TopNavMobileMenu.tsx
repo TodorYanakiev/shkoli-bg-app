@@ -1,6 +1,7 @@
 import type { TFunction } from 'i18next'
 import { NavLink, type NavLinkRenderProps } from 'react-router-dom'
 
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import { TopNavMobileCourseActions } from './TopNavMobileCourseActions'
 import { TopNavMobileLyceumActions } from './TopNavMobileLyceumActions'
 import { TopNavMobileAuth } from './TopNavMobileAuth'
@@ -61,55 +62,62 @@ export const TopNavMobileMenu = ({
   isLoggingOut,
   onLogout,
   t,
-}: TopNavMobileMenuProps) => (
-  <div
-    id="mobile-nav"
-    aria-hidden={!isOpen}
-    className={`overflow-hidden border-t border-slate-200 bg-white transition-[max-height,opacity] duration-200 ease-out md:hidden ${
-      isOpen
-        ? 'max-h-[calc(100vh-var(--topnav-height))] opacity-100'
-        : 'max-h-0 opacity-0 pointer-events-none'
-    }`}
-  >
-    <div className="flex max-h-[calc(100vh-var(--topnav-height))] flex-col gap-3 overflow-y-auto px-4 py-4">
-      <TopNavMobileCourseActions
-        hasCourseActions={hasCourseActions}
-        isCourseActionsOpen={isCourseActionsOpen}
-        onToggle={onToggleCourseActions}
-        currentCourseId={currentCourseId}
-        getNavLinkClassName={mobileNavLinkClassName}
-        t={t}
-      />
-      <TopNavMobileLyceumActions
-        hasLyceumActions={hasLyceumActions}
-        isLyceumActionsOpen={isLyceumActionsOpen}
-        onToggle={onToggleLyceumActions}
-        currentLyceumId={currentLyceumId}
-        canEditLyceum={canEditLyceum}
-        canAddCourse={canAddCourse}
-        canInviteLecturer={canInviteLecturer}
-        getNavLinkClassName={mobileNavLinkClassName}
-        t={t}
-      />
-      <NavLink to="/map" className={mobileNavLinkClassName}>
-        {t('nav.map')}
-      </NavLink>
-      {isGlobalAdmin ? (
-        <NavLink to="/admin" className={mobileNavLinkClassName}>
-          {t('nav.admin')}
+}: TopNavMobileMenuProps) => {
+  const localizedPath = useLocalizedPath()
+
+  return (
+    <div
+      id="mobile-nav"
+      aria-hidden={!isOpen}
+      className={`overflow-hidden border-t border-slate-200 bg-white transition-[max-height,opacity] duration-200 ease-out md:hidden ${
+        isOpen
+          ? 'max-h-[calc(100vh-var(--topnav-height))] opacity-100'
+          : 'max-h-0 opacity-0 pointer-events-none'
+      }`}
+    >
+      <div className="flex max-h-[calc(100vh-var(--topnav-height))] flex-col gap-3 overflow-y-auto px-4 py-4">
+        <TopNavMobileCourseActions
+          hasCourseActions={hasCourseActions}
+          isCourseActionsOpen={isCourseActionsOpen}
+          onToggle={onToggleCourseActions}
+          currentCourseId={currentCourseId}
+          getNavLinkClassName={mobileNavLinkClassName}
+          t={t}
+        />
+        <TopNavMobileLyceumActions
+          hasLyceumActions={hasLyceumActions}
+          isLyceumActionsOpen={isLyceumActionsOpen}
+          onToggle={onToggleLyceumActions}
+          currentLyceumId={currentLyceumId}
+          canEditLyceum={canEditLyceum}
+          canAddCourse={canAddCourse}
+          canInviteLecturer={canInviteLecturer}
+          getNavLinkClassName={mobileNavLinkClassName}
+          t={t}
+        />
+        <NavLink to={localizedPath('/map')} className={mobileNavLinkClassName}>
+          {t('nav.map')}
         </NavLink>
-      ) : null}
-      <TopNavMobileAuth
-        isAuthenticated={isAuthenticated}
-        profileAvatarUrl={profileAvatarUrl}
-        profileAvatarAlt={profileAvatarAlt}
-        hasAdministratedLyceum={hasAdministratedLyceum}
-        administratedLyceumId={administratedLyceumId}
-        administratedLyceumLabel={administratedLyceumLabel}
-        isLoggingOut={isLoggingOut}
-        onLogout={onLogout}
-        t={t}
-      />
+        {isGlobalAdmin ? (
+          <NavLink
+            to={localizedPath('/admin')}
+            className={mobileNavLinkClassName}
+          >
+            {t('nav.admin')}
+          </NavLink>
+        ) : null}
+        <TopNavMobileAuth
+          isAuthenticated={isAuthenticated}
+          profileAvatarUrl={profileAvatarUrl}
+          profileAvatarAlt={profileAvatarAlt}
+          hasAdministratedLyceum={hasAdministratedLyceum}
+          administratedLyceumId={administratedLyceumId}
+          administratedLyceumLabel={administratedLyceumLabel}
+          isLoggingOut={isLoggingOut}
+          onLogout={onLogout}
+          t={t}
+        />
+      </div>
     </div>
-  </div>
-)
+  )
+}
