@@ -31,6 +31,8 @@ type CourseDetailTabPanelsProps = {
   scheduleSpecialCases: CourseScheduleSpecialCase[]
   locale: string
   galleryImages: CourseImageResponse[]
+  isCourseImagesLoading: boolean
+  courseImagesErrorMessage: string | null
   lecturers?: UserResponse[]
   isLecturersLoading: boolean
   lecturersErrorMessage: string | null
@@ -55,6 +57,8 @@ export const CourseDetailTabPanels = ({
   scheduleSpecialCases,
   locale,
   galleryImages,
+  isCourseImagesLoading,
+  courseImagesErrorMessage,
   lecturers,
   isLecturersLoading,
   lecturersErrorMessage,
@@ -88,6 +92,8 @@ export const CourseDetailTabPanels = ({
     {activeTab === 'gallery' ? (
       <CourseDetailGallerySection
         galleryImages={galleryImages}
+        isLoading={isCourseImagesLoading}
+        errorMessage={courseImagesErrorMessage}
         courseName={courseName}
         t={t}
       />

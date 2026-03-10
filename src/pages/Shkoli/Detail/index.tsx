@@ -27,12 +27,15 @@ const CourseDetailPage = () => {
     course,
     lecturers,
     lyceum,
+    courseImages,
+    courseImagesError,
     courseError,
     lecturersError,
     lyceumError,
     isLoading,
     isLecturersLoading,
     isLyceumLoading,
+    isCourseImagesLoading,
     canEditCourse,
     lyceumId,
   } = useCourseDetailData({ courseId, isValidId })
@@ -61,7 +64,12 @@ const CourseDetailPage = () => {
     mainImage,
     mainImageUrl,
     galleryImages,
-  } = useCourseDetailView({ course, locale: i18n.language, t })
+  } = useCourseDetailView({
+    course,
+    courseImages,
+    locale: i18n.language,
+    t,
+  })
   useShkoliPageBackground()
   const {
     isDesktop,
@@ -105,6 +113,9 @@ const CourseDetailPage = () => {
     ? t(lecturersError.messageKey)
     : null
   const lyceumErrorMessage = lyceumError ? t(lyceumError.messageKey) : null
+  const courseImagesErrorMessage = courseImagesError
+    ? t(courseImagesError.messageKey)
+    : null
 
   const shouldNoindex =
     !isValidId ||
@@ -215,6 +226,8 @@ const CourseDetailPage = () => {
           mainImage={mainImage}
           mainImageUrl={mainImageUrl}
           galleryImages={galleryImages}
+          isCourseImagesLoading={isCourseImagesLoading}
+          courseImagesErrorMessage={courseImagesErrorMessage}
           activeTab={activeTab}
           onSelectTab={onSelectTab}
           lecturers={lecturers}

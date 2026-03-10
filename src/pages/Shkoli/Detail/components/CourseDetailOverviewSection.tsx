@@ -1,6 +1,5 @@
 import type { TFunction } from 'i18next'
 
-import courseLogoPlaceholder from '../../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
 import type { CourseImageResponse } from '../../../../types/courses'
 import type { CourseDetailValue } from '../types'
@@ -15,9 +14,7 @@ type CourseDetailOverviewSectionProps = {
   normalizedAchievements: string | null
   normalizedWebsiteLink: string | null
   normalizedFacebookLink: string | null
-  logoImage?: CourseImageResponse
   mainImage?: CourseImageResponse
-  logoImageUrl: string
   mainImageUrl: string
   t: TFunction
 }
@@ -32,9 +29,7 @@ export const CourseDetailOverviewSection = ({
   normalizedAchievements,
   normalizedWebsiteLink,
   normalizedFacebookLink,
-  logoImage,
   mainImage,
-  logoImageUrl,
   mainImageUrl,
   t,
 }: CourseDetailOverviewSectionProps) => (
@@ -45,24 +40,6 @@ export const CourseDetailOverviewSection = ({
     <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
       <div className="p-5 sm:p-6">
         <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center rounded-2xl border border-white/80 bg-white/90 p-1 shadow-md">
-            <img
-              src={logoImageUrl}
-              alt={
-                logoImage?.altText ??
-                t('pages.shkoli.detail.images.logoAlt', {
-                  name: courseName,
-                })
-              }
-              className="h-12 w-12 rounded-xl object-cover"
-              loading="lazy"
-              onError={(event) => {
-                const target = event.currentTarget
-                target.onerror = null
-                target.src = courseLogoPlaceholder
-              }}
-            />
-          </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-brand">
               {t('pages.shkoli.detail.heroLabel')}

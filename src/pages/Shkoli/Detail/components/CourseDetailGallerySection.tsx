@@ -7,6 +7,8 @@ import { resolveCourseImageUrl } from '../../../../utils/courseImages'
 
 type CourseDetailGallerySectionProps = {
   galleryImages: CourseImageResponse[]
+  isLoading: boolean
+  errorMessage: string | null
   courseName: string
   t: TFunction
 }
@@ -19,6 +21,8 @@ type GalleryItem = {
 
 export const CourseDetailGallerySection = ({
   galleryImages,
+  isLoading,
+  errorMessage,
   courseName,
   t,
 }: CourseDetailGallerySectionProps) => {
@@ -77,7 +81,18 @@ export const CourseDetailGallerySection = ({
       <h3 className="text-3xl font-semibold text-slate-900">
         {t('pages.shkoli.detail.sections.gallery')}
       </h3>
-      {galleryItems.length > 0 ? (
+      {isLoading ? (
+        <p className="mt-3 text-base text-slate-600">
+          {t('pages.shkoli.detail.images.loading')}
+        </p>
+      ) : errorMessage ? (
+        <div
+          className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
+          role="alert"
+        >
+          {errorMessage}
+        </div>
+      ) : galleryItems.length > 0 ? (
         <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {galleryItems.map((image, index) => (
             <button

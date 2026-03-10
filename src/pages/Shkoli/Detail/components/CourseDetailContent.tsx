@@ -54,6 +54,8 @@ type CourseDetailContentProps = {
   mainImage?: CourseImageResponse
   mainImageUrl: string
   galleryImages: CourseImageResponse[]
+  isCourseImagesLoading: boolean
+  courseImagesErrorMessage: string | null
   activeTab: CourseDetailTabKey
   onSelectTab: (tab: CourseDetailTabKey) => void
   lecturers?: UserResponse[]
@@ -103,6 +105,8 @@ export const CourseDetailContent = ({
   mainImage,
   mainImageUrl,
   galleryImages,
+  isCourseImagesLoading,
+  courseImagesErrorMessage,
   activeTab,
   onSelectTab,
   lecturers,
@@ -222,6 +226,8 @@ export const CourseDetailContent = ({
             scheduleSpecialCases={scheduleSpecialCases}
             locale={locale}
             galleryImages={galleryImages}
+            isCourseImagesLoading={isCourseImagesLoading}
+            courseImagesErrorMessage={courseImagesErrorMessage}
             lecturers={lecturers}
             isLecturersLoading={isLecturersLoading}
             lecturersErrorMessage={lecturersErrorMessage}

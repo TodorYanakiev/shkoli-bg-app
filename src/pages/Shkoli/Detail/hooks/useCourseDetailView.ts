@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import type { TFunction } from 'i18next'
 
-import courseLogoPlaceholder from '../../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
 import type {
   CourseImageResponse,
@@ -10,7 +9,7 @@ import type {
   CourseScheduleSpecialCase,
 } from '../../../../types/courses'
 import {
-  getPreferredCourseImage,
+  getCourseImageByRole,
   resolveCourseImageUrl,
 } from '../../../../utils/courseImages'
 import type { CourseDetailValue } from '../types'
@@ -21,6 +20,7 @@ import {
 
 type UseCourseDetailViewOptions = {
   course?: CourseResponse
+  courseImages?: CourseImageResponse[]
   locale: string
   t: TFunction
 }
@@ -42,15 +42,14 @@ type CourseDetailView = {
   courseDetails: CourseDetailValue[]
   scheduleSlots: CourseScheduleSlot[]
   scheduleSpecialCases: CourseScheduleSpecialCase[]
-  logoImage?: CourseImageResponse
   mainImage?: CourseImageResponse
-  logoImageUrl: string
   mainImageUrl: string
   galleryImages: CourseImageResponse[]
 }
 
 export const useCourseDetailView = ({
   course,
+  courseImages = [],
   locale,
   t,
 }: UseCourseDetailViewOptions): CourseDetailView => {
@@ -118,14 +117,14 @@ export const useCourseDetailView = ({
     const scheduleSlots = course?.schedule?.slots ?? []
     const scheduleSpecialCases = course?.schedule?.specialCases ?? []
 
-    const mainImage = getPreferredCourseImage(course?.images, 'MAIN')
-    const logoImage = getPreferredCourseImage(course?.images, 'LOGO')
+    const mainImage =
+      course?.mainImage ??
+      getCourseImageByRole(courseImages, 'MAIN')
     const mainImageUrl =
       resolveCourseImageUrl(mainImage) ?? courseMainPlaceholder
-    const logoImageUrl =
-      resolveCourseImageUrl(logoImage) ?? courseLogoPlaceholder
-    const galleryImages =
-      course?.images?.filter((image) => image.role === 'GALLERY') ?? []
+    const galleryImages = courseImages.filter(
+      (image) => image.role === 'GALLERY',
+    )
 
     return {
       fallbackValue,
@@ -144,11 +143,9 @@ export const useCourseDetailView = ({
       courseDetails,
       scheduleSlots,
       scheduleSpecialCases,
-      logoImage,
       mainImage,
-      logoImageUrl,
       mainImageUrl,
       galleryImages,
     }
-  }, [course, locale, t])
+  }, [course, courseImages, locale, t])
 }

@@ -1,15 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import courseLogoPlaceholder from '../../../../assets/course-logo-placeholder.svg'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
 import { RatingStars } from '../../../../components/ui/RatingStars'
 import { useLocalizedPath } from '../../../../hooks/useLocalizedPath'
 import type { CourseResponse } from '../../../../types/courses'
-import {
-  getPreferredCourseImage,
-  resolveCourseImageUrl,
-} from '../../../../utils/courseImages'
+import { resolveCourseImageUrl } from '../../../../utils/courseImages'
 
 type LyceumCourseCardProps = {
   course: CourseResponse
@@ -27,13 +23,10 @@ const LyceumCourseCard = ({
   const { t } = useTranslation()
   const localizedPath = useLocalizedPath()
   const courseName = course.name ?? fallbackValue
-  const mainImage = getPreferredCourseImage(course.images, 'MAIN')
-  const logoImage = getPreferredCourseImage(course.images, 'LOGO')
+  const mainImage = course.mainImage
 
   const mainImageUrl =
     resolveCourseImageUrl(mainImage) ?? courseMainPlaceholder
-  const logoImageUrl =
-    resolveCourseImageUrl(logoImage) ?? courseLogoPlaceholder
   const averageRating =
     typeof course.averageRating === 'number' &&
     Number.isFinite(course.averageRating)
@@ -60,24 +53,8 @@ const LyceumCourseCard = ({
             target.src = courseMainPlaceholder
           }}
         />
-        <div className="absolute -bottom-4 left-4 rounded-2xl border border-white/80 bg-white/90 p-1 shadow-md">
-          <img
-            src={logoImageUrl}
-            alt={
-              logoImage?.altText ??
-              t('pages.lyceums.detail.courseCard.logoAlt', { name: courseName })
-            }
-            className="h-12 w-12 rounded-xl object-cover"
-            loading="lazy"
-            onError={(event) => {
-              const target = event.currentTarget
-              target.onerror = null
-              target.src = courseLogoPlaceholder
-            }}
-          />
-        </div>
       </div>
-      <div className="flex flex-1 flex-col px-4 pb-4 pt-6">
+      <div className="flex flex-1 flex-col px-4 pb-4 pt-4">
         <h4 className="text-sm font-semibold text-slate-900">{courseName}</h4>
         <p className="mt-2 text-xs text-slate-600">
           <span className="text-slate-500">
