@@ -177,6 +177,8 @@ export type CourseResponse = {
   facebookLink?: string
   websiteLink?: string
   lyceumId?: number
+  lyceumTown?: string
+  lyceumAddress?: string
   achievements?: string
   activeStartMonth?: CourseActiveMonth
   activeEndMonth?: CourseActiveMonth

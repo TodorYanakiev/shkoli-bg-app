@@ -50,6 +50,8 @@ const CourseCard = ({
   const { resolvedAddress, isLoading: isLyceumLoading } =
     useCourseCardLocation({
       courseAddress: course.address,
+      lyceumTown: course.lyceumTown,
+      lyceumAddress: course.lyceumAddress,
       lyceumId: course.lyceumId,
     })
 
