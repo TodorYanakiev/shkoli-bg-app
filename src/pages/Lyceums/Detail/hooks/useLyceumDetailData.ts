@@ -157,13 +157,7 @@ export const useLyceumDetailData = ({
     lecturersErrorRaw ?? null,
     "pages.lyceums.detail.lecturersError",
   );
-  const fallbackLyceumImages = toObjectArray<LyceumImageResponse>(
-    lyceum?.images,
-  );
-  const lyceumImages =
-    normalizedLyceumImages.length > 0
-      ? normalizedLyceumImages
-      : fallbackLyceumImages;
+  const lyceumImages = normalizedLyceumImages;
   const lyceumImagesError =
     lyceumImages.length > 0
       ? null

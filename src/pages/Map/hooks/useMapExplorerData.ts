@@ -2,10 +2,7 @@ import { useMemo } from 'react'
 
 import type { CourseResponse, CourseType } from '../../../types/courses'
 import type { AppError } from '../../../types/appError'
-import {
-  getPreferredLyceumImage,
-  resolveLyceumImageUrl,
-} from '../../../utils/lyceumImages'
+import { resolveLyceumImageUrl } from '../../../utils/lyceumImages'
 import { useMapExplorerCourses } from './useMapExplorerCourses'
 import { useMapExplorerLyceums } from './useMapExplorerLyceums'
 import type {
@@ -157,7 +154,7 @@ export const useMapExplorerData = ({
       .map<MapExplorerItem>((lyceum) => {
         const lyceumId = lyceum.id as number
         const activities = coursesByLyceumId.get(lyceumId) ?? []
-        const mainImage = getPreferredLyceumImage(lyceum.images, 'MAIN')
+        const mainImage = lyceum.mainImage
 
         return {
           lyceumId,
