@@ -15,7 +15,7 @@ import {
   type CourseSortKey,
 } from '../types'
 
-const COURSE_PAGE_SIZE = 10
+const COURSE_PAGE_SIZE = 6
 const DEFAULT_PAGE = 1
 
 const parseNumber = (value: string | null) => {
