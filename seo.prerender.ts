@@ -184,21 +184,20 @@ const waitForRouteReady = async (page: Page) => {
         '[data-route-suspense-fallback="true"]',
       )
       const localeLoading = document.querySelector('[data-locale-loading="true"]')
-      const hasAppError = document.body.textContent?.includes(
-        'Unexpected Application Error!',
-      )
+      const hasAppError =
+        document.body.textContent?.includes('Unexpected Application Error!') ?? false
       const canonicalPathname = canonical
         ? new URL(canonical.getAttribute('href') ?? '', window.location.origin)
             .pathname
         : ''
 
       return (
-        Boolean(title) &&
-        Boolean(canonical) &&
-        Boolean(robots) &&
-        !Boolean(routeFallback) &&
-        !Boolean(localeLoading) &&
-        !Boolean(hasAppError) &&
+        title !== null &&
+        canonical !== null &&
+        robots !== null &&
+        routeFallback === null &&
+        localeLoading === null &&
+        !hasAppError &&
         canonicalPathname === window.location.pathname
       )
     },
