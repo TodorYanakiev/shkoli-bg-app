@@ -12,6 +12,8 @@ type LyceumCardProps = {
   compact?: boolean
   hideShadow?: boolean
   className?: string
+  imageLoading?: 'lazy' | 'eager'
+  imageFetchPriority?: 'high' | 'low' | 'auto'
 }
 
 const LyceumCard = ({
@@ -19,6 +21,8 @@ const LyceumCard = ({
   compact = false,
   hideShadow = false,
   className,
+  imageLoading = 'lazy',
+  imageFetchPriority = 'low',
 }: LyceumCardProps) => {
   const { t } = useTranslation()
   const localizedPath = useLocalizedPath()
@@ -85,7 +89,11 @@ const LyceumCard = ({
             t('pages.lyceums.list.card.imageAlt', { name: lyceumName })
           }
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-          loading="lazy"
+          loading={imageLoading}
+          {...{ fetchpriority: imageFetchPriority }}
+          decoding="async"
+          width={mainImage?.width}
+          height={mainImage?.height}
           onError={(event) => {
             const target = event.currentTarget
             target.onerror = null

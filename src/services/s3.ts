@@ -33,6 +33,8 @@ const getS3Client = async () => {
   })
 }
 
+const S3_UPLOAD_CACHE_CONTROL = 'public, max-age=31536000, immutable'
+
 export const uploadFileToS3 = async ({
   file,
   key,
@@ -51,6 +53,7 @@ export const uploadFileToS3 = async ({
       Key: key,
       Body: file,
       ContentType: file.type,
+      CacheControl: S3_UPLOAD_CACHE_CONTROL,
     },
   })
 

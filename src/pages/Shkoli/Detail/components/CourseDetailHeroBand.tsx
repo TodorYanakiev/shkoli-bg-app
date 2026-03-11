@@ -204,7 +204,7 @@ export const CourseDetailHeroBand = ({
             }
             className="h-full w-full object-cover"
             loading="eager"
-            fetchPriority="high"
+            {...{ fetchpriority: 'high' }}
             decoding="async"
             width={mainImage?.width ?? 1600}
             height={mainImage?.height ?? 900}

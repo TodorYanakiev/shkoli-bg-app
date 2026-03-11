@@ -85,13 +85,20 @@ const LyceumResultsSection = ({
             const style: CSSProperties = {
               animationDelay: `${index * 70}ms`,
             }
+            const shouldPrioritizeImage = page === 1 && index === 0
             return (
               <div
                 key={lyceum.id ?? `${lyceum.name ?? 'lyceum'}-${index}`}
                 className="shkoli-fade-up"
                 style={style}
               >
-                <LyceumCard lyceum={lyceum} />
+                <LyceumCard
+                  lyceum={lyceum}
+                  imageLoading={shouldPrioritizeImage ? 'eager' : 'lazy'}
+                  imageFetchPriority={
+                    shouldPrioritizeImage ? 'high' : 'low'
+                  }
+                />
               </div>
             )
           })}

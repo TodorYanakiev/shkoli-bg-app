@@ -90,13 +90,20 @@ const CourseResultsSection = ({
             const style: CSSProperties = {
               animationDelay: `${index * 70}ms`,
             }
+            const shouldPrioritizeImage = page === 1 && index === 0
             return (
               <div
                 key={course.id ?? `${course.name ?? 'course'}-${index}`}
                 className="shkoli-fade-up"
                 style={style}
               >
-                <CourseCard course={course} />
+                <CourseCard
+                  course={course}
+                  imageLoading={shouldPrioritizeImage ? 'eager' : 'lazy'}
+                  imageFetchPriority={
+                    shouldPrioritizeImage ? 'high' : 'low'
+                  }
+                />
               </div>
             )
           })}

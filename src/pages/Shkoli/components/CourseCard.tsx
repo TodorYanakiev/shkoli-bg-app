@@ -12,11 +12,15 @@ import { useCourseCardLocation } from '../hooks/useCourseCardLocation'
 type CourseCardProps = {
   course: CourseResponse
   hideShadow?: boolean
+  imageLoading?: 'lazy' | 'eager'
+  imageFetchPriority?: 'high' | 'low' | 'auto'
 }
 
 const CourseCard = ({
   course,
   hideShadow = false,
+  imageLoading = 'lazy',
+  imageFetchPriority = 'low',
 }: CourseCardProps) => {
   const { t, i18n } = useTranslation()
   const localizedPath = useLocalizedPath()
@@ -83,7 +87,11 @@ const CourseCard = ({
             t('pages.shkoli.list.card.imageAlt', { name: courseName })
           }
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-          loading="lazy"
+          loading={imageLoading}
+          {...{ fetchpriority: imageFetchPriority }}
+          decoding="async"
+          width={mainImage?.width}
+          height={mainImage?.height}
           onError={(event) => {
             const target = event.currentTarget
             target.onerror = null
