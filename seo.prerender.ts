@@ -180,8 +180,27 @@ const waitForRouteReady = async (page: Page) => {
       const title = head.querySelector('title')
       const canonical = head.querySelector('link[rel="canonical"]')
       const robots = head.querySelector('meta[name="robots"]')
+      const routeFallback = document.querySelector(
+        '[data-route-suspense-fallback="true"]',
+      )
+      const localeLoading = document.querySelector('[data-locale-loading="true"]')
+      const hasAppError = document.body.textContent?.includes(
+        'Unexpected Application Error!',
+      )
+      const canonicalPathname = canonical
+        ? new URL(canonical.getAttribute('href') ?? '', window.location.origin)
+            .pathname
+        : ''
 
-      return Boolean(title) && Boolean(canonical) && Boolean(robots)
+      return (
+        Boolean(title) &&
+        Boolean(canonical) &&
+        Boolean(robots) &&
+        !Boolean(routeFallback) &&
+        !Boolean(localeLoading) &&
+        !Boolean(hasAppError) &&
+        canonicalPathname === window.location.pathname
+      )
     },
     undefined,
     {

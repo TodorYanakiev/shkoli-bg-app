@@ -10,7 +10,10 @@ import ProtectedRoute from './ProtectedRoute'
 import RootRedirect from './RootRedirect'
 
 const routeLoadingFallback = (
-  <div className="mx-auto w-full max-w-6xl space-y-4 px-4 py-8 sm:px-6">
+  <div
+    data-route-suspense-fallback="true"
+    className="mx-auto w-full max-w-6xl space-y-4 px-4 py-8 sm:px-6"
+  >
     <div className="h-7 w-2/5 animate-pulse rounded-xl bg-slate-200" />
     <div className="h-4 w-4/5 animate-pulse rounded-xl bg-slate-200" />
     <div className="h-44 animate-pulse rounded-2xl bg-slate-200" />
