@@ -26,7 +26,11 @@ export const TopNavBrand = ({
           src={logoSrc}
           alt={logoAlt}
           className="h-7 w-7 object-contain"
-          loading="lazy"
+          loading="eager"
+          {...{ fetchpriority: 'high' }}
+          decoding="async"
+          width={28}
+          height={28}
         />
       </span>
       <span className="text-base font-semibold text-brand">{title}</span>

@@ -11,6 +11,7 @@ import { useCourseFilters } from './hooks/useCourseFilters'
 import { useCoursesFilter } from './hooks/useCoursesFilter'
 import { useShkoliPageBackground } from './hooks/useShkoliPageBackground'
 import { getCourseFilterError } from './services/courseFilterErrors'
+import { resolveCourseImageUrl } from '../../utils/courseImages'
 
 const ShkoliPage = () => {
   const { t, i18n } = useTranslation()
@@ -73,6 +74,10 @@ const ShkoliPage = () => {
     () => getCourseFilterError(error ?? null),
     [error],
   )
+  const firstCourseImageUrl = useMemo(
+    () => resolveCourseImageUrl(data?.content?.[0]?.mainImage),
+    [data?.content],
+  )
 
   return (
     <section className="space-y-10 sm:space-y-12">
@@ -81,6 +86,8 @@ const ShkoliPage = () => {
         description={t('pages.shkoli.subtitle')}
         canonicalPath="/shkoli"
         locale={locale}
+        imagePath={firstCourseImageUrl ?? undefined}
+        preloadImage={Boolean(firstCourseImageUrl)}
         searchParams={searchParams}
         breadcrumbs={[
           {

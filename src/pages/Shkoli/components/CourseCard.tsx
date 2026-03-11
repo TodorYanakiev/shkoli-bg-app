@@ -79,7 +79,10 @@ const CourseCard = ({
         .join(' ')
         .trim()}
     >
-      <div className="relative h-56 overflow-hidden sm:h-60">
+      <div
+        className="relative h-56 overflow-hidden sm:h-60"
+        style={{ minHeight: '14rem' }}
+      >
         <img
           src={mainImageUrl}
           alt={
@@ -87,9 +90,11 @@ const CourseCard = ({
             t('pages.shkoli.list.card.imageAlt', { name: courseName })
           }
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           loading={imageLoading}
           {...{ fetchpriority: imageFetchPriority }}
           decoding="async"
+          sizes="(max-width: 640px) 100vw, 50vw"
           width={mainImage?.width}
           height={mainImage?.height}
           onError={(event) => {
