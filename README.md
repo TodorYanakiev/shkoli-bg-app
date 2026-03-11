@@ -21,6 +21,16 @@ npm ci
 npm run dev
 ```
 
+## Docker Build
+
+The Docker build stage runs `npm run build:seo` with offline-safe defaults:
+- `SEO_ALLOW_CACHE_ON_SYNC_FAILURE=false`
+- `SEO_PRERENDER_WORKERS=1`
+- `SEO_PRERENDER_RETRIES=3`
+- `SEO_ROUTE_READY_TIMEOUT_MS=30000`
+
+You can override them with build args if backend API is reachable during image build.
+
 ## Quality Gates
 
 ```bash
