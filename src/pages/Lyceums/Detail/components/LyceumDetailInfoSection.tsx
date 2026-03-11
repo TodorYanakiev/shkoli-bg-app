@@ -33,11 +33,14 @@ export const LyceumDetailInfoSection = ({
   mainImageUrl,
   isImagesLoading,
   t,
-}: LyceumDetailInfoSectionProps) => (
-  <div
-    id="lyceum-info"
-    className="scroll-mt-24 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
-  >
+}: LyceumDetailInfoSectionProps) => {
+  const showImageLoader = isImagesLoading && !mainImageUrl
+
+  return (
+    <div
+      id="lyceum-info"
+      className="scroll-mt-24 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+    >
     <div className="grid gap-4 lg:gap-0 lg:grid-cols-[1.1fr_0.9fr]">
       <div className="p-5 sm:p-6 lg:p-8">
         <p className="text-xs font-semibold uppercase tracking-wide text-brand">
@@ -115,7 +118,7 @@ export const LyceumDetailInfoSection = ({
         </dl>
       </div>
       <div className="relative">
-        {isImagesLoading ? (
+        {showImageLoader ? (
           <div className="flex h-full min-h-60 animate-pulse items-center justify-center bg-slate-200 text-xs font-medium text-slate-500">
             {t("pages.lyceums.detail.images.loading")}
           </div>
@@ -140,4 +143,5 @@ export const LyceumDetailInfoSection = ({
       </div>
     </div>
   </div>
-);
+  )
+};

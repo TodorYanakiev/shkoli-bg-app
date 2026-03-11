@@ -59,6 +59,8 @@ export const AdminCourseCard = ({
   const { resolvedAddress, isLoading: isLyceumAddressLoading } =
     useCourseCardLocation({
       courseAddress: course.address,
+      lyceumTown: course.lyceumTown,
+      lyceumAddress: course.lyceumAddress,
       lyceumId: course.lyceumId,
     })
   const addressLabel =

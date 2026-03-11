@@ -5,11 +5,7 @@ import lyceumPlaceholder from '../../../assets/lyceum-placeholder.svg'
 import { RatingStars } from '../../../components/ui/RatingStars'
 import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import type { LyceumResponse } from '../../../types/lyceums'
-import {
-  getPreferredLyceumImage,
-  resolveLyceumImageUrl,
-} from '../../../utils/lyceumImages'
-import { useLyceumCourses } from '../hooks/useLyceumCourses'
+import { resolveLyceumImageUrl } from '../../../utils/lyceumImages'
 
 type LyceumCardProps = {
   lyceum: LyceumResponse
@@ -35,7 +31,7 @@ const LyceumCard = ({
       ? addressParts.join(' - ')
       : t('pages.lyceums.list.card.locationFallback')
 
-  const mainImage = getPreferredLyceumImage(lyceum.images, 'MAIN')
+  const mainImage = lyceum.mainImage
   const mainImageUrl =
     resolveLyceumImageUrl(mainImage) ?? lyceumPlaceholder
 
@@ -45,15 +41,14 @@ const LyceumCard = ({
       ? lyceum.averageRating
       : null
 
-  const { data: courses, isLoading: isCoursesLoading } = useLyceumCourses(
-    lyceum.id,
-    { enabled: Boolean(lyceum.id) },
-  )
-  const coursesCountLabel = isCoursesLoading
-    ? t('pages.lyceums.list.card.coursesLoading')
-    : t('pages.lyceums.list.card.coursesCount', {
-        count: courses?.length ?? 0,
-      })
+  const coursesCount =
+    typeof lyceum.coursesCount === 'number' &&
+    Number.isFinite(lyceum.coursesCount)
+      ? lyceum.coursesCount
+      : 0
+  const coursesCountLabel = t('pages.lyceums.list.card.coursesCount', {
+    count: coursesCount,
+  })
 
   const cardContent = (
     <article

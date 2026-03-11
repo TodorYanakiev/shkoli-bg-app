@@ -26,6 +26,10 @@ const LocaleRoute = () => {
     void i18n.changeLanguage(locale)
   }, [i18n, isLocaleSupported, locale])
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [location.pathname])
+
   if (!isLocaleSupported) {
     const preferredLanguage = getPreferredLanguage() ?? defaultLanguage
     const redirectPath = toLocalizedPath(location.pathname, preferredLanguage)

@@ -17,6 +17,10 @@ type PageResponse<T> = {
 
 const PAGE_SIZE = 200
 const MAX_PAGE_GUARD = 200
+const ALLOW_CACHE_ON_SYNC_FAILURE =
+  (process.env.SEO_ALLOW_CACHE_ON_SYNC_FAILURE ?? 'true')
+    .trim()
+    .toLowerCase() !== 'false'
 
 const toEntries = (
   records: Array<Record<string, unknown>>,
@@ -108,16 +112,31 @@ const tryFetchEntries = async (
     return {
       entries,
       fromApi: true,
+      usedCacheFallback: false,
     }
   } catch (error) {
+    if (ALLOW_CACHE_ON_SYNC_FAILURE) {
+      console.warn(
+        `[seo:sync-content] Failed to sync ${label} from API. Reusing previous map.`,
+        error,
+      )
+
+      return {
+        entries: previousEntries,
+        fromApi: false,
+        usedCacheFallback: true,
+      }
+    }
+
     console.warn(
-      `[seo:sync-content] Failed to sync ${label} from API. Reusing previous map.`,
+      `[seo:sync-content] Failed to sync ${label} from API. Using empty list because SEO_ALLOW_CACHE_ON_SYNC_FAILURE=false.`,
       error,
     )
 
     return {
-      entries: previousEntries,
+      entries: [],
       fromApi: false,
+      usedCacheFallback: false,
     }
   }
 }
@@ -156,9 +175,13 @@ const main = async () => {
   const sourceLabel =
     coursesResult.fromApi && lyceumsResult.fromApi
       ? 'API'
-      : coursesResult.fromApi || lyceumsResult.fromApi
-        ? 'mixed API/cache'
-        : 'cache'
+      : coursesResult.usedCacheFallback || lyceumsResult.usedCacheFallback
+        ? coursesResult.fromApi || lyceumsResult.fromApi
+          ? 'mixed API/cache'
+          : 'cache'
+        : coursesResult.fromApi || lyceumsResult.fromApi
+          ? 'mixed API/empty'
+          : 'empty'
 
   console.log(
     `[seo:sync-content] Wrote content map (${sourceLabel}) with ${nextMap.courses.length} courses and ${nextMap.lyceums.length} lyceums.`,

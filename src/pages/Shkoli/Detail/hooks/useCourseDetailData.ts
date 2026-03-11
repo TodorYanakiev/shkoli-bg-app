@@ -1,12 +1,13 @@
 import { useAuthStatus } from '../../../../hooks/useAuthStatus'
 import { useUsersByIds } from '../../../../hooks/useUsersByIds'
 import type { AppError } from '../../../../types/appError'
-import type { CourseResponse } from '../../../../types/courses'
+import type { CourseImageResponse, CourseResponse } from '../../../../types/courses'
 import type { LyceumResponse } from '../../../../types/lyceums'
 import type { UserResponse } from '../../../../types/users'
 import { useLyceum } from '../../../Lyceums/hooks/useLyceum'
 import { useUserProfile } from '../../../Profile/hooks/useUserProfile'
 import { useCourse } from '../../hooks/useCourse'
+import { useCourseImages } from '../../hooks/useCourseImages'
 import {
   getCourseLoadError,
   getSectionError,
@@ -21,12 +22,15 @@ type CourseDetailData = {
   course?: CourseResponse
   lecturers?: UserResponse[]
   lyceum?: LyceumResponse
+  courseImages: CourseImageResponse[]
+  courseImagesError: AppError | null
   courseError: AppError | null
   lecturersError: AppError | null
   lyceumError: AppError | null
   isLoading: boolean
   isLecturersLoading: boolean
   isLyceumLoading: boolean
+  isCourseImagesLoading: boolean
   isValidId: boolean
   courseId: number
   lyceumId?: number
@@ -45,6 +49,13 @@ export const useCourseDetailData = ({
     isLoading,
     error: courseErrorRaw,
   } = useCourse(courseId, {
+    enabled: isValidId,
+  })
+  const {
+    data: courseImages = [],
+    isLoading: isCourseImagesLoadingRaw,
+    error: courseImagesErrorRaw,
+  } = useCourseImages(courseId, {
     enabled: isValidId,
   })
   const lecturerIds = course?.lecturerIds ?? []
@@ -70,6 +81,15 @@ export const useCourseDetailData = ({
     lyceumErrorRaw ?? null,
     'pages.shkoli.detail.lyceumError',
   )
+  const courseImagesError =
+    courseImages.length > 0
+      ? null
+      : getSectionError(
+          courseImagesErrorRaw ?? null,
+          'errors.courses.imagesLoadFailed',
+        )
+  const isCourseImagesLoading =
+    isCourseImagesLoadingRaw && courseImages.length === 0
 
   const userId = currentUser?.id
   const isCourseLecturer =
@@ -86,12 +106,15 @@ export const useCourseDetailData = ({
     course,
     lecturers,
     lyceum,
+    courseImages,
+    courseImagesError,
     courseError,
     lecturersError,
     lyceumError,
     isLoading,
     isLecturersLoading,
     isLyceumLoading,
+    isCourseImagesLoading,
     isValidId,
     courseId,
     lyceumId: lyceumId ?? undefined,

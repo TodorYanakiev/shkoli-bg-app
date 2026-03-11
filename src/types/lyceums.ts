@@ -80,9 +80,10 @@ export type LyceumResponse = {
   address?: string;
   urlToLibrariesSite?: string;
   registrationNumber?: number;
+  coursesCount?: number;
   longitude?: number;
   latitude?: number;
-  images?: LyceumImageResponse[];
+  mainImage?: LyceumImageResponse;
   verificationStatus?: "VERIFIED" | "NOT_VERIFIED" | "PENDING";
   averageRating?: number;
 };

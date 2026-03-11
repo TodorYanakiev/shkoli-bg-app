@@ -52,11 +52,16 @@ This pipeline runs:
 
 Prerender is tuned for faster CI/local runs by default:
 - `SEO_PRERENDER_WORKERS=4`
-- `SEO_PRERENDER_RETRIES=1`
-- `SEO_ROUTE_READY_TIMEOUT_MS=4000`
+- `SEO_PRERENDER_RETRIES=2`
+- `SEO_ROUTE_READY_TIMEOUT_MS=10000`
 - `SEO_PAGE_TIMEOUT_MS=20000`
 
 You can override these when needed for stricter runs.
+In GitHub Actions CI, the build step overrides this to a more conservative profile:
+- `SEO_ALLOW_CACHE_ON_SYNC_FAILURE=false` (if SEO sync API is unreachable, dynamic routes are skipped instead of reused from cache)
+- `SEO_PRERENDER_WORKERS=1`
+- `SEO_PRERENDER_RETRIES=3`
+- `SEO_ROUTE_READY_TIMEOUT_MS=30000`
 
 ## Performance Budgets
 

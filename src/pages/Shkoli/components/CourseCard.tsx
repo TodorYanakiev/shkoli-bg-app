@@ -5,10 +5,7 @@ import { Link } from 'react-router-dom'
 import courseMainPlaceholder from '../../../assets/course-main-placeholder.svg'
 import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import type { CourseAgeGroup, CourseResponse } from '../../../types/courses'
-import {
-  getPreferredCourseImage,
-  resolveCourseImageUrl,
-} from '../../../utils/courseImages'
+import { resolveCourseImageUrl } from '../../../utils/courseImages'
 import { RatingStars } from './RatingStars'
 import { useCourseCardLocation } from '../hooks/useCourseCardLocation'
 
@@ -34,7 +31,7 @@ const CourseCard = ({
     Boolean,
   ) as CourseAgeGroup[]
 
-  const mainImage = getPreferredCourseImage(course.images, 'MAIN')
+  const mainImage = course.mainImage
   const mainImageUrl =
     resolveCourseImageUrl(mainImage) ?? courseMainPlaceholder
 
@@ -53,6 +50,8 @@ const CourseCard = ({
   const { resolvedAddress, isLoading: isLyceumLoading } =
     useCourseCardLocation({
       courseAddress: course.address,
+      lyceumTown: course.lyceumTown,
+      lyceumAddress: course.lyceumAddress,
       lyceumId: course.lyceumId,
     })
 

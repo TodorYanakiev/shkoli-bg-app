@@ -6,7 +6,7 @@ import type {
   LyceumResponse,
 } from '../../../../types/lyceums'
 import {
-  getPreferredLyceumImage,
+  getLyceumImageByRole,
   resolveLyceumImageUrl,
 } from '../../../../utils/lyceumImages'
 import type { OverviewDetail } from '../types'
@@ -90,7 +90,9 @@ export const useLyceumDetailView = ({
         value: lyceum?.secretary ?? fallbackValue,
       },
     ]
-    const mainImage = getPreferredLyceumImage(lyceumImages, 'MAIN')
+    const mainImage =
+      getLyceumImageByRole(lyceumImages, 'MAIN') ??
+      lyceum?.mainImage
     const mainImageUrl = resolveLyceumImageUrl(mainImage)
     const galleryImages = lyceumImages.filter(
       (image) => image.role === 'GALLERY',

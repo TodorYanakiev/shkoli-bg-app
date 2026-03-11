@@ -832,6 +832,7 @@
         "linksEmpty": "No links are available for this course.",
         "galleryEmpty": "No gallery images yet.",
         "images": {
+          "loading": "Loading images...",
           "mainAlt": "Course main image for {{name}}",
           "logoAlt": "Course logo for {{name}}",
           "galleryAlt": "Gallery image {{index}} for {{name}}"

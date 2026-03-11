@@ -171,12 +171,14 @@ export type CourseResponse = {
   executionType?: CourseExecutionType
   ageGroupList?: CourseAgeGroup[]
   schedule?: CourseSchedule
-  images?: CourseImageResponse[]
+  mainImage?: CourseImageResponse
   address?: string
   price?: number
   facebookLink?: string
   websiteLink?: string
   lyceumId?: number
+  lyceumTown?: string
+  lyceumAddress?: string
   achievements?: string
   activeStartMonth?: CourseActiveMonth
   activeEndMonth?: CourseActiveMonth
