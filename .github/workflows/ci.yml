@@ -32,8 +32,9 @@ jobs:
       - name: Build
         run: npm run build:seo
         env:
-          SEO_PRERENDER_RETRIES: '2'
-          SEO_ROUTE_READY_TIMEOUT_MS: '10000'
+          SEO_PRERENDER_WORKERS: '1'
+          SEO_PRERENDER_RETRIES: '3'
+          SEO_ROUTE_READY_TIMEOUT_MS: '30000'
       - name: Performance Budget
         run: npm run perf:budget
       - name: E2E
