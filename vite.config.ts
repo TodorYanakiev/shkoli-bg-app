@@ -17,12 +17,6 @@ export default defineConfig({
           query: ['@tanstack/react-query'],
           i18n: ['i18next', 'react-i18next'],
           map: ['leaflet', 'leaflet.markercluster', 'react-leaflet'],
-          aws: [
-            '@aws-sdk/client-cognito-identity',
-            '@aws-sdk/client-s3',
-            '@aws-sdk/credential-provider-cognito-identity',
-            '@aws-sdk/lib-storage',
-          ],
         },
       },
     },
