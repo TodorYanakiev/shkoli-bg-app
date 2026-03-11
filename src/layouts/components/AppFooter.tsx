@@ -24,7 +24,10 @@ const AppFooter = () => {
   }
 
   return (
-    <footer className="mt-auto border-t border-slate-200 bg-[radial-gradient(120%_80%_at_10%_0%,rgba(214,236,226,0.42),rgba(255,255,255,0)_58%),radial-gradient(120%_90%_at_90%_0%,rgba(224,241,232,0.36),rgba(255,255,255,0)_60%),linear-gradient(180deg,rgba(255,255,255,0.95)_0%,rgba(247,251,249,1)_100%)]">
+    <footer
+      className="mt-auto border-t border-slate-200 bg-[radial-gradient(120%_80%_at_10%_0%,rgba(214,236,226,0.42),rgba(255,255,255,0)_58%),radial-gradient(120%_90%_at_90%_0%,rgba(224,241,232,0.36),rgba(255,255,255,0)_60%),linear-gradient(180deg,rgba(255,255,255,0.95)_0%,rgba(247,251,249,1)_100%)]"
+      style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}
+    >
       <div className="w-full px-4 py-7 sm:px-6 sm:py-8 lg:pr-12 lg:pl-[calc(3rem+var(--page-sidebar-offset,0px))]">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)]">
           <div className="space-y-4">
@@ -40,6 +43,9 @@ const AppFooter = () => {
                   alt={t('app.logoAlt')}
                   className="h-7 w-7 object-contain"
                   loading="lazy"
+                  decoding="async"
+                  width={28}
+                  height={28}
                 />
               </span>
               <span className="text-xl font-semibold leading-none text-brand sm:text-2xl">

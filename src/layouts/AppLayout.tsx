@@ -18,8 +18,8 @@ const AppLayout = () => {
         <main
           className={
             isMapRoute
-              ? 'relative w-full flex-1 overflow-hidden pt-[var(--topnav-height,0px)]'
-              : 'relative w-full flex-1 overflow-visible pb-8 pt-[calc(var(--topnav-height,0px)+2rem)] px-4 sm:pb-10 sm:px-6 sm:pt-[calc(var(--topnav-height,0px)+2.5rem)] lg:pr-12 lg:pl-[calc(3rem+var(--page-sidebar-offset,0px))]'
+              ? 'relative w-full flex-1 overflow-hidden pt-[var(--topnav-height,76px)]'
+              : 'relative w-full min-h-screen flex-1 overflow-visible pb-8 pt-[calc(var(--topnav-height,76px)+2rem)] px-4 sm:pb-10 sm:px-6 sm:pt-[calc(var(--topnav-height,76px)+2.5rem)] lg:pr-12 lg:pl-[calc(3rem+var(--page-sidebar-offset,0px))]'
           }
         >
           <Outlet />

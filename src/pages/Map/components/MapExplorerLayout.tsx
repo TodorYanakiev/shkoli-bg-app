@@ -18,7 +18,7 @@ const MapExplorerLayout = ({
   onClosePanel,
   t,
 }: MapExplorerLayoutProps) => (
-  <section className="relative z-0 h-[calc(100dvh-var(--topnav-height,0px))] w-full overflow-hidden">
+  <section className="relative z-0 h-[calc(100dvh-var(--topnav-height,76px))] w-full overflow-hidden">
     <div className="flex h-full w-full">
       <div className="hidden h-full lg:block">{panel}</div>
       <div className="h-full min-w-0 flex-1">{map}</div>
