@@ -60,12 +60,12 @@ const CookieConsentBanner = ({ triggerClassName }: CookieConsentBannerProps) => 
   return (
     <>
       {isPanelOpen ? (
-        <div className="fixed inset-x-0 bottom-0 z-[90] px-3 pb-3 sm:px-4 sm:pb-4">
+        <div className="fixed inset-0 z-[90] flex items-end px-3 pb-3 sm:px-4 sm:pb-4">
           <section
             role="dialog"
             aria-modal={!hasSelection}
             aria-label={t('cookiesConsent.title')}
-            className="mx-auto w-full max-w-5xl rounded-3xl border border-slate-200 bg-gradient-to-br from-amber-50/95 via-white to-sky-50/90 p-4 shadow-2xl backdrop-blur sm:p-6"
+            className="mx-auto h-[calc(100dvh-1.5rem)] w-full max-w-5xl overflow-y-auto rounded-3xl border border-slate-200 bg-gradient-to-br from-amber-50/95 via-white to-sky-50/90 p-4 shadow-2xl backdrop-blur sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:p-6"
           >
             <div className="mb-5 flex items-start justify-between gap-4">
               <div className="flex min-w-0 gap-3">

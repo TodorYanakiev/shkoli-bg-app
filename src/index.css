@@ -13,6 +13,8 @@
   :root {
     color: #0f172a;
     background-color: #f8fafc;
+    --topnav-height: 76px;
+    --page-sidebar-offset: 0px;
   }
 
   body {

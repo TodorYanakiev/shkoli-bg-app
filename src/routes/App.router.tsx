@@ -3,6 +3,7 @@ import { Navigate, createBrowserRouter } from 'react-router-dom'
 
 import AppLayout from '../layouts/AppLayout'
 import AuthLayout from '../layouts/AuthLayout'
+import AboutPage from '../pages/About'
 import AdminRoute from './AdminRoute'
 import LocaleRoute from './LocaleRoute'
 import ProtectedRoute from './ProtectedRoute'
@@ -22,7 +23,6 @@ const withSuspense = (element: ReactElement) => (
   </Suspense>
 )
 
-const AboutPage = lazy(() => import('../pages/About'))
 const AdminPage = lazy(() => import('../pages/Admin'))
 const AdminCoursesPage = lazy(() => import('../pages/Admin/Courses'))
 const AdminLyceumsPage = lazy(() => import('../pages/Admin/Lyceums'))
@@ -118,7 +118,7 @@ const router = createBrowserRouter([
             ),
           },
           { path: 'map', element: withSuspense(<MapPage />) },
-          { path: 'about', element: withSuspense(<AboutPage />) },
+          { path: 'about', element: <AboutPage /> },
           {
             path: 'admin',
             element: (
