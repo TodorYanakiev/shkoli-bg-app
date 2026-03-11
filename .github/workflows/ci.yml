@@ -31,6 +31,9 @@ jobs:
         run: npx playwright install --with-deps
       - name: Build
         run: npm run build:seo
+        env:
+          SEO_PRERENDER_RETRIES: '2'
+          SEO_ROUTE_READY_TIMEOUT_MS: '10000'
       - name: Performance Budget
         run: npm run perf:budget
       - name: E2E

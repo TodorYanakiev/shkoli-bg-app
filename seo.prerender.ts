@@ -27,12 +27,12 @@ const RENDER_SETTLE_TIMEOUT_MS = Number.parseInt(
   10,
 )
 const ROUTE_READY_TIMEOUT_MS = Number.parseInt(
-  process.env.SEO_ROUTE_READY_TIMEOUT_MS ?? '4000',
+  process.env.SEO_ROUTE_READY_TIMEOUT_MS ?? '10000',
   10,
 )
 const MAX_RENDER_ATTEMPTS = Math.max(
   1,
-  Number.parseInt(process.env.SEO_PRERENDER_RETRIES ?? '1', 10),
+  Number.parseInt(process.env.SEO_PRERENDER_RETRIES ?? '2', 10),
 )
 const PRERENDER_WORKERS = Math.max(
   1,
@@ -174,16 +174,14 @@ const getRoutesForPrerender = () => {
 }
 
 const waitForRouteReady = async (page: Page) => {
-  await page.waitForSelector('head title', {
-    state: 'attached',
-    timeout: ROUTE_READY_TIMEOUT_MS,
-  })
-
   await page.waitForFunction(
     () => {
-      const canonical = document.head.querySelector('link[rel="canonical"]')
-      const robots = document.head.querySelector('meta[name="robots"]')
-      return Boolean(canonical) && Boolean(robots)
+      const head = document.head
+      const title = head.querySelector('title')
+      const canonical = head.querySelector('link[rel="canonical"]')
+      const robots = head.querySelector('meta[name="robots"]')
+
+      return Boolean(title) && Boolean(canonical) && Boolean(robots)
     },
     undefined,
     {
