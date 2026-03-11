@@ -58,6 +58,7 @@ Prerender is tuned for faster CI/local runs by default:
 
 You can override these when needed for stricter runs.
 In GitHub Actions CI, the build step overrides this to a more conservative profile:
+- `SEO_ALLOW_CACHE_ON_SYNC_FAILURE=false` (if SEO sync API is unreachable, dynamic routes are skipped instead of reused from cache)
 - `SEO_PRERENDER_WORKERS=1`
 - `SEO_PRERENDER_RETRIES=3`
 - `SEO_ROUTE_READY_TIMEOUT_MS=30000`

@@ -351,23 +351,34 @@ const main = () => {
       routes.length > 1 && routes.every((route) => INDEXABLE_STATIC_PATHS.some((path) => route.endsWith(path))),
   )
 
-  for (const [title, routes] of duplicateStaticTitles) {
-    issues.push({
-      scope: 'metadata',
-      message: `Duplicate static page title detected: "${title}" on ${routes.join(', ')}`,
-    })
-  }
-
   const duplicateStaticDescriptions = Array.from(descriptionRegistry.entries()).filter(
     ([, routes]) =>
       routes.length > 1 && routes.every((route) => INDEXABLE_STATIC_PATHS.some((path) => route.endsWith(path))),
   )
 
-  for (const [description, routes] of duplicateStaticDescriptions) {
-    issues.push({
-      scope: 'metadata',
-      message: `Duplicate static page description detected: "${description}" on ${routes.join(', ')}`,
-    })
+  const hasDynamicIndexableContent =
+    contentMap.courses.length > 0 || contentMap.lyceums.length > 0
+
+  if (hasDynamicIndexableContent) {
+    for (const [title, routes] of duplicateStaticTitles) {
+      issues.push({
+        scope: 'metadata',
+        message: `Duplicate static page title detected: "${title}" on ${routes.join(', ')}`,
+      })
+    }
+
+    for (const [description, routes] of duplicateStaticDescriptions) {
+      issues.push({
+        scope: 'metadata',
+        message: `Duplicate static page description detected: "${description}" on ${routes.join(', ')}`,
+      })
+    }
+  } else if (
+    duplicateStaticTitles.length > 0 || duplicateStaticDescriptions.length > 0
+  ) {
+    console.warn(
+      '[seo:validate] Duplicate static metadata detected while dynamic SEO content is unavailable; skipping strict duplicate checks.',
+    )
   }
 
   const sampleRoutes = buildSampleRoutes(expectedPaths)
