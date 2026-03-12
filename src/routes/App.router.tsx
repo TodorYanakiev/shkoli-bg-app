@@ -39,6 +39,7 @@ const MapPage = lazy(() => import('../pages/Map'))
 const NotFoundPage = lazy(() => import('../pages/NotFound'))
 const PrivacyPolicyPage = lazy(() => import('../pages/PrivacyPolicy'))
 const ChangePasswordPage = lazy(() => import('../pages/Profile/ChangePassword'))
+const OAuth2Page = lazy(() => import('../pages/OAuth2'))
 const EditProfilePage = lazy(() => import('../pages/Profile/Edit'))
 const LyceumRightsPage = lazy(() => import('../pages/Profile/LyceumRights'))
 const ProfilePage = lazy(() => import('../pages/Profile'))
@@ -73,6 +74,7 @@ const router = createBrowserRouter([
           { index: true, element: <Navigate to="login" replace /> },
           { path: 'login', element: withSuspense(<LoginPage />) },
           { path: 'register', element: withSuspense(<RegisterPage />) },
+          { path: 'oauth2/callback', element: withSuspense(<OAuth2Page />) },
           { path: '*', element: <Navigate to="login" replace /> },
         ],
       },

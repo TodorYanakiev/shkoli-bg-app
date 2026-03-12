@@ -104,6 +104,12 @@
     "logout": "Log out",
     "loggingOut": "Logging out..."
   },
+  "common": {
+    "auth": {
+      "continueWithGoogle": "Continue with Google",
+      "or": "or"
+    }
+  },
   "form": {
     "passwordToggle": {
       "show": "Show",
@@ -219,7 +225,14 @@
       "logoutFailed": "We couldn't log you out. Try again.",
       "registerFailed": "We couldn't create your account. Try again.",
       "userExists": "An account with these details already exists.",
-      "registerImageFailed": "Account created, but we couldn't upload your profile image."
+      "registerImageFailed": "Account created, but we couldn't upload your profile image.",
+      "oauth2Failed": "Google sign-in failed. Please try again.",
+      "oauth2Cancelled": "Google sign-in was cancelled.",
+      "oauth2MissingCallbackData": "Google sign-in response is missing required data.",
+      "oauth2InvalidCallbackData": "Google sign-in response is invalid.",
+      "oauth2RegistrationExpired": "Your Google registration session expired. Please start again.",
+      "oauth2CompleteInvalid": "Please check the profile details and try again.",
+      "oauth2CompleteFailed": "We couldn't complete your Google registration. Try again."
     },
     "reviews": {
       "generic": "Something went wrong while processing the review.",
@@ -246,7 +259,8 @@
     "auth": {
       "loginSuccess": "Welcome back! You are signed in.",
       "logoutSuccess": "You have been logged out.",
-      "registerSuccess": "Account created. You're signed in."
+      "registerSuccess": "Account created. You're signed in.",
+      "oauth2Success": "Google sign-in completed successfully."
     },
     "courses": {
       "createSuccess": "Course created successfully.",
@@ -481,6 +495,33 @@
         "profileImageRemove": "Remove selected image",
         "profileImageUploading": "Uploading {{progress}}%",
         "finalizing": "Finalizing account..."
+      }
+    },
+    "oauth2": {
+      "title": "Google sign-in",
+      "subtitle": "We are finalizing your Google authentication.",
+      "loading": "Signing you in...",
+      "actions": {
+        "backToLogin": "Back to login",
+        "goToRegister": "Go to register"
+      },
+      "completeProfile": {
+        "title": "Complete your profile",
+        "subtitle": "A few profile details are still needed to finish registration.",
+        "form": {
+          "usernameLabel": "Username",
+          "usernamePlaceholder": "Choose a username",
+          "emailLabel": "Email address",
+          "emailPlaceholder": "you@example.com",
+          "firstnameLabel": "First name",
+          "firstnamePlaceholder": "Your first name",
+          "lastnameLabel": "Last name",
+          "lastnamePlaceholder": "Your last name",
+          "descriptionLabel": "Description",
+          "descriptionPlaceholder": "Tell others a bit about yourself (optional)",
+          "submit": "Complete registration",
+          "submitting": "Completing registration..."
+        }
       }
     },
     "profile": {

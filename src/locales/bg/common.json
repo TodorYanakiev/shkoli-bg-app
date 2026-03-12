@@ -104,6 +104,12 @@
     "logout": "Изход",
     "loggingOut": "Излизане..."
   },
+  "common": {
+    "auth": {
+      "continueWithGoogle": "Продължи с Google",
+      "or": "или"
+    }
+  },
   "form": {
     "passwordToggle": {
       "show": "Покажи",
@@ -208,7 +214,14 @@
       "logoutFailed": "Неуспешен изход от профила. Опитайте отново.",
       "registerFailed": "Неуспешна регистрация. Опитайте отново.",
       "userExists": "Вече има профил с тези данни.",
-      "registerImageFailed": "Не успяхме да качим изображението при регистрацията. Опитайте отново."
+      "registerImageFailed": "Не успяхме да качим изображението при регистрацията. Опитайте отново.",
+      "oauth2Failed": "Входът с Google беше неуспешен. Опитайте отново.",
+      "oauth2Cancelled": "Входът с Google беше отказан.",
+      "oauth2MissingCallbackData": "Липсват нужни данни от отговора на Google.",
+      "oauth2InvalidCallbackData": "Невалиден отговор от Google.",
+      "oauth2RegistrationExpired": "Сесията за регистрация с Google е изтекла. Започнете отново.",
+      "oauth2CompleteInvalid": "Проверете данните в профила и опитайте отново.",
+      "oauth2CompleteFailed": "Не успяхме да завършим регистрацията с Google. Опитайте отново."
     },
     "reviews": {
       "generic": "Нещо се обърка при обработката на отзивите.",
@@ -246,7 +259,8 @@
     "auth": {
       "loginSuccess": "Добре дошли отново! Влязохте успешно.",
       "logoutSuccess": "Излязохте от профила си.",
-      "registerSuccess": "Профилът е създаден. Влязохте успешно."
+      "registerSuccess": "Профилът е създаден. Влязохте успешно.",
+      "oauth2Success": "Входът с Google завърши успешно."
     },
     "courses": {
       "createSuccess": "Школата е създадена успешно.",
@@ -481,6 +495,33 @@
         "profileImageRemove": "Премахни профилната снимка",
         "profileImageUploading": "Качване: {{progress}}%",
         "finalizing": "Завършване..."
+      }
+    },
+    "oauth2": {
+      "title": "Вход с Google",
+      "subtitle": "Завършваме удостоверяването ви с Google.",
+      "loading": "Влизане...",
+      "actions": {
+        "backToLogin": "Към вход",
+        "goToRegister": "Към регистрация"
+      },
+      "completeProfile": {
+        "title": "Допълнете профила си",
+        "subtitle": "Нужни са още няколко полета, за да завършим регистрацията.",
+        "form": {
+          "usernameLabel": "Потребителско име",
+          "usernamePlaceholder": "Изберете потребителско име",
+          "emailLabel": "Имейл адрес",
+          "emailPlaceholder": "you@example.com",
+          "firstnameLabel": "Име",
+          "firstnamePlaceholder": "Вашето име",
+          "lastnameLabel": "Фамилия",
+          "lastnamePlaceholder": "Вашата фамилия",
+          "descriptionLabel": "Описание",
+          "descriptionPlaceholder": "Опишете накратко профила си (по избор)",
+          "submit": "Завърши регистрацията",
+          "submitting": "Завършване на регистрацията..."
+        }
       }
     },
     "profile": {
