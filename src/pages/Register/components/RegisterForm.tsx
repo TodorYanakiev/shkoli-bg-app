@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 
 import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
 import { useToast } from '../../../components/feedback/ToastContext'
+import GoogleOAuthButton from '../../../components/ui/GoogleOAuthButton'
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate'
 import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import { useUpsertUserProfileImageMutation } from '../../../hooks/useUpsertUserProfileImageMutation'
@@ -524,6 +525,14 @@ const RegisterForm = () => {
           {t('pages.register.form.loginLink')}
         </Link>
       </p>
+      <div className="flex items-center gap-3" aria-hidden>
+        <span className="h-px flex-1 bg-slate-200" />
+        <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          {t('common.auth.or')}
+        </span>
+        <span className="h-px flex-1 bg-slate-200" />
+      </div>
+      <GoogleOAuthButton />
     </form>
   )
 }
