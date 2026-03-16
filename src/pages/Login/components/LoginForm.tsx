@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
+import GoogleOAuthButton from '../../../components/ui/GoogleOAuthButton'
 import { useLoginMutation } from '../hooks/useLoginMutation'
 import { useToast } from '../../../components/feedback/ToastContext'
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate'
@@ -170,6 +171,14 @@ const LoginForm = () => {
           ? t('pages.login.form.submitting')
           : t('pages.login.form.submit')}
       </button>
+      <div className="flex items-center gap-3" aria-hidden>
+        <span className="h-px flex-1 bg-slate-200" />
+        <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          {t('common.auth.or')}
+        </span>
+        <span className="h-px flex-1 bg-slate-200" />
+      </div>
+      <GoogleOAuthButton />
     </form>
   )
 }
