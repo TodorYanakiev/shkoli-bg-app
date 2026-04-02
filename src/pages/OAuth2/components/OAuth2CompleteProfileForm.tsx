@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { useToast } from '../../../components/feedback/ToastContext'
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate'
+import { consumeStoredPostLoginRedirect } from '../../../services/authRedirect'
 import { setTokens } from '../../../utils/authStorage'
 import { useCompleteOAuth2RegistrationMutation } from '../hooks/useCompleteOAuth2RegistrationMutation'
 import { useOAuth2CompleteProfileForm } from '../hooks/useOAuth2CompleteProfileForm'
@@ -22,6 +24,7 @@ const OAuth2CompleteProfileForm = ({
 }: OAuth2CompleteProfileFormProps) => {
   const { t } = useTranslation()
   const navigate = useLocalizedNavigate()
+  const routerNavigate = useNavigate()
   const { showToast } = useToast()
   const mutation = useCompleteOAuth2RegistrationMutation()
   const {
@@ -78,6 +81,14 @@ const OAuth2CompleteProfileForm = ({
           message: t('feedback.auth.oauth2Success'),
           tone: 'success',
         })
+
+        const postLoginRedirect = consumeStoredPostLoginRedirect()
+
+        if (postLoginRedirect) {
+          routerNavigate(postLoginRedirect, { replace: true })
+          return
+        }
+
         navigate('/profile', { replace: true })
       },
       onError: (error) => {

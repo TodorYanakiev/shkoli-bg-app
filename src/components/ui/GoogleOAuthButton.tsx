@@ -1,5 +1,11 @@
+import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
+import {
+  clearStoredPostLoginRedirect,
+  getPostLoginRedirectFromSearchParams,
+  setStoredPostLoginRedirect,
+} from '../../services/authRedirect'
 import { getGoogleOAuthAuthorizationUrl } from '../../services/auth'
 
 type GoogleOAuthButtonProps = {
@@ -8,8 +14,17 @@ type GoogleOAuthButtonProps = {
 
 const GoogleOAuthButton = ({ className }: GoogleOAuthButtonProps) => {
   const { t } = useTranslation()
+  const [searchParams] = useSearchParams()
 
   const handleContinue = () => {
+    const postLoginRedirect = getPostLoginRedirectFromSearchParams(searchParams)
+
+    if (postLoginRedirect) {
+      setStoredPostLoginRedirect(postLoginRedirect)
+    } else {
+      clearStoredPostLoginRedirect()
+    }
+
     window.location.assign(getGoogleOAuthAuthorizationUrl())
   }
 

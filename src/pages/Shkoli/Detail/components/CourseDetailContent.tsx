@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import type { TFunction } from 'i18next'
 
 import type {
@@ -9,10 +10,12 @@ import type {
 import type { BreadcrumbItem } from '../../../../components/ui/Breadcrumbs'
 import type { LyceumResponse } from '../../../../types/lyceums'
 import type { UserResponse } from '../../../../types/users'
+import { useLoginRedirectToCurrentPage } from '../../../../hooks/useLoginRedirectToCurrentPage'
 import { useCourseReviews } from '../../../Reviews/hooks/useCourseReviews'
 import type { SideNavItem, CourseDetailTabKey } from '../types'
 import { useCourseDetailDecisionValues } from '../hooks/useCourseDetailDecisionValues'
 import { useCourseDetailReviewActions } from '../hooks/useCourseDetailReviewActions'
+import { useCourseSubscriptionActions } from '../hooks/useCourseSubscriptionActions'
 import { CourseDetailDecisionStrip } from './CourseDetailDecisionStrip'
 import { CourseDetailHeroBand } from './CourseDetailHeroBand'
 import { CourseDetailSideNav } from './CourseDetailSideNav'
@@ -124,6 +127,14 @@ export const CourseDetailContent = ({
     enabled: Boolean(course.id),
   })
   const reviewsCount = reviewsQuery.data?.length ?? 0
+  const {
+    isAuthenticated,
+    isSubscribed,
+    actionError: subscriptionError,
+    isPending: isSubscriptionPending,
+    onToggleSubscription,
+  } = useCourseSubscriptionActions(course.id)
+  const redirectToLogin = useLoginRedirectToCurrentPage()
 
   const { scheduleDuration, scheduleFactValue } =
     useCourseDetailDecisionValues({
@@ -139,6 +150,22 @@ export const CourseDetailContent = ({
     scheduleDuration === fallbackValue ? null : scheduleDuration
   const { reviewEditorTriggerId, openReviewsTab, openReviewEditor } =
     useCourseDetailReviewActions({ onSelectTab })
+  const subscriptionErrorMessage = subscriptionError
+    ? t(subscriptionError.messageKey)
+    : null
+  const subscriptionTooltip = isSubscribed
+    ? null
+    : t('pages.shkoli.detail.actions.subscribeTooltip', {
+        name: courseName,
+      })
+  const handleOpenReviewAction = useCallback(() => {
+    if (!isAuthenticated) {
+      redirectToLogin()
+      return
+    }
+
+    openReviewEditor()
+  }, [isAuthenticated, openReviewEditor, redirectToLogin])
   const openOverviewTab = () => {
     onSelectTab('overview')
 
@@ -200,7 +227,14 @@ export const CourseDetailContent = ({
             durationValue={resolvedDurationValue}
             locationValue={resolvedLocationValue}
             activeMonthsValue={activeMonthsValue}
-            onOpenReviews={openReviewEditor}
+            isSubscribed={isSubscribed}
+            isSubscriptionPending={isSubscriptionPending}
+            subscriptionErrorMessage={subscriptionErrorMessage}
+            subscriptionTooltip={subscriptionTooltip}
+            onSubscriptionAction={() => {
+              void onToggleSubscription()
+            }}
+            onOpenReviews={handleOpenReviewAction}
             t={t}
           />
         </div>

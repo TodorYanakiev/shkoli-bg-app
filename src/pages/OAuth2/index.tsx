@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import SeoHead from '../../components/ui/SeoHead'
 import { useToast } from '../../components/feedback/ToastContext'
 import { useCurrentLocale } from '../../hooks/useCurrentLocale'
 import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate'
+import { consumeStoredPostLoginRedirect } from '../../services/authRedirect'
 import { setTokens } from '../../utils/authStorage'
 import OAuth2CallbackErrorState from './components/OAuth2CallbackErrorState'
 import OAuth2CompleteProfileForm from './components/OAuth2CompleteProfileForm'
@@ -14,6 +16,7 @@ const OAuth2Page = () => {
   const { t } = useTranslation()
   const locale = useCurrentLocale()
   const navigate = useLocalizedNavigate()
+  const routerNavigate = useNavigate()
   const { showToast } = useToast()
   const callbackResult = useOAuth2CallbackResult()
   const handledCompleteRef = useRef(false)
@@ -32,8 +35,16 @@ const OAuth2Page = () => {
       message: t('feedback.auth.oauth2Success'),
       tone: 'success',
     })
+
+    const postLoginRedirect = consumeStoredPostLoginRedirect()
+
+    if (postLoginRedirect) {
+      routerNavigate(postLoginRedirect, { replace: true })
+      return
+    }
+
     navigate('/profile', { replace: true })
-  }, [callbackResult, navigate, showToast, t])
+  }, [callbackResult, navigate, routerNavigate, showToast, t])
 
   const isPendingCompletion = callbackResult.state === 'pending'
 
