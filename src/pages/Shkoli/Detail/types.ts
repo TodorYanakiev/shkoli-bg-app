@@ -13,6 +13,8 @@ export type SideNavItem =
       icon: ReactNode
       href: string
       to?: never
+      onClick?: never
+      controlsId?: never
     }
   | {
       key: string
@@ -20,6 +22,17 @@ export type SideNavItem =
       icon: ReactNode
       to: string
       href?: never
+      onClick?: never
+      controlsId?: never
+    }
+  | {
+      key: string
+      label: string
+      icon: ReactNode
+      onClick: () => void
+      controlsId?: string
+      href?: never
+      to?: never
     }
 
 export type CourseDetailValue = {

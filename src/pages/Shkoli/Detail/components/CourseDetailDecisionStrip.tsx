@@ -13,7 +13,9 @@ type CourseDetailDecisionStripProps = {
   isSubscriptionPending: boolean
   subscriptionErrorMessage: string | null
   subscriptionTooltip: string | null
+  canViewSubscribers: boolean
   onSubscriptionAction: () => void
+  onOpenSubscribers: () => void
   onOpenReviews: () => void
   t: TFunction
 }
@@ -41,7 +43,9 @@ export const CourseDetailDecisionStrip = ({
   isSubscriptionPending,
   subscriptionErrorMessage,
   subscriptionTooltip,
+  canViewSubscribers,
   onSubscriptionAction,
+  onOpenSubscribers,
   onOpenReviews,
   t,
 }: CourseDetailDecisionStripProps) => {
@@ -190,6 +194,16 @@ export const CourseDetailDecisionStrip = ({
             isPending={isSubscriptionPending}
             errorMessage={subscriptionErrorMessage}
           />
+
+          {canViewSubscribers ? (
+            <button
+              type="button"
+              onClick={onOpenSubscribers}
+              className={`${secondaryActionClassName} lg:hidden`}
+            >
+              {t('pages.shkoli.detail.actions.viewSubscribers')}
+            </button>
+          ) : null}
 
           <button
             type="button"

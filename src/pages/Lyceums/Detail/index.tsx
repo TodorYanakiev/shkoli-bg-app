@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -9,6 +9,7 @@ import { LyceumDetailContent } from './components/LyceumDetailContent'
 import { getLyceumDetailSideNavItems } from './components/lyceumDetailSideNavItems'
 import LyceumLecturerInviteModal from './components/LyceumLecturerInviteModal'
 import LyceumLecturerReviewsModal from './components/LyceumLecturerReviewsModal'
+import { LyceumSubscribersModal } from './components/LyceumSubscribersModal'
 import { useLyceumDetailData } from './hooks/useLyceumDetailData'
 import { useLyceumDetailLayout } from './hooks/useLyceumDetailLayout'
 import { useLyceumDetailTabs } from './hooks/useLyceumDetailTabs'
@@ -78,6 +79,11 @@ const LyceumDetailPage = () => {
     openModal: openLecturerReviewsModal,
     closeModal: closeLecturerReviewsModal,
   } = useLyceumLecturerReviewsModal()
+  const [isSubscribersModalOpen, setIsSubscribersModalOpen] = useState(false)
+  const subscribersModalId = 'lyceum-subscribers-modal'
+  const openSubscribersModal = useCallback(() => {
+    setIsSubscribersModalOpen(true)
+  }, [])
 
   const sideNavItems = useMemo(
     () =>
@@ -87,9 +93,12 @@ const LyceumDetailPage = () => {
         canAddCourse,
         canInviteLecturer,
         canEditLyceum,
+        canViewSubscribers: canEditLyceum,
         navIconClassName,
         inviteModalId,
+        subscribersModalId,
         onInviteLecturer: openInviteModal,
+        onOpenSubscribers: openSubscribersModal,
       }),
     [
       t,
@@ -99,7 +108,9 @@ const LyceumDetailPage = () => {
       canEditLyceum,
       navIconClassName,
       inviteModalId,
+      subscribersModalId,
       openInviteModal,
+      openSubscribersModal,
     ],
   )
 
@@ -198,6 +209,7 @@ const LyceumDetailPage = () => {
           sideNavContainerClassName={sideNavContainerClassName}
           sideNavListClassName={sideNavListClassName}
           setIsSideNavExpanded={setIsSideNavExpanded}
+          canViewSubscribers={canEditLyceum}
           lyceumName={lyceumName}
           heroLocation={heroLocation}
           fallbackValue={fallbackValue}
@@ -215,6 +227,7 @@ const LyceumDetailPage = () => {
           lyceumImagesErrorMessage={lyceumImagesErrorMessage}
           activeTab={activeTab}
           onSelectTab={onSelectTab}
+          onOpenSubscribers={openSubscribersModal}
           onOpenLecturerReviews={openLecturerReviewsModal}
           t={t}
         />
@@ -231,6 +244,14 @@ const LyceumDetailPage = () => {
           lecturer={selectedLecturer}
           lyceumId={lyceumId}
           onClose={closeLecturerReviewsModal}
+        />
+      ) : null}
+      {isSubscribersModalOpen && isValidId && lyceum ? (
+        <LyceumSubscribersModal
+          modalId={subscribersModalId}
+          lyceumId={lyceumId}
+          lyceumName={lyceumName}
+          onClose={() => setIsSubscribersModalOpen(false)}
         />
       ) : null}
     </section>

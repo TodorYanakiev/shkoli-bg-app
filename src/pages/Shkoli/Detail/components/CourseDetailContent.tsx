@@ -37,6 +37,7 @@ type CourseDetailContentProps = {
   sideNavListClassName: string
   setIsSideNavExpanded: (value: boolean | ((prev: boolean) => boolean)) => void
   canEditCourse: boolean
+  canViewSubscribers: boolean
   isDeletingCourse: boolean
   onDeleteCourse: () => void
   courseName: string
@@ -61,6 +62,7 @@ type CourseDetailContentProps = {
   courseImagesErrorMessage: string | null
   activeTab: CourseDetailTabKey
   onSelectTab: (tab: CourseDetailTabKey) => void
+  onOpenSubscribers: () => void
   lecturers?: UserResponse[]
   isLecturersLoading: boolean
   lecturersErrorMessage: string | null
@@ -88,6 +90,7 @@ export const CourseDetailContent = ({
   sideNavListClassName,
   setIsSideNavExpanded,
   canEditCourse,
+  canViewSubscribers,
   isDeletingCourse,
   onDeleteCourse,
   courseName,
@@ -112,6 +115,7 @@ export const CourseDetailContent = ({
   courseImagesErrorMessage,
   activeTab,
   onSelectTab,
+  onOpenSubscribers,
   lecturers,
   isLecturersLoading,
   lecturersErrorMessage,
@@ -231,9 +235,11 @@ export const CourseDetailContent = ({
             isSubscriptionPending={isSubscriptionPending}
             subscriptionErrorMessage={subscriptionErrorMessage}
             subscriptionTooltip={subscriptionTooltip}
+            canViewSubscribers={canViewSubscribers}
             onSubscriptionAction={() => {
               void onToggleSubscription()
             }}
+            onOpenSubscribers={onOpenSubscribers}
             onOpenReviews={handleOpenReviewAction}
             t={t}
           />

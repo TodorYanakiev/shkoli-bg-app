@@ -31,6 +31,7 @@ type LyceumDetailContentProps = {
   sideNavContainerClassName: string
   sideNavListClassName: string
   setIsSideNavExpanded: (value: boolean | ((prev: boolean) => boolean)) => void
+  canViewSubscribers: boolean
   lyceumName: string
   heroLocation: string
   fallbackValue: string
@@ -48,6 +49,7 @@ type LyceumDetailContentProps = {
   lyceumImagesErrorMessage: string | null
   activeTab: LyceumDetailTabKey
   onSelectTab: (tab: LyceumDetailTabKey) => void
+  onOpenSubscribers: () => void
   onOpenLecturerReviews: (lecturer: UserResponse) => void
   t: TFunction
 }
@@ -67,6 +69,7 @@ export const LyceumDetailContent = ({
   sideNavContainerClassName,
   sideNavListClassName,
   setIsSideNavExpanded,
+  canViewSubscribers,
   lyceumName,
   heroLocation,
   fallbackValue,
@@ -84,6 +87,7 @@ export const LyceumDetailContent = ({
   lyceumImagesErrorMessage,
   activeTab,
   onSelectTab,
+  onOpenSubscribers,
   onOpenLecturerReviews,
   t,
 }: LyceumDetailContentProps) => {
@@ -182,9 +186,11 @@ export const LyceumDetailContent = ({
             isSubscriptionPending={isSubscriptionPending}
             subscriptionErrorMessage={subscriptionErrorMessage}
             subscriptionTooltip={subscriptionTooltip}
+            canViewSubscribers={canViewSubscribers}
             onSubscriptionAction={() => {
               void onToggleSubscription()
             }}
+            onOpenSubscribers={onOpenSubscribers}
             onOpenReviews={handleOpenReviewAction}
             t={t}
           />

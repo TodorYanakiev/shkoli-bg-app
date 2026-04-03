@@ -10,7 +10,9 @@ type LyceumDetailDecisionStripProps = {
   isSubscriptionPending: boolean
   subscriptionErrorMessage: string | null
   subscriptionTooltip: string | null
+  canViewSubscribers: boolean
   onSubscriptionAction: () => void
+  onOpenSubscribers: () => void
   onOpenReviews: () => void
   t: TFunction
 }
@@ -35,7 +37,9 @@ export const LyceumDetailDecisionStrip = ({
   isSubscriptionPending,
   subscriptionErrorMessage,
   subscriptionTooltip,
+  canViewSubscribers,
   onSubscriptionAction,
+  onOpenSubscribers,
   onOpenReviews,
   t,
 }: LyceumDetailDecisionStripProps) => {
@@ -140,6 +144,16 @@ export const LyceumDetailDecisionStrip = ({
             isPending={isSubscriptionPending}
             errorMessage={subscriptionErrorMessage}
           />
+
+          {canViewSubscribers ? (
+            <button
+              type="button"
+              onClick={onOpenSubscribers}
+              className={`${secondaryActionClassName} lg:hidden`}
+            >
+              {t('pages.lyceums.detail.actions.viewSubscribers')}
+            </button>
+          ) : null}
 
           <button
             type="button"
