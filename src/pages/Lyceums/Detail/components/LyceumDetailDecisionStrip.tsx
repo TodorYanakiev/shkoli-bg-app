@@ -1,9 +1,18 @@
 import type { TFunction } from 'i18next'
 
+import { SubscriptionActionGroup } from '../../../../components/ui/SubscriptionActionGroup'
+
 type LyceumDetailDecisionStripProps = {
   coursesCount: number
   lecturersCount: number
   locationValue: string
+  isSubscribed: boolean
+  isSubscriptionPending: boolean
+  subscriptionErrorMessage: string | null
+  subscriptionTooltip: string | null
+  canViewSubscribers: boolean
+  onSubscriptionAction: () => void
+  onOpenSubscribers: () => void
   onOpenReviews: () => void
   t: TFunction
 }
@@ -14,9 +23,9 @@ type FactItemProps = {
 }
 
 const FactItem = ({ icon, value }: FactItemProps) => (
-  <div className="inline-flex items-center gap-2 text-sm text-slate-700 sm:text-base">
-    <span className="text-brand">{icon}</span>
-    <span className="font-medium">{value}</span>
+  <div className="flex min-h-11 items-start gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 sm:text-base lg:min-h-0 lg:items-center lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-0">
+    <span className="mt-0.5 shrink-0 text-brand lg:mt-0">{icon}</span>
+    <span className="min-w-0 flex-1 font-medium leading-5">{value}</span>
   </div>
 )
 
@@ -24,12 +33,22 @@ export const LyceumDetailDecisionStrip = ({
   coursesCount,
   lecturersCount,
   locationValue,
+  isSubscribed,
+  isSubscriptionPending,
+  subscriptionErrorMessage,
+  subscriptionTooltip,
+  canViewSubscribers,
+  onSubscriptionAction,
+  onOpenSubscribers,
   onOpenReviews,
   t,
 }: LyceumDetailDecisionStripProps) => {
+  const secondaryActionClassName =
+    'inline-flex h-10 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900 sm:h-11 sm:px-5 sm:text-base lg:h-12 lg:w-auto lg:px-6 lg:text-lg'
   const facts = [
     {
       key: 'courses',
+      mobileLayoutClassName: '',
       value: t('pages.lyceums.detail.facts.coursesCount', {
         count: coursesCount,
       }),
@@ -55,6 +74,7 @@ export const LyceumDetailDecisionStrip = ({
     },
     {
       key: 'lecturers',
+      mobileLayoutClassName: '',
       value: t('pages.lyceums.detail.facts.lecturersCount', {
         count: lecturersCount,
       }),
@@ -78,6 +98,7 @@ export const LyceumDetailDecisionStrip = ({
     },
     {
       key: 'location',
+      mobileLayoutClassName: 'sm:col-span-2',
       value: locationValue,
       icon: (
         <svg
@@ -95,29 +116,71 @@ export const LyceumDetailDecisionStrip = ({
         </svg>
       ),
     },
-  ]
+  ] as Array<{
+    key: string
+    value: string
+    mobileLayoutClassName: string
+    icon: JSX.Element
+  }>
 
   return (
     <div className="border-t border-slate-200 bg-white px-4 py-3 sm:px-6 sm:py-3.5 lg:px-9">
-      <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 lg:gap-4">
-        <button
-          type="button"
-          onClick={onOpenReviews}
-          className="inline-flex h-10 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900 sm:h-11 sm:px-5 sm:text-base lg:h-12 lg:px-6 lg:text-lg"
-        >
-          {t('pages.lyceums.detail.actions.leaveReview')}
-        </button>
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-4">
+        <div className="grid w-full gap-2.5 sm:grid-cols-2 lg:flex lg:w-auto lg:flex-wrap lg:items-start lg:gap-4">
+          <SubscriptionActionGroup
+            className="lg:min-w-[220px]"
+            label={t(
+              isSubscribed
+                ? 'pages.lyceums.detail.actions.unsubscribe'
+                : 'pages.lyceums.detail.actions.subscribe',
+            )}
+            pendingLabel={t(
+              isSubscribed
+                ? 'pages.lyceums.detail.actions.unsubscribing'
+                : 'pages.lyceums.detail.actions.subscribing',
+            )}
+            tooltip={subscriptionTooltip ?? undefined}
+            onAction={onSubscriptionAction}
+            isPending={isSubscriptionPending}
+            errorMessage={subscriptionErrorMessage}
+          />
 
-        <span className="hidden h-8 w-px bg-slate-200 lg:inline-block" />
+          {canViewSubscribers ? (
+            <button
+              type="button"
+              onClick={onOpenSubscribers}
+              className={`${secondaryActionClassName} lg:hidden`}
+            >
+              {t('pages.lyceums.detail.actions.viewSubscribers')}
+            </button>
+          ) : null}
 
-        {facts.map((fact, index) => (
-          <div key={fact.key} className="contents">
-            {index > 0 ? (
-              <span className="hidden h-7 w-px bg-slate-200 lg:inline-block" />
-            ) : null}
-            <FactItem value={fact.value} icon={fact.icon} />
-          </div>
-        ))}
+          <button
+            type="button"
+            onClick={onOpenReviews}
+            className={secondaryActionClassName}
+          >
+            {t('pages.lyceums.detail.actions.leaveReview')}
+          </button>
+        </div>
+
+        <div className="grid w-full gap-2 sm:grid-cols-2 lg:flex lg:min-w-0 lg:flex-1 lg:flex-wrap lg:items-center lg:gap-4">
+          <span className="hidden h-8 w-px bg-slate-200 lg:inline-block" />
+
+          {facts.map((fact, index) => (
+            <div
+              key={fact.key}
+              className={[fact.mobileLayoutClassName, 'lg:contents']
+                .join(' ')
+                .trim()}
+            >
+              {index > 0 ? (
+                <span className="hidden h-7 w-px bg-slate-200 lg:inline-block" />
+              ) : null}
+              <FactItem value={fact.value} icon={fact.icon} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

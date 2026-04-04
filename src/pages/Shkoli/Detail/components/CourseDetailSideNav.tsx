@@ -71,7 +71,7 @@ export const CourseDetailSideNav = ({
                   <span className="sr-only">{item.label}</span>
                 )}
               </Link>
-            ) : (
+            ) : item.href ? (
               <a
                 key={item.key}
                 href={item.href}
@@ -85,6 +85,23 @@ export const CourseDetailSideNav = ({
                   <span className="sr-only">{item.label}</span>
                 )}
               </a>
+            ) : (
+              <button
+                key={item.key}
+                type="button"
+                onClick={item.onClick}
+                title={item.label}
+                aria-haspopup="dialog"
+                aria-controls={item.controlsId}
+                className={sideNavItemClassName}
+              >
+                <span className={sideNavIconClassName}>{item.icon}</span>
+                {isSideNavExpanded ? (
+                  <span>{item.label}</span>
+                ) : (
+                  <span className="sr-only">{item.label}</span>
+                )}
+              </button>
             ),
           )}
         </div>

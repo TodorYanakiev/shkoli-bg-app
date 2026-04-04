@@ -1,11 +1,13 @@
 import type { TFunction } from 'i18next'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import type { BreadcrumbItem } from '../../../../components/ui/Breadcrumbs'
 import type { CourseResponse } from '../../../../types/courses'
 import type { LyceumImageResponse, LyceumResponse } from '../../../../types/lyceums'
 import type { UserResponse } from '../../../../types/users'
+import { useLoginRedirectToCurrentPage } from '../../../../hooks/useLoginRedirectToCurrentPage'
 import { useLyceumReviews } from '../../../Reviews/hooks/useLyceumReviews'
+import { useLyceumSubscriptionActions } from '../hooks/useLyceumSubscriptionActions'
 import { useLyceumDetailReviewActions } from '../hooks/useLyceumDetailReviewActions'
 import type { LyceumDetailTabKey, OverviewDetail, SideNavItem } from '../types'
 import { LyceumDetailDecisionStrip } from './LyceumDetailDecisionStrip'
@@ -29,6 +31,7 @@ type LyceumDetailContentProps = {
   sideNavContainerClassName: string
   sideNavListClassName: string
   setIsSideNavExpanded: (value: boolean | ((prev: boolean) => boolean)) => void
+  canViewSubscribers: boolean
   lyceumName: string
   heroLocation: string
   fallbackValue: string
@@ -46,6 +49,7 @@ type LyceumDetailContentProps = {
   lyceumImagesErrorMessage: string | null
   activeTab: LyceumDetailTabKey
   onSelectTab: (tab: LyceumDetailTabKey) => void
+  onOpenSubscribers: () => void
   onOpenLecturerReviews: (lecturer: UserResponse) => void
   t: TFunction
 }
@@ -65,6 +69,7 @@ export const LyceumDetailContent = ({
   sideNavContainerClassName,
   sideNavListClassName,
   setIsSideNavExpanded,
+  canViewSubscribers,
   lyceumName,
   heroLocation,
   fallbackValue,
@@ -82,6 +87,7 @@ export const LyceumDetailContent = ({
   lyceumImagesErrorMessage,
   activeTab,
   onSelectTab,
+  onOpenSubscribers,
   onOpenLecturerReviews,
   t,
 }: LyceumDetailContentProps) => {
@@ -89,6 +95,14 @@ export const LyceumDetailContent = ({
     enabled: Boolean(lyceum.id),
   })
   const reviewsCount = reviewsQuery.data?.length ?? 0
+  const {
+    isAuthenticated,
+    isSubscribed,
+    actionError: subscriptionError,
+    isPending: isSubscriptionPending,
+    onToggleSubscription,
+  } = useLyceumSubscriptionActions(lyceumId)
+  const redirectToLogin = useLoginRedirectToCurrentPage()
   const coursesCount = courses?.length ?? 0
   const lecturersCount = lecturers?.length ?? 0
   const locationValue = heroLocation || fallbackValue
@@ -111,6 +125,22 @@ export const LyceumDetailContent = ({
   }, [courses, t])
   const { reviewEditorTriggerId, openReviewsTab, openReviewEditor } =
     useLyceumDetailReviewActions({ onSelectTab })
+  const subscriptionErrorMessage = subscriptionError
+    ? t(subscriptionError.messageKey)
+    : null
+  const subscriptionTooltip = isSubscribed
+    ? null
+    : t('pages.lyceums.detail.actions.subscribeTooltip', {
+        name: lyceumName,
+      })
+  const handleOpenReviewAction = useCallback(() => {
+    if (!isAuthenticated) {
+      redirectToLogin()
+      return
+    }
+
+    openReviewEditor()
+  }, [isAuthenticated, openReviewEditor, redirectToLogin])
 
   return (
     <div className="relative">
@@ -152,7 +182,16 @@ export const LyceumDetailContent = ({
             coursesCount={coursesCount}
             lecturersCount={lecturersCount}
             locationValue={locationValue}
-            onOpenReviews={openReviewEditor}
+            isSubscribed={isSubscribed}
+            isSubscriptionPending={isSubscriptionPending}
+            subscriptionErrorMessage={subscriptionErrorMessage}
+            subscriptionTooltip={subscriptionTooltip}
+            canViewSubscribers={canViewSubscribers}
+            onSubscriptionAction={() => {
+              void onToggleSubscription()
+            }}
+            onOpenSubscribers={onOpenSubscribers}
+            onOpenReviews={handleOpenReviewAction}
             t={t}
           />
         </div>

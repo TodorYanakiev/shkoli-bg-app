@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -7,6 +7,7 @@ import { useCurrentLocale } from '../../../hooks/useCurrentLocale'
 import { toAbsoluteUrl } from '../../../services/seo'
 import CourseLecturerReviewsModal from './components/CourseLecturerReviewsModal'
 import { CourseDetailContent } from './components/CourseDetailContent'
+import { CourseSubscribersModal } from './components/CourseSubscribersModal'
 import { getCourseDetailSideNavItems } from './components/courseDetailSideNavItems'
 import { useCourseDetailData } from './hooks/useCourseDetailData'
 import { useCourseDetailDeleteAction } from './hooks/useCourseDetailDeleteAction'
@@ -90,6 +91,11 @@ const CourseDetailPage = () => {
     openModal: openLecturerReviewsModal,
     closeModal: closeLecturerReviewsModal,
   } = useCourseLecturerReviewsModal()
+  const [isSubscribersModalOpen, setIsSubscribersModalOpen] = useState(false)
+  const subscribersModalId = 'course-subscribers-modal'
+  const openSubscribersModal = useCallback(() => {
+    setIsSubscribersModalOpen(true)
+  }, [])
 
   const sideNavItems = useMemo(
     () =>
@@ -97,9 +103,19 @@ const CourseDetailPage = () => {
         t,
         courseId,
         canEditCourse,
+        canViewSubscribers: canEditCourse,
         navIconClassName,
+        subscribersModalId,
+        onOpenSubscribers: openSubscribersModal,
       }),
-    [t, courseId, canEditCourse, navIconClassName],
+    [
+      t,
+      courseId,
+      canEditCourse,
+      navIconClassName,
+      subscribersModalId,
+      openSubscribersModal,
+    ],
   )
 
   const pageTitle = course?.name
@@ -204,6 +220,7 @@ const CourseDetailPage = () => {
           sideNavListClassName={sideNavListClassName}
           setIsSideNavExpanded={setIsSideNavExpanded}
           canEditCourse={canEditCourse}
+          canViewSubscribers={canEditCourse}
           isDeletingCourse={isDeletingCourse}
           onDeleteCourse={() => {
             void onDeleteCourse()
@@ -230,6 +247,7 @@ const CourseDetailPage = () => {
           courseImagesErrorMessage={courseImagesErrorMessage}
           activeTab={activeTab}
           onSelectTab={onSelectTab}
+          onOpenSubscribers={openSubscribersModal}
           lecturers={lecturers}
           isLecturersLoading={isLecturersLoading}
           lecturersErrorMessage={lecturersErrorMessage}
@@ -249,6 +267,14 @@ const CourseDetailPage = () => {
           lecturer={selectedLecturer}
           lyceumId={lyceumId}
           onClose={closeLecturerReviewsModal}
+        />
+      ) : null}
+      {isSubscribersModalOpen && isValidId && course ? (
+        <CourseSubscribersModal
+          modalId={subscribersModalId}
+          courseId={courseId}
+          courseName={courseName}
+          onClose={() => setIsSubscribersModalOpen(false)}
         />
       ) : null}
     </section>

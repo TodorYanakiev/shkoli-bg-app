@@ -2,11 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
 import GoogleOAuthButton from '../../../components/ui/GoogleOAuthButton'
 import { useLoginMutation } from '../hooks/useLoginMutation'
 import { useToast } from '../../../components/feedback/ToastContext'
+import { clearStoredPostLoginRedirect, getPostLoginRedirectFromSearchParams } from '../../../services/authRedirect'
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate'
 import type { ApiError } from '../../../types/api'
 import { setTokens } from '../../../utils/authStorage'
@@ -36,6 +38,8 @@ const getLoginErrorMessage = (error: ApiError | null, t: (key: string) => string
 const LoginForm = () => {
   const { t } = useTranslation()
   const navigate = useLocalizedNavigate()
+  const routerNavigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { showToast } = useToast()
   const schema = useMemo(() => getLoginSchema(t), [t])
   const mutation = useLoginMutation()
@@ -64,6 +68,18 @@ const LoginForm = () => {
           message: t('feedback.auth.loginSuccess'),
           tone: 'success',
         })
+
+        clearStoredPostLoginRedirect()
+
+        const postLoginRedirect = getPostLoginRedirectFromSearchParams(
+          searchParams,
+        )
+
+        if (postLoginRedirect) {
+          routerNavigate(postLoginRedirect, { replace: true })
+          return
+        }
+
         navigate('/profile', { replace: true })
       },
     })

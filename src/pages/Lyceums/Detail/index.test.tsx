@@ -13,6 +13,7 @@ import {
 } from "vitest";
 
 import LyceumDetailPage from "./index";
+import ToastProvider from "../../../components/feedback/ToastProvider";
 import i18n from "../../../locales/i18n";
 import type { ApiError } from "../../../types/api";
 import type { CourseResponse } from "../../../types/courses";
@@ -71,11 +72,13 @@ const renderPage = (path = "/lyceums/1") =>
   return render(
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
-        <MemoryRouter initialEntries={[path]}>
-          <Routes>
-            <Route path="/lyceums/:id" element={<LyceumDetailPage />} />
-          </Routes>
-        </MemoryRouter>
+        <ToastProvider>
+          <MemoryRouter initialEntries={[path]}>
+            <Routes>
+              <Route path="/lyceums/:id" element={<LyceumDetailPage />} />
+            </Routes>
+          </MemoryRouter>
+        </ToastProvider>
       </HelmetProvider>
     </QueryClientProvider>,
   );

@@ -8,9 +8,12 @@ type LyceumDetailSideNavItemsOptions = {
   canAddCourse: boolean;
   canInviteLecturer: boolean;
   canEditLyceum: boolean;
+  canViewSubscribers: boolean;
   navIconClassName: string;
   inviteModalId: string;
+  subscribersModalId: string;
   onInviteLecturer: () => void;
+  onOpenSubscribers: () => void;
 };
 
 export const getLyceumDetailSideNavItems = ({
@@ -19,9 +22,12 @@ export const getLyceumDetailSideNavItems = ({
   canAddCourse,
   canInviteLecturer,
   canEditLyceum,
+  canViewSubscribers,
   navIconClassName,
   inviteModalId,
+  subscribersModalId,
   onInviteLecturer,
+  onOpenSubscribers,
 }: LyceumDetailSideNavItemsOptions): SideNavItem[] => {
   const baseSideNavItems: SideNavItem[] = [
     {
@@ -184,6 +190,33 @@ export const getLyceumDetailSideNavItems = ({
                 <path d="M4 19.5a4 4 0 0 1 8 0" />
                 <path d="M18 8v6" />
                 <path d="M15 11h6" />
+              </svg>
+            ),
+          },
+        ]
+      : []),
+    ...(canViewSubscribers
+      ? [
+          {
+            key: "lyceum-subscribers",
+            label: t("pages.lyceums.detail.actions.viewSubscribers"),
+            onClick: onOpenSubscribers,
+            controlsId: subscribersModalId,
+            icon: (
+              <svg
+                viewBox="0 0 24 24"
+                className={navIconClassName}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M8 12.5a3.5 3.5 0 1 0-3.5-3.5A3.5 3.5 0 0 0 8 12.5z" />
+                <path d="M4 19.5a4 4 0 0 1 8 0" />
+                <path d="M17 12a3 3 0 1 0-2.6-4.5" />
+                <path d="M14.5 18.5a3.5 3.5 0 0 1 5.5 1" />
               </svg>
             ),
           },

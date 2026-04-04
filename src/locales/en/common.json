@@ -110,6 +110,36 @@
       "or": "or"
     }
   },
+  "subscribersModal": {
+    "countLabel": "{{count}} subscribers",
+    "subscriberFallback": "Subscriber",
+    "listTitle": "Subscribers",
+    "formatLabel": "Export format",
+    "exportTitle": "Export subscribers",
+    "exportSubtitle": "Create a file and download it when it is ready.",
+    "formats": {
+      "csv": "CSV (.csv)",
+      "xlsx": "Excel (.xlsx)"
+    },
+    "actions": {
+      "createExport": "Create export",
+      "creatingExport": "Preparing export...",
+      "downloadExport": "Download file",
+      "downloadingExport": "Downloading file..."
+    },
+    "status": {
+      "PENDING": "Pending",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Ready",
+      "FAILED": "Failed"
+    },
+    "statusDescriptions": {
+      "PENDING": "The export is queued and will start soon.",
+      "IN_PROGRESS": "We are preparing the subscriber file now.",
+      "COMPLETED": "The export is ready to download.",
+      "FAILED": "We couldn't prepare the export file."
+    }
+  },
   "form": {
     "passwordToggle": {
       "show": "Show",
@@ -135,6 +165,12 @@
   "errors": {
     "network": "We couldn't reach the server. Try again.",
     "generic": "Something went wrong. Please try again.",
+    "subscribers": {
+      "invalidFormat": "Please choose a supported export format.",
+      "exportNotFound": "We couldn't find that export file.",
+      "fileNotReady": "The export file is not ready yet.",
+      "exportFailedState": "This export job failed. Start a new export to try again."
+    },
     "courses": {
       "createFailed": "We couldn't create this course. Try again.",
       "createInvalid": "Please check the course data and schedule.",
@@ -145,6 +181,17 @@
       "updateNotFound": "This course was not found.",
       "updateConflict": "This course couldn't be updated due to a data conflict.",
       "deleteFailed": "We couldn't delete this course. Try again.",
+      "subscribeFailed": "We couldn't subscribe you to this course. Try again.",
+      "unsubscribeFailed": "We couldn't unsubscribe you from this course. Try again.",
+      "alreadySubscribed": "You are already subscribed to this course.",
+      "notSubscribed": "You are not subscribed to this course yet.",
+      "subscriptionNotFound": "This course was not found.",
+      "subscribers": {
+        "loadFailed": "We couldn't load the subscribers for this course.",
+        "exportFailed": "We couldn't start the subscriber export for this course.",
+        "statusFailed": "We couldn't refresh the subscriber export status right now.",
+        "downloadFailed": "We couldn't download the subscriber export for this course."
+      },
       "imagesLoadFailed": "We couldn't load course images right now.",
       "imagesInvalid": "We couldn't load images because the request is invalid.",
       "imagesNotFound": "Course images were not found.",
@@ -164,6 +211,17 @@
       "createConflict": "A lyceum with these details already exists.",
       "updateFailed": "We couldn't update this lyceum. Try again.",
       "deleteFailed": "We couldn't delete this lyceum. Try again.",
+      "subscribeFailed": "We couldn't subscribe you to this lyceum. Try again.",
+      "unsubscribeFailed": "We couldn't unsubscribe you from this lyceum. Try again.",
+      "alreadySubscribed": "You are already subscribed to this lyceum.",
+      "notSubscribed": "You are not subscribed to this lyceum yet.",
+      "subscriptionNotFound": "This lyceum was not found.",
+      "subscribers": {
+        "loadFailed": "We couldn't load the subscribers for this lyceum.",
+        "exportFailed": "We couldn't start the subscriber export for this lyceum.",
+        "statusFailed": "We couldn't refresh the subscriber export status right now.",
+        "downloadFailed": "We couldn't download the subscriber export for this lyceum."
+      },
       "imageUploadFailed": "We couldn't upload this image. Try again.",
       "imagesUploadFailed": "Some images could not be uploaded.",
       "imageDuplicate": "This image has already been uploaded.",
@@ -234,6 +292,9 @@
       "oauth2CompleteInvalid": "Please check the profile details and try again.",
       "oauth2CompleteFailed": "We couldn't complete your Google registration. Try again."
     },
+    "subscriptions": {
+      "authRequired": "You need to sign in to manage subscriptions."
+    },
     "reviews": {
       "generic": "Something went wrong while processing the review.",
       "loadFailed": "We couldn't load reviews right now.",
@@ -265,12 +326,16 @@
     "courses": {
       "createSuccess": "Course created successfully.",
       "updateSuccess": "Course updated successfully.",
-      "deleteSuccess": "Course deleted successfully."
+      "deleteSuccess": "Course deleted successfully.",
+      "subscribed": "You are subscribed to this course.",
+      "unsubscribed": "You are unsubscribed from this course."
     },
     "lyceums": {
       "createSuccess": "Lyceum created successfully.",
       "updateSuccess": "Lyceum updated successfully.",
       "deleteSuccess": "Lyceum deleted successfully.",
+      "subscribed": "You are subscribed to this lyceum.",
+      "unsubscribed": "You are unsubscribed from this lyceum.",
       "adminAdded": "Administrator assigned successfully.",
       "adminRemoved": "Administrator removed successfully.",
       "lecturerAdded": "Invitation sent. If the user already exists, they are now a lecturer.",
@@ -881,10 +946,22 @@
         "actions": {
           "openLyceum": "Open lyceum",
           "visitWebsite": "Visit website",
+          "subscribe": "Subscribe",
+          "subscribing": "Subscribing...",
+          "subscribeTooltip": "Subscribe to receive emails and notifications for {{name}}",
+          "unsubscribe": "Unsubscribe",
+          "unsubscribing": "Unsubscribing...",
+          "viewSubscribers": "See subscribers",
+          "signInToSubscribe": "Sign in to subscribe",
           "leaveReview": "Leave review",
           "writeReview": "Write a review",
           "openMap": "Open map",
           "seeMore": "See more"
+        },
+        "subscribers": {
+          "title": "{{name}} subscribers",
+          "subtitle": "People who subscribed to this course.",
+          "empty": "No users have subscribed to this course yet."
         },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
@@ -1195,8 +1272,20 @@
         "actions": {
           "visitWebsite": "Visit website",
           "openChitalishtaProfile": "Open profile",
+          "subscribe": "Subscribe",
+          "subscribing": "Subscribing...",
+          "subscribeTooltip": "Subscribe to receive emails and notifications for {{name}}",
+          "unsubscribe": "Unsubscribe",
+          "unsubscribing": "Unsubscribing...",
+          "viewSubscribers": "See subscribers",
+          "signInToSubscribe": "Sign in to subscribe",
           "leaveReview": "Leave review",
           "openMap": "Open map"
+        },
+        "subscribers": {
+          "title": "{{name}} subscribers",
+          "subtitle": "People who subscribed to this lyceum.",
+          "empty": "No users have subscribed to this lyceum yet."
         },
         "facts": {
           "coursesCount": "{{count}} courses",

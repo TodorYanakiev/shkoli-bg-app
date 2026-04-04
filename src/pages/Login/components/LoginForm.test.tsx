@@ -44,9 +44,9 @@ type MutationResult = {
   error: ApiError | null
 }
 
-const renderForm = () =>
+const renderForm = (initialEntries: string[] = ['/bg/auth/login']) =>
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={initialEntries}>
       <LoginForm />
     </MemoryRouter>,
   )
@@ -134,6 +134,40 @@ describe('LoginForm', () => {
       tone: 'success',
     })
     expect(navigateMock).toHaveBeenCalledWith('/bg/profile', { replace: true })
+  })
+
+  it('redirects to the requested page after login when returnTo is present', async () => {
+    const mutateMock: MutationResult['mutate'] = vi.fn((_values, options) => {
+      options?.onSuccess?.({
+        access_token: 'access',
+        refresh_token: 'refresh',
+      })
+    })
+
+    useLoginMutationMock.mockReturnValue({
+      mutate: mutateMock,
+      isPending: false,
+      error: null,
+    } satisfies MutationResult)
+
+    renderForm(['/bg/auth/login?returnTo=%2Fbg%2Fshkoli%2F42'])
+
+    fireEvent.change(screen.getByLabelText('Email address'), {
+      target: { value: 'user@example.com' },
+    })
+    fireEvent.change(screen.getByLabelText('Password'), {
+      target: { value: 'password123' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Log in' }))
+
+    await waitFor(() => {
+      expect(mutateMock).toHaveBeenCalledWith(
+        { email: 'user@example.com', password: 'password123' },
+        expect.objectContaining({ onSuccess: expect.any(Function) }),
+      )
+    })
+
+    expect(navigateMock).toHaveBeenCalledWith('/bg/shkoli/42', { replace: true })
   })
 
   it('shows pending state', () => {

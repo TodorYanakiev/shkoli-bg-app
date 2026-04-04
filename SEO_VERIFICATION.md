@@ -1,20 +1,20 @@
 # SEO Verification Report
 
-Generated: 2026-02-19T14:09:14.549Z
+Generated: 2026-04-04T14:49:07.251Z
 
 ## Indexability Map
 
-- Indexable localized routes: 108
+- Indexable localized routes: 12
 - Static indexable paths: /shkoli, /lyceums, /about, /cookies, /privacy-policy, /terms-and-conditions
 - Blocked route patterns: /:locale/auth/*, /:locale/admin/*, /:locale/profile/*, /:locale/map, /:locale/shkoli/new, /:locale/shkoli/:id/edit, /:locale/lyceums/:id/edit, /:locale/not-found, /:locale/login, /:locale/register
-- Courses indexed: 27
-- Lyceums indexed: 21
+- Courses indexed: 0
+- Lyceums indexed: 0
 
 ## Sitemap and Robots Validation
 
 - robots.txt present: true
 - sitemap.xml present: true
-- Sitemap URL count: 109
+- Sitemap URL count: 13
 - Query-parameter URLs in sitemap: 0
 
 ## Rendered HTML Samples
@@ -54,34 +54,12 @@ Generated: 2026-02-19T14:09:14.549Z
 
 ### /bg/privacy-policy
 
-- h1: Политика за поверителност
+- h1: privacyPolicy.title
 
 ```html
-<title>Политика за поверителност | Школи.бг</title>
+<title>privacyPolicy.title | Школи.бг</title>
 <meta name="description" content="Find courses and lyceums in Bulgaria with Shkoli.bg.">
 <link rel="canonical" href="https://shkoli.bg/bg/privacy-policy" data-rh="true">
-<meta name="robots" content="index,follow">
-```
-
-### /bg/shkoli/23
-
-- h1: Вокална формация “Морски гласчета“
-
-```html
-<title>Вокална формация “Морски гласчета“ | Школи.бг</title>
-<meta name="description" content="Find courses and lyceums in Bulgaria with Shkoli.bg.">
-<link rel="canonical" href="https://shkoli.bg/bg/shkoli/23" data-rh="true">
-<meta name="robots" content="index,follow">
-```
-
-### /bg/lyceums/1201
-
-- h1: "Ереван 2022"
-
-```html
-<title>"Ереван 2022" | Школи.бг</title>
-<meta name="description" content="Find courses and lyceums in Bulgaria with Shkoli.bg.">
-<link rel="canonical" href="https://shkoli.bg/bg/lyceums/1201" data-rh="true">
 <meta name="robots" content="index,follow">
 ```
 

@@ -2,6 +2,10 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
+import {
+  buildLoginPathWithRedirect,
+  getStoredPostLoginRedirect,
+} from '../../../services/authRedirect'
 
 type OAuth2CallbackErrorStateProps = {
   messageKey: string
@@ -12,13 +16,20 @@ const OAuth2CallbackErrorState = ({
 }: OAuth2CallbackErrorStateProps) => {
   const { t } = useTranslation()
   const localizedPath = useLocalizedPath()
+  const storedPostLoginRedirect = getStoredPostLoginRedirect()
+  const loginPath = storedPostLoginRedirect
+    ? buildLoginPathWithRedirect(
+        localizedPath('/auth/login'),
+        storedPostLoginRedirect,
+      )
+    : localizedPath('/auth/login')
 
   return (
     <div className="mt-6 w-full max-w-xl space-y-4 rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-800 shadow-sm">
       <p className="text-sm font-semibold">{t(messageKey)}</p>
       <div className="flex flex-wrap gap-3">
         <Link
-          to={localizedPath('/auth/login')}
+          to={loginPath}
           className="inline-flex items-center rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
         >
           {t('pages.oauth2.actions.backToLogin')}

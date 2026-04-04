@@ -6,14 +6,20 @@ type CourseDetailSideNavItemsOptions = {
   t: TFunction
   courseId: number
   canEditCourse: boolean
+  canViewSubscribers: boolean
   navIconClassName: string
+  subscribersModalId: string
+  onOpenSubscribers: () => void
 }
 
 export const getCourseDetailSideNavItems = ({
   t,
   courseId,
   canEditCourse,
+  canViewSubscribers,
   navIconClassName,
+  subscribersModalId,
+  onOpenSubscribers,
 }: CourseDetailSideNavItemsOptions): SideNavItem[] => {
   const courseEditNavItem: SideNavItem = {
     key: 'course-edit',
@@ -174,8 +180,33 @@ export const getCourseDetailSideNavItems = ({
       ),
     },
   ]
+  const courseSubscribersNavItem: SideNavItem = {
+    key: 'course-subscribers',
+    label: t('pages.shkoli.detail.actions.viewSubscribers'),
+    onClick: onOpenSubscribers,
+    controlsId: subscribersModalId,
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        className={navIconClassName}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M8 12.5a3.5 3.5 0 1 0-3.5-3.5A3.5 3.5 0 0 0 8 12.5z" />
+        <path d="M4 19.5a4 4 0 0 1 8 0" />
+        <path d="M17 12a3 3 0 1 0-2.6-4.5" />
+        <path d="M14.5 18.5a3.5 3.5 0 0 1 5.5 1" />
+      </svg>
+    ),
+  }
 
-  return canEditCourse
-    ? [...baseSideNavItems, courseEditNavItem]
-    : baseSideNavItems
+  return [
+    ...baseSideNavItems,
+    ...(canViewSubscribers ? [courseSubscribersNavItem] : []),
+    ...(canEditCourse ? [courseEditNavItem] : []),
+  ]
 }

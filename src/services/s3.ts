@@ -11,19 +11,15 @@ const getS3Client = async () => {
     throw new Error('s3_config_missing')
   }
 
-  const { CognitoIdentityClient } = await import(
-    '@aws-sdk/client-cognito-identity'
-  )
   const { fromCognitoIdentityPool } = await import(
     '@aws-sdk/credential-provider-cognito-identity'
   )
   const { S3Client } = await import('@aws-sdk/client-s3')
 
-  const identityClient = new CognitoIdentityClient({
-    region: env.awsRegion,
-  })
   const credentials = fromCognitoIdentityPool({
-    client: identityClient,
+    clientConfig: {
+      region: env.awsRegion,
+    },
     identityPoolId: env.awsIdentityPoolId,
   })
 
