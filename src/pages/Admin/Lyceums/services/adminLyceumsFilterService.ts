@@ -1,3 +1,4 @@
+import { LYCEUM_TOWNS } from '../../../../constants/lyceums'
 import type { LyceumResponse } from '../../../../types/lyceums'
 import type { AdminLyceumsFilterState } from '../types'
 
@@ -36,12 +37,4 @@ export const filterAdminLyceums = (
   )
 }
 
-const hasTownValue = (value: string | undefined): value is string =>
-  typeof value === 'string' && value.trim().length > 0
-
-export const getAdminLyceumTownOptions = (lyceums: LyceumResponse[]) =>
-  Array.from(
-    new Set(
-      lyceums.map((lyceum) => lyceum.town?.trim()).filter(hasTownValue),
-    ),
-  ).sort((a, b) => a.localeCompare(b, 'bg', { sensitivity: 'base' }))
+export const getAdminLyceumTownOptions = () => [...LYCEUM_TOWNS]

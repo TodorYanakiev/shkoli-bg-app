@@ -31,6 +31,7 @@ export const AdminLyceumCreateModal = ({
   const { t } = useTranslation()
   const [submitError, setSubmitError] = useState<AppError | null>(null)
   const {
+    control,
     register,
     handleSubmit,
     setError,
@@ -148,6 +149,7 @@ export const AdminLyceumCreateModal = ({
           </p>
 
           <AdminLyceumCreateForm
+            control={control}
             register={register}
             errors={errors}
             isSubmitting={isSubmitting}

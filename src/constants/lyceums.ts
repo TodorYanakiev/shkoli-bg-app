@@ -30,12 +30,7 @@ export const LYCEUM_TOWNS = [
 
 export type LyceumTown = (typeof LYCEUM_TOWNS)[number]
 
-export const PUBLIC_LYCEUM_TOWNS = [
-  'БУРГАС',
-  'ВАРНА',
-  'ПЛОВДИВ',
-  'СОФИЯ',
-] as const
+export const PUBLIC_LYCEUM_TOWNS = LYCEUM_TOWNS
 
 export type PublicLyceumTown = (typeof PUBLIC_LYCEUM_TOWNS)[number]
 
