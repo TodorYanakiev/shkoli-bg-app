@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { LYCEUM_TOWNS } from '../../../../constants/lyceums'
 import type { LyceumResponse } from '../../../../types/lyceums'
 import {
   filterAdminLyceums,
@@ -88,13 +89,9 @@ describe('adminLyceumsFilterService', () => {
     expect(result[0]?.id).toBe(3)
   })
 
-  it('returns unique and sorted town options', () => {
-    const result = getAdminLyceumTownOptions([
-      ...lyceums,
-      { id: 4, name: 'Extra', town: 'Sofia' },
-      { id: 5, name: 'No town' },
-    ])
+  it('returns every configured town option', () => {
+    const result = getAdminLyceumTownOptions()
 
-    expect(result).toEqual(['Plovdiv', 'Sofia'])
+    expect(result).toEqual([...LYCEUM_TOWNS])
   })
 })

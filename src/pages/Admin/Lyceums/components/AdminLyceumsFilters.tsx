@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
+import TownSelect from '../../../../components/ui/TownSelect'
 import type { AdminLyceumsFilterState } from '../types'
 
 type AdminLyceumsFiltersProps = {
@@ -42,23 +43,23 @@ export const AdminLyceumsFilters = ({
             className="h-11 w-full rounded-xl border border-slate-300 px-3 text-sm text-slate-900 outline-none transition focus:border-brand/60 focus:ring-2 focus:ring-brand/20"
           />
         </label>
-        <label className="space-y-1 text-sm text-slate-700">
-          <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            {t('pages.admin.lyceums.filters.townLabel')}
-          </span>
-          <select
-            value={state.town}
-            onChange={(event) => onTownChange(event.target.value)}
-            className="h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition focus:border-brand/60 focus:ring-2 focus:ring-brand/20"
+        <div className="space-y-1 text-sm text-slate-700">
+          <label
+            htmlFor="admin-lyceums-town-filter"
+            className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
           >
-            <option value="">{t('pages.admin.lyceums.filters.townAll')}</option>
-            {townOptions.map((town) => (
-              <option key={town} value={town}>
-                {town}
-              </option>
-            ))}
-          </select>
-        </label>
+            {t('pages.admin.lyceums.filters.townLabel')}
+          </label>
+          <TownSelect
+            id="admin-lyceums-town-filter"
+            value={state.town}
+            onChange={onTownChange}
+            options={townOptions}
+            placeholder={t('pages.admin.lyceums.filters.townAll')}
+            emptyOptionLabel={t('pages.admin.lyceums.filters.townAll')}
+            variant="filter"
+          />
+        </div>
         <fieldset className="space-y-2 text-sm text-slate-700">
           <legend className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             {t('pages.admin.lyceums.filters.verificationLabel')}

@@ -49,10 +49,7 @@ export const useAdminLyceumsData = (): AdminLyceumsData => {
     clearFilters,
   } = useAdminLyceumFilters()
   const allLyceums = data ?? EMPTY_LYCEUMS
-  const townOptions = useMemo(
-    () => getAdminLyceumTownOptions(allLyceums),
-    [allLyceums],
-  )
+  const townOptions = useMemo(() => getAdminLyceumTownOptions(), [])
   const filteredLyceums = useMemo(
     () => filterAdminLyceums(allLyceums, filterState),
     [allLyceums, filterState],

@@ -14,8 +14,6 @@ type LyceumRightsForms = {
   requestForm: UseFormReturn<LyceumRightsRequestFormValues>
   verifyForm: UseFormReturn<LyceumRightsVerificationFormValues>
   selectedTown: string
-  lyceumNameValue: string
-  trimmedLyceumName: string
   shouldFetchSuggestions: boolean
 }
 
@@ -39,17 +37,12 @@ export const useLyceumRightsForms = (t: TFunction): LyceumRightsForms => {
   })
 
   const selectedTown = requestForm.watch('town') ?? ''
-  const lyceumNameValue = requestForm.watch('lyceumName') ?? ''
-  const trimmedLyceumName = lyceumNameValue.trim()
-  const shouldFetchSuggestions =
-    Boolean(selectedTown) || Boolean(trimmedLyceumName)
+  const shouldFetchSuggestions = Boolean(selectedTown.trim())
 
   return {
     requestForm,
     verifyForm,
     selectedTown,
-    lyceumNameValue,
-    trimmedLyceumName,
     shouldFetchSuggestions,
   }
 }

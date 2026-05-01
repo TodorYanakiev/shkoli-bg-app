@@ -23,11 +23,11 @@ type LyceumRightsRequestCardProps = {
   requestedLyceum: LyceumRightsRequestFormValues | null
   requestErrorKey: string | null
   shouldShowRequestError: boolean
+  selectedTown: string
   suggestionNames: string[]
   suggestionMessageKey: string | null
   suggestionMessageTone: string
-  onOpenManualPicker: () => void
-  isManualPickerDisabled: boolean
+  isSuggestionsLoading: boolean
   onStartOver: () => void
 }
 
@@ -42,19 +42,27 @@ const LyceumRightsRequestCard = ({
   requestedLyceum,
   requestErrorKey,
   shouldShowRequestError,
+  selectedTown,
   suggestionNames,
   suggestionMessageKey,
   suggestionMessageTone,
-  onOpenManualPicker,
-  isManualPickerDisabled,
+  isSuggestionsLoading,
   onStartOver,
 }: LyceumRightsRequestCardProps) => {
   const { t } = useTranslation()
   const {
     handleSubmit,
     control,
+    clearErrors,
+    setValue,
     formState: { errors },
   } = form
+  const isLyceumNameDisabled =
+    isSubmitting ||
+    isRequestLocked ||
+    !selectedTown.trim() ||
+    isSuggestionsLoading ||
+    suggestionNames.length === 0
   const requestOutcomeMessageKey = requestOutcome
     ? getRequestOutcomeMessageKey(requestOutcome)
     : null
@@ -108,14 +116,54 @@ const LyceumRightsRequestCard = ({
               {t(requestOutcomeMessageKey, { email: CONTACT_EMAIL })}
             </div>
           ) : null}
-          <button
-            type="button"
-            onClick={onOpenManualPicker}
-            disabled={isManualPickerDisabled}
-            className="inline-flex w-full items-center justify-center rounded-2xl border-2 border-brand/70 bg-gradient-to-r from-brand/20 via-amber-100/80 to-brand/10 px-5 py-3 text-sm font-extrabold text-brand-dark shadow-sm transition hover:border-brand hover:from-brand/25 hover:to-brand/20 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {t('pages.profile.lyceumRights.request.manualPicker.trigger')}
-          </button>
+          <div>
+            <label
+              htmlFor="lyceum-rights-town"
+              className="text-sm font-semibold text-slate-800"
+            >
+              {t('pages.profile.lyceumRights.request.form.townLabel')}
+            </label>
+            <Controller
+              control={control}
+              name="town"
+              render={({ field }) => (
+                <TownSelect
+                  id="lyceum-rights-town"
+                  value={field.value ?? ''}
+                  onChange={(value) => {
+                    const hasTownChanged = value !== field.value
+                    field.onChange(value)
+                    if (hasTownChanged) {
+                      setValue('lyceumName', '', {
+                        shouldDirty: true,
+                        shouldTouch: false,
+                        shouldValidate: false,
+                      })
+                      clearErrors('lyceumName')
+                    }
+                  }}
+                  options={LYCEUM_TOWNS}
+                  placeholder={t(
+                    'pages.profile.lyceumRights.request.form.townPlaceholder',
+                  )}
+                  disabled={isSubmitting || isRequestLocked}
+                  hasError={Boolean(errors.town)}
+                  describedById={
+                    errors.town ? 'lyceum-rights-town-error' : undefined
+                  }
+                />
+              )}
+            />
+            {errors.town ? (
+              <p
+                id="lyceum-rights-town-error"
+                className="mt-1 text-xs text-rose-600"
+                role="alert"
+              >
+                {errors.town.message}
+              </p>
+            ) : null}
+          </div>
           <div>
             <label
               htmlFor="lyceum-rights-name"
@@ -136,7 +184,7 @@ const LyceumRightsRequestCard = ({
                   placeholder={t(
                     'pages.profile.lyceumRights.request.form.lyceumNamePlaceholder',
                   )}
-                  disabled={isSubmitting || isRequestLocked}
+                  disabled={isLyceumNameDisabled}
                   hasError={Boolean(errors.lyceumName)}
                   describedById={
                     errors.lyceumName ? 'lyceum-rights-name-error' : undefined
@@ -156,43 +204,6 @@ const LyceumRightsRequestCard = ({
             {suggestionMessageKey ? (
               <p className={`mt-2 text-xs ${suggestionMessageTone}`}>
                 {t(suggestionMessageKey)}
-              </p>
-            ) : null}
-          </div>
-          <div>
-            <label
-              htmlFor="lyceum-rights-town"
-              className="text-sm font-semibold text-slate-800"
-            >
-              {t('pages.profile.lyceumRights.request.form.townLabel')}
-            </label>
-            <Controller
-              control={control}
-              name="town"
-              render={({ field }) => (
-                <TownSelect
-                  id="lyceum-rights-town"
-                  value={field.value ?? ''}
-                  onChange={field.onChange}
-                  options={LYCEUM_TOWNS}
-                  placeholder={t(
-                    'pages.profile.lyceumRights.request.form.townPlaceholder',
-                  )}
-                  disabled={isSubmitting || isRequestLocked}
-                  hasError={Boolean(errors.town)}
-                  describedById={
-                    errors.town ? 'lyceum-rights-town-error' : undefined
-                  }
-                />
-              )}
-            />
-            {errors.town ? (
-              <p
-                id="lyceum-rights-town-error"
-                className="mt-1 text-xs text-rose-600"
-                role="alert"
-              >
-                {errors.town.message}
               </p>
             ) : null}
           </div>

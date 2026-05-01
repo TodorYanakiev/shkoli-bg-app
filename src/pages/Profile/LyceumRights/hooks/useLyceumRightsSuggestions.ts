@@ -2,12 +2,8 @@ import { useMemo } from 'react'
 
 import { useLyceumSuggestions } from './useLyceumSuggestions'
 
-const MAX_SUGGESTIONS = 8
-
 type UseLyceumRightsSuggestionsOptions = {
   selectedTown: string
-  lyceumNameValue: string
-  trimmedLyceumName: string
   isRequestLocked: boolean
   shouldFetchSuggestions: boolean
 }
@@ -16,12 +12,11 @@ type LyceumRightsSuggestionsResult = {
   suggestionNames: string[]
   suggestionMessageKey: string | null
   suggestionMessageTone: string
+  isSuggestionsLoading: boolean
 }
 
 export const useLyceumRightsSuggestions = ({
   selectedTown,
-  lyceumNameValue,
-  trimmedLyceumName,
   isRequestLocked,
   shouldFetchSuggestions,
 }: UseLyceumRightsSuggestionsOptions): LyceumRightsSuggestionsResult => {
@@ -34,33 +29,21 @@ export const useLyceumRightsSuggestions = ({
   })
 
   const suggestionNames = useMemo(() => {
-    if (!lyceumSuggestions) {
+    if (!Array.isArray(lyceumSuggestions)) {
       return []
     }
-    const query = lyceumNameValue.trim().toLowerCase()
-    const normalizedTown = selectedTown.trim().toLowerCase()
-    const suggestionsByTown = normalizedTown
-      ? lyceumSuggestions.filter(
-          (lyceum) =>
-            (lyceum.town ?? '').trim().toLowerCase() === normalizedTown,
-        )
-      : lyceumSuggestions
-    const names = suggestionsByTown
+    const names = lyceumSuggestions
       .map((lyceum) => lyceum.name)
       .filter((name): name is string => Boolean(name))
-    const filtered = query
-      ? names.filter((name) => name.toLowerCase().includes(query))
-      : names
-    const uniqueNames = Array.from(new Set(filtered))
-    return uniqueNames.slice(0, MAX_SUGGESTIONS)
-  }, [selectedTown, lyceumSuggestions, lyceumNameValue])
+    return Array.from(new Set(names))
+  }, [lyceumSuggestions])
 
   const suggestionMessageKey = useMemo(() => {
     if (isRequestLocked) {
       return null
     }
-    const hasSelectedTown = Boolean(selectedTown)
-    if (!hasSelectedTown && !trimmedLyceumName) {
+    const hasSelectedTown = Boolean(selectedTown.trim())
+    if (!hasSelectedTown) {
       return 'pages.profile.lyceumRights.request.suggestions.selectTown'
     }
     if (isSuggestionsLoading) {
@@ -72,14 +55,10 @@ export const useLyceumRightsSuggestions = ({
     if (shouldFetchSuggestions && suggestionNames.length === 0) {
       return 'pages.profile.lyceumRights.request.suggestions.empty'
     }
-    if (!trimmedLyceumName) {
-      return 'pages.profile.lyceumRights.request.suggestions.hint'
-    }
-    return null
+    return 'pages.profile.lyceumRights.request.suggestions.hint'
   }, [
     isRequestLocked,
     selectedTown,
-    trimmedLyceumName,
     isSuggestionsLoading,
     isSuggestionsError,
     shouldFetchSuggestions,
@@ -96,5 +75,6 @@ export const useLyceumRightsSuggestions = ({
     suggestionNames,
     suggestionMessageKey,
     suggestionMessageTone,
+    isSuggestionsLoading,
   }
 }

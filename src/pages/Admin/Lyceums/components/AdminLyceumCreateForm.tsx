@@ -1,7 +1,13 @@
 import type { BaseSyntheticEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { FieldErrors, UseFormRegister } from 'react-hook-form'
+import {
+  Controller,
+  type Control,
+  type FieldErrors,
+  type UseFormRegister,
+} from 'react-hook-form'
 
+import TownSelect from '../../../../components/ui/TownSelect'
 import type { AppError } from '../../../../types/appError'
 import { LYCEUM_TOWNS } from '../../../../constants/lyceums'
 import type { AdminLyceumCreateFormValues } from '../validations/adminLyceumCreateSchema'
@@ -58,6 +64,7 @@ const getFieldErrorMessage = (
 }
 
 type AdminLyceumCreateFormProps = {
+  control: Control<AdminLyceumCreateFormValues>
   register: UseFormRegister<AdminLyceumCreateFormValues>
   errors: FieldErrors<AdminLyceumCreateFormValues>
   isSubmitting: boolean
@@ -67,6 +74,7 @@ type AdminLyceumCreateFormProps = {
 }
 
 export const AdminLyceumCreateForm = ({
+  control,
   register,
   errors,
   isSubmitting,
@@ -83,14 +91,65 @@ export const AdminLyceumCreateForm = ({
         {fieldOrder.map((fieldName) => {
           const isRequired = requiredFields.has(fieldName)
           const fieldErrorMessage = getFieldErrorMessage(errors, fieldName)
+          const fieldErrorId = fieldErrorMessage
+            ? `admin-lyceum-create-${fieldName}-error`
+            : undefined
           const inputType = getInputType(fieldName)
           const inputMode = getInputMode(fieldName)
+          const fieldClassName = `space-y-1 text-sm text-slate-700 ${
+            wideFields.has(fieldName) ? 'sm:col-span-2' : ''
+          }`
+
+          if (fieldName === 'town') {
+            return (
+              <div key={fieldName} className={fieldClassName}>
+                <label
+                  htmlFor="admin-lyceum-create-town"
+                  className="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+                >
+                  {t(`pages.admin.lyceums.create.fields.${fieldName}`)}
+                  {isRequired ? (
+                    <span className="ml-1 text-rose-600" aria-hidden="true">
+                      *
+                    </span>
+                  ) : null}
+                </label>
+                <Controller
+                  control={control}
+                  name="town"
+                  render={({ field }) => (
+                    <TownSelect
+                      id="admin-lyceum-create-town"
+                      value={field.value ?? ''}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      options={LYCEUM_TOWNS}
+                      placeholder={t(
+                        'pages.admin.lyceums.create.selectPlaceholder',
+                      )}
+                      disabled={isSubmitting}
+                      hasError={Boolean(fieldErrorMessage)}
+                      describedById={fieldErrorId}
+                    />
+                  )}
+                />
+                {fieldErrorMessage ? (
+                  <p
+                    id={fieldErrorId}
+                    className="text-xs text-rose-600"
+                    role="alert"
+                  >
+                    {fieldErrorMessage}
+                  </p>
+                ) : null}
+              </div>
+            )
+          }
+
           return (
             <label
               key={fieldName}
-              className={`space-y-1 text-sm text-slate-700 ${
-                wideFields.has(fieldName) ? 'sm:col-span-2' : ''
-              }`}
+              className={fieldClassName}
             >
               <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 {t(`pages.admin.lyceums.create.fields.${fieldName}`)}
@@ -139,7 +198,11 @@ export const AdminLyceumCreateForm = ({
                 />
               )}
               {fieldErrorMessage ? (
-                <p className="text-xs text-rose-600" role="alert">
+                <p
+                  id={fieldErrorId}
+                  className="text-xs text-rose-600"
+                  role="alert"
+                >
                   {fieldErrorMessage}
                 </p>
               ) : null}

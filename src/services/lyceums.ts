@@ -93,6 +93,14 @@ export const filterLyceums = async (params: LyceumFilterParams) => {
   return response.data;
 };
 
+export const getLyceumsByTown = async (town: string) => {
+  const response = await httpClient.get<LyceumResponse[]>(
+    "/api/v1/lyceums/by-town",
+    { params: { town } },
+  );
+  return response.data;
+};
+
 export const getLyceumCourses = async (lyceumId: number) => {
   const response = await httpClient.get<CourseResponse[]>(
     `/api/v1/lyceums/${lyceumId}/courses`,

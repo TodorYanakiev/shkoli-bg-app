@@ -692,7 +692,7 @@
         "backLink": "Back to profile",
         "request": {
           "title": "Request verification email",
-          "description": "Use the registered lyceum name and town so we can email the official address.",
+          "description": "Choose the town first, then select the registered lyceum so we can email the official address.",
           "contact": "Having trouble? Contact us at {{email}}.",
           "contactNotFound": "Can't find the lyceum? Contact us at {{email}}.",
           "form": {
@@ -704,11 +704,11 @@
             "submitting": "Sending..."
           },
           "suggestions": {
-            "selectTown": "Start typing to see suggestions, or select a town to narrow results.",
+            "selectTown": "Select a town first to load lyceums.",
             "loading": "Loading lyceum suggestions...",
             "error": "Unable to load lyceum suggestions.",
             "empty": "No lyceums found for the current selection.",
-            "hint": "Start typing to see suggestions."
+            "hint": "Select your lyceum from the list."
           },
           "manualPicker": {
             "trigger": "Pick lyceum name manually",
