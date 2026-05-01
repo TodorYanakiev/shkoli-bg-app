@@ -196,100 +196,32 @@ describe('LyceumRightsPage (request flow)', () => {
 
     renderPage()
 
+    const lyceumNameSelect = screen.getByLabelText(
+      'Lyceum name',
+    ) as HTMLSelectElement
+    expect(lyceumNameSelect.disabled).toBe(true)
+
     fireEvent.change(screen.getByLabelText('Town'), {
       target: { value: 'Sofia' },
     })
-    const lyceumNameInput = screen.getByLabelText(
-      'Lyceum name',
-    ) as HTMLInputElement
-    fireEvent.focus(lyceumNameInput)
-
-    const suggestionOption = await screen.findByRole('option', {
-      name: 'Community Center',
-    })
-    const suggestionButton = suggestionOption.querySelector('button')
-    if (!suggestionButton) {
-      throw new Error('Expected suggestion option button to exist')
-    }
-    fireEvent.click(suggestionButton)
-
-    expect(lyceumNameInput.value).toBe('Community Center')
-  })
-
-  it('fills and submits when selecting a lyceum from the manual picker modal', async () => {
-    useLyceumSuggestionsMock.mockReturnValue({
-      data: [
-        { id: 1, name: 'Community Center', town: 'Sofia' },
-        { id: 2, name: 'Readers Club', town: 'Plovdiv' },
-      ],
-      isLoading: false,
-      isError: false,
-      refetch: vi.fn(),
-    })
-
-    renderPage()
-
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Pick lyceum name manually' }),
-    )
-
-    const selectedLyceumButton = await screen.findByRole('button', {
-      name: /Community Center/i,
-    })
-    fireEvent.click(selectedLyceumButton)
 
     await waitFor(() => {
-      expect(requestMutationState.mutate).toHaveBeenCalledWith(
-        { lyceumName: 'Community Center', town: 'Sofia' },
-        expect.objectContaining({
-          onSuccess: expect.any(Function),
-          onError: expect.any(Function),
-        }),
-      )
+      expect(lyceumNameSelect.disabled).toBe(false)
+    })
+    fireEvent.change(lyceumNameSelect, {
+      target: { value: 'Community Center' },
     })
 
-    expect((screen.getByLabelText('Lyceum name') as HTMLInputElement).value).toBe(
-      'Community Center',
-    )
-    expect((screen.getByLabelText('Town') as HTMLSelectElement).value).toBe(
-      'Sofia',
-    )
-  })
-
-  it('expands and collapses lyceums per town in the manual picker', async () => {
-    useLyceumSuggestionsMock.mockReturnValue({
-      data: [
-        { id: 1, name: 'Community Center', town: 'Sofia' },
-        { id: 2, name: 'Readers Club', town: 'Plovdiv' },
-      ],
-      isLoading: false,
-      isError: false,
-      refetch: vi.fn(),
-    })
-
-    renderPage()
-
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Pick lyceum name manually' }),
-    )
-
-    const townToggle = await screen.findByRole('button', { name: /^Sofia$/i })
-    expect(
-      screen.queryByRole('button', { name: /Community Center/i }),
-    ).toBeDefined()
-
-    fireEvent.click(townToggle)
-    expect(
-      screen.queryByRole('button', { name: /Community Center/i }),
-    ).toBeNull()
-
-    fireEvent.click(townToggle)
-    expect(
-      await screen.findByRole('button', { name: /Community Center/i }),
-    ).toBeDefined()
+    expect(lyceumNameSelect.value).toBe('Community Center')
   })
 
   it('submits a request and renders the email sent state', async () => {
+    useLyceumSuggestionsMock.mockReturnValue({
+      data: [{ id: 1, name: 'Community Center', town: 'Sofia' }],
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    })
     const mutateMock: RequestMutationResult['mutate'] = (_, options) => {
       requestMutationState.error = null
       options?.onSuccess?.(
@@ -300,11 +232,11 @@ describe('LyceumRightsPage (request flow)', () => {
 
     renderPage()
 
-    fireEvent.change(screen.getByLabelText('Lyceum name'), {
-      target: { value: 'Community Center' },
-    })
     fireEvent.change(screen.getByLabelText('Town'), {
       target: { value: 'Sofia' },
+    })
+    fireEvent.change(screen.getByLabelText('Lyceum name'), {
+      target: { value: 'Community Center' },
     })
     fireEvent.click(
       screen.getByRole('button', { name: 'Send verification email' }),
@@ -335,6 +267,12 @@ describe('LyceumRightsPage (request flow)', () => {
   })
 
   it('shows the already-admin outcome and disables the request form', async () => {
+    useLyceumSuggestionsMock.mockReturnValue({
+      data: [{ id: 1, name: 'Community Center', town: 'Sofia' }],
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    })
     const error: ApiError = { status: 409, kind: 'unknown' }
     const mutateMock: RequestMutationResult['mutate'] = (_, options) => {
       requestMutationState.error = error
@@ -344,11 +282,11 @@ describe('LyceumRightsPage (request flow)', () => {
 
     renderPage()
 
-    fireEvent.change(screen.getByLabelText('Lyceum name'), {
-      target: { value: 'Community Center' },
-    })
     fireEvent.change(screen.getByLabelText('Town'), {
       target: { value: 'Sofia' },
+    })
+    fireEvent.change(screen.getByLabelText('Lyceum name'), {
+      target: { value: 'Community Center' },
     })
     fireEvent.click(
       screen.getByRole('button', { name: 'Send verification email' }),
