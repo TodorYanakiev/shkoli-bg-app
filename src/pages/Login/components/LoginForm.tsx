@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import PasswordVisibilityToggle from '../../../components/form/PasswordVisibilityToggle'
 import GoogleOAuthButton from '../../../components/ui/GoogleOAuthButton'
@@ -10,6 +10,7 @@ import { useLoginMutation } from '../hooks/useLoginMutation'
 import { useToast } from '../../../components/feedback/ToastContext'
 import { clearStoredPostLoginRedirect, getPostLoginRedirectFromSearchParams } from '../../../services/authRedirect'
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate'
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import type { ApiError } from '../../../types/api'
 import { setTokens } from '../../../utils/authStorage'
 import {
@@ -38,6 +39,7 @@ const getLoginErrorMessage = (error: ApiError | null, t: (key: string) => string
 const LoginForm = () => {
   const { t } = useTranslation()
   const navigate = useLocalizedNavigate()
+  const localizedPath = useLocalizedPath()
   const routerNavigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { showToast } = useToast()
@@ -135,12 +137,20 @@ const LoginForm = () => {
         ) : null}
       </div>
       <div>
-        <label
-          htmlFor="login-password"
-          className="text-sm font-semibold text-slate-800"
-        >
-          {t('pages.login.form.passwordLabel')}
-        </label>
+        <div className="flex items-center justify-between gap-3">
+          <label
+            htmlFor="login-password"
+            className="text-sm font-semibold text-slate-800"
+          >
+            {t('pages.login.form.passwordLabel')}
+          </label>
+          <Link
+            to={localizedPath('/auth/forgot-password')}
+            className="text-xs font-semibold text-brand"
+          >
+            {t('pages.login.form.forgotPasswordLink')}
+          </Link>
+        </div>
         <div className="relative mt-1">
           <input
             data-testid="login-password"
