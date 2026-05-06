@@ -9,6 +9,7 @@ type LyceumDetailSideNavItemsOptions = {
   canInviteLecturer: boolean;
   canEditLyceum: boolean;
   canViewSubscribers: boolean;
+  canViewStatistics: boolean;
   navIconClassName: string;
   inviteModalId: string;
   subscribersModalId: string;
@@ -23,6 +24,7 @@ export const getLyceumDetailSideNavItems = ({
   canInviteLecturer,
   canEditLyceum,
   canViewSubscribers,
+  canViewStatistics,
   navIconClassName,
   inviteModalId,
   subscribersModalId,
@@ -217,6 +219,32 @@ export const getLyceumDetailSideNavItems = ({
                 <path d="M4 19.5a4 4 0 0 1 8 0" />
                 <path d="M17 12a3 3 0 1 0-2.6-4.5" />
                 <path d="M14.5 18.5a3.5 3.5 0 0 1 5.5 1" />
+              </svg>
+            ),
+          },
+        ]
+      : []),
+    ...(canViewStatistics
+      ? [
+          {
+            key: "lyceum-statistics",
+            label: t("pages.lyceums.detail.sideNav.statistics"),
+            href: "#lyceum-statistics",
+            icon: (
+              <svg
+                viewBox="0 0 24 24"
+                className={navIconClassName}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 19.5h16" />
+                <path d="M7 16v-5" />
+                <path d="M12 16V6.5" />
+                <path d="M17 16V9" />
               </svg>
             ),
           },

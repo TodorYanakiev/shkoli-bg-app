@@ -45,4 +45,5 @@ export type CourseDetailTabKey =
   | 'schedule'
   | 'gallery'
   | 'lecturers'
+  | 'statistics'
   | 'reviews'

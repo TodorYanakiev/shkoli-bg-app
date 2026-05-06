@@ -38,6 +38,7 @@ type CourseDetailContentProps = {
   setIsSideNavExpanded: (value: boolean | ((prev: boolean) => boolean)) => void
   canEditCourse: boolean
   canViewSubscribers: boolean
+  canViewStatistics: boolean
   isDeletingCourse: boolean
   onDeleteCourse: () => void
   courseName: string
@@ -91,6 +92,7 @@ export const CourseDetailContent = ({
   setIsSideNavExpanded,
   canEditCourse,
   canViewSubscribers,
+  canViewStatistics,
   isDeletingCourse,
   onDeleteCourse,
   courseName,
@@ -247,6 +249,7 @@ export const CourseDetailContent = ({
         <CourseDetailTabs
           activeTab={activeTab}
           onSelectTab={onSelectTab}
+          canViewStatistics={canViewStatistics}
           t={t}
         />
         <div className="px-8 py-7">
@@ -271,6 +274,7 @@ export const CourseDetailContent = ({
             lecturers={lecturers}
             isLecturersLoading={isLecturersLoading}
             lecturersErrorMessage={lecturersErrorMessage}
+            canViewStatistics={canViewStatistics}
             onOpenLecturerReviews={onOpenLecturerReviews}
             reviewEditorTriggerId={reviewEditorTriggerId}
             t={t}

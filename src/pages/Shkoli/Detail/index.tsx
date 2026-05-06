@@ -84,7 +84,10 @@ const CourseDetailPage = () => {
     sideNavContainerClassName,
     sideNavListClassName,
   } = useCourseDetailLayout({ hasCourse: Boolean(course) })
-  const { activeTab, onSelectTab } = useCourseDetailTabs()
+  const canViewStatistics = canEditCourse
+  const { activeTab, onSelectTab } = useCourseDetailTabs({
+    canViewStatistics,
+  })
   const {
     selectedLecturer,
     isOpen: isLecturerReviewsModalOpen,
@@ -104,6 +107,7 @@ const CourseDetailPage = () => {
         courseId,
         canEditCourse,
         canViewSubscribers: canEditCourse,
+        canViewStatistics,
         navIconClassName,
         subscribersModalId,
         onOpenSubscribers: openSubscribersModal,
@@ -112,6 +116,7 @@ const CourseDetailPage = () => {
       t,
       courseId,
       canEditCourse,
+      canViewStatistics,
       navIconClassName,
       subscribersModalId,
       openSubscribersModal,
@@ -221,6 +226,7 @@ const CourseDetailPage = () => {
           setIsSideNavExpanded={setIsSideNavExpanded}
           canEditCourse={canEditCourse}
           canViewSubscribers={canEditCourse}
+          canViewStatistics={canViewStatistics}
           isDeletingCourse={isDeletingCourse}
           onDeleteCourse={() => {
             void onDeleteCourse()

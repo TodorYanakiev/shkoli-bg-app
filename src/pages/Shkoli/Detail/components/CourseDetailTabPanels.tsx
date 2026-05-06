@@ -14,6 +14,7 @@ import { CourseDetailGallerySection } from './CourseDetailGallerySection'
 import { CourseDetailLecturersSection } from './CourseDetailLecturersSection'
 import { CourseDetailOverviewTab } from './CourseDetailOverviewTab'
 import { CourseDetailScheduleSection } from './CourseDetailScheduleSection'
+import { CourseStatisticsSection } from './CourseStatisticsSection'
 
 type CourseDetailTabPanelsProps = {
   activeTab: CourseDetailTabKey
@@ -36,6 +37,7 @@ type CourseDetailTabPanelsProps = {
   lecturers?: UserResponse[]
   isLecturersLoading: boolean
   lecturersErrorMessage: string | null
+  canViewStatistics: boolean
   onOpenLecturerReviews: (lecturer: UserResponse) => void
   reviewEditorTriggerId: string
   t: TFunction
@@ -62,6 +64,7 @@ export const CourseDetailTabPanels = ({
   lecturers,
   isLecturersLoading,
   lecturersErrorMessage,
+  canViewStatistics,
   onOpenLecturerReviews,
   reviewEditorTriggerId,
   t,
@@ -107,6 +110,9 @@ export const CourseDetailTabPanels = ({
         onOpenLecturerReviews={onOpenLecturerReviews}
         t={t}
       />
+    ) : null}
+    {activeTab === 'statistics' && canViewStatistics ? (
+      <CourseStatisticsSection courseId={course.id} />
     ) : null}
     {activeTab === 'reviews' ? (
       <div>

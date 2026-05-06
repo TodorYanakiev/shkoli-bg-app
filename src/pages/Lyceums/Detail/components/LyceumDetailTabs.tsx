@@ -5,6 +5,7 @@ import type { LyceumDetailTabKey } from '../types'
 type LyceumDetailTabsProps = {
   activeTab: LyceumDetailTabKey
   onSelectTab: (tab: LyceumDetailTabKey) => void
+  canViewStatistics: boolean
   t: TFunction
 }
 
@@ -16,6 +17,7 @@ type LyceumDetailTabItem = {
 export const LyceumDetailTabs = ({
   activeTab,
   onSelectTab,
+  canViewStatistics,
   t,
 }: LyceumDetailTabsProps) => {
   const tabs: LyceumDetailTabItem[] = [
@@ -23,6 +25,14 @@ export const LyceumDetailTabs = ({
     { key: 'courses', label: t('pages.lyceums.detail.sections.courses') },
     { key: 'gallery', label: t('pages.lyceums.detail.sections.gallery') },
     { key: 'lecturers', label: t('pages.lyceums.detail.sections.lecturers') },
+    ...(canViewStatistics
+      ? [
+          {
+            key: 'statistics' as const,
+            label: t('pages.lyceums.detail.sections.statistics'),
+          },
+        ]
+      : []),
     { key: 'reviews', label: t('pages.lyceums.detail.sideNav.reviews') },
   ]
 

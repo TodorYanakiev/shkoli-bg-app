@@ -7,6 +7,7 @@ type CourseDetailSideNavItemsOptions = {
   courseId: number
   canEditCourse: boolean
   canViewSubscribers: boolean
+  canViewStatistics: boolean
   navIconClassName: string
   subscribersModalId: string
   onOpenSubscribers: () => void
@@ -17,6 +18,7 @@ export const getCourseDetailSideNavItems = ({
   courseId,
   canEditCourse,
   canViewSubscribers,
+  canViewStatistics,
   navIconClassName,
   subscribersModalId,
   onOpenSubscribers,
@@ -203,9 +205,32 @@ export const getCourseDetailSideNavItems = ({
       </svg>
     ),
   }
+  const courseStatisticsNavItem: SideNavItem = {
+    key: 'course-statistics',
+    label: t('pages.shkoli.detail.sideNav.statistics'),
+    href: '#course-statistics',
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        className={navIconClassName}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 19.5h16" />
+        <path d="M7 16v-5" />
+        <path d="M12 16V6.5" />
+        <path d="M17 16V9" />
+      </svg>
+    ),
+  }
 
   return [
     ...baseSideNavItems,
+    ...(canViewStatistics ? [courseStatisticsNavItem] : []),
     ...(canViewSubscribers ? [courseSubscribersNavItem] : []),
     ...(canEditCourse ? [courseEditNavItem] : []),
   ]
