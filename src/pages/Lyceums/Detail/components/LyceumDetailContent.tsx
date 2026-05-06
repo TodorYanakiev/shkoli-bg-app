@@ -6,6 +6,7 @@ import type { CourseResponse } from '../../../../types/courses'
 import type { LyceumImageResponse, LyceumResponse } from '../../../../types/lyceums'
 import type { UserResponse } from '../../../../types/users'
 import { useLoginRedirectToCurrentPage } from '../../../../hooks/useLoginRedirectToCurrentPage'
+import { useShareAction } from '../../../../hooks/useShareAction'
 import { useLyceumReviews } from '../../../Reviews/hooks/useLyceumReviews'
 import { useLyceumSubscriptionActions } from '../hooks/useLyceumSubscriptionActions'
 import { useLyceumDetailReviewActions } from '../hooks/useLyceumDetailReviewActions'
@@ -105,6 +106,10 @@ export const LyceumDetailContent = ({
     onToggleSubscription,
   } = useLyceumSubscriptionActions(lyceumId)
   const redirectToLogin = useLoginRedirectToCurrentPage()
+  const { isSharing, onShare } = useShareAction({
+    entityType: 'lyceum',
+    entityId: lyceum.id,
+  })
   const coursesCount = courses?.length ?? 0
   const lecturersCount = lecturers?.length ?? 0
   const locationValue = heroLocation || fallbackValue
@@ -189,8 +194,12 @@ export const LyceumDetailContent = ({
             subscriptionErrorMessage={subscriptionErrorMessage}
             subscriptionTooltip={subscriptionTooltip}
             canViewSubscribers={canViewSubscribers}
+            isSharePending={isSharing}
             onSubscriptionAction={() => {
               void onToggleSubscription()
+            }}
+            onShare={() => {
+              void onShare()
             }}
             onOpenSubscribers={onOpenSubscribers}
             onOpenReviews={handleOpenReviewAction}

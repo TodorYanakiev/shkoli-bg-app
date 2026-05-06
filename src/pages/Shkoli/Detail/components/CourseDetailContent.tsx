@@ -11,6 +11,7 @@ import type { BreadcrumbItem } from '../../../../components/ui/Breadcrumbs'
 import type { LyceumResponse } from '../../../../types/lyceums'
 import type { UserResponse } from '../../../../types/users'
 import { useLoginRedirectToCurrentPage } from '../../../../hooks/useLoginRedirectToCurrentPage'
+import { useShareAction } from '../../../../hooks/useShareAction'
 import { useCourseReviews } from '../../../Reviews/hooks/useCourseReviews'
 import type { SideNavItem, CourseDetailTabKey } from '../types'
 import { useCourseDetailDecisionValues } from '../hooks/useCourseDetailDecisionValues'
@@ -141,6 +142,10 @@ export const CourseDetailContent = ({
     onToggleSubscription,
   } = useCourseSubscriptionActions(course.id)
   const redirectToLogin = useLoginRedirectToCurrentPage()
+  const { isSharing, onShare } = useShareAction({
+    entityType: 'course',
+    entityId: course.id,
+  })
 
   const { scheduleDuration, scheduleFactValue } =
     useCourseDetailDecisionValues({
@@ -238,8 +243,12 @@ export const CourseDetailContent = ({
             subscriptionErrorMessage={subscriptionErrorMessage}
             subscriptionTooltip={subscriptionTooltip}
             canViewSubscribers={canViewSubscribers}
+            isSharePending={isSharing}
             onSubscriptionAction={() => {
               void onToggleSubscription()
+            }}
+            onShare={() => {
+              void onShare()
             }}
             onOpenSubscribers={onOpenSubscribers}
             onOpenReviews={handleOpenReviewAction}
