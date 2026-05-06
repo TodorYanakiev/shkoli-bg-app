@@ -31,6 +31,7 @@ const AdminCoursesPage = lazy(() => import('../pages/Admin/Courses'))
 const AdminLyceumsPage = lazy(() => import('../pages/Admin/Lyceums'))
 const AdminUsersPage = lazy(() => import('../pages/Admin/Users'))
 const CookiesPage = lazy(() => import('../pages/Cookies'))
+const ForgotPasswordPage = lazy(() => import('../pages/ForgotPassword'))
 const LoginPage = lazy(() => import('../pages/Login'))
 const LyceumsPage = lazy(() => import('../pages/Lyceums'))
 const LyceumDetailPage = lazy(() => import('../pages/Lyceums/Detail'))
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="login" replace /> },
           { path: 'login', element: withSuspense(<LoginPage />) },
+          {
+            path: 'forgot-password',
+            element: withSuspense(<ForgotPasswordPage />),
+          },
           { path: 'register', element: withSuspense(<RegisterPage />) },
           { path: 'oauth2/callback', element: withSuspense(<OAuth2Page />) },
           { path: '*', element: <Navigate to="login" replace /> },

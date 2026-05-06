@@ -3,7 +3,10 @@ import { env } from './env'
 import type {
   AuthenticationRequest,
   AuthenticationResponse,
+  ForgotPasswordRequest,
+  PasswordResetCodeVerificationRequest,
   RegisterRequest,
+  ResetForgottenPasswordRequest,
 } from '../types/auth'
 
 export const authenticate = async (payload: AuthenticationRequest) => {
@@ -17,6 +20,36 @@ export const authenticate = async (payload: AuthenticationRequest) => {
 export const register = async (payload: RegisterRequest) => {
   const response = await httpClient.post<AuthenticationResponse>(
     '/api/v1/auth/register',
+    payload,
+  )
+  return response.data
+}
+
+export const requestPasswordReset = async (
+  payload: ForgotPasswordRequest,
+) => {
+  const response = await httpClient.post<string>(
+    '/api/v1/auth/forgot-password',
+    payload,
+  )
+  return response.data
+}
+
+export const verifyPasswordResetCode = async (
+  payload: PasswordResetCodeVerificationRequest,
+) => {
+  const response = await httpClient.post<string>(
+    '/api/v1/auth/forgot-password/verify',
+    payload,
+  )
+  return response.data
+}
+
+export const resetForgottenPassword = async (
+  payload: ResetForgottenPasswordRequest,
+) => {
+  const response = await httpClient.post<string>(
+    '/api/v1/auth/forgot-password/reset',
     payload,
   )
   return response.data

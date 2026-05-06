@@ -155,6 +155,7 @@
     "usernameRange": "Username must be between 3 and 50 characters.",
     "passwordMin": "Password must be at least 8 characters.",
     "passwordMatch": "Passwords do not match.",
+    "verificationCode": "Enter the 6-digit verification code.",
     "acceptLegalDocuments": "You must accept the Privacy Policy and Terms & Conditions.",
     "invalidOption": "Select a valid option.",
     "number": "Enter a valid number.",
@@ -290,7 +291,31 @@
       "oauth2InvalidCallbackData": "Google sign-in response is invalid.",
       "oauth2RegistrationExpired": "Your Google registration session expired. Please start again.",
       "oauth2CompleteInvalid": "Please check the profile details and try again.",
-      "oauth2CompleteFailed": "We couldn't complete your Google registration. Try again."
+      "oauth2CompleteFailed": "We couldn't complete your Google registration. Try again.",
+      "passwordResetRequestFailed": "We couldn't send the verification code. Try again.",
+      "passwordResetVerifyFailed": "We couldn't verify the code. Try again.",
+      "passwordResetFailed": "We couldn't reset your password. Try again.",
+      "passwordReset": {
+        "requestInvalid": "Check the email address and try again.",
+        "requestConflict": "We couldn't create a new reset code because of a data conflict. Try again.",
+        "verifyInvalid": "Check the verification code and try again.",
+        "resetInvalid": "Check the code and password fields, then try again.",
+        "userDisabled": "This account is disabled.",
+        "server": "Internal server error. Please try again.",
+        "messages": {
+          "emailRequired": "Email must not be blank.",
+          "emailInvalid": "Enter a valid email address.",
+          "codeRequired": "Verification code must not be blank.",
+          "invalidCode": "Invalid verification code.",
+          "expiredCode": "Verification code has expired.",
+          "userDisabled": "This account is disabled.",
+          "internalServerError": "Internal server error. Please try again.",
+          "newPasswordRequired": "New password must not be blank.",
+          "newPasswordMin": "New password must be at least 8 characters long.",
+          "confirmationPasswordRequired": "Confirmation password must not be blank.",
+          "passwordsDoNotMatch": "Passwords do not match."
+        }
+      }
     },
     "subscriptions": {
       "authRequired": "You need to sign in to manage subscriptions."
@@ -321,7 +346,10 @@
       "loginSuccess": "Welcome back! You are signed in.",
       "logoutSuccess": "You have been logged out.",
       "registerSuccess": "Account created. You're signed in.",
-      "oauth2Success": "Google sign-in completed successfully."
+      "oauth2Success": "Google sign-in completed successfully.",
+      "passwordResetCodeSent": "Verification code sent.",
+      "passwordResetCodeVerified": "Verification code confirmed.",
+      "passwordResetSuccess": "Password reset successfully."
     },
     "courses": {
       "createSuccess": "Course created successfully.",
@@ -514,11 +542,47 @@
         "emailPlaceholder": "you@example.com",
         "passwordLabel": "Password",
         "passwordPlaceholder": "Enter your password",
+        "forgotPasswordLink": "Forgot password?",
         "submit": "Log in",
         "submitting": "Signing in...",
         "errors": {
           "invalidCredentials": "Incorrect email or password."
         }
+      }
+    },
+    "forgotPassword": {
+      "title": "Reset password",
+      "subtitle": "Use the verification code sent to your email to create a new password.",
+      "backToLogin": "Back to login",
+      "useDifferentEmail": "Use different email",
+      "steps": {
+        "label": "Password reset steps",
+        "step": "Step {{number}}",
+        "request": "Email",
+        "verify": "Code",
+        "reset": "Password"
+      },
+      "request": {
+        "emailLabel": "Email address",
+        "emailPlaceholder": "you@example.com",
+        "submit": "Send code",
+        "submitting": "Sending code..."
+      },
+      "verify": {
+        "emailSent": "If an account exists for {{email}}, a 6-digit code was sent. The code is valid for 15 minutes.",
+        "codeLabel": "Verification code",
+        "codePlaceholder": "123456",
+        "submit": "Confirm code",
+        "submitting": "Confirming..."
+      },
+      "reset": {
+        "codeConfirmed": "Code confirmed for {{email}}. Create your new password.",
+        "newPasswordLabel": "New password",
+        "newPasswordPlaceholder": "Create a new password",
+        "confirmationPasswordLabel": "Confirm new password",
+        "confirmationPasswordPlaceholder": "Repeat the new password",
+        "submit": "Reset password",
+        "submitting": "Resetting password..."
       }
     },
     "register": {

@@ -155,6 +155,7 @@
     "usernameRange": "Потребителското име трябва да е между 3 и 50 символа.",
     "passwordMin": "Паролата трябва да е поне 8 символа.",
     "passwordMatch": "Паролите не съвпадат.",
+    "verificationCode": "Въведете 6-цифрения код за потвърждение.",
     "acceptLegalDocuments": "Трябва да приемете Политиката за поверителност и Общите условия.",
     "invalidOption": "Изберете валидна опция.",
     "number": "Въведете валидно число.",
@@ -279,7 +280,31 @@
       "oauth2InvalidCallbackData": "Невалиден отговор от Google.",
       "oauth2RegistrationExpired": "Сесията за регистрация с Google е изтекла. Започнете отново.",
       "oauth2CompleteInvalid": "Проверете данните в профила и опитайте отново.",
-      "oauth2CompleteFailed": "Не успяхме да завършим регистрацията с Google. Опитайте отново."
+      "oauth2CompleteFailed": "Не успяхме да завършим регистрацията с Google. Опитайте отново.",
+      "passwordResetRequestFailed": "Не успяхме да изпратим кода за потвърждение. Опитайте отново.",
+      "passwordResetVerifyFailed": "Не успяхме да потвърдим кода. Опитайте отново.",
+      "passwordResetFailed": "Не успяхме да нулираме паролата ви. Опитайте отново.",
+      "passwordReset": {
+        "requestInvalid": "Проверете имейл адреса и опитайте отново.",
+        "requestConflict": "Не успяхме да създадем нов код поради конфликт в данните. Опитайте отново.",
+        "verifyInvalid": "Проверете кода за потвърждение и опитайте отново.",
+        "resetInvalid": "Проверете кода и полетата за парола, след което опитайте отново.",
+        "userDisabled": "Този профил е деактивиран.",
+        "server": "Вътрешна сървърна грешка. Опитайте отново.",
+        "messages": {
+          "emailRequired": "Имейлът не може да е празен.",
+          "emailInvalid": "Въведете валиден имейл адрес.",
+          "codeRequired": "Кодът за потвърждение не може да е празен.",
+          "invalidCode": "Невалиден код за потвърждение.",
+          "expiredCode": "Кодът за потвърждение е изтекъл.",
+          "userDisabled": "Този профил е деактивиран.",
+          "internalServerError": "Вътрешна сървърна грешка. Опитайте отново.",
+          "newPasswordRequired": "Новата парола не може да е празна.",
+          "newPasswordMin": "Новата парола трябва да е поне 8 символа.",
+          "confirmationPasswordRequired": "Потвърждението на паролата не може да е празно.",
+          "passwordsDoNotMatch": "Паролите не съвпадат."
+        }
+      }
     },
     "subscriptions": {
       "authRequired": "Трябва да влезете, за да управлявате абонаментите си."
@@ -321,7 +346,10 @@
       "loginSuccess": "Добре дошли отново! Влязохте успешно.",
       "logoutSuccess": "Излязохте от профила си.",
       "registerSuccess": "Профилът е създаден. Влязохте успешно.",
-      "oauth2Success": "Входът с Google завърши успешно."
+      "oauth2Success": "Входът с Google завърши успешно.",
+      "passwordResetCodeSent": "Кодът за потвърждение е изпратен.",
+      "passwordResetCodeVerified": "Кодът за потвърждение е потвърден.",
+      "passwordResetSuccess": "Паролата е нулирана успешно."
     },
     "courses": {
       "createSuccess": "Школата е създадена успешно.",
@@ -514,11 +542,47 @@
         "emailPlaceholder": "you@example.com",
         "passwordLabel": "Парола",
         "passwordPlaceholder": "Въведете паролата си",
+        "forgotPasswordLink": "Забравена парола?",
         "submit": "Вход",
         "submitting": "Влизане...",
         "errors": {
           "invalidCredentials": "Невалиден имейл или парола."
         }
+      }
+    },
+    "forgotPassword": {
+      "title": "Нулиране на парола",
+      "subtitle": "Използвайте кода за потвърждение от имейла си, за да създадете нова парола.",
+      "backToLogin": "Към вход",
+      "useDifferentEmail": "Използвай друг имейл",
+      "steps": {
+        "label": "Стъпки за нулиране на парола",
+        "step": "Стъпка {{number}}",
+        "request": "Имейл",
+        "verify": "Код",
+        "reset": "Парола"
+      },
+      "request": {
+        "emailLabel": "Имейл адрес",
+        "emailPlaceholder": "you@example.com",
+        "submit": "Изпрати код",
+        "submitting": "Изпращане..."
+      },
+      "verify": {
+        "emailSent": "Ако има профил за {{email}}, изпратихме 6-цифрен код. Кодът е валиден 15 минути.",
+        "codeLabel": "Код за потвърждение",
+        "codePlaceholder": "123456",
+        "submit": "Потвърди кода",
+        "submitting": "Потвърждаване..."
+      },
+      "reset": {
+        "codeConfirmed": "Кодът за {{email}} е потвърден. Създайте новата си парола.",
+        "newPasswordLabel": "Нова парола",
+        "newPasswordPlaceholder": "Създайте нова парола",
+        "confirmationPasswordLabel": "Потвърди новата парола",
+        "confirmationPasswordPlaceholder": "Повторете новата парола",
+        "submit": "Нулирай паролата",
+        "submitting": "Нулиране..."
       }
     },
     "register": {
