@@ -33,41 +33,23 @@ const ShkoliPage = () => {
 
   const form = useCourseFilterForm({ t, defaultValues: formDefaults })
   const onSubmit = form.handleSubmit(applyFilters)
-  const [isExpanded, setIsExpanded] = useState(
-    Boolean(
-      state.sort ||
-        state.minPrice != null ||
-        state.maxPrice != null ||
-        state.town ||
-        (state.dayOfWeek?.length ?? 0) > 0 ||
-        state.startTimeFrom ||
-        state.startTimeTo,
-    ),
+  const hasAdvancedFilters = Boolean(
+    state.sort ||
+      state.minPrice != null ||
+      state.maxPrice != null ||
+      (state.dayOfWeek?.length ?? 0) > 0 ||
+      state.startTimeFrom ||
+      state.startTimeTo,
   )
+  const [isExpanded, setIsExpanded] = useState(hasAdvancedFilters)
 
   useShkoliPageBackground()
 
   useEffect(() => {
-    if (
-      state.sort ||
-      state.minPrice != null ||
-      state.maxPrice != null ||
-      state.town ||
-      (state.dayOfWeek?.length ?? 0) > 0 ||
-      state.startTimeFrom ||
-      state.startTimeTo
-    ) {
+    if (hasAdvancedFilters) {
       setIsExpanded(true)
     }
-  }, [
-    state.sort,
-    state.minPrice,
-    state.maxPrice,
-    state.town,
-    state.dayOfWeek?.length,
-    state.startTimeFrom,
-    state.startTimeTo,
-  ])
+  }, [hasAdvancedFilters])
 
   const { data, isLoading, isFetching, error } = useCoursesFilter(query)
   const appError = useMemo(
