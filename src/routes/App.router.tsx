@@ -28,9 +28,11 @@ const withSuspense = (element: ReactElement) => (
 
 const AdminPage = lazy(() => import('../pages/Admin'))
 const AdminCoursesPage = lazy(() => import('../pages/Admin/Courses'))
+const AdminFeedbackPage = lazy(() => import('../pages/Admin/Feedback'))
 const AdminLyceumsPage = lazy(() => import('../pages/Admin/Lyceums'))
 const AdminUsersPage = lazy(() => import('../pages/Admin/Users'))
 const CookiesPage = lazy(() => import('../pages/Cookies'))
+const FeedbackPage = lazy(() => import('../pages/Feedback'))
 const ForgotPasswordPage = lazy(() => import('../pages/ForgotPassword'))
 const LoginPage = lazy(() => import('../pages/Login'))
 const LyceumsPage = lazy(() => import('../pages/Lyceums'))
@@ -119,6 +121,7 @@ const router = createBrowserRouter([
             path: 'terms-and-conditions',
             element: withSuspense(<TermsAndConditionsPage />),
           },
+          { path: 'help', element: withSuspense(<FeedbackPage />) },
           {
             path: 'lyceums/:id/edit',
             element: (
@@ -147,6 +150,10 @@ const router = createBrowserRouter([
                 element: withSuspense(<AdminLyceumsPage />),
               },
               { path: 'users', element: withSuspense(<AdminUsersPage />) },
+              {
+                path: 'feedback',
+                element: withSuspense(<AdminFeedbackPage />),
+              },
             ],
           },
           {

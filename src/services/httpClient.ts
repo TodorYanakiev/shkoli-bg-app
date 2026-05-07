@@ -1,10 +1,20 @@
-import axios, { AxiosError } from 'axios'
+import axios, {
+  AxiosError,
+  type AxiosRequestConfig,
+  type InternalAxiosRequestConfig,
+} from 'axios'
 
 import { env } from './env'
 import { clearTokens, getAccessToken } from '../utils/authStorage'
 import type { ApiError } from '../types/api'
 
 type ErrorRecord = Record<string, unknown>
+export type AnonymousRequestConfig = AxiosRequestConfig & {
+  skipAuth: true
+}
+type HttpClientRequestConfig = InternalAxiosRequestConfig & {
+  skipAuth?: boolean
+}
 
 const isErrorRecord = (value: unknown): value is ErrorRecord =>
   typeof value === 'object' && value !== null
@@ -94,6 +104,10 @@ const httpClient = axios.create({
 })
 
 httpClient.interceptors.request.use((config) => {
+  if ((config as HttpClientRequestConfig).skipAuth) {
+    return config
+  }
+
   const token = getAccessToken()
   if (token) {
     config.headers = config.headers ?? {}
@@ -106,8 +120,9 @@ httpClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     const status = error.response?.status
+    const requestConfig = error.config as HttpClientRequestConfig | undefined
 
-    if (status === 401) {
+    if (status === 401 && !requestConfig?.skipAuth) {
       clearTokens()
     }
 

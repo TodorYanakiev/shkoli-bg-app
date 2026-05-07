@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react'
 
-export type AdminTabId = 'courses' | 'lyceums' | 'users'
+export type AdminTabId = 'courses' | 'lyceums' | 'users' | 'feedback'
 
 export type AdminTab = {
   id: AdminTabId

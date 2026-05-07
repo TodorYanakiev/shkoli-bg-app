@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import {
   AdminCoursesIcon,
+  AdminFeedbackIcon,
   AdminLyceumsIcon,
   AdminUsersIcon,
 } from '../components/AdminNavIcons'
@@ -29,6 +30,12 @@ export const useAdminNavItems = (): AdminNavItem[] => {
       label: t('pages.admin.tabs.users'),
       to: getAdminTabPath('users'),
       Icon: AdminUsersIcon,
+    },
+    {
+      id: 'feedback',
+      label: t('pages.admin.tabs.feedback'),
+      to: getAdminTabPath('feedback'),
+      Icon: AdminFeedbackIcon,
     },
   ]
 }
