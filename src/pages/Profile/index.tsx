@@ -89,6 +89,14 @@ const ProfilePage = () => {
   const administratedLyceumList = administratedLyceum
     ? [administratedLyceum]
     : []
+  const shouldShowLecturedCoursesPanel =
+    lecturedCoursesState.isLecturedCoursesLoading ||
+    Boolean(lecturedCoursesState.lecturedCoursesError) ||
+    lecturedCoursesState.lecturedCourses.length > 0
+  const shouldShowLecturedLyceumsPanel =
+    lecturedLyceumState.isLecturedLyceumsLoading ||
+    Boolean(lecturedLyceumState.lecturedLyceumsError) ||
+    lecturedLyceumState.lecturedLyceums.length > 0
 
   const handleDeleteAccountConfirm = () => {
     if (!userId) return
@@ -164,23 +172,27 @@ const ProfilePage = () => {
               />
             </div>
 
-            <div className="order-2 lg:col-start-2">
-              <ProfileLecturedCoursesPanel
-                courses={lecturedCoursesState.lecturedCourses}
-                isLoading={lecturedCoursesState.isLecturedCoursesLoading}
-                error={lecturedCoursesState.lecturedCoursesError ?? null}
-              />
-            </div>
+            {shouldShowLecturedCoursesPanel ? (
+              <div className="order-2 lg:col-start-2">
+                <ProfileLecturedCoursesPanel
+                  courses={lecturedCoursesState.lecturedCourses}
+                  isLoading={lecturedCoursesState.isLecturedCoursesLoading}
+                  error={lecturedCoursesState.lecturedCoursesError ?? null}
+                />
+              </div>
+            ) : null}
 
-            <div className="order-3 lg:col-start-1">
-              <ProfileLyceumsPanel
-                title={t('pages.profile.lecturedLyceums.title')}
-                lyceums={lecturedLyceumState.lecturedLyceums}
-                isLoading={lecturedLyceumState.isLecturedLyceumsLoading}
-                error={lecturedLyceumState.lecturedLyceumsError}
-                emptyMessage={t('pages.profile.lecturedLyceums.empty')}
-              />
-            </div>
+            {shouldShowLecturedLyceumsPanel ? (
+              <div className="order-3 lg:col-start-1">
+                <ProfileLyceumsPanel
+                  title={t('pages.profile.lecturedLyceums.title')}
+                  lyceums={lecturedLyceumState.lecturedLyceums}
+                  isLoading={lecturedLyceumState.isLecturedLyceumsLoading}
+                  error={lecturedLyceumState.lecturedLyceumsError}
+                  emptyMessage={t('pages.profile.lecturedLyceums.empty')}
+                />
+              </div>
+            ) : null}
 
             {summary.hasLyceumAdministration ? (
               <div className="order-4 lg:col-start-2">
