@@ -54,3 +54,20 @@ export const AdminUsersIcon = ({ className }: AdminNavIconProps) => (
     <path d="M6 20a6 6 0 0 1 12 0" />
   </svg>
 )
+
+export const AdminFeedbackIcon = ({ className }: AdminNavIconProps) => (
+  <svg
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M5 6.5A3.5 3.5 0 0 1 8.5 3h7A3.5 3.5 0 0 1 19 6.5v5A3.5 3.5 0 0 1 15.5 15H13l-4.2 3.5V15h-.3A3.5 3.5 0 0 1 5 11.5v-5Z" />
+    <path d="M9 8h6" />
+    <path d="M9 11h4" />
+  </svg>
+)

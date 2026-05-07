@@ -28,6 +28,7 @@ const withSuspense = (element: ReactElement) => (
 
 const AdminPage = lazy(() => import('../pages/Admin'))
 const AdminCoursesPage = lazy(() => import('../pages/Admin/Courses'))
+const AdminFeedbackPage = lazy(() => import('../pages/Admin/Feedback'))
 const AdminLyceumsPage = lazy(() => import('../pages/Admin/Lyceums'))
 const AdminUsersPage = lazy(() => import('../pages/Admin/Users'))
 const CookiesPage = lazy(() => import('../pages/Cookies'))
@@ -149,6 +150,10 @@ const router = createBrowserRouter([
                 element: withSuspense(<AdminLyceumsPage />),
               },
               { path: 'users', element: withSuspense(<AdminUsersPage />) },
+              {
+                path: 'feedback',
+                element: withSuspense(<AdminFeedbackPage />),
+              },
             ],
           },
           {
