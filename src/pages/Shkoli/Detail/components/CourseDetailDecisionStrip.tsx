@@ -14,7 +14,9 @@ type CourseDetailDecisionStripProps = {
   subscriptionErrorMessage: string | null
   subscriptionTooltip: string | null
   canViewSubscribers: boolean
+  isSharePending: boolean
   onSubscriptionAction: () => void
+  onShare: () => void
   onOpenSubscribers: () => void
   onOpenReviews: () => void
   t: TFunction
@@ -44,7 +46,9 @@ export const CourseDetailDecisionStrip = ({
   subscriptionErrorMessage,
   subscriptionTooltip,
   canViewSubscribers,
+  isSharePending,
   onSubscriptionAction,
+  onShare,
   onOpenSubscribers,
   onOpenReviews,
   t,
@@ -53,6 +57,8 @@ export const CourseDetailDecisionStrip = ({
     'inline-flex h-10 w-full items-center justify-center rounded-xl bg-brand px-4 text-sm font-semibold text-white transition hover:bg-brand-dark sm:h-11 sm:px-5 sm:text-base lg:h-12 lg:w-auto lg:px-6 lg:text-lg'
   const secondaryActionClassName =
     'inline-flex h-10 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900 sm:h-11 sm:px-5 sm:text-base lg:h-12 lg:w-auto lg:px-6 lg:text-lg'
+  const iconActionClassName =
+    'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-white text-slate-700 transition hover:border-slate-400 hover:text-slate-900 sm:h-11 sm:w-11 lg:h-12 lg:w-12'
   const facts = [
     {
       key: 'schedule',
@@ -204,6 +210,47 @@ export const CourseDetailDecisionStrip = ({
               {t('pages.shkoli.detail.actions.viewSubscribers')}
             </button>
           ) : null}
+
+          <button
+            type="button"
+            onClick={onShare}
+            disabled={isSharePending}
+            aria-label={t('pages.shkoli.detail.actions.share')}
+            title={t('pages.shkoli.detail.actions.share')}
+            className={`${iconActionClassName} disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400`}
+          >
+            {isSharePending ? (
+              <svg
+                viewBox="0 0 20 20"
+                className="h-[18px] w-[18px] animate-spin"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M10 3.5a6.5 6.5 0 1 1-4.6 1.9" />
+              </svg>
+            ) : (
+              <svg
+                viewBox="0 0 20 20"
+                className="h-[18px] w-[18px]"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="5" cy="10" r="2" />
+                <circle cx="14.5" cy="5.5" r="2" />
+                <circle cx="14.5" cy="14.5" r="2" />
+                <path d="M6.7 9l6-2.7" />
+                <path d="M6.7 11l6 2.7" />
+              </svg>
+            )}
+          </button>
 
           <button
             type="button"

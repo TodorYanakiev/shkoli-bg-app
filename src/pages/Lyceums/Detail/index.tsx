@@ -66,7 +66,10 @@ const LyceumDetailPage = () => {
     sideNavContainerClassName,
     sideNavListClassName,
   } = useLyceumDetailLayout({ hasLyceum: Boolean(lyceum) })
-  const { activeTab, onSelectTab } = useLyceumDetailTabs()
+  const canViewStatistics = canAddCourse
+  const { activeTab, onSelectTab } = useLyceumDetailTabs({
+    canViewStatistics,
+  })
   const {
     inviteModalId,
     isInviteModalOpen,
@@ -94,6 +97,7 @@ const LyceumDetailPage = () => {
         canInviteLecturer,
         canEditLyceum,
         canViewSubscribers: canEditLyceum,
+        canViewStatistics,
         navIconClassName,
         inviteModalId,
         subscribersModalId,
@@ -106,6 +110,7 @@ const LyceumDetailPage = () => {
       canAddCourse,
       canInviteLecturer,
       canEditLyceum,
+      canViewStatistics,
       navIconClassName,
       inviteModalId,
       subscribersModalId,
@@ -210,6 +215,7 @@ const LyceumDetailPage = () => {
           sideNavListClassName={sideNavListClassName}
           setIsSideNavExpanded={setIsSideNavExpanded}
           canViewSubscribers={canEditLyceum}
+          canViewStatistics={canViewStatistics}
           lyceumName={lyceumName}
           heroLocation={heroLocation}
           fallbackValue={fallbackValue}

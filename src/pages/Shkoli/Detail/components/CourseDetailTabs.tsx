@@ -5,6 +5,7 @@ import type { CourseDetailTabKey } from '../types'
 type CourseDetailTabsProps = {
   activeTab: CourseDetailTabKey
   onSelectTab: (tab: CourseDetailTabKey) => void
+  canViewStatistics: boolean
   t: TFunction
 }
 
@@ -16,6 +17,7 @@ type CourseDetailTabItem = {
 export const CourseDetailTabs = ({
   activeTab,
   onSelectTab,
+  canViewStatistics,
   t,
 }: CourseDetailTabsProps) => {
   const tabs: CourseDetailTabItem[] = [
@@ -26,6 +28,14 @@ export const CourseDetailTabs = ({
       key: 'lecturers',
       label: t('pages.shkoli.detail.sections.lecturers'),
     },
+    ...(canViewStatistics
+      ? [
+          {
+            key: 'statistics' as const,
+            label: t('pages.shkoli.detail.sections.statistics'),
+          },
+        ]
+      : []),
     { key: 'reviews', label: t('pages.shkoli.detail.sideNav.reviews') },
   ]
 

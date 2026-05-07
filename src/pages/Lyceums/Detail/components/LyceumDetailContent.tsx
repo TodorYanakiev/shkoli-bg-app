@@ -6,6 +6,7 @@ import type { CourseResponse } from '../../../../types/courses'
 import type { LyceumImageResponse, LyceumResponse } from '../../../../types/lyceums'
 import type { UserResponse } from '../../../../types/users'
 import { useLoginRedirectToCurrentPage } from '../../../../hooks/useLoginRedirectToCurrentPage'
+import { useShareAction } from '../../../../hooks/useShareAction'
 import { useLyceumReviews } from '../../../Reviews/hooks/useLyceumReviews'
 import { useLyceumSubscriptionActions } from '../hooks/useLyceumSubscriptionActions'
 import { useLyceumDetailReviewActions } from '../hooks/useLyceumDetailReviewActions'
@@ -32,6 +33,7 @@ type LyceumDetailContentProps = {
   sideNavListClassName: string
   setIsSideNavExpanded: (value: boolean | ((prev: boolean) => boolean)) => void
   canViewSubscribers: boolean
+  canViewStatistics: boolean
   lyceumName: string
   heroLocation: string
   fallbackValue: string
@@ -70,6 +72,7 @@ export const LyceumDetailContent = ({
   sideNavListClassName,
   setIsSideNavExpanded,
   canViewSubscribers,
+  canViewStatistics,
   lyceumName,
   heroLocation,
   fallbackValue,
@@ -103,6 +106,10 @@ export const LyceumDetailContent = ({
     onToggleSubscription,
   } = useLyceumSubscriptionActions(lyceumId)
   const redirectToLogin = useLoginRedirectToCurrentPage()
+  const { isSharing, onShare } = useShareAction({
+    entityType: 'lyceum',
+    entityId: lyceum.id,
+  })
   const coursesCount = courses?.length ?? 0
   const lecturersCount = lecturers?.length ?? 0
   const locationValue = heroLocation || fallbackValue
@@ -187,8 +194,12 @@ export const LyceumDetailContent = ({
             subscriptionErrorMessage={subscriptionErrorMessage}
             subscriptionTooltip={subscriptionTooltip}
             canViewSubscribers={canViewSubscribers}
+            isSharePending={isSharing}
             onSubscriptionAction={() => {
               void onToggleSubscription()
+            }}
+            onShare={() => {
+              void onShare()
             }}
             onOpenSubscribers={onOpenSubscribers}
             onOpenReviews={handleOpenReviewAction}
@@ -198,6 +209,7 @@ export const LyceumDetailContent = ({
         <LyceumDetailTabs
           activeTab={activeTab}
           onSelectTab={onSelectTab}
+          canViewStatistics={canViewStatistics}
           t={t}
         />
         <div className="px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
@@ -218,6 +230,7 @@ export const LyceumDetailContent = ({
             lecturers={lecturers}
             isLecturersLoading={isLecturersLoading}
             lecturersErrorMessage={lecturersErrorMessage}
+            canViewStatistics={canViewStatistics}
             onOpenLecturerReviews={onOpenLecturerReviews}
             reviewEditorTriggerId={reviewEditorTriggerId}
             t={t}

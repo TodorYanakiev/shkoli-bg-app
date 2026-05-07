@@ -182,6 +182,8 @@
       "updateNotFound": "This course was not found.",
       "updateConflict": "This course couldn't be updated due to a data conflict.",
       "deleteFailed": "We couldn't delete this course. Try again.",
+      "shareFailed": "We couldn't share this course. Try again.",
+      "shareNotFound": "This course was not found.",
       "subscribeFailed": "We couldn't subscribe you to this course. Try again.",
       "unsubscribeFailed": "We couldn't unsubscribe you from this course. Try again.",
       "alreadySubscribed": "You are already subscribed to this course.",
@@ -192,6 +194,9 @@
         "exportFailed": "We couldn't start the subscriber export for this course.",
         "statusFailed": "We couldn't refresh the subscriber export status right now.",
         "downloadFailed": "We couldn't download the subscriber export for this course."
+      },
+      "statistics": {
+        "loadFailed": "We couldn't load statistics for this course."
       },
       "imagesLoadFailed": "We couldn't load course images right now.",
       "imagesInvalid": "We couldn't load images because the request is invalid.",
@@ -212,6 +217,8 @@
       "createConflict": "A lyceum with these details already exists.",
       "updateFailed": "We couldn't update this lyceum. Try again.",
       "deleteFailed": "We couldn't delete this lyceum. Try again.",
+      "shareFailed": "We couldn't share this lyceum. Try again.",
+      "shareNotFound": "This lyceum was not found.",
       "subscribeFailed": "We couldn't subscribe you to this lyceum. Try again.",
       "unsubscribeFailed": "We couldn't unsubscribe you from this lyceum. Try again.",
       "alreadySubscribed": "You are already subscribed to this lyceum.",
@@ -222,6 +229,9 @@
         "exportFailed": "We couldn't start the subscriber export for this lyceum.",
         "statusFailed": "We couldn't refresh the subscriber export status right now.",
         "downloadFailed": "We couldn't download the subscriber export for this lyceum."
+      },
+      "statistics": {
+        "loadFailed": "We couldn't load statistics for this lyceum."
       },
       "imageUploadFailed": "We couldn't upload this image. Try again.",
       "imagesUploadFailed": "Some images could not be uploaded.",
@@ -350,6 +360,12 @@
       "passwordResetCodeSent": "Verification code sent.",
       "passwordResetCodeVerified": "Verification code confirmed.",
       "passwordResetSuccess": "Password reset successfully."
+    },
+    "share": {
+      "copied": "Link copied.",
+      "summaryCopied": "Share text copied.",
+      "shared": "Shared successfully.",
+      "failed": "We couldn't share this link."
     },
     "courses": {
       "createSuccess": "Course created successfully.",
@@ -947,6 +963,7 @@
           "deletingCourse": "Deleting...",
           "expand": "Expand menu",
           "collapse": "Collapse menu",
+          "statistics": "Statistics",
           "reviews": "Reviews"
         },
         "deleteConfirm": {
@@ -958,7 +975,8 @@
           "lecturers": "Lecturers",
           "lyceum": "Lyceum",
           "links": "Links",
-          "gallery": "Gallery"
+          "gallery": "Gallery",
+          "statistics": "Statistics"
         },
         "fields": {
           "type": "Type",
@@ -1016,16 +1034,65 @@
           "unsubscribe": "Unsubscribe",
           "unsubscribing": "Unsubscribing...",
           "viewSubscribers": "See subscribers",
+          "share": "Share",
+          "sharing": "Sharing...",
           "signInToSubscribe": "Sign in to subscribe",
           "leaveReview": "Leave review",
           "writeReview": "Write a review",
           "openMap": "Open map",
           "seeMore": "See more"
         },
+        "shareModal": {
+          "badge": "Share",
+          "title": "Share this course",
+          "subtitle": "Copy the direct link or choose where to send this course.",
+          "linkLabel": "Direct link",
+          "closeAriaLabel": "Close share options",
+          "options": {
+            "copyLink": {
+              "label": "Copy link",
+              "description": "Copy this page URL for chat, Viber, or email."
+            },
+            "copySummary": {
+              "label": "Copy course summary",
+              "description": "Copy a ready-to-send text with title, details, and link."
+            },
+            "facebook": {
+              "label": "Share to Facebook",
+              "description": "Open Facebook with this course link prefilled."
+            },
+            "email": {
+              "label": "Send by email",
+              "description": "Open your email app with a prepared subject and message."
+            }
+          }
+        },
         "subscribers": {
           "title": "{{name}} subscribers",
           "subtitle": "People who subscribed to this course.",
           "empty": "No users have subscribed to this course yet."
+        },
+        "statistics": {
+          "title": "Course statistics",
+          "subtitle": "Private activity metrics for the people who manage this course.",
+          "metrics": {
+            "seenInResults": {
+              "label": "Seen in results",
+              "description": "How often this course appeared in search and map results."
+            },
+            "visits": {
+              "label": "Visits",
+              "description": "Detail page visits recorded for this course."
+            },
+            "shares": {
+              "label": "Shares",
+              "description": "Public share actions recorded from this page."
+            },
+            "subscriptions": {
+              "label": "Subscriptions",
+              "description": "Users who subscribed to course updates."
+            }
+          }
         },
         "averageRatingLabel": "Average rating {{rating}} of {{max}}",
         "noRating": "No ratings yet.",
@@ -1342,14 +1409,63 @@
           "unsubscribe": "Unsubscribe",
           "unsubscribing": "Unsubscribing...",
           "viewSubscribers": "See subscribers",
+          "share": "Share",
+          "sharing": "Sharing...",
           "signInToSubscribe": "Sign in to subscribe",
           "leaveReview": "Leave review",
           "openMap": "Open map"
+        },
+        "shareModal": {
+          "badge": "Share",
+          "title": "Share this lyceum",
+          "subtitle": "Copy the direct link or choose where to send this lyceum.",
+          "linkLabel": "Direct link",
+          "closeAriaLabel": "Close share options",
+          "options": {
+            "copyLink": {
+              "label": "Copy link",
+              "description": "Copy this page URL for chat, Viber, or email."
+            },
+            "copySummary": {
+              "label": "Copy lyceum summary",
+              "description": "Copy a ready-to-send text with title, details, and link."
+            },
+            "facebook": {
+              "label": "Share to Facebook",
+              "description": "Open Facebook with this lyceum link prefilled."
+            },
+            "email": {
+              "label": "Send by email",
+              "description": "Open your email app with a prepared subject and message."
+            }
+          }
         },
         "subscribers": {
           "title": "{{name}} subscribers",
           "subtitle": "People who subscribed to this lyceum.",
           "empty": "No users have subscribed to this lyceum yet."
+        },
+        "statistics": {
+          "title": "Lyceum statistics",
+          "subtitle": "Private activity metrics for lecturers and administrators.",
+          "metrics": {
+            "seenInResults": {
+              "label": "Seen in results",
+              "description": "How often this lyceum appeared in search and map results."
+            },
+            "visits": {
+              "label": "Visits",
+              "description": "Detail page visits recorded for this lyceum."
+            },
+            "shares": {
+              "label": "Shares",
+              "description": "Public share actions recorded from this page."
+            },
+            "subscriptions": {
+              "label": "Subscriptions",
+              "description": "Users who subscribed to lyceum updates."
+            }
+          }
         },
         "facts": {
           "coursesCount": "{{count}} courses",
@@ -1370,6 +1486,7 @@
           "addLecturer": "Add lecturer",
           "expand": "Expand menu",
           "collapse": "Collapse menu",
+          "statistics": "Statistics",
           "reviews": "Reviews"
         },
         "editCta": "Update lyceum",
@@ -1392,7 +1509,8 @@
           "coursesSubtitle": "Programs and activities offered by this lyceum.",
           "gallery": "Gallery",
           "lecturers": "Lecturers",
-          "lecturersSubtitle": "Educators associated with this lyceum."
+          "lecturersSubtitle": "Educators associated with this lyceum.",
+          "statistics": "Statistics"
         },
         "fields": {
           "status": "Status",

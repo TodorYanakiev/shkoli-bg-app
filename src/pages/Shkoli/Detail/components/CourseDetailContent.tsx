@@ -11,6 +11,7 @@ import type { BreadcrumbItem } from '../../../../components/ui/Breadcrumbs'
 import type { LyceumResponse } from '../../../../types/lyceums'
 import type { UserResponse } from '../../../../types/users'
 import { useLoginRedirectToCurrentPage } from '../../../../hooks/useLoginRedirectToCurrentPage'
+import { useShareAction } from '../../../../hooks/useShareAction'
 import { useCourseReviews } from '../../../Reviews/hooks/useCourseReviews'
 import type { SideNavItem, CourseDetailTabKey } from '../types'
 import { useCourseDetailDecisionValues } from '../hooks/useCourseDetailDecisionValues'
@@ -38,6 +39,7 @@ type CourseDetailContentProps = {
   setIsSideNavExpanded: (value: boolean | ((prev: boolean) => boolean)) => void
   canEditCourse: boolean
   canViewSubscribers: boolean
+  canViewStatistics: boolean
   isDeletingCourse: boolean
   onDeleteCourse: () => void
   courseName: string
@@ -91,6 +93,7 @@ export const CourseDetailContent = ({
   setIsSideNavExpanded,
   canEditCourse,
   canViewSubscribers,
+  canViewStatistics,
   isDeletingCourse,
   onDeleteCourse,
   courseName,
@@ -139,6 +142,10 @@ export const CourseDetailContent = ({
     onToggleSubscription,
   } = useCourseSubscriptionActions(course.id)
   const redirectToLogin = useLoginRedirectToCurrentPage()
+  const { isSharing, onShare } = useShareAction({
+    entityType: 'course',
+    entityId: course.id,
+  })
 
   const { scheduleDuration, scheduleFactValue } =
     useCourseDetailDecisionValues({
@@ -236,8 +243,12 @@ export const CourseDetailContent = ({
             subscriptionErrorMessage={subscriptionErrorMessage}
             subscriptionTooltip={subscriptionTooltip}
             canViewSubscribers={canViewSubscribers}
+            isSharePending={isSharing}
             onSubscriptionAction={() => {
               void onToggleSubscription()
+            }}
+            onShare={() => {
+              void onShare()
             }}
             onOpenSubscribers={onOpenSubscribers}
             onOpenReviews={handleOpenReviewAction}
@@ -247,6 +258,7 @@ export const CourseDetailContent = ({
         <CourseDetailTabs
           activeTab={activeTab}
           onSelectTab={onSelectTab}
+          canViewStatistics={canViewStatistics}
           t={t}
         />
         <div className="px-8 py-7">
@@ -271,6 +283,7 @@ export const CourseDetailContent = ({
             lecturers={lecturers}
             isLecturersLoading={isLecturersLoading}
             lecturersErrorMessage={lecturersErrorMessage}
+            canViewStatistics={canViewStatistics}
             onOpenLecturerReviews={onOpenLecturerReviews}
             reviewEditorTriggerId={reviewEditorTriggerId}
             t={t}

@@ -59,4 +59,5 @@ export type LyceumDetailTabKey =
   | 'courses'
   | 'gallery'
   | 'lecturers'
+  | 'statistics'
   | 'reviews'

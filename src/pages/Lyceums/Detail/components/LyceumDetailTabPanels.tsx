@@ -9,6 +9,7 @@ import { LyceumDetailCoursesSection } from './LyceumDetailCoursesSection'
 import { LyceumDetailGallerySection } from './LyceumDetailGallerySection'
 import { LyceumDetailLecturersSection } from './LyceumDetailLecturersSection'
 import { LyceumDetailOverviewTab } from './LyceumDetailOverviewTab'
+import { LyceumStatisticsSection } from './LyceumStatisticsSection'
 
 type LyceumDetailTabPanelsProps = {
   activeTab: LyceumDetailTabKey
@@ -27,6 +28,7 @@ type LyceumDetailTabPanelsProps = {
   lecturers?: UserResponse[]
   isLecturersLoading: boolean
   lecturersErrorMessage: string | null
+  canViewStatistics: boolean
   onOpenLecturerReviews: (lecturer: UserResponse) => void
   reviewEditorTriggerId: string
   t: TFunction
@@ -49,6 +51,7 @@ export const LyceumDetailTabPanels = ({
   lecturers,
   isLecturersLoading,
   lecturersErrorMessage,
+  canViewStatistics,
   onOpenLecturerReviews,
   reviewEditorTriggerId,
   t,
@@ -89,6 +92,9 @@ export const LyceumDetailTabPanels = ({
         onOpenLecturerReviews={onOpenLecturerReviews}
         t={t}
       />
+    ) : null}
+    {activeTab === 'statistics' && canViewStatistics ? (
+      <LyceumStatisticsSection lyceumId={lyceumId} />
     ) : null}
     {activeTab === 'reviews' ? (
       <div>
