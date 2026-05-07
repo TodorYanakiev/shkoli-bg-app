@@ -6,6 +6,7 @@ import { RatingStars } from '../../../../components/ui/RatingStars'
 import { useLocalizedPath } from '../../../../hooks/useLocalizedPath'
 import type { CourseResponse } from '../../../../types/courses'
 import { resolveCourseImageUrl } from '../../../../utils/courseImages'
+import { getTextLanguage } from '../../../../utils/textLanguage'
 
 type LyceumCourseCardProps = {
   course: CourseResponse
@@ -27,6 +28,8 @@ const LyceumCourseCard = ({
 
   const mainImageUrl =
     resolveCourseImageUrl(mainImage) ?? courseMainPlaceholder
+  const courseNameLang = getTextLanguage(courseName)
+  const lecturerNameLang = getTextLanguage(lecturerName)
   const averageRating =
     typeof course.averageRating === 'number' &&
     Number.isFinite(course.averageRating)
@@ -55,12 +58,16 @@ const LyceumCourseCard = ({
         />
       </div>
       <div className="flex flex-1 flex-col px-4 pb-4 pt-4">
-        <h4 className="text-sm font-semibold text-slate-900">{courseName}</h4>
+        <h4 className="text-sm font-semibold text-slate-900" lang={courseNameLang}>
+          {courseName}
+        </h4>
         <p className="mt-2 text-xs text-slate-600">
           <span className="text-slate-500">
             {t('pages.lyceums.detail.courseCard.lecturerLabel')}
           </span>{' '}
-          <span className="font-semibold text-slate-700">{lecturerName}</span>
+          <span className="font-semibold text-slate-700" lang={lecturerNameLang}>
+            {lecturerName}
+          </span>
           {additionalLecturers > 0 ? (
             <span className="text-slate-500">
               {' '}

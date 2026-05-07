@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { TFunction } from 'i18next'
 
 import type { AppError } from '../../../types/appError'
+import { scrollToPageTopAfterLayout } from '../../../utils/scrollToPageTop'
 import type { MapExplorerItem } from '../types'
 import MapExplorerResultCard from './MapExplorerResultCard'
 
@@ -99,6 +100,10 @@ const MapExplorerResultsList = ({
   const pagedItems = items.slice(startIndex, startIndex + MAP_RESULTS_PAGE_SIZE)
   const rangeStart = startIndex + 1
   const rangeEnd = startIndex + pagedItems.length
+  const goToPage = (nextPage: number) => {
+    scrollToPageTopAfterLayout()
+    setCurrentPage(nextPage)
+  }
 
   return (
     <div>
@@ -130,7 +135,7 @@ const MapExplorerResultsList = ({
             <button
               type="button"
               disabled={currentPage <= 1}
-              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              onClick={() => goToPage(Math.max(1, currentPage - 1))}
               className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {t('pages.map.results.pagination.prev')}
@@ -144,9 +149,7 @@ const MapExplorerResultsList = ({
             <button
               type="button"
               disabled={currentPage >= totalPages}
-              onClick={() =>
-                setCurrentPage((page) => Math.min(totalPages, page + 1))
-              }
+              onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
               className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {t('pages.map.results.pagination.next')}

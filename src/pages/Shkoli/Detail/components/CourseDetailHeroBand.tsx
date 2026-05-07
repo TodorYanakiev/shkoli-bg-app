@@ -7,6 +7,7 @@ import Breadcrumbs, {
 import type { CourseImageResponse } from '../../../../types/courses'
 import { RatingStars } from '../../../../components/ui/RatingStars'
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
+import { getTextLanguage } from '../../../../utils/textLanguage'
 
 type CourseDetailHeroBandProps = {
   breadcrumbs: BreadcrumbItem[]
@@ -58,6 +59,8 @@ export const CourseDetailHeroBand = ({
   const descriptionRef = useRef<HTMLParagraphElement | null>(null)
   const [isDescriptionTruncated, setIsDescriptionTruncated] = useState(false)
   const shouldShowMoreLink = isDescriptionTruncated || isLikelyLongDescription
+  const courseNameLang = getTextLanguage(courseName)
+  const descriptionLang = getTextLanguage(description)
 
   useEffect(() => {
     const descriptionElement = descriptionRef.current
@@ -100,7 +103,10 @@ export const CourseDetailHeroBand = ({
               className="mb-3"
             />
             <div className="space-y-1">
-              <h1 className="line-clamp-2 text-4xl font-semibold leading-[1.08] text-slate-900">
+              <h1
+                className="line-clamp-2 text-4xl font-semibold leading-[1.08] text-slate-900"
+                lang={courseNameLang}
+              >
                 {courseName}
               </h1>
               <p className="text-xl font-medium uppercase tracking-[0.01em] text-slate-500">
@@ -158,6 +164,7 @@ export const CourseDetailHeroBand = ({
               <p
                 ref={descriptionRef}
                 className="min-h-0 max-w-[30rem] flex-1 overflow-hidden text-ellipsis text-lg leading-relaxed text-slate-700 [display:-webkit-box] [-webkit-box-orient:vertical]"
+                lang={descriptionLang}
                 style={{
                   WebkitLineClamp: maxVisibleLines,
                 }}

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
+import { scrollToPageTopAfterLayout } from '../../../../utils/scrollToPageTop'
 import type { AdminCoursesPagination } from '../types'
 
 type AdminCoursesPaginationProps = {
@@ -10,12 +11,20 @@ export const AdminCoursesPaginationControls = ({
   pagination,
 }: AdminCoursesPaginationProps) => {
   const { t } = useTranslation()
+  const goToPrev = () => {
+    scrollToPageTopAfterLayout()
+    pagination.goToPrev()
+  }
+  const goToNext = () => {
+    scrollToPageTopAfterLayout()
+    pagination.goToNext()
+  }
 
   return (
     <div className="flex items-center justify-between gap-4">
       <button
         type="button"
-        onClick={pagination.goToPrev}
+        onClick={goToPrev}
         disabled={!pagination.canGoPrev}
         className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white p-2 text-slate-600 shadow-sm transition hover:border-brand/40 hover:text-brand disabled:cursor-not-allowed disabled:opacity-40"
         aria-label={t('pages.admin.courses.pagination.previous')}
@@ -43,7 +52,7 @@ export const AdminCoursesPaginationControls = ({
       </span>
       <button
         type="button"
-        onClick={pagination.goToNext}
+        onClick={goToNext}
         disabled={!pagination.canGoNext}
         className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white p-2 text-slate-600 shadow-sm transition hover:border-brand/40 hover:text-brand disabled:cursor-not-allowed disabled:opacity-40"
         aria-label={t('pages.admin.courses.pagination.next')}

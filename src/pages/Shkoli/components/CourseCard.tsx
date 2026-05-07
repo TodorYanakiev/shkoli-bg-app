@@ -6,6 +6,7 @@ import courseMainPlaceholder from '../../../assets/course-main-placeholder.svg'
 import { useLocalizedPath } from '../../../hooks/useLocalizedPath'
 import type { CourseAgeGroup, CourseResponse } from '../../../types/courses'
 import { resolveCourseImageUrl } from '../../../utils/courseImages'
+import { getTextLanguage } from '../../../utils/textLanguage'
 import { RatingStars } from './RatingStars'
 import { useCourseCardLocation } from '../hooks/useCourseCardLocation'
 
@@ -64,6 +65,8 @@ const CourseCard = ({
     (isLyceumLoading
       ? t('pages.shkoli.list.card.locationLoading')
       : t('pages.shkoli.list.card.locationFallback'))
+  const courseNameLang = getTextLanguage(courseName)
+  const addressLabelLang = getTextLanguage(addressLabel)
 
   const cardContent = (
     <article
@@ -116,7 +119,10 @@ const CourseCard = ({
           </span>
         ) : null}
         <div className="absolute bottom-4 left-4 right-4">
-          <h3 className="line-clamp-1 text-lg font-semibold text-white drop-shadow-sm">
+          <h3
+            className="line-clamp-1 text-lg font-semibold text-white drop-shadow-sm"
+            lang={courseNameLang}
+          >
             {courseName}
           </h3>
         </div>
@@ -157,7 +163,9 @@ const CourseCard = ({
               />
               <circle cx="10" cy="7.5" r="1.8" />
             </svg>
-            <span className="truncate">{addressLabel}</span>
+            <span className="truncate" lang={addressLabelLang}>
+              {addressLabel}
+            </span>
           </div>
         </div>
         <div className="self-start rounded-full bg-amber-50 px-3 py-1 shadow-sm sm:self-auto">

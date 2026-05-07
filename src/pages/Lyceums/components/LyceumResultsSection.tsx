@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import type { TFunction } from 'i18next'
 
 import type { AppError } from '../../../types/appError'
+import { scrollToPageTopAfterLayout } from '../../../utils/scrollToPageTop'
 import type { PageLyceumResponse } from '../types'
 import LyceumCard from './LyceumCard'
 
@@ -43,6 +44,10 @@ const LyceumResultsSection = ({
   const shownCount = data?.numberOfElements ?? lyceums.length
   const totalPages = data?.totalPages ?? 1
   const canPaginate = !isLoading && !error && totalElements > 0
+  const handlePageChange = (nextPage: number) => {
+    scrollToPageTopAfterLayout()
+    onNextPage(nextPage)
+  }
 
   return (
     <section className="space-y-6">
@@ -62,48 +67,50 @@ const LyceumResultsSection = ({
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {Array.from({ length: pageSize }, (_, index) => (
-            <LyceumCardSkeleton key={`lyceum-skeleton-${index}`} />
-          ))}
-        </div>
-      ) : error ? (
-        <div
-          className="rounded-[24px] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700 shadow-sm"
-          role="alert"
-        >
-          {t(error.messageKey)}
-        </div>
-      ) : lyceums.length === 0 ? (
-        <div className="rounded-[24px] border border-dashed border-slate-200 bg-white/80 px-5 py-6 text-sm text-slate-600 shadow-sm">
-          {t('pages.lyceums.list.states.empty')}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {lyceums.map((lyceum, index) => {
-            const style: CSSProperties = {
-              animationDelay: `${index * 70}ms`,
-            }
-            const shouldPrioritizeImage = page === 1 && index === 0
-            return (
-              <div
-                key={lyceum.id ?? `${lyceum.name ?? 'lyceum'}-${index}`}
-                className="shkoli-fade-up"
-                style={style}
-              >
-                <LyceumCard
-                  lyceum={lyceum}
-                  imageLoading={shouldPrioritizeImage ? 'eager' : 'lazy'}
-                  imageFetchPriority={
-                    shouldPrioritizeImage ? 'high' : 'low'
-                  }
-                />
-              </div>
-            )
-          })}
-        </div>
-      )}
+      <div>
+        {isLoading ? (
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {Array.from({ length: pageSize }, (_, index) => (
+              <LyceumCardSkeleton key={`lyceum-skeleton-${index}`} />
+            ))}
+          </div>
+        ) : error ? (
+          <div
+            className="rounded-[24px] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700 shadow-sm"
+            role="alert"
+          >
+            {t(error.messageKey)}
+          </div>
+        ) : lyceums.length === 0 ? (
+          <div className="rounded-[24px] border border-dashed border-slate-200 bg-white/80 px-5 py-6 text-sm text-slate-600 shadow-sm">
+            {t('pages.lyceums.list.states.empty')}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {lyceums.map((lyceum, index) => {
+              const style: CSSProperties = {
+                animationDelay: `${index * 70}ms`,
+              }
+              const shouldPrioritizeImage = page === 1 && index === 0
+              return (
+                <div
+                  key={lyceum.id ?? `${lyceum.name ?? 'lyceum'}-${index}`}
+                  className="shkoli-fade-up"
+                  style={style}
+                >
+                  <LyceumCard
+                    lyceum={lyceum}
+                    imageLoading={shouldPrioritizeImage ? 'eager' : 'lazy'}
+                    imageFetchPriority={
+                      shouldPrioritizeImage ? 'high' : 'low'
+                    }
+                  />
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
 
       {canPaginate ? (
         <div className="flex justify-center">
@@ -117,7 +124,7 @@ const LyceumResultsSection = ({
             <div className="flex flex-wrap items-center justify-center gap-1 rounded-full border border-white/80 bg-white/90 px-2 py-2 shadow-sm backdrop-blur-md sm:gap-2 sm:px-3">
               <button
                 type="button"
-                onClick={() => onNextPage(1)}
+                onClick={() => handlePageChange(1)}
                 disabled={page <= 1 || isFetching}
                 className="rounded-full border border-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-800 transition hover:border-emerald-200 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-50 sm:px-3 sm:text-[11px]"
               >
@@ -125,7 +132,7 @@ const LyceumResultsSection = ({
               </button>
               <button
                 type="button"
-                onClick={() => onNextPage(page - 1)}
+                onClick={() => handlePageChange(page - 1)}
                 disabled={page <= 1 || isFetching}
                 className="rounded-full border border-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-800 transition hover:border-emerald-200 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-50 sm:px-3 sm:text-[11px]"
               >
@@ -139,7 +146,7 @@ const LyceumResultsSection = ({
               </span>
               <button
                 type="button"
-                onClick={() => onNextPage(page + 1)}
+                onClick={() => handlePageChange(page + 1)}
                 disabled={page >= totalPages || isFetching}
                 className="rounded-full border border-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-800 transition hover:border-emerald-200 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-50 sm:px-3 sm:text-[11px]"
               >
@@ -147,7 +154,7 @@ const LyceumResultsSection = ({
               </button>
               <button
                 type="button"
-                onClick={() => onNextPage(totalPages)}
+                onClick={() => handlePageChange(totalPages)}
                 disabled={page >= totalPages || isFetching}
                 className="rounded-full border border-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-800 transition hover:border-emerald-200 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-50 sm:px-3 sm:text-[11px]"
               >

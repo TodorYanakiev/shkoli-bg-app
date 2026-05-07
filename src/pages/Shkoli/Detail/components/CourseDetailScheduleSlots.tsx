@@ -35,12 +35,14 @@ export const CourseDetailScheduleSlots = ({
           startTimeValue && endTimeValue
             ? `${startTimeValue} - ${endTimeValue}`
             : startTimeValue ?? endTimeValue ?? fallbackValue
-        const durationValue =
-          typeof slot.singleClassDurationMinutes === 'number'
-            ? t('pages.shkoli.detail.schedule.minutes', {
-                count: slot.singleClassDurationMinutes,
-              })
-            : fallbackValue
+        const hasDuration =
+          typeof slot.singleClassDurationMinutes === 'number' &&
+          Number.isFinite(slot.singleClassDurationMinutes)
+        const durationValue = hasDuration
+          ? t('pages.shkoli.detail.schedule.minutes', {
+              count: slot.singleClassDurationMinutes,
+            })
+          : null
 
         return (
           <article
@@ -62,14 +64,16 @@ export const CourseDetailScheduleSlots = ({
                   {timeRangeValue}
                 </span>
               </div>
-              <div className="flex items-center justify-between gap-3 text-base">
-                <span className="font-medium text-slate-500">
-                  {t('pages.shkoli.detail.schedule.duration')}
-                </span>
-                <span className="text-lg font-semibold text-slate-900">
-                  {durationValue}
-                </span>
-              </div>
+              {durationValue ? (
+                <div className="flex items-center justify-between gap-3 text-base">
+                  <span className="font-medium text-slate-500">
+                    {t('pages.shkoli.detail.schedule.duration')}
+                  </span>
+                  <span className="text-lg font-semibold text-slate-900">
+                    {durationValue}
+                  </span>
+                </div>
+              ) : null}
             </div>
           </article>
         )

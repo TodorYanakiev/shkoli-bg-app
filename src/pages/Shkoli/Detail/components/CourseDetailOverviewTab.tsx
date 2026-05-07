@@ -1,5 +1,6 @@
 import type { TFunction } from 'i18next'
 import type { LyceumResponse } from '../../../../types/lyceums'
+import { getTextLanguage } from '../../../../utils/textLanguage'
 import LyceumCard from '../../../Lyceums/components/LyceumCard'
 import CourseDetailMiniMap from './CourseDetailMiniMap'
 type CourseDetailOverviewTabProps = {
@@ -64,7 +65,10 @@ export const CourseDetailOverviewTab = ({
         <h3 className="text-4xl font-semibold text-slate-900">
           {t('pages.shkoli.detail.overview.descriptionTitle')}
         </h3>
-        <p className="mt-6 whitespace-pre-line text-xl leading-relaxed text-slate-700">
+        <p
+          className="mt-6 whitespace-pre-line text-xl leading-relaxed text-slate-700"
+          lang={getTextLanguage(courseDescription)}
+        >
           {courseDescription}
         </p>
         <div className="mt-9 border-t border-slate-200 pt-6">
@@ -74,7 +78,9 @@ export const CourseDetailOverviewTab = ({
           {achievementLines.length > 0 ? (
             <ul className="mt-4 space-y-2 text-lg leading-relaxed text-slate-700">
               {achievementLines.map((line, index) => (
-                <li key={`${line}-${index}`}>{line}</li>
+                <li key={`${line}-${index}`} lang={getTextLanguage(line)}>
+                  {line}
+                </li>
               ))}
             </ul>
           ) : (
@@ -92,7 +98,10 @@ export const CourseDetailOverviewTab = ({
             className="aspect-[4/3]"
           />
           <div className="flex items-start justify-between gap-4 border-t border-slate-200 px-4 py-3">
-            <p className="text-sm font-medium text-slate-700">
+            <p
+              className="text-sm font-medium text-slate-700"
+              lang={getTextLanguage(lyceumAddress)}
+            >
               {lyceumAddress}
             </p>
             <a
