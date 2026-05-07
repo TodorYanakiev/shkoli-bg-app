@@ -47,14 +47,18 @@
       },
       "footer": {
         "description": "EducationNearby helps citizens find the right course faster.",
-        "contact": "Contact: {{email}}",
+        "contact": "Email: {{email}}",
         "linksLabel": "Quick links",
+        "exploreTitle": "Explore",
+        "legalLabel": "Legal links",
+        "legalTitle": "Legal",
+        "contactsTitle": "Contacts",
+        "contactHelp": "Send us a message",
+        "socialsLabel": "Social links",
         "notice": "All rights reserved.",
         "privacyPolicy": "Privacy policy",
         "cookiesPolicy": "Cookies policy",
         "termsAndConditions": "Terms & conditions",
-        "userHelp": "Help & feedback",
-        "htmlSitemap": "HTML sitemap",
         "socials": {
           "youtube": "Shkoli.bg on YouTube",
           "instagram": "Shkoli.bg on Instagram",
@@ -83,7 +87,7 @@
     },
     "actions": {
       "acceptAll": "Accept all",
-      "rejectOptional": "Reject optional",
+      "rejectOptional": "Reject unnecessary",
       "savePreferences": "Save preferences",
       "manage": "Cookie settings",
       "close": "Close"

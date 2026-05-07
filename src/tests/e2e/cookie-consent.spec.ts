@@ -51,7 +51,7 @@ test('accept all stores consent and keeps settings hidden after reload', async (
   await expect(consentDialog).toBeVisible()
 })
 
-test('save preferences stores custom analytics/diagnostics consent', async ({
+test('reject unnecessary keeps analytics and diagnostics disabled and sets opt-out cookie', async ({
   page,
 }) => {
   await page.goto('/')
@@ -59,30 +59,7 @@ test('save preferences stores custom analytics/diagnostics consent', async ({
   const consentDialog = page.getByRole('dialog', { name: 'Cookie settings' })
 
   await expect(consentDialog).toBeVisible()
-  await consentDialog
-    .getByRole('checkbox', {
-      name: /Analytics \(Google Analytics, Hotjar, Contentsquare\)/i,
-    })
-    .check()
-  await consentDialog.getByRole('button', { name: 'Save preferences' }).click()
-
-  await expect(consentDialog).toBeHidden()
-  await expect(await readStoredCookieConsentPreferences(page)).toEqual({
-    necessary: true,
-    analytics: true,
-    diagnostics: false,
-  })
-})
-
-test('reject optional keeps analytics and diagnostics disabled and sets opt-out cookie', async ({
-  page,
-}) => {
-  await page.goto('/')
-
-  const consentDialog = page.getByRole('dialog', { name: 'Cookie settings' })
-
-  await expect(consentDialog).toBeVisible()
-  await consentDialog.getByRole('button', { name: 'Reject optional' }).click()
+  await consentDialog.getByRole('button', { name: 'Reject unnecessary' }).click()
   await expect(consentDialog).toBeHidden()
 
   await expect(await readStoredCookieConsentPreferences(page)).toEqual({

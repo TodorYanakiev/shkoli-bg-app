@@ -41,20 +41,14 @@ describe('CookieConsentBanner', () => {
     })
   })
 
-  it('saves custom consent preferences', () => {
+  it('rejects unnecessary consent', () => {
     render(<CookieConsentBanner />)
 
-    fireEvent.click(
-      screen.getByRole('checkbox', {
-        name: /Analytics \(Google Analytics, Hotjar, Contentsquare\)/i,
-      }),
-    )
-
-    fireEvent.click(screen.getByRole('button', { name: 'Save preferences' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Reject unnecessary' }))
 
     expect(getCookieConsentPreferences()).toEqual({
       necessary: true,
-      analytics: true,
+      analytics: false,
       diagnostics: false,
     })
   })

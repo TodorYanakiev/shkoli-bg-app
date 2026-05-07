@@ -47,14 +47,18 @@
       },
       "footer": {
         "description": "Школи помага на семействата да откриват подходящата школа по-бързо.",
-        "contact": "Контакт: {{email}}",
+        "contact": "Имейл: {{email}}",
         "linksLabel": "Бързи връзки",
+        "exploreTitle": "Разгледай",
+        "legalLabel": "Правни връзки",
+        "legalTitle": "Правна информация",
+        "contactsTitle": "Контакти",
+        "contactHelp": "Пишете ни",
+        "socialsLabel": "Социални мрежи",
         "notice": "Всички права запазени.",
         "privacyPolicy": "Политика за поверителност",
         "cookiesPolicy": "Политика за бисквитки",
         "termsAndConditions": "Общи условия",
-        "userHelp": "Помощ и обратна връзка",
-        "htmlSitemap": "HTML карта на сайта",
         "socials": {
           "youtube": "Shkoli.bg в YouTube",
           "instagram": "Shkoli.bg в Instagram",
@@ -83,7 +87,7 @@
     },
     "actions": {
       "acceptAll": "Приеми всички",
-      "rejectOptional": "Откажи допълнителните",
+      "rejectOptional": "Откажи ненужните",
       "savePreferences": "Запази настройките",
       "manage": "Настройки за бисквитки",
       "close": "Затвори"

@@ -2,12 +2,8 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCookieConsent } from '../../hooks/useCookieConsent'
-import CookiePreferenceToggle from './CookiePreferenceToggle'
 const COOKIE_ICONS = {
   main: '\u{1F36A}',
-  necessary: '\u{1F512}',
-  analytics: '\u{1F4CA}',
-  diagnostics: '\u{1F6E0}\uFE0F',
 } as const
 
 type CookieConsentBannerProps = {
@@ -16,30 +12,22 @@ type CookieConsentBannerProps = {
 
 const CookieConsentBanner = ({ triggerClassName }: CookieConsentBannerProps) => {
   const { t } = useTranslation()
-  const { hasSelection, preferences, acceptAll, rejectOptional, savePreferences } = useCookieConsent()
+  const { hasSelection, acceptAll, rejectOptional } = useCookieConsent()
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(() => !hasSelection)
-  const [analyticsEnabled, setAnalyticsEnabled] = useState(preferences.analytics)
-  const [diagnosticsEnabled, setDiagnosticsEnabled] = useState(preferences.diagnostics)
 
   useEffect(() => {
     if (!hasSelection) {
       setIsPanelOpen(true)
     }
-    setAnalyticsEnabled(preferences.analytics)
-    setDiagnosticsEnabled(preferences.diagnostics)
-  }, [hasSelection, preferences.analytics, preferences.diagnostics])
+  }, [hasSelection])
 
   const closePanel = () => {
     if (!hasSelection) {
       return
     }
-    setAnalyticsEnabled(preferences.analytics)
-    setDiagnosticsEnabled(preferences.diagnostics)
     setIsPanelOpen(false)
   }
   const openPanel = () => {
-    setAnalyticsEnabled(preferences.analytics)
-    setDiagnosticsEnabled(preferences.diagnostics)
     setIsPanelOpen(true)
   }
   const handleAcceptAll = () => {
@@ -50,41 +38,33 @@ const CookieConsentBanner = ({ triggerClassName }: CookieConsentBannerProps) => 
     rejectOptional()
     setIsPanelOpen(false)
   }
-  const handleSavePreferences = () => {
-    savePreferences({
-      analytics: analyticsEnabled,
-      diagnostics: diagnosticsEnabled,
-    })
-    setIsPanelOpen(false)
-  }
   return (
     <>
       {isPanelOpen ? (
-        <div className="fixed inset-0 z-[90] flex items-end px-3 pb-3 sm:px-4 sm:pb-4">
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[90] px-3 pb-3 sm:px-4 sm:pb-4">
           <section
             role="dialog"
-            aria-modal={!hasSelection}
             aria-label={t('cookiesConsent.title')}
-            className="mx-auto h-[calc(100dvh-1.5rem)] w-full max-w-5xl overflow-y-auto rounded-3xl border border-slate-200 bg-gradient-to-br from-amber-50/95 via-white to-sky-50/90 p-4 shadow-2xl backdrop-blur sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:p-6"
+            className="pointer-events-auto mx-auto w-full max-w-2xl rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-2xl shadow-slate-950/15 backdrop-blur sm:p-4"
           >
-            <div className="mb-5 flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 gap-3">
                 <span
                   aria-hidden
-                  className="inline-flex h-11 w-11 flex-none items-center justify-center rounded-2xl border border-amber-200 bg-white text-xl shadow-sm"
+                  className="inline-flex h-9 w-9 flex-none items-center justify-center rounded-xl border border-amber-200 bg-amber-50 text-lg shadow-sm"
                 >
                   {COOKIE_ICONS.main}
                 </span>
-                <div className="space-y-2">
-                  <h2 className="text-base font-semibold text-slate-900 sm:text-lg">
+                <div className="min-w-0 space-y-1">
+                  <h2 className="text-sm font-semibold leading-5 text-slate-900 sm:text-base">
                     {t('cookiesConsent.title')}
                   </h2>
-                  <p className="text-sm leading-6 text-slate-700">
+                  <p className="text-xs leading-5 text-slate-700 sm:text-sm">
                     {t('cookiesConsent.description')}
                   </p>
                   <a
                     href="/cookies"
-                    className="inline-flex text-sm font-medium text-brand-dark transition-colors hover:text-brand-light"
+                    className="inline-flex text-xs font-semibold text-brand-dark transition-colors hover:text-brand sm:text-sm"
                   >
                     {t('cookiesConsent.learnMore')}
                   </a>
@@ -94,56 +74,25 @@ const CookieConsentBanner = ({ triggerClassName }: CookieConsentBannerProps) => 
                 <button
                   type="button"
                   onClick={closePanel}
-                  className="rounded-md px-2 py-1 text-sm font-medium text-slate-500 transition-colors hover:bg-white hover:text-slate-700"
+                  className="rounded-md px-2 py-1 text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 sm:text-sm"
                 >
                   {t('cookiesConsent.actions.close')}
                 </button>
               ) : null}
             </div>
 
-            <div className="space-y-3">
-              <CookiePreferenceToggle
-                icon={COOKIE_ICONS.necessary}
-                title={t('cookiesConsent.categories.necessary.title')}
-                description={t('cookiesConsent.categories.necessary.description')}
-                checked
-                disabled
-              />
-              <CookiePreferenceToggle
-                icon={COOKIE_ICONS.analytics}
-                title={t('cookiesConsent.categories.analytics.title')}
-                description={t('cookiesConsent.categories.analytics.description')}
-                checked={analyticsEnabled}
-                onChange={setAnalyticsEnabled}
-              />
-              <CookiePreferenceToggle
-                icon={COOKIE_ICONS.diagnostics}
-                title={t('cookiesConsent.categories.diagnostics.title')}
-                description={t('cookiesConsent.categories.diagnostics.description')}
-                checked={diagnosticsEnabled}
-                onChange={setDiagnosticsEnabled}
-              />
-            </div>
-
-            <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:justify-end">
               <button
                 type="button"
                 onClick={handleRejectOptional}
-                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:bg-slate-100"
+                className="min-h-10 rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold leading-5 text-slate-700 transition-colors hover:border-slate-400 hover:bg-slate-100 sm:px-4 sm:text-sm"
               >
                 {t('cookiesConsent.actions.rejectOptional')}
               </button>
               <button
                 type="button"
-                onClick={handleSavePreferences}
-                className="rounded-xl border border-brand-dark bg-brand-dark/5 px-4 py-2 text-sm font-semibold text-brand-dark transition-colors hover:bg-brand-dark/10"
-              >
-                {t('cookiesConsent.actions.savePreferences')}
-              </button>
-              <button
-                type="button"
                 onClick={handleAcceptAll}
-                className="rounded-xl bg-brand-dark px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-light"
+                className="min-h-10 rounded-xl bg-brand-dark px-3 py-2 text-xs font-semibold leading-5 text-white transition-colors hover:bg-brand sm:px-4 sm:text-sm"
               >
                 {t('cookiesConsent.actions.acceptAll')}
               </button>
