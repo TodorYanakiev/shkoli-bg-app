@@ -47,6 +47,7 @@ export const staticIndexablePaths = [
   '/shkoli',
   '/lyceums',
   '/about',
+  '/help',
   '/cookies',
   '/privacy-policy',
   '/terms-and-conditions',

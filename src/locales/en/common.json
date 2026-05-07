@@ -53,6 +53,7 @@
         "privacyPolicy": "Privacy policy",
         "cookiesPolicy": "Cookies policy",
         "termsAndConditions": "Terms & conditions",
+        "userHelp": "Help & feedback",
         "htmlSitemap": "HTML sitemap",
         "socials": {
           "youtube": "Shkoli.bg on YouTube",
@@ -150,6 +151,7 @@
   "validation": {
     "required": "This field is required.",
     "email": "Enter a valid email address.",
+    "maxLength": "Must be at most {{count}} characters.",
     "usernameMin": "Username must be at least 3 characters.",
     "usernameMax": "Username must be at most 50 characters.",
     "usernameRange": "Username must be between 3 and 50 characters.",
@@ -348,6 +350,20 @@
       "alreadyReviewed": "You have already submitted a review.",
       "alreadyDeleted": "This review is already deleted.",
       "server": "A server error occurred. Please try again."
+    },
+    "feedback": {
+      "submitFailed": "We couldn't send your message. Try again.",
+      "submitInvalid": "Please check the highlighted fields and try again.",
+      "loadFailed": "We couldn't load feedback right now.",
+      "loadInvalid": "The feedback filter or sort is invalid.",
+      "markReadFailed": "We couldn't mark this feedback as read.",
+      "markUnreadFailed": "We couldn't mark this feedback as unread.",
+      "deleteFailed": "We couldn't delete this feedback.",
+      "invalidRequest": "The feedback request is invalid.",
+      "authRequired": "You need to sign in as an admin to manage feedback.",
+      "forbidden": "You do not have permission to manage feedback.",
+      "notFound": "This feedback was not found.",
+      "server": "A server error occurred. Please try again."
     }
   },
   "feedback": {
@@ -403,6 +419,14 @@
       "createSuccess": "Review submitted successfully.",
       "updateSuccess": "Review updated successfully.",
       "deleteSuccess": "Review deleted successfully."
+    },
+    "support": {
+      "submitted": "Thanks, your message was sent."
+    },
+    "adminFeedback": {
+      "markedRead": "Feedback marked as read.",
+      "markedUnread": "Feedback marked as unread.",
+      "deleted": "Feedback deleted."
     }
   },
   "components": {
@@ -1684,6 +1708,44 @@
       "subtitle": "Learn more about the EducationNearby project.",
       "contact": "Contact us at {{email}}."
     },
+    "feedback": {
+      "title": "How can we help?",
+      "subtitle": "Send us a note about a question, a problem, or an idea that would make Shkoli.bg better.",
+      "kicker": "User help",
+      "backLink": "Back to courses",
+      "successMessage": "Thanks, your message was sent.",
+      "form": {
+        "fullNameLabel": "Full name",
+        "fullNamePlaceholder": "Ivan Petrov",
+        "emailLabel": "Email address",
+        "emailPlaceholder": "ivan.petrov@example.com",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Course filters",
+        "messageLabel": "Message",
+        "messagePlaceholder": "Tell us what happened or what you would like to see.",
+        "messageCounter": "{{count}} / {{max}}",
+        "submit": "Send message",
+        "submitting": "Sending..."
+      },
+      "aside": {
+        "title": "What reaches us",
+        "description": "Every message is stored as feedback so the team can review it and follow up when needed.",
+        "items": {
+          "ideas": {
+            "title": "Ideas",
+            "description": "Suggest course filters, pages, or details that would help families compare options."
+          },
+          "issues": {
+            "title": "Problems",
+            "description": "Report broken links, confusing information, or anything that feels off."
+          },
+          "questions": {
+            "title": "Questions",
+            "description": "Ask about schools, lyceums, accounts, or anything else around the platform."
+          }
+        }
+      }
+    },
     "admin": {
       "title": "Admin",
       "subtitle": "Manage global settings and administration tasks.",
@@ -1691,7 +1753,8 @@
       "tabs": {
         "courses": "Courses",
         "lyceums": "Lyceums",
-        "users": "Users"
+        "users": "Users",
+        "feedback": "Feedback"
       },
       "sideNav": {
         "expand": "Expand menu",
@@ -1894,6 +1957,57 @@
           "title": "Delete user",
           "description": "Are you sure you want to delete {{name}}? This action cannot be undone.",
           "confirm": "Delete user",
+          "cancel": "Cancel"
+        }
+      },
+      "feedback": {
+        "title": "Feedback",
+        "subtitle": "Review visitor messages, track read state, and remove submissions that are no longer needed.",
+        "loading": "Loading feedback...",
+        "empty": "No feedback submissions yet.",
+        "emptyFiltered": "No feedback matches the current filter.",
+        "countLabel": "{{count}} feedback items",
+        "rangeLabel": "Showing {{start}}-{{end}} of {{total}}",
+        "filters": {
+          "statusLabel": "Read state",
+          "all": "All",
+          "read": "Read",
+          "unread": "Unread",
+          "sortLabel": "Sort by",
+          "clear": "Clear filters",
+          "sort": {
+            "createdAt,desc": "Newest first",
+            "createdAt,asc": "Oldest first",
+            "read,asc": "Unread first",
+            "read,desc": "Read first",
+            "fullName,asc": "Name A-Z",
+            "email,asc": "Email A-Z",
+            "title,asc": "Title A-Z"
+          }
+        },
+        "pagination": {
+          "previous": "Previous page",
+          "next": "Next page",
+          "page": "Page {{current}} of {{total}}"
+        },
+        "status": {
+          "read": "Read",
+          "unread": "Unread"
+        },
+        "fields": {
+          "createdAt": "Created"
+        },
+        "actions": {
+          "markRead": "Mark as read",
+          "markUnread": "Mark as unread",
+          "marking": "Updating...",
+          "delete": "Delete",
+          "deleting": "Deleting..."
+        },
+        "deleteConfirm": {
+          "title": "Delete feedback",
+          "description": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+          "confirm": "Delete feedback",
           "cancel": "Cancel"
         }
       },

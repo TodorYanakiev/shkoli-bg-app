@@ -116,6 +116,13 @@ const AppFooter = () => {
                 >
                   {t('layouts.app.footer.termsAndConditions')}
                 </Link>
+                <Link
+                  to={localizedPath('/help')}
+                  className={footerLinkClassName}
+                  onClick={scrollToPageTop}
+                >
+                  {t('layouts.app.footer.userHelp')}
+                </Link>
                 <a
                   href="/site-map.html"
                   className={footerLinkClassName}
