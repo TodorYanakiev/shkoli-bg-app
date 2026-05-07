@@ -222,6 +222,9 @@ describe('AdminCoursesGrid', () => {
   it('calls pagination callbacks', async () => {
     const goToPrev = vi.fn()
     const goToNext = vi.fn()
+    const scrollToSpy = vi
+      .spyOn(window, 'scrollTo')
+      .mockImplementation(() => {})
 
     renderGrid({
       pagination: buildPagination({
@@ -243,5 +246,10 @@ describe('AdminCoursesGrid', () => {
 
     expect(goToPrev).toHaveBeenCalledTimes(1)
     expect(goToNext).toHaveBeenCalledTimes(1)
+    expect(scrollToSpy).toHaveBeenCalledWith({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    })
   })
 })

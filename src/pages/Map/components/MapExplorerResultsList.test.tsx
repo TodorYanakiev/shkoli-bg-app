@@ -50,9 +50,14 @@ const items = Array.from({ length: 12 }, (_, index) => createItem(index + 1))
 describe('MapExplorerResultsList', () => {
   afterEach(() => {
     cleanup()
+    vi.restoreAllMocks()
   })
 
   it('keeps manual pagination even when selected lyceum is on another page', () => {
+    const scrollToSpy = vi
+      .spyOn(window, 'scrollTo')
+      .mockImplementation(() => {})
+
     render(
       <MapExplorerResultsList
         isLoading={false}
@@ -71,6 +76,11 @@ describe('MapExplorerResultsList', () => {
 
     expect(screen.queryByText('Lyceum 1')).toBeNull()
     expect(screen.getByText('Lyceum 9')).toBeTruthy()
+    expect(scrollToSpy).toHaveBeenCalledWith({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    })
   })
 
   it('jumps to the page of selected lyceum when selection changes', async () => {
