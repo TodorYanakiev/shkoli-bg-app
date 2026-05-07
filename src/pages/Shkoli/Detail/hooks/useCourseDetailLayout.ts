@@ -11,10 +11,7 @@ export const useCourseDetailLayout = ({
     if (typeof window === 'undefined') return true
     return window.matchMedia('(min-width: 1024px)').matches
   })
-  const [isSideNavExpanded, setIsSideNavExpanded] = useState(() => {
-    if (typeof window === 'undefined') return true
-    return window.matchMedia('(min-width: 1024px)').matches
-  })
+  const [isSideNavExpanded, setIsSideNavExpanded] = useState(false)
 
   const sideNavWidth = !isDesktop
     ? '0px'
