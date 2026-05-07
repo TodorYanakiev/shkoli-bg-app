@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import { useLocalizedPath } from '../../hooks/useLocalizedPath'
+import { getTextLanguage } from '../../utils/textLanguage'
 
 export type BreadcrumbItem = {
   label: string
@@ -32,6 +33,7 @@ const Breadcrumbs = ({
                 <Link
                   to={localizedPath(item.path)}
                   className="hover:text-brand hover:underline"
+                  lang={getTextLanguage(item.label)}
                 >
                   {item.label}
                 </Link>
@@ -39,6 +41,7 @@ const Breadcrumbs = ({
                 <span
                   aria-current={isLastItem ? 'page' : undefined}
                   className={isLastItem ? 'font-semibold text-slate-800' : undefined}
+                  lang={getTextLanguage(item.label)}
                 >
                   {item.label}
                 </span>

@@ -2,6 +2,7 @@ import type { TFunction } from 'i18next'
 
 import courseMainPlaceholder from '../../../../assets/course-main-placeholder.svg'
 import type { CourseImageResponse } from '../../../../types/courses'
+import { getTextLanguage } from '../../../../utils/textLanguage'
 import type { CourseDetailValue } from '../types'
 
 type CourseDetailOverviewSectionProps = {
@@ -44,7 +45,10 @@ export const CourseDetailOverviewSection = ({
             <p className="text-xs font-semibold uppercase tracking-wide text-brand">
               {t('pages.shkoli.detail.heroLabel')}
             </p>
-            <h2 className="text-xl font-semibold text-slate-900">
+            <h2
+              className="text-xl font-semibold text-slate-900"
+              lang={getTextLanguage(courseName)}
+            >
               {courseName}
             </h2>
             <p className="text-sm text-slate-600">{courseTypeLabel}</p>
@@ -67,14 +71,22 @@ export const CourseDetailOverviewSection = ({
             ))}
           </div>
         ) : null}
-        <p className="mt-4 text-sm text-slate-600">{courseDescription}</p>
+        <p
+          className="mt-4 text-sm text-slate-600"
+          lang={getTextLanguage(courseDescription)}
+        >
+          {courseDescription}
+        </p>
         <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
           {courseDetails.map((detail) => (
             <div key={detail.label} className="space-y-1">
               <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                 {detail.label}
               </dt>
-              <dd className="font-medium text-slate-900">
+              <dd
+                className="font-medium text-slate-900"
+                lang={getTextLanguage(detail.value)}
+              >
                 {detail.value}
               </dd>
             </div>
@@ -84,7 +96,10 @@ export const CourseDetailOverviewSection = ({
               <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                 {t('pages.shkoli.detail.fields.achievements')}
               </dt>
-              <dd className="font-medium text-slate-900">
+              <dd
+                className="font-medium text-slate-900"
+                lang={getTextLanguage(normalizedAchievements)}
+              >
                 {normalizedAchievements}
               </dd>
             </div>
